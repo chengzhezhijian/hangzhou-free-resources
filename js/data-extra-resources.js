@@ -1,0 +1,1676 @@
+/** 停车、公园、公厕、体育、充电、WiFi、政策指南等扩展免费资源 */
+const EXTRA_RESOURCES = [
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "《杭州市区机动车停放收费管理实施办法》",
+      "适用于道路收费泊位、公共停车场"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-park-15min",
+    "name": "道路停车15分钟免费",
+    "category": "policy",
+    "subType": "停车政策",
+    "district": "杭州",
+    "address": "全市道路泊位及公共停车场",
+    "hours": "停车不超过15分钟免收停车费",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82%E9%81%93%E8%B7%AF%E6%B3%8A%E4%BD%8D%E5%8F%8A%E5%85%AC%E5%85%B1%E5%81%9C%E8%BD%A6%E5%9C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "西湖景区除外",
+      "具体日期以市城管局公告为准"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-park-holiday",
+    "name": "春节等长假道路泊位免费",
+    "category": "policy",
+    "subType": "停车政策",
+    "district": "杭州",
+    "address": "全市（西湖景区除外）",
+    "hours": "每年春节等长假约8—9天，5万+道路泊位免费",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82%EF%BC%88%E8%A5%BF%E6%B9%96%E6%99%AF%E5%8C%BA%E9%99%A4%E5%A4%96%EF%BC%89"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "通过「邻里停」小程序查询预约",
+      "开放比例不少于30%"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-park-share",
+    "name": "机关事业单位共享停车",
+    "category": "policy",
+    "subType": "停车政策",
+    "district": "杭州",
+    "address": "全市400+家单位",
+    "hours": "工作日夜间+周末节假日全天，1.7万+泊位",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82400%2B%E5%AE%B6%E5%8D%95%E4%BD%8D"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "无人值守区域免费",
+      "以现场公示牌为准"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "policy-park-freezone",
+    "name": "部分区域道路免费停车",
+    "category": "policy",
+    "subType": "停车政策",
+    "district": "杭州",
+    "address": "停车矛盾不突出、无人值守区域",
+    "hours": "道路停车泊位实行免费",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%81%9C%E8%BD%A6%E7%9F%9B%E7%9B%BE%E4%B8%8D%E7%AA%81%E5%87%BA%E3%80%81%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%8C%BA%E5%9F%9F"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "我国首个免费开放的5A级景区",
+      "含湖滨公园、太子湾等"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "policy-westlake",
+    "name": "西湖景区环湖公园免费",
+    "category": "policy",
+    "subType": "公园政策",
+    "district": "西湖",
+    "address": "西湖风景名胜区",
+    "hours": "2003年起环湖公园全部免费开放",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E9%A3%8E%E6%99%AF%E5%90%8D%E8%83%9C%E5%8C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "部分公厕配有充电接口、热水"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "policy-toilet",
+    "name": "西湖公厕24小时免费",
+    "category": "policy",
+    "subType": "公厕政策",
+    "district": "西湖",
+    "address": "西湖风景名胜区",
+    "hours": "全天候免费开放",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E9%A3%8E%E6%99%AF%E5%90%8D%E8%83%9C%E5%8C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "通过「杭州体育在线」预约",
+      "室内场馆免费或低收费"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-campus-sport",
+    "name": "中小学室外场地免费开放",
+    "category": "policy",
+    "subType": "体育政策",
+    "district": "杭州",
+    "address": "全市945所中小学",
+    "hours": "室外体育场地945个全部免费向社会开放",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82945%E6%89%80%E4%B8%AD%E5%B0%8F%E5%AD%A6"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "羽毛球、乒乓球、游泳等",
+      "以「杭州体育在线」公告为准"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-sport-holiday",
+    "name": "公共场馆节假日免费",
+    "category": "policy",
+    "subType": "体育政策",
+    "district": "杭州",
+    "address": "市本级及区县公共体育场馆",
+    "hours": "法定节假日及每月1日、15日等时段部分项目免费",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%B8%82%E6%9C%AC%E7%BA%A7%E5%8F%8A%E5%8C%BA%E5%8E%BF%E5%85%AC%E5%85%B1%E4%BD%93%E8%82%B2%E5%9C%BA%E9%A6%86"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "信号名 i-hangzhou",
+      "体验因区域而异，建议现场验证"
+    ],
+    "website": "",
+    "note": "政策类资源，非具体点位，出行前核实当年公告",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "policy-wifi",
+    "name": "i-hangzhou公共WiFi",
+    "category": "policy",
+    "subType": "网络政策",
+    "district": "杭州",
+    "address": "道路、景区、公交站台等",
+    "hours": "手机短信获取密码连接",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E9%81%93%E8%B7%AF%E3%80%81%E6%99%AF%E5%8C%BA%E3%80%81%E5%85%AC%E4%BA%A4%E7%AB%99%E5%8F%B0%E7%AD%89"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "1.7万+机关企事业单位泊位",
+      "在线预约临停/包月"
+    ],
+    "website": "https://www.zjzwfw.gov.cn/",
+    "note": "海量点位请通过官方平台实时查询",
+    "phone": "",
+    "transport": "",
+    "costType": "tool",
+    "id": "tool-linlit",
+    "name": "邻里停 · 共享停车查询",
+    "category": "parking",
+    "subType": "停车查询",
+    "district": "杭州",
+    "address": "浙里办/微信/支付宝小程序",
+    "hours": "实时查询周边共享泊位",
+    "featured": true,
+    "isTool": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%B5%99%E9%87%8C%E5%8A%9E/%E5%BE%AE%E4%BF%A1/%E6%94%AF%E4%BB%98%E5%AE%9D%E5%B0%8F%E7%A8%8B%E5%BA%8F"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "全市5万+公共充电设施",
+      "实时空位查询"
+    ],
+    "website": "https://www.zjzwfw.gov.cn/",
+    "note": "海量点位请通过官方平台实时查询",
+    "phone": "",
+    "transport": "",
+    "costType": "tool",
+    "id": "tool-charge",
+    "name": "一键找桩",
+    "category": "charging",
+    "subType": "充电查询",
+    "district": "杭州",
+    "address": "杭州停车/相关政务小程序",
+    "hours": "查看周边充电桩空位与价格",
+    "featured": true,
+    "isTool": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%9D%AD%E5%B7%9E%E5%81%9C%E8%BD%A6/%E7%9B%B8%E5%85%B3%E6%94%BF%E5%8A%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "384+场馆入驻",
+      "945个校园室外场地免费"
+    ],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "海量点位请通过官方平台实时查询",
+    "phone": "",
+    "transport": "",
+    "costType": "tool",
+    "id": "tool-sport",
+    "name": "杭州体育在线",
+    "category": "sports",
+    "subType": "体育预约",
+    "district": "杭州",
+    "address": "浙里办/支付宝",
+    "hours": "场馆查询、预约、校园健身",
+    "featured": true,
+    "isTool": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%B5%99%E9%87%8C%E5%8A%9E/%E6%94%AF%E4%BB%98%E5%AE%9D"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "综合/社区/专类/游园",
+      "500米见园"
+    ],
+    "website": "http://www.zj.xinhuanet.com/20260508/b261af240c0a48f49a0a0975007a01f6/c.html",
+    "note": "海量点位请通过官方平台实时查询",
+    "phone": "",
+    "transport": "",
+    "costType": "tool",
+    "id": "tool-park-list",
+    "name": "杭州市城市公园名录",
+    "category": "park",
+    "subType": "公园查询",
+    "district": "杭州",
+    "address": "杭州市园林文物局",
+    "hours": "2026年版名录共747个城市公园",
+    "featured": true,
+    "isTool": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%9D%AD%E5%B7%9E%E5%B8%82%E5%9B%AD%E6%9E%97%E6%96%87%E7%89%A9%E5%B1%80"
+  },
+  {
+    "seasonal": false,
+    "facilities": {},
+    "features": [
+      "全市公厕数字化查询"
+    ],
+    "website": "https://www.zjzwfw.gov.cn/",
+    "note": "海量点位请通过官方平台实时查询",
+    "phone": "",
+    "transport": "",
+    "costType": "tool",
+    "id": "tool-toilet",
+    "name": "浙里办 · 找公厕",
+    "category": "toilet",
+    "subType": "公厕查询",
+    "district": "杭州",
+    "address": "浙里办APP",
+    "hours": "查询周边公共厕所位置",
+    "featured": true,
+    "isTool": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%B5%99%E9%87%8C%E5%8A%9EAPP"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "西湖东侧",
+      "一公园至六公园",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-hubin",
+    "name": "湖滨公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "西湖",
+    "address": "西湖区湖滨路沿线",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E6%B9%96%E6%BB%A8%E8%B7%AF%E6%B2%BF%E7%BA%BF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "郁金香赏花",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-taiziwan",
+    "name": "太子湾公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "西湖",
+    "address": "西湖区南山路",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E5%8D%97%E5%B1%B1%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "孤山岛上",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-zhongshan",
+    "name": "中山公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "西湖",
+    "address": "西湖区孤山",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E5%AD%A4%E5%B1%B1"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "西湖十景",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-huagang",
+    "name": "花港观鱼",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "西湖",
+    "address": "西湖区西山路",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E8%A5%BF%E5%B1%B1%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-liulang",
+    "name": "柳浪闻莺",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "西湖",
+    "address": "西湖区南山路",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E5%8D%97%E5%B1%B1%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-huamu",
+    "name": "杭州花圃",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "西湖",
+    "address": "西湖区玉泉路",
+    "hours": "以公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E7%8E%89%E6%B3%89%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "铁路遗址",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-baita",
+    "name": "白塔公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "上城",
+    "address": "上城区白塔岭",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E7%99%BD%E5%A1%94%E5%B2%AD"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "大运河国家文化公园",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-xiaohe",
+    "name": "小河公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "拱墅",
+    "address": "拱墅区小河路",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E5%B0%8F%E6%B2%B3%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "50公顷，运动休闲",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-yayun",
+    "name": "运河亚运公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "拱墅",
+    "address": "拱墅区学院北路",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E5%AD%A6%E9%99%A2%E5%8C%97%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "含体育设施",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-chengbei",
+    "name": "城北体育公园",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "拱墅",
+    "address": "拱墅区绍兴路",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E7%BB%8D%E5%85%B4%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-senlin",
+    "name": "钱江新城森林公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "上城",
+    "address": "上城区钱江新城",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E9%92%B1%E6%B1%9F%E6%96%B0%E5%9F%8E"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-shimin",
+    "name": "钱江新城市民公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "上城",
+    "address": "上城区钱江新城",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E9%92%B1%E6%B1%9F%E6%96%B0%E5%9F%8E"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "桃文化主题",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-taohua",
+    "name": "桃花湖公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "上城",
+    "address": "上城区丁兰街道",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E4%B8%81%E5%85%B0%E8%A1%97%E9%81%93"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "注意收费区域边界",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-xixi",
+    "name": "西溪国家湿地公园（免费区）",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "西湖",
+    "address": "西湖区天目山路518号",
+    "hours": "部分区域需购票，外围绿道免费",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E5%A4%A9%E7%9B%AE%E5%B1%B1%E8%B7%AF518%E5%8F%B7"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费慢行",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-xixiwt",
+    "name": "西溪湿地外围绿道",
+    "category": "park",
+    "subType": "游园",
+    "district": "西湖",
+    "address": "西湖区西溪路沿线",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E8%A5%BF%E6%BA%AA%E8%B7%AF%E6%B2%BF%E7%BA%BF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费徒步",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-jiuxi",
+    "name": "九溪烟树",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "西湖",
+    "address": "西湖区九溪路",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E4%B9%9D%E6%BA%AA%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-yunqi",
+    "name": "云栖竹径",
+    "category": "park",
+    "subType": "专类公园",
+    "district": "西湖",
+    "address": "西湖区梅灵南路",
+    "hours": "以公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E6%A2%85%E7%81%B5%E5%8D%97%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-meadow",
+    "name": "大草坪（太子湾周边）",
+    "category": "park",
+    "subType": "游园",
+    "district": "西湖",
+    "address": "西湖景区",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E6%99%AF%E5%8C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-wushan",
+    "name": "吴山广场",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "上城",
+    "address": "上城区吴山广场",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E5%90%B4%E5%B1%B1%E5%B9%BF%E5%9C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-qianjiang",
+    "name": "钱塘江滨江公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "滨江",
+    "address": "滨江区钱塘江边",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%BB%A8%E6%B1%9F%E5%8C%BA%E9%92%B1%E5%A1%98%E6%B1%9F%E8%BE%B9"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-chaoming",
+    "name": "潮鸣公园",
+    "category": "park",
+    "subType": "社区公园",
+    "district": "拱墅",
+    "address": "拱墅区潮鸣街道",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E6%BD%AE%E9%B8%A3%E8%A1%97%E9%81%93"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-xixi-gong",
+    "name": "西溪天堂湿地公苑",
+    "category": "park",
+    "subType": "游园",
+    "district": "西湖",
+    "address": "西湖区紫金港路",
+    "hours": "以公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E7%B4%AB%E9%87%91%E6%B8%AF%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "地铁1号线金沙湖站",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-jinsha",
+    "name": "金沙湖公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "钱塘",
+    "address": "钱塘区金沙大道",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E9%92%B1%E5%A1%98%E5%8C%BA%E9%87%91%E6%B2%99%E5%A4%A7%E9%81%93"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-dongqiao",
+    "name": "东沙湖公园",
+    "category": "park",
+    "subType": "社区公园",
+    "district": "钱塘",
+    "address": "钱塘区河庄街道",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E9%92%B1%E5%A1%98%E5%8C%BA%E6%B2%B3%E5%BA%84%E8%A1%97%E9%81%93"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "萧山免费大公园",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-xianghu",
+    "name": "湘湖公园",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "萧山",
+    "address": "萧山区湘湖路",
+    "hours": "全天开放",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%90%A7%E5%B1%B1%E5%8C%BA%E6%B9%98%E6%B9%96%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "环湖绿道免费",
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-linan",
+    "name": "青山湖绿道",
+    "category": "park",
+    "subType": "综合公园",
+    "district": "临安",
+    "address": "临安区青山湖",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%B4%E5%AE%89%E5%8C%BA%E9%9D%92%E5%B1%B1%E6%B9%96"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": "partial",
+      "ac": false,
+      "study": false,
+      "charge": false,
+      "open24": true
+    },
+    "features": [
+      "免费入园"
+    ],
+    "website": "",
+    "note": "全市747个城市公园见官方名录",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "park-tonglu",
+    "name": "桐庐迎春苑",
+    "category": "park",
+    "subType": "社区公园",
+    "district": "桐庐",
+    "address": "桐庐县城区",
+    "hours": "全天开放",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%A1%90%E5%BA%90%E5%8E%BF%E5%9F%8E%E5%8C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": false,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": false
+    },
+    "features": [
+      "配套公共文化设施"
+    ],
+    "website": "",
+    "note": "配套停车，非全天候免费",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "park-lib-hz",
+    "name": "杭州图书馆市民中心馆停车场",
+    "category": "parking",
+    "subType": "配套停车",
+    "district": "上城",
+    "address": "上城区解放东路18号市民中心",
+    "hours": "读者凭借阅可享优惠，以馆方为准",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E8%A7%A3%E6%94%BE%E4%B8%9C%E8%B7%AF18%E5%8F%B7%E5%B8%82%E6%B0%91%E4%B8%AD%E5%BF%83"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": false,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": false
+    },
+    "features": [],
+    "website": "",
+    "note": "配套停车，非全天候免费",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "park-museum-zhijiang",
+    "name": "之江文化中心停车场",
+    "category": "parking",
+    "subType": "配套停车",
+    "district": "西湖",
+    "address": "西湖区之江文化中心",
+    "hours": "以现场收费公示为准",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E5%8C%BA%E4%B9%8B%E6%B1%9F%E6%96%87%E5%8C%96%E4%B8%AD%E5%BF%83"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": false,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": false
+    },
+    "features": [],
+    "website": "",
+    "note": "配套停车，非全天候免费",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "park-xianghu-lake",
+    "name": "湘湖旅游度假区停车场",
+    "category": "parking",
+    "subType": "景区停车",
+    "district": "萧山",
+    "address": "萧山区湘湖路",
+    "hours": "部分时段免费或优惠，以公示为准",
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%90%A7%E5%B1%B1%E5%8C%BA%E6%B9%98%E6%B9%96%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "国定节假日免费",
+      "每月1日15日免费"
+    ],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-hz-gym",
+    "name": "杭州体育馆",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "上城",
+    "address": "上城区体育场路210号",
+    "hours": "工作日09:00-12:00羽毛球10元；节假日部分免费",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E4%BD%93%E8%82%B2%E5%9C%BA%E8%B7%AF210%E5%8F%B7"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-hz-swim",
+    "name": "杭州游泳健身馆",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "下城",
+    "address": "拱墅区体育场路",
+    "hours": "以「杭州体育在线」公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E4%BD%93%E8%82%B2%E5%9C%BA%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-daguan",
+    "name": "杭州大关游泳健身馆",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "拱墅",
+    "address": "拱墅区大关路",
+    "hours": "以公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E5%A4%A7%E5%85%B3%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-jianshen",
+    "name": "杭州全民健身中心",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "下城",
+    "address": "拱墅区体育场路",
+    "hours": "以公告为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E4%BD%93%E8%82%B2%E5%9C%BA%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "户外跑道、球场免费"
+    ],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "sport-yayun-gong",
+    "name": "拱墅运河亚运公园",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "拱墅",
+    "address": "拱墅区学院北路",
+    "hours": "户外场地全天免费",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E5%AD%A6%E9%99%A2%E5%8C%97%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-chengbei",
+    "name": "城北体育公园",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "拱墅",
+    "address": "拱墅区绍兴路",
+    "hours": "户外免费，馆内以预约为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%8B%B1%E5%A2%85%E5%8C%BA%E7%BB%8D%E5%85%B4%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "sport-olympic",
+    "name": "杭州奥体中心",
+    "category": "sports",
+    "subType": "公共场馆",
+    "district": "滨江",
+    "address": "滨江区奥体板块",
+    "hours": "节假日惠民开放，以公告为准",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%BB%A8%E6%B1%9F%E5%8C%BA%E5%A5%A5%E4%BD%93%E6%9D%BF%E5%9D%97"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": true,
+      "study": false,
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "浙里办「杭州体育在线」预约",
+      "1134所学校参与开放"
+    ],
+    "website": "https://ori.hangzhou.com.cn/ornews/content/2024-05/24/content_8734095.htm",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "sport-campus",
+    "name": "中小学校园体育场地",
+    "category": "sports",
+    "subType": "校园场地",
+    "district": "杭州",
+    "address": "全市945所中小学",
+    "hours": "室外场地945个全部免费",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82945%E6%89%80%E4%B8%AD%E5%B0%8F%E5%AD%A6"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": true,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": true
+    },
+    "features": [
+      "环湖公厕24小时开放",
+      "部分配有充电、热水"
+    ],
+    "website": "",
+    "note": "全市公厕可通过浙里办查询",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "toilet-westlake",
+    "name": "西湖景区公厕",
+    "category": "toilet",
+    "subType": "旅游景区",
+    "district": "西湖",
+    "address": "西湖风景名胜区",
+    "hours": "24小时免费",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E8%A5%BF%E6%B9%96%E9%A3%8E%E6%99%AF%E5%90%8D%E8%83%9C%E5%8C%BA"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": true,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": true
+    },
+    "features": [],
+    "website": "",
+    "note": "全市公厕可通过浙里办查询",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "toilet-hubin",
+    "name": "湖滨路公厕",
+    "category": "toilet",
+    "subType": "城市公厕",
+    "district": "上城",
+    "address": "上城区湖滨路",
+    "hours": "24小时",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E6%B9%96%E6%BB%A8%E8%B7%AF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": false,
+      "water": true,
+      "ac": false,
+      "study": false,
+      "charge": "partial",
+      "open24": true
+    },
+    "features": [],
+    "website": "",
+    "note": "全市公厕可通过浙里办查询",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "toilet-qianjiang",
+    "name": "钱江新城公厕",
+    "category": "toilet",
+    "subType": "城市公厕",
+    "district": "上城",
+    "address": "上城区钱江新城",
+    "hours": "以现场为准",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E4%B8%8A%E5%9F%8E%E5%8C%BA%E9%92%B1%E6%B1%9F%E6%96%B0%E5%9F%8E"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": "partial",
+      "study": false,
+      "charge": true,
+      "open24": "partial"
+    },
+    "features": [
+      "腾讯地图搜「爱心驿站」",
+      "免费手机充电"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "charge-station",
+    "name": "爱心驿家免费手机充电",
+    "category": "charging",
+    "subType": "手机充电",
+    "district": "杭州",
+    "address": "全市爱心驿家/驿站",
+    "hours": "全年",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82%E7%88%B1%E5%BF%83%E9%A9%BF%E5%AE%B6/%E9%A9%BF%E7%AB%99"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": "partial",
+      "study": false,
+      "charge": true,
+      "open24": "partial"
+    },
+    "features": [
+      "5万+公共充电桩，多数按量计费",
+      "「一键找桩」查空位"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "charge-ev-public",
+    "name": "公共新能源汽车充电桩",
+    "category": "charging",
+    "subType": "汽车充电",
+    "district": "杭州",
+    "address": "全市公共充电网络",
+    "hours": "24小时",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%85%A8%E5%B8%82%E5%85%AC%E5%85%B1%E5%85%85%E7%94%B5%E7%BD%91%E7%BB%9C"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": "partial",
+      "study": false,
+      "charge": true,
+      "open24": "partial"
+    },
+    "features": [
+      "部分站点提供便民充电"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "charge-metro",
+    "name": "地铁站便民充电",
+    "category": "charging",
+    "subType": "手机充电",
+    "district": "杭州",
+    "address": "杭州地铁各站",
+    "hours": "运营时间内",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E6%9D%AD%E5%B7%9E%E5%9C%B0%E9%93%81%E5%90%84%E7%AB%99"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": "partial",
+      "water": "partial",
+      "ac": "partial",
+      "study": false,
+      "charge": true,
+      "open24": "partial"
+    },
+    "features": [
+      "可充电+WiFi+自习"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "charge-library",
+    "name": "图书馆电子阅览区",
+    "category": "charging",
+    "subType": "手机充电",
+    "district": "杭州",
+    "address": "各级公共图书馆",
+    "hours": "开馆时间内",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%90%84%E7%BA%A7%E5%85%AC%E5%85%B1%E5%9B%BE%E4%B9%A6%E9%A6%86"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": true,
+      "water": false,
+      "ac": "partial",
+      "study": "partial",
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "读者证/短信认证",
+      "每日约2小时限额"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "free",
+    "id": "wifi-library-sys",
+    "name": "公共图书馆WiFi",
+    "category": "wifi_pub",
+    "subType": "文化场馆",
+    "district": "杭州",
+    "address": "各级图书馆及城市书房",
+    "hours": "开馆时间",
+    "featured": true,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%90%84%E7%BA%A7%E5%9B%BE%E4%B9%A6%E9%A6%86%E5%8F%8A%E5%9F%8E%E5%B8%82%E4%B9%A6%E6%88%BF"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": true,
+      "water": false,
+      "ac": "partial",
+      "study": "partial",
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "搜 i-hangzhou，短信获取密码"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "wifi-ihz",
+    "name": "i-hangzhou室外WiFi",
+    "category": "wifi_pub",
+    "subType": "公共网络",
+    "district": "杭州",
+    "address": "道路、景区、公交站台",
+    "hours": "全天",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E9%81%93%E8%B7%AF%E3%80%81%E6%99%AF%E5%8C%BA%E3%80%81%E5%85%AC%E4%BA%A4%E7%AB%99%E5%8F%B0"
+  },
+  {
+    "seasonal": false,
+    "facilities": {
+      "wifi": true,
+      "water": false,
+      "ac": "partial",
+      "study": "partial",
+      "charge": false,
+      "open24": false
+    },
+    "features": [],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "partial",
+    "id": "wifi-museum",
+    "name": "博物馆公共WiFi",
+    "category": "wifi_pub",
+    "subType": "文化场馆",
+    "district": "杭州",
+    "address": "各免费博物馆",
+    "hours": "开馆时间",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%20%E5%90%84%E5%85%8D%E8%B4%B9%E5%8D%9A%E7%89%A9%E9%A6%86"
+  },
+  {
+    "seasonal": true,
+    "facilities": {
+      "wifi": true,
+      "water": false,
+      "ac": "partial",
+      "study": "partial",
+      "charge": false,
+      "open24": false
+    },
+    "features": [
+      "季节性"
+    ],
+    "website": "",
+    "note": "",
+    "phone": "",
+    "transport": "",
+    "costType": "conditional",
+    "id": "wifi-metro",
+    "name": "地铁纳凉点WiFi",
+    "category": "wifi_pub",
+    "subType": "交通场所",
+    "district": "杭州",
+    "address": "82个夏季纳凉地铁站",
+    "hours": "夏季",
+    "featured": false,
+    "mapUrl": "https://uri.amap.com/search?query=%E6%9D%AD%E5%B7%9E%2082%E4%B8%AA%E5%A4%8F%E5%AD%A3%E7%BA%B3%E5%87%89%E5%9C%B0%E9%93%81%E7%AB%99"
+  }
+];
