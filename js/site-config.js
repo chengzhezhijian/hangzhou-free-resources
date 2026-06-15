@@ -19,4 +19,7 @@ const SITE_CONFIG = {
 
   /** 是否在本机控制台打印埋点（调试用） */
   analyticsDebug: false,
+
+  /** 首次访问自动尝试定位并选中地市（需用户授权） */
+  autoLocateOnLoad: true,
 };

@@ -220,6 +220,72 @@ a:hover {
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 
+.city-filter-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.city-filter-row .select-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-geo {
+  flex-shrink: 0;
+  padding: 0.5rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-geo:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-geo:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.geo-banner-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.geo-banner {
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  border: 1px solid var(--border);
+}
+
+.geo-banner--success {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  border-color: rgba(13, 110, 110, 0.25);
+}
+
+.geo-banner--warn {
+  background: var(--gold-light);
+  color: #92400e;
+  border-color: rgba(180, 83, 9, 0.25);
+}
+
+.geo-banner--info {
+  background: var(--bg-card);
+  color: var(--ink-muted);
+}
+
 .search-clear {
   position: absolute;
   right: 0.5rem;

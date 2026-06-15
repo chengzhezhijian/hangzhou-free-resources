@@ -575,6 +575,87 @@
     renderCards();
   }
 
+  function applyCitySelection(city) {
+    if (!CITIES.includes(city)) return;
+    state.city = city;
+    if (city !== "全部" && city !== "杭州") {
+      state.district = "全部";
+      const districtSel = document.getElementById("districtFilter");
+      if (districtSel) districtSel.value = "全部";
+    }
+    const citySel = document.getElementById("cityFilter");
+    if (citySel) citySel.value = city;
+    updateDistrictVisibility();
+    state.page = 1;
+    renderCards();
+  }
+
+  function showGeoBanner(message, tone) {
+    const el = document.getElementById("geoBanner");
+    if (!el) return;
+    el.textContent = message;
+    el.className = `geo-banner geo-banner--${tone || "info"}`;
+    el.hidden = false;
+  }
+
+  async function runGeoLocate(manual) {
+    if (typeof GeoCity === "undefined") return;
+    const btn = document.getElementById("geoLocateBtn");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "定位中…";
+    }
+    if (manual) showGeoBanner("正在获取您的位置…", "info");
+
+    try {
+      const pos = await GeoCity.requestLocation();
+      const result = GeoCity.resolveCity(pos.lat, pos.lng);
+      if (!result.ok) {
+        showGeoBanner("您当前不在浙江省内，请手动选择地市", "warn");
+        track("geo_locate", { ok: false, reason: "outside" });
+        return;
+      }
+      applyCitySelection(result.city);
+      sessionStorage.setItem("hz_geo_city", result.city);
+      showGeoBanner(`已根据位置定位到「${result.city}」`, "success");
+      track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
+      document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      const denied = err && err.code === 1;
+      showGeoBanner(
+        denied ? "定位权限未开启，请点击「📍 定位」或手动选择地市" : "定位失败，请手动选择地市",
+        "warn"
+      );
+      track("geo_locate", { ok: false, reason: denied ? "denied" : "error" });
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "📍 定位";
+      }
+    }
+  }
+
+  function initGeo() {
+    const btn = document.getElementById("geoLocateBtn");
+    if (btn) btn.addEventListener("click", () => runGeoLocate(true));
+
+    const params = new URLSearchParams(location.search);
+    if (params.get("city")) return;
+    if (state.city !== "全部") return;
+
+    const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+    const cached = sessionStorage.getItem("hz_geo_city");
+    if (cached && CITIES.includes(cached)) {
+      applyCitySelection(cached);
+      showGeoBanner(`已为您选中「${cached}」`, "success");
+      return;
+    }
+
+    if (cfg.autoLocateOnLoad !== false) {
+      runGeoLocate(false);
+    }
+  }
+
   function initSearch() {
     const input = document.getElementById("searchInput");
     const clear = document.getElementById("searchClear");
@@ -618,6 +699,7 @@
     renderTools();
     initSearch();
     initFeedback();
+    initGeo();
 
     document.getElementById("resetFilters").addEventListener("click", resetFilters);
     document.getElementById("emptyReset").addEventListener("click", resetFilters);

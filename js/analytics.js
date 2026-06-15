@@ -21,6 +21,7 @@
     tool_click: { category: "工具", action: "打开外链" },
     feedback_open: { category: "反馈", action: "打开问卷" },
     feedback_submit: { category: "反馈", action: "提交表单" },
+    geo_locate: { category: "定位", action: "地市识别" },
   };
 
   function buildLabel(name, props) {
@@ -45,6 +46,8 @@
           .filter(([k]) => k !== "ts")
           .map(([k, v]) => `${k}=${v}`)
           .join("&");
+      case "geo_locate":
+        return p.city ? `${p.city}${p.km ? `·${p.km}km` : ""}` : p.reason || "";
       case "page_view":
         return p.path || location.pathname;
       default:

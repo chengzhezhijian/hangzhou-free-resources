@@ -77,6 +77,10 @@
     </div>
   </section>
 
+  <div class="geo-banner-wrap">
+    <div class="geo-banner" id="geoBanner" hidden role="status"></div>
+  </div>
+
   <main class="main">
     <aside class="sidebar" id="sidebar">
       <div class="filter-block">
@@ -93,7 +97,10 @@
       </div>
       <div class="filter-block">
         <h3>地市</h3>
-        <select id="cityFilter" class="select-input"></select>
+        <div class="city-filter-row">
+          <select id="cityFilter" class="select-input"></select>
+          <button type="button" id="geoLocateBtn" class="btn-geo" title="根据当前位置自动选择地市">📍 定位</button>
+        </div>
       </div>
       <div class="filter-block" id="districtBlock">
         <h3>杭州区县</h3>
@@ -250,12 +257,13 @@
     <div class="modal-footer" id="modalFooter"></div>
   </dialog>
 
-  <script src="js/site-config.js?v=6"></script>
-  <script src="js/analytics.js?v=6"></script>
-  <script src="js/data-study-spaces.js?v=6"></script>
-  <script src="js/data-extra-resources.js?v=6"></script>
-  <script src="js/data-zhejiang-cities.js?v=6"></script>
-  <script src="js/data.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
+  <script src="js/site-config.js?v=7"></script>
+  <script src="js/geo.js?v=7"></script>
+  <script src="js/analytics.js?v=7"></script>
+  <script src="js/data-study-spaces.js?v=7"></script>
+  <script src="js/data-extra-resources.js?v=7"></script>
+  <script src="js/data-zhejiang-cities.js?v=7"></script>
+  <script src="js/data.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
 </body>
 </html>
