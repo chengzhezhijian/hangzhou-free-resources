@@ -431,8 +431,10 @@
     const form = document.getElementById("feedbackForm");
     const hint = document.getElementById("feedbackHint");
 
-    if (cfg.feedbackUrl) {
-      hint.innerHTML = `也可直接填写 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">在线问卷</a>`;
+    if (cfg.feedbackUrl?.includes("wj.qq.com")) {
+      hint.innerHTML = `通过 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">腾讯问卷</a> 提交反馈`;
+    } else if (cfg.feedbackUrl?.includes("github.com")) {
+      hint.innerHTML = `通过 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">GitHub 反馈</a> 提交（无需登录 GitHub 也可查看已收集反馈）`;
     } else if (cfg.feedbackEmail) {
       hint.textContent = `或通过页内表单，我们将发送至 ${cfg.feedbackEmail}`;
     } else {
@@ -441,8 +443,14 @@
 
     const open = () => {
       track("feedback_open");
-      if (cfg.feedbackUrl) {
+      const isGithubIssue = cfg.feedbackUrl?.includes("github.com") && cfg.feedbackUrl.includes("/issues/new");
+      if (cfg.feedbackUrl && !isGithubIssue) {
         window.open(cfg.feedbackUrl, "_blank", "noopener");
+        return;
+      }
+      if (cfg.feedbackUrl && isGithubIssue) {
+        const url = `${cfg.feedbackUrl}${cfg.feedbackUrl.includes("?") ? "&" : "?"}page=${encodeURIComponent(location.href)}`;
+        window.open(url, "_blank", "noopener");
         return;
       }
       modal.showModal();

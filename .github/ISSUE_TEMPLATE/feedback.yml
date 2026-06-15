@@ -1,0 +1,37 @@
+name: 站点反馈
+description: 纠错、新增点位或功能建议
+title: "[反馈] "
+labels: ["feedback"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: 反馈类型
+      options:
+        - 信息纠错
+        - 新增点位
+        - 功能建议
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: content
+    attributes:
+      label: 反馈内容
+      description: 请写清点位名称、地址、开放时间，或具体问题
+      placeholder: "例如：金沙湖书房开放时间已变更…"
+    validations:
+      required: true
+
+  - type: input
+    id: contact
+    attributes:
+      label: 联系方式（选填）
+      placeholder: 微信 / 手机 / 邮箱
+
+  - type: input
+    id: page
+    attributes:
+      label: 来源页面
+      description: 自动填写当前页面 URL（如有）

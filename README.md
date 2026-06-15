@@ -52,8 +52,8 @@ python3 -m http.server 8080
 
 | 配置项 | 说明 |
 |--------|------|
-| `baiduTongjiId` | 百度统计 Site ID，留空则不加载 |
-| `feedbackUrl` | 腾讯问卷 / 金数据链接（优先使用，点击反馈直接跳转） |
+| `baiduTongjiId` | 百度统计 Site ID，留空则不加载（[创建指南](docs/setup-feedback-analytics.md)） |
+| `feedbackUrl` | 腾讯问卷链接；当前默认 GitHub Issues 反馈 |
 | `feedbackEmail` | 无问卷时，页内表单走 `mailto:` |
 | `analyticsDebug` | `true` 时在控制台打印埋点 |
 
