@@ -28,6 +28,7 @@
   function loadBaidu() {
     const id = cfg.baiduTongjiId;
     if (!id) return;
+    if (document.querySelector('script[src*="hm.baidu.com/hm.js"]')) return;
     window._hmt = window._hmt || [];
     const s = document.createElement("script");
     s.async = true;
