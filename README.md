@@ -2,6 +2,8 @@
 
 杭州市**全品类**公益免费资源查询网站。
 
+**在线地址**：https://chengzhezhijian.github.io/hangzhou-free-resources/
+
 ## 收录范围
 
 | 大类 | 类型 | 数量级 | 说明 |
