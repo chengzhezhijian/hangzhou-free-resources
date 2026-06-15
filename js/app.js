@@ -398,6 +398,8 @@
     const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
     countEl.textContent = resultCountLabel(filtered.length);
+    renderPagination(filtered.length, totalPages);
+    updateMobileChrome();
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -504,6 +506,7 @@
     });
 
     modal.showModal();
+    document.body.classList.add("sheet-open");
   }
 
   function renderGuide() {
@@ -606,6 +609,241 @@
     });
   }
 
+  function syncCityQuickLabel() {
+    const el = document.getElementById("cityQuickValue");
+    if (el) el.textContent = state.city;
+  }
+
+  function countActiveFilters() {
+    let n = 0;
+    if (state.group !== "all") n++;
+    if (state.category !== "all") n++;
+    if (state.subType !== "all") n++;
+    if (state.city !== "全部") n++;
+    if (state.district !== "全部") n++;
+    if (state.facilities.size) n += state.facilities.size;
+    if (state.featuredOnly) n++;
+    if (state.freeOnly) n++;
+    if (state.yearRoundOnly) n++;
+    return n;
+  }
+
+  function updateFilterBadge() {
+    const badge = document.getElementById("filterBadge");
+    if (!badge) return;
+    const n = countActiveFilters();
+    badge.textContent = n;
+    badge.hidden = n === 0;
+  }
+
+  function renderActiveFilters() {
+    const el = document.getElementById("activeFilters");
+    if (!el) return;
+    const chips = [];
+
+    const addChip = (key, label, clear) => {
+      chips.push(
+        `<span class="filter-chip" data-clear="${key}">${label}<button type="button" aria-label="清除">×</button></span>`
+      );
+    };
+
+    if (state.city !== "全部") addChip("city", state.city);
+    if (state.district !== "全部") addChip("district", state.district);
+    if (state.group !== "all") {
+      const g = CATEGORY_GROUPS.find((x) => x.id === state.group);
+      addChip("group", g?.label || state.group);
+    }
+    if (state.category !== "all") {
+      const c = RESOURCE_CATEGORIES.find((x) => x.id === state.category);
+      addChip("category", c?.label || state.category);
+    }
+    if (state.subType !== "all") addChip("subType", state.subType);
+    state.facilities.forEach((f) => {
+      const item = FACILITY_FILTERS.find((x) => x.id === f);
+      addChip(`facility:${f}`, item?.label || f);
+    });
+    if (state.featuredOnly) addChip("featured", "推荐");
+    if (state.freeOnly) addChip("free", "完全免费");
+    if (state.yearRoundOnly) addChip("yearRound", "全年开放");
+    if (state.search) addChip("search", `「${state.search}」`);
+
+    if (!chips.length) {
+      el.hidden = true;
+      el.innerHTML = "";
+      return;
+    }
+
+    el.hidden = false;
+    el.innerHTML = chips.join("");
+    el.querySelectorAll(".filter-chip").forEach((chip) => {
+      chip.querySelector("button")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        clearFilterKey(chip.dataset.clear);
+      });
+      chip.addEventListener("click", () => clearFilterKey(chip.dataset.clear));
+    });
+  }
+
+  function clearFilterKey(key) {
+    if (key === "city") applyCitySelection("全部");
+    else if (key === "district") {
+      state.district = "全部";
+      document.getElementById("districtFilter").value = "全部";
+    } else if (key === "group") {
+      state.group = "all";
+      document.getElementById("groupFilter").value = "all";
+      renderCategoryFilters();
+      updateSubTypeVisibility();
+    } else if (key === "category") {
+      state.category = "all";
+      renderCategoryFilters();
+      updateSubTypeVisibility();
+    } else if (key === "subType") {
+      state.subType = "all";
+      document.getElementById("subTypeFilter").value = "all";
+    } else if (key.startsWith("facility:")) {
+      state.facilities.delete(key.slice(9));
+      renderFacilityFilters();
+    } else if (key === "featured") {
+      state.featuredOnly = false;
+      document.getElementById("featuredOnly").checked = false;
+    } else if (key === "free") {
+      state.freeOnly = false;
+      document.getElementById("freeOnly").checked = false;
+    } else if (key === "yearRound") {
+      state.yearRoundOnly = false;
+      document.getElementById("yearRoundOnly").checked = false;
+    } else if (key === "search") {
+      state.search = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("searchClear").hidden = true;
+    }
+    state.page = 1;
+    renderCards();
+  }
+
+  function updateMobileChrome() {
+    syncCityQuickLabel();
+    updateFilterBadge();
+    renderActiveFilters();
+    renderCityGrid();
+  }
+
+  function renderCityGrid() {
+    const grid = document.getElementById("cityGrid");
+    if (!grid) return;
+    grid.innerHTML = CITIES.map(
+      (c) =>
+        `<button type="button" class="city-pill ${state.city === c ? "active" : ""}" data-city="${c}">${c}</button>`
+    ).join("");
+    grid.querySelectorAll(".city-pill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        applyCitySelection(btn.dataset.city);
+        document.getElementById("citySheet")?.close();
+      });
+    });
+  }
+
+  function openSheet(dialog) {
+    if (!dialog) return;
+    dialog.showModal();
+    document.body.classList.add("sheet-open");
+  }
+
+  function closeSheet(dialog) {
+    if (!dialog) return;
+    dialog.close();
+    document.body.classList.remove("sheet-open");
+  }
+
+  function mountFiltersToSheet(open) {
+    const inner = document.getElementById("sidebarInner");
+    const sheetBody = document.getElementById("filterSheetBody");
+    const sidebar = document.getElementById("sidebar");
+    if (!inner || !sheetBody || !sidebar) return;
+    if (open) sheetBody.appendChild(inner);
+    else sidebar.appendChild(inner);
+  }
+
+  function initMobileChrome() {
+    const filterSheet = document.getElementById("filterSheet");
+    const citySheet = document.getElementById("citySheet");
+
+    document.getElementById("filterOpenBtn")?.addEventListener("click", () => {
+      mountFiltersToSheet(true);
+      openSheet(filterSheet);
+    });
+    document.getElementById("filterSheetClose")?.addEventListener("click", () => {
+      mountFiltersToSheet(false);
+      closeSheet(filterSheet);
+    });
+    document.getElementById("filterSheetApply")?.addEventListener("click", () => {
+      mountFiltersToSheet(false);
+      closeSheet(filterSheet);
+      document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    document.getElementById("filterSheetReset")?.addEventListener("click", resetFilters);
+    filterSheet?.addEventListener("click", (e) => {
+      if (e.target === filterSheet) {
+        mountFiltersToSheet(false);
+        closeSheet(filterSheet);
+      }
+    });
+    filterSheet?.addEventListener("close", () => {
+      mountFiltersToSheet(false);
+      document.body.classList.remove("sheet-open");
+    });
+
+    document.getElementById("cityQuickBtn")?.addEventListener("click", () => {
+      renderCityGrid();
+      openSheet(citySheet);
+    });
+    document.getElementById("citySheetClose")?.addEventListener("click", () => closeSheet(citySheet));
+    citySheet?.addEventListener("click", (e) => {
+      if (e.target === citySheet) closeSheet(citySheet);
+    });
+    citySheet?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+
+    document.getElementById("brandHome")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    const navItems = document.querySelectorAll(".bottom-nav-item");
+    navItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        navItems.forEach((n) => n.classList.remove("is-active"));
+        item.classList.add("is-active");
+      });
+    });
+
+    const sections = ["resources", "guide", "tools", "about"];
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            navItems.forEach((n) => {
+              n.classList.toggle("is-active", n.dataset.nav === id);
+            });
+          });
+        },
+        { rootMargin: "-40% 0px -45% 0px", threshold: 0 }
+      );
+      sections.forEach((id) => {
+        const sec = document.getElementById(id);
+        if (sec) observer.observe(sec);
+      });
+    }
+
+    [document.getElementById("detailModal"), document.getElementById("feedbackModal")].forEach(
+      (dialog) => {
+        dialog?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+      }
+    );
+  }
+
   function resetFilters() {
     state.group = "all";
     state.category = "all";
@@ -632,6 +870,8 @@
     updateSubTypeVisibility();
     updateDistrictVisibility();
     renderCards();
+    mountFiltersToSheet(false);
+    document.getElementById("filterSheet")?.close();
   }
 
   function applyCitySelection(city) {
@@ -644,6 +884,7 @@
     }
     const citySel = document.getElementById("cityFilter");
     if (citySel) citySel.value = city;
+    syncCityQuickLabel();
     updateDistrictVisibility();
     state.page = 1;
     renderCards();
@@ -659,11 +900,14 @@
 
   async function runGeoLocate(manual) {
     if (typeof GeoCity === "undefined") return;
-    const btn = document.getElementById("geoLocateBtn");
-    if (btn) {
+    const geoBtns = [
+      document.getElementById("geoLocateBtn"),
+      document.getElementById("geoLocateBtnDesktop"),
+    ].filter(Boolean);
+    geoBtns.forEach((btn) => {
       btn.disabled = true;
-      btn.textContent = "定位中…";
-    }
+      if (btn.id === "geoLocateBtnDesktop") btn.textContent = "定位中…";
+    });
     if (manual) showGeoBanner("正在获取您的位置…", "info");
 
     try {
@@ -682,21 +926,23 @@
     } catch (err) {
       const denied = err && err.code === 1;
       showGeoBanner(
-        denied ? "定位权限未开启，请点击「📍 定位」或手动选择地市" : "定位失败，请手动选择地市",
+        denied ? "定位权限未开启，请手动选择地市" : "定位失败，请手动选择地市",
         "warn"
       );
       track("geo_locate", { ok: false, reason: denied ? "denied" : "error" });
     } finally {
-      if (btn) {
+      geoBtns.forEach((btn) => {
         btn.disabled = false;
-        btn.textContent = "📍 定位";
-      }
+        if (btn.id === "geoLocateBtnDesktop") btn.textContent = "📍 定位";
+      });
     }
   }
 
   function initGeo() {
     const btn = document.getElementById("geoLocateBtn");
+    const btnDesktop = document.getElementById("geoLocateBtnDesktop");
     if (btn) btn.addEventListener("click", () => runGeoLocate(true));
+    if (btnDesktop) btnDesktop.addEventListener("click", () => runGeoLocate(true));
 
     const params = new URLSearchParams(location.search);
     if (params.get("city")) return;
@@ -759,6 +1005,7 @@
     initSearch();
     initFeedback();
     initGeo();
+    initMobileChrome();
 
     document.getElementById("resetFilters").addEventListener("click", resetFilters);
     document.getElementById("emptyReset").addEventListener("click", resetFilters);
@@ -779,10 +1026,16 @@
     });
     document.getElementById("modalClose").addEventListener("click", () => {
       document.getElementById("detailModal").close();
+      document.body.classList.remove("sheet-open");
     });
-    document.getElementById("detailModal").addEventListener("click", (e) => {
-      if (e.target === e.currentTarget) e.currentTarget.close();
+    const detailModal = document.getElementById("detailModal");
+    detailModal.addEventListener("click", (e) => {
+      if (e.target === detailModal) {
+        detailModal.close();
+        document.body.classList.remove("sheet-open");
+      }
     });
+    detailModal.addEventListener("close", () => document.body.classList.remove("sheet-open"));
   }
 
   if (document.readyState === "loading") {

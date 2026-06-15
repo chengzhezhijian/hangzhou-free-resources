@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d6e6e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="description" content="浙江省免费公共资源大全：11地市图书馆、城市书房、停车、公园、公厕、体育、纳凉点等。杭州细粒度收录，其他地市代表点+官方工具。" />
   <meta name="keywords" content="浙江免费资源,杭州城市书房,宁波图书馆,浙里办,免费停车,纳凉点,爱心驿家" />
   <meta property="og:title" content="浙里惠民地图 · 浙江公益资源大全" />
@@ -11,9 +13,8 @@
   <title>浙里惠民地图 · 浙江公益资源大全</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <!-- 百度统计（官方推荐：置于 head，便于代码检测） -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=13" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -23,7 +24,6 @@
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <!-- Microsoft Clarity：点击热图、会话录屏 -->
   <script type="text/javascript">
     (function (c, l, a, r, i, t, y) {
       c[a] =
@@ -42,14 +42,14 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <div class="brand">
+      <a href="#" class="brand" id="brandHome">
         <span class="brand-icon">浙</span>
-        <div>
+        <div class="brand-text">
           <h1>浙里惠民地图</h1>
-          <p>浙江公益免费资源大全</p>
+          <p class="brand-sub">浙江公益免费资源</p>
         </div>
-      </div>
-      <nav class="header-nav">
+      </a>
+      <nav class="header-nav" aria-label="桌面导航">
         <a href="#resources">资源</a>
         <a href="#guide">场景</a>
         <a href="#tools">工具</a>
@@ -62,80 +62,94 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="hero-badge">全省 · 11地市 · 杭州细录 · 官方工具</span>
-        <h2>浙江省免费公益资源<br />一站查询</h2>
-        <p>杭州 400+ 条细粒度收录；宁波、温州、嘉兴等 10 市代表点位 + 浙里办官方查询。图书馆、书房、公园、停车、纳凉、驿家等。</p>
+        <span class="hero-badge">全省 · 11地市 · 杭州细录</span>
+        <h2 class="hero-title">浙江省免费公益资源一站查询</h2>
+        <p class="hero-desc">图书馆、书房、公园、停车、纳凉、驿家等。杭州 400+ 细录，其他地市代表点 + 官方工具。</p>
         <div class="hero-stats" id="heroStats"></div>
-      </div>
-      <div class="hero-search">
-        <label class="search-label" for="searchInput">搜索名称或地址</label>
-        <div class="search-box">
-          <input type="search" id="searchInput" placeholder="例如：宁波图书馆、金沙湖书房、温州、免费停车…" autocomplete="off" />
-          <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
-        </div>
       </div>
     </div>
   </section>
 
-  <div class="geo-banner-wrap">
-    <div class="geo-banner" id="geoBanner" hidden role="status"></div>
+  <div class="discover-bar" id="discoverBar">
+    <div class="discover-inner">
+      <div class="geo-banner" id="geoBanner" hidden role="status"></div>
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input type="search" id="searchInput" placeholder="搜索名称或地址" autocomplete="off" enterkeyhint="search" />
+        <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
+      </div>
+      <div class="toolbar-row">
+        <button type="button" class="toolbar-btn" id="cityQuickBtn" aria-haspopup="dialog">
+          <span class="toolbar-btn-label">地市</span>
+          <span class="toolbar-btn-value" id="cityQuickValue">全部</span>
+        </button>
+        <button type="button" class="toolbar-btn" id="filterOpenBtn" aria-haspopup="dialog">
+          <span class="toolbar-btn-label">筛选</span>
+          <span class="filter-badge" id="filterBadge" hidden>0</span>
+        </button>
+        <button type="button" class="toolbar-btn toolbar-btn--icon" id="geoLocateBtn" title="根据当前位置选择地市" aria-label="定位">
+          📍
+        </button>
+      </div>
+      <div class="active-filters" id="activeFilters" hidden></div>
+    </div>
   </div>
 
   <main class="main">
-    <aside class="sidebar" id="sidebar">
-      <div class="filter-block">
-        <h3>资源大类</h3>
-        <select id="groupFilter" class="select-input"></select>
-      </div>
-      <div class="filter-block">
-        <h3>资源类型</h3>
-        <div class="chip-group chip-group-scroll" id="categoryFilters"></div>
-      </div>
-      <div class="filter-block">
-        <h3>设施筛选</h3>
-        <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
-      </div>
-      <div class="filter-block">
-        <h3>地市</h3>
-        <div class="city-filter-row">
-          <select id="cityFilter" class="select-input"></select>
-          <button type="button" id="geoLocateBtn" class="btn-geo" title="根据当前位置自动选择地市">📍 定位</button>
+    <aside class="sidebar" id="sidebar" aria-label="筛选条件">
+      <div class="sidebar-inner" id="sidebarInner">
+        <div class="filter-block">
+          <h3>资源大类</h3>
+          <select id="groupFilter" class="select-input"></select>
         </div>
+        <div class="filter-block">
+          <h3>资源类型</h3>
+          <div class="chip-group chip-group-scroll" id="categoryFilters"></div>
+        </div>
+        <div class="filter-block">
+          <h3>设施筛选</h3>
+          <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
+        </div>
+        <div class="filter-block filter-block--desktop">
+          <h3>地市</h3>
+          <div class="city-filter-row">
+            <select id="cityFilter" class="select-input"></select>
+            <button type="button" id="geoLocateBtnDesktop" class="btn-geo" title="根据当前位置自动选择地市">📍 定位</button>
+          </div>
+        </div>
+        <div class="filter-block" id="districtBlock">
+          <h3>杭州区县</h3>
+          <select id="districtFilter" class="select-input"></select>
+        </div>
+        <div class="filter-block" id="subTypeBlock" hidden>
+          <h3>书房子类</h3>
+          <select id="subTypeFilter" class="select-input"></select>
+        </div>
+        <div class="filter-block">
+          <label class="checkbox-row">
+            <input type="checkbox" id="featuredOnly" />
+            <span>仅看推荐</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="freeOnly" />
+            <span>仅看完全免费</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="yearRoundOnly" />
+            <span>仅看全年开放</span>
+          </label>
+        </div>
+        <button type="button" class="btn-reset" id="resetFilters">重置筛选</button>
       </div>
-      <div class="filter-block" id="districtBlock">
-        <h3>杭州区县</h3>
-        <select id="districtFilter" class="select-input"></select>
-      </div>
-      <div class="filter-block" id="subTypeBlock" hidden>
-        <h3>书房子类</h3>
-        <select id="subTypeFilter" class="select-input"></select>
-      </div>
-      <div class="filter-block">
-        <label class="checkbox-row">
-          <input type="checkbox" id="featuredOnly" />
-          <span>仅看推荐</span>
-        </label>
-        <label class="checkbox-row">
-          <input type="checkbox" id="freeOnly" />
-          <span>仅看完全免费</span>
-        </label>
-        <label class="checkbox-row">
-          <input type="checkbox" id="yearRoundOnly" />
-          <span>仅看全年开放</span>
-        </label>
-      </div>
-      <button type="button" class="btn-reset" id="resetFilters">重置筛选</button>
     </aside>
 
     <section class="content" id="resources">
       <div class="content-header">
         <h2>资源列表</h2>
-        <div class="content-header-right">
-          <span class="result-count" id="resultCount"></span>
-          <div class="pagination" id="pagination" hidden></div>
-        </div>
+        <span class="result-count" id="resultCount"></span>
       </div>
       <div class="card-grid" id="cardGrid"></div>
+      <div class="pagination-wrap" id="pagination" hidden></div>
       <div class="empty-state" id="emptyState" hidden>
         <p>没有找到匹配的资源</p>
         <button type="button" class="btn-secondary" id="emptyReset">清除筛选</button>
@@ -143,7 +157,7 @@
     </section>
   </main>
 
-  <section class="guide-section" id="guide">
+  <section class="guide-section page-section" id="guide">
     <div class="section-inner">
       <h2>按场景选点</h2>
       <p class="section-desc">根据你的需求，快速找到最合适的公益场所</p>
@@ -151,15 +165,15 @@
     </div>
   </section>
 
-  <section class="tools-section" id="tools">
+  <section class="tools-section page-section" id="tools">
     <div class="section-inner">
       <h2>官方查询工具</h2>
-      <p class="section-desc">动态数据（如900+爱心驿家）请通过以下官方渠道实时查询</p>
+      <p class="section-desc">动态数据请通过以下官方渠道实时查询</p>
       <div class="tools-grid" id="toolsGrid"></div>
     </div>
   </section>
 
-  <section class="about-section" id="about">
+  <section class="about-section page-section" id="about">
     <div class="section-inner about-inner">
       <h2>使用说明</h2>
       <div class="about-grid">
@@ -173,7 +187,7 @@
         </div>
         <div class="about-card">
           <h4>城市书房</h4>
-          <p>杭州邻里阅读空间已逐条收录；宁波、温州、嘉兴等地市提供官方查询工具卡片，海量点位请点「官方平台」。</p>
+          <p>杭州邻里阅读空间已逐条收录；其他地市提供官方查询工具卡片，海量点位请点「官方平台」。</p>
         </div>
         <div class="about-card">
           <h4>爱心驿家</h4>
@@ -200,7 +214,7 @@
     </div>
   </section>
 
-  <section class="feedback-section" id="feedback">
+  <section class="feedback-section page-section" id="feedback">
     <div class="section-inner feedback-inner">
       <h2>发现错误或新点位？</h2>
       <p class="section-desc">你的反馈能帮我们验证需求、修正数据。感谢每一位纠错者。</p>
@@ -212,12 +226,56 @@
   </section>
 
   <footer class="site-footer">
-    <p>浙里惠民地图 · 浙江公益免费资源大全 · 出行前请核实官方公告</p>
+    <p>浙里惠民地图 · 出行前请核实官方公告</p>
   </footer>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="主导航">
+    <a href="#resources" class="bottom-nav-item is-active" data-nav="resources">
+      <span class="bottom-nav-icon">🗺</span>
+      <span>地图</span>
+    </a>
+    <a href="#guide" class="bottom-nav-item" data-nav="guide">
+      <span class="bottom-nav-icon">💡</span>
+      <span>场景</span>
+    </a>
+    <a href="#tools" class="bottom-nav-item" data-nav="tools">
+      <span class="bottom-nav-icon">🔧</span>
+      <span>工具</span>
+    </a>
+    <a href="#about" class="bottom-nav-item" data-nav="about">
+      <span class="bottom-nav-icon">ℹ️</span>
+      <span>说明</span>
+    </a>
+  </nav>
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <dialog class="feedback-modal" id="feedbackModal">
+  <dialog class="sheet-dialog filter-sheet" id="filterSheet">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <h3>筛选条件</h3>
+      <button type="button" class="sheet-close" id="filterSheetClose" aria-label="关闭">×</button>
+    </div>
+    <div class="sheet-body" id="filterSheetBody"></div>
+    <div class="sheet-footer">
+      <button type="button" class="btn-secondary" id="filterSheetReset">重置</button>
+      <button type="button" class="btn-primary" id="filterSheetApply">查看结果</button>
+    </div>
+  </dialog>
+
+  <dialog class="sheet-dialog city-sheet" id="citySheet">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <h3>选择地市</h3>
+      <button type="button" class="sheet-close" id="citySheetClose" aria-label="关闭">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="city-grid" id="cityGrid"></div>
+    </div>
+  </dialog>
+
+  <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
+    <div class="sheet-handle" aria-hidden="true"></div>
     <div class="modal-header">
       <h3>提交反馈</h3>
       <button type="button" class="modal-close" id="feedbackClose" aria-label="关闭">×</button>
@@ -238,7 +296,7 @@
       </label>
       <label class="form-label">
         联系方式（选填）
-        <input type="text" name="contact" class="form-input" placeholder="微信 / 手机 / 邮箱，方便我们回访" />
+        <input type="text" name="contact" class="form-input" placeholder="微信 / 手机 / 邮箱" />
       </label>
       <div class="modal-footer feedback-form-footer">
         <button type="submit" class="btn-primary">发送反馈</button>
@@ -247,16 +305,17 @@
     </form>
   </dialog>
 
-  <dialog class="detail-modal" id="detailModal">
+  <dialog class="detail-modal sheet-dialog" id="detailModal">
+    <div class="sheet-handle" aria-hidden="true"></div>
     <div class="modal-header">
       <h3 id="modalTitle"></h3>
       <button type="button" class="modal-close" id="modalClose" aria-label="关闭">×</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer" id="modalFooter"></div>
+    <div class="modal-footer modal-footer--sticky" id="modalFooter"></div>
   </dialog>
 
-  <script src="js/site-config.js?v=9"></script>
+  <script src="js/site-config.js?v=13"></script>
   <script src="js/geo.js?v=12"></script>
   <script src="js/map-nav.js?v=11"></script>
   <script src="js/analytics.js?v=9"></script>
@@ -264,6 +323,6 @@
   <script src="js/data-extra-resources.js?v=9"></script>
   <script src="js/data-zhejiang-cities.js?v=9"></script>
   <script src="js/data.js?v=11"></script>
-  <script src="js/app.js?v=12"></script>
+  <script src="js/app.js?v=13"></script>
 </body>
 </html>
