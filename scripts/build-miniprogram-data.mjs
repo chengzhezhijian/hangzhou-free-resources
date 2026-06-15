@@ -21,19 +21,44 @@ function runDataFile(filename, context) {
 function build() {
   const context = vm.createContext({ console });
 
-  runDataFile("data-study-spaces.js", context);
-  runDataFile("data-extra-resources.js", context);
-  runDataFile("data.js", context);
+  const files = [
+    "data-study-spaces.js",
+    "data-extra-resources.js",
+    "data-zhejiang-cities.js",
+    "data.js",
+  ];
+  const combined = files
+    .map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8"))
+    .join("\n");
+  vm.runInContext(
+    `${combined}\n;(() => {
+      globalThis.__EXPORT__ = {
+        RESOURCES,
+        RESOURCE_CATEGORIES,
+        CATEGORY_GROUPS,
+        COST_TYPE_LABELS,
+        FACILITY_FILTERS,
+        CITIES,
+        DISTRICTS,
+        READING_SUBTYPES,
+        SCENE_GUIDES,
+        EXTERNAL_TOOLS,
+      };
+    })();`,
+    context
+  );
 
-  const RESOURCES = context.RESOURCES;
-  const RESOURCE_CATEGORIES = context.RESOURCE_CATEGORIES;
-  const CATEGORY_GROUPS = context.CATEGORY_GROUPS;
-  const COST_TYPE_LABELS = context.COST_TYPE_LABELS;
-  const FACILITY_FILTERS = context.FACILITY_FILTERS;
-  const DISTRICTS = context.DISTRICTS;
-  const READING_SUBTYPES = context.READING_SUBTYPES;
-  const SCENE_GUIDES = context.SCENE_GUIDES;
-  const EXTERNAL_TOOLS = context.EXTERNAL_TOOLS;
+  const exported = context.__EXPORT__;
+  const RESOURCES = exported?.RESOURCES;
+  const RESOURCE_CATEGORIES = exported.RESOURCE_CATEGORIES;
+  const CATEGORY_GROUPS = exported.CATEGORY_GROUPS;
+  const COST_TYPE_LABELS = exported.COST_TYPE_LABELS;
+  const FACILITY_FILTERS = exported.FACILITY_FILTERS;
+  const CITIES = exported.CITIES;
+  const DISTRICTS = exported.DISTRICTS;
+  const READING_SUBTYPES = exported.READING_SUBTYPES;
+  const SCENE_GUIDES = exported.SCENE_GUIDES;
+  const EXTERNAL_TOOLS = exported.EXTERNAL_TOOLS;
 
   if (!Array.isArray(RESOURCES)) {
     throw new Error("RESOURCES 未生成，请检查 js/data.js 加载顺序");
@@ -52,6 +77,7 @@ function build() {
       categoryGroups: CATEGORY_GROUPS,
       costTypeLabels: COST_TYPE_LABELS,
       facilityFilters: FACILITY_FILTERS,
+      cities: CITIES,
       districts: DISTRICTS,
       readingSubtypes: READING_SUBTYPES,
       sceneGuides: SCENE_GUIDES,

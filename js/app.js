@@ -19,6 +19,8 @@
       const clear = document.getElementById("searchClear");
       if (clear) clear.hidden = !q;
     }
+    const city = params.get("city");
+    if (city) state.city = city;
     if (params.get("free") === "1") state.freeOnly = true;
     if (params.toString()) {
       track("landing_params", Object.fromEntries(params.entries()));
@@ -30,6 +32,7 @@
     category: "all",
     subType: "all",
     facilities: new Set(),
+    city: "全部",
     district: "全部",
     search: "",
     featuredOnly: false,
@@ -74,6 +77,10 @@
     );
   }
 
+  function resourceCity(r) {
+    return r.city || "杭州";
+  }
+
   function filterResources() {
     return RESOURCES.filter((r) => {
       if (state.category !== "all" && r.category !== state.category) return false;
@@ -82,7 +89,17 @@
         if (g !== state.group) return false;
       }
       if (state.category === "reading" && state.subType !== "all" && r.subType !== state.subType) return false;
-      if (state.district !== "全部" && r.district !== state.district && r.district !== "杭州") return false;
+      if (state.city !== "全部") {
+        if (state.city === "全省") {
+          if (resourceCity(r) !== "全省") return false;
+        } else if (resourceCity(r) !== state.city) {
+          return false;
+        }
+      }
+      if (state.district !== "全部") {
+        if (resourceCity(r) !== "杭州") return false;
+        if (r.district !== state.district && r.district !== "杭州") return false;
+      }
       if (state.featuredOnly && !r.featured) return false;
       if (state.freeOnly && r.costType && r.costType !== "free") return false;
       if (state.yearRoundOnly && r.seasonal) return false;
@@ -95,6 +112,7 @@
           r.name,
           r.fullName,
           r.subType,
+          r.city,
           r.address,
           r.district,
           r.transport,
@@ -130,11 +148,14 @@
   function renderHeroStats() {
     const counts = countByCategory();
     const el = document.getElementById("heroStats");
+    const coveredCities = new Set(
+      RESOURCES.map((r) => resourceCity(r)).filter((c) => c !== "全省")
+    ).size;
+    const hangzhouCount = RESOURCES.filter((r) => resourceCity(r) === "杭州").length;
     const items = [
-      { n: counts.reading || 0, label: "城市书房" },
-      { n: counts.parking || 0, label: "停车" },
-      { n: counts.park || 0, label: "公园" },
-      { n: counts.sports || 0, label: "体育" },
+      { n: coveredCities, label: "覆盖地市" },
+      { n: hangzhouCount, label: "杭州细录" },
+      { n: counts.reading || 0, label: "书房" },
       { n: RESOURCES.length, label: "总收录" },
     ];
     el.innerHTML = items
@@ -143,6 +164,31 @@
           `<div class="stat-item"><strong>${i.n}</strong><span>${i.label}</span></div>`
       )
       .join("");
+  }
+
+  function updateDistrictVisibility() {
+    const block = document.getElementById("districtBlock");
+    if (block) block.hidden = state.city !== "全部" && state.city !== "杭州";
+  }
+
+  function renderCityFilter() {
+    const sel = document.getElementById("cityFilter");
+    if (!sel) return;
+    sel.innerHTML = CITIES.map(
+      (c) => `<option value="${c}" ${state.city === c ? "selected" : ""}>${c}</option>`
+    ).join("");
+    sel.onchange = () => {
+      state.city = sel.value;
+      if (state.city !== "全部" && state.city !== "杭州") {
+        state.district = "全部";
+        document.getElementById("districtFilter").value = "全部";
+      }
+      state.page = 1;
+      track("filter_change", { field: "city", value: state.city });
+      updateDistrictVisibility();
+      renderCards();
+    };
+    updateDistrictVisibility();
   }
 
   function updateSubTypeVisibility() {
@@ -231,6 +277,7 @@
     sel.addEventListener("change", () => {
       state.district = sel.value;
       state.page = 1;
+      track("filter_change", { field: "district", value: state.district });
       renderCards();
     });
   }
@@ -270,7 +317,7 @@
         <p class="card-address">${resource.address}</p>
         <p class="card-hours">${resource.hours}</p>
         <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
-        <span class="card-district">${resource.district}</span>
+        <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
       </article>
     `;
   }
@@ -354,6 +401,8 @@
     const features = (r.features || []).map((f) => `<li>${f}</li>`).join("");
 
     document.getElementById("modalBody").innerHTML = `
+      <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
+      ${r.district ? `<div class="modal-row"><label>区县</label><p>${r.district}</p></div>` : ""}
       <div class="modal-row"><label>类型</label><p>${categoryLabel(r)}</p></div>
       ${r.costType ? `<div class="modal-row"><label>费用</label><p>${COST_TYPE_LABELS[r.costType] || r.costType}</p></div>` : ""}
       ${r.fullName && r.fullName !== r.name ? `<div class="modal-row"><label>全称</label><p>${r.fullName}</p></div>` : ""}
@@ -503,6 +552,7 @@
     state.category = "all";
     state.subType = "all";
     state.facilities.clear();
+    state.city = "全部";
     state.district = "全部";
     state.search = "";
     state.featuredOnly = false;
@@ -515,11 +565,13 @@
     document.getElementById("freeOnly").checked = false;
     document.getElementById("yearRoundOnly").checked = false;
     document.getElementById("districtFilter").value = "全部";
+    document.getElementById("cityFilter").value = "全部";
     document.getElementById("groupFilter").value = "all";
     document.getElementById("subTypeFilter").value = "all";
     renderCategoryFilters();
     renderFacilityFilters();
     updateSubTypeVisibility();
+    updateDistrictVisibility();
     renderCards();
   }
 
@@ -552,11 +604,13 @@
     applyUrlParams();
     renderHeroStats();
     renderGroupFilter();
+    renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();
     renderDistrictFilter();
     renderSubTypeFilter();
     if (state.freeOnly) document.getElementById("freeOnly").checked = true;
+    if (state.city !== "全部") document.getElementById("cityFilter").value = state.city;
     if (state.group !== "all") document.getElementById("groupFilter").value = state.group;
     if (state.category === "reading") updateSubTypeVisibility();
     renderCards();

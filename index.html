@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="杭州市免费公共资源大全：图书馆、城市书房、免费停车、公园、公厕、体育场馆、充电、WiFi、纳凉点等。可搜索、可筛选，附官方查询入口。" />
-  <meta name="keywords" content="杭州免费资源,城市书房,金沙湖书房,免费停车,邻里停,纳凉点,爱心驿家,杭州图书馆" />
-  <meta property="og:title" content="杭城免费资源地图 · 杭州公益资源大全" />
-  <meta property="og:description" content="图书馆、城市书房、免费停车、公园、纳凉点等 400+ 公益资源，一站查询。" />
+  <meta name="description" content="浙江省免费公共资源大全：11地市图书馆、城市书房、停车、公园、公厕、体育、纳凉点等。杭州细粒度收录，其他地市代表点+官方工具。" />
+  <meta name="keywords" content="浙江免费资源,杭州城市书房,宁波图书馆,浙里办,免费停车,纳凉点,爱心驿家" />
+  <meta property="og:title" content="浙里惠民地图 · 浙江公益资源大全" />
+  <meta property="og:description" content="覆盖浙江省11地市，杭州400+细录，图书馆、书房、公园、停车、纳凉等公益资源一站查询。" />
   <meta property="og:type" content="website" />
-  <title>杭城免费资源地图 · 杭州公益资源大全</title>
+  <title>浙里惠民地图 · 浙江公益资源大全</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -43,10 +43,10 @@
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
-        <span class="brand-icon">杭</span>
+        <span class="brand-icon">浙</span>
         <div>
-          <h1>杭城免费资源地图</h1>
-          <p>杭州公益免费资源大全</p>
+          <h1>浙里惠民地图</h1>
+          <p>浙江公益免费资源大全</p>
         </div>
       </div>
       <nav class="header-nav">
@@ -62,15 +62,15 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="hero-badge">文化 · 停车 · 公园 · 体育 · 便民 · 纳凉</span>
-        <h2>杭州免费公共资源<br />一站集齐</h2>
-        <p>收录图书馆、城市书房、共享停车、免费公园、公厕、体育场馆、充电、WiFi、爱心驿家、纳凉点等。海量点位附官方查询入口。</p>
+        <span class="hero-badge">全省 · 11地市 · 杭州细录 · 官方工具</span>
+        <h2>浙江省免费公益资源<br />一站查询</h2>
+        <p>杭州 400+ 条细粒度收录；宁波、温州、嘉兴等 10 市代表点位 + 浙里办官方查询。图书馆、书房、公园、停车、纳凉、驿家等。</p>
         <div class="hero-stats" id="heroStats"></div>
       </div>
       <div class="hero-search">
         <label class="search-label" for="searchInput">搜索名称或地址</label>
         <div class="search-box">
-          <input type="search" id="searchInput" placeholder="例如：金沙湖书房、免费停车、运河公园、邻里停…" autocomplete="off" />
+          <input type="search" id="searchInput" placeholder="例如：宁波图书馆、金沙湖书房、温州、免费停车…" autocomplete="off" />
           <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
         </div>
       </div>
@@ -92,7 +92,11 @@
         <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
       </div>
       <div class="filter-block">
-        <h3>所在区县</h3>
+        <h3>地市</h3>
+        <select id="cityFilter" class="select-input"></select>
+      </div>
+      <div class="filter-block" id="districtBlock">
+        <h3>杭州区县</h3>
         <select id="districtFilter" class="select-input"></select>
       </div>
       <div class="filter-block" id="subTypeBlock" hidden>
@@ -157,8 +161,12 @@
           <p>免证阅览，凭证借书。WiFi 需读者证/短信认证，电子阅览每日约 2 小时。自修区请保持安静。</p>
         </div>
         <div class="about-card">
+          <h4>覆盖范围</h4>
+          <p>杭州：图书馆、223+ 书房、纳凉、停车等细录。其他 10 市：市图书馆 + 城市书房工具 + 代表公园/博物馆 + 浙里办入口。</p>
+        </div>
+        <div class="about-card">
           <h4>城市书房</h4>
-          <p>含金沙湖书房等公益阅读点，接入通借通还，可免费阅览自习。全市 200+ 点位已收录。</p>
+          <p>杭州邻里阅读空间已逐条收录；宁波、温州、嘉兴等地市提供官方查询工具卡片，海量点位请点「官方平台」。</p>
         </div>
         <div class="about-card">
           <h4>爱心驿家</h4>
@@ -166,7 +174,7 @@
         </div>
         <div class="about-card">
           <h4>停车</h4>
-          <p>春节等长假 5万+ 道路泊位免费；机关单位 1.7万+ 共享泊位通过「邻里停」查询。15 分钟内停车免费。</p>
+          <p>杭州：邻里停 1.7 万+ 共享泊位、春节道路免费等已收录。其他地市：通过浙里办 / 各地分厅查询。</p>
         </div>
         <div class="about-card">
           <h4>公园与体育</h4>
@@ -174,7 +182,7 @@
         </div>
         <div class="about-card">
           <h4>夏季纳凉</h4>
-          <p>防空洞通常 7—8 月开放（约 25℃）；地铁纳凉在运营时间内。出行前关注「杭州国防动员」公告。</p>
+          <p>杭州：防空洞、地铁 82 站已细录。其他地市：关注当地城管、国防动员夏季公告，或全省政策卡片。</p>
         </div>
         <div class="about-card">
           <h4>免责声明</h4>
@@ -198,7 +206,7 @@
   </section>
 
   <footer class="site-footer">
-    <p>杭城免费资源地图 · 杭州公益免费资源大全 · 出行前请核实官方公告</p>
+    <p>浙里惠民地图 · 浙江公益免费资源大全 · 出行前请核实官方公告</p>
   </footer>
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
@@ -242,11 +250,12 @@
     <div class="modal-footer" id="modalFooter"></div>
   </dialog>
 
-  <script src="js/site-config.js?v=5"></script>
-  <script src="js/analytics.js?v=5"></script>
-  <script src="js/data-study-spaces.js?v=5"></script>
-  <script src="js/data-extra-resources.js?v=5"></script>
-  <script src="js/data.js?v=5"></script>
-  <script src="js/app.js?v=5"></script>
+  <script src="js/site-config.js?v=6"></script>
+  <script src="js/analytics.js?v=6"></script>
+  <script src="js/data-study-spaces.js?v=6"></script>
+  <script src="js/data-extra-resources.js?v=6"></script>
+  <script src="js/data-zhejiang-cities.js?v=6"></script>
+  <script src="js/data.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
 </body>
 </html>

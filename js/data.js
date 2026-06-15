@@ -1,5 +1,5 @@
 /**
- * 杭州市公共免费资源数据
+ * 浙江省公共免费资源数据（杭州细粒度 + 全省合并入口）
  * 来源：政府公开信息整理，出行前请核实当日开放状态
  */
 const RESOURCE_CATEGORIES = [
@@ -45,6 +45,23 @@ const FACILITY_FILTERS = [
   { id: "open24", label: "24小时" },
 ];
 
+const CITIES = [
+  "全部",
+  "全省",
+  "杭州",
+  "宁波",
+  "温州",
+  "嘉兴",
+  "湖州",
+  "绍兴",
+  "金华",
+  "衢州",
+  "舟山",
+  "台州",
+  "丽水",
+];
+
+/** 杭州区县（仅在地市=杭州时使用） */
 const DISTRICTS = [
   "全部", "上城", "拱墅", "西湖", "滨江", "萧山", "余杭", "富阳", "临平", "钱塘", "临安", "桐庐", "淳安", "建德",
 ];
@@ -58,17 +75,29 @@ const READING_SUBTYPES = [
 ];
 
 const SCENE_GUIDES = [
-  { need: "长时间自习 + 稳定网络", pick: "图书馆自修区", alt: "城市书房 / 邻里阅读空间" },
+  { need: "长时间自习 + 稳定网络", pick: "各地市图书馆自修区", alt: "城市书房 / 邻里阅读空间" },
   { need: "就近喝水 + 手机充电", pick: "爱心驿家", alt: "社区党群中心" },
-  { need: "夏天极致凉快", pick: "四牌楼防空洞", alt: "地铁纳凉点" },
-  { need: "免费停车", pick: "邻里停查共享泊位", alt: "春节道路泊位免费政策" },
-  { need: "户外遛娃散步", pick: "西湖环湖公园", alt: "运河亚运公园 / 金沙湖公园" },
-  { need: "免费运动健身", pick: "校园室外场地", alt: "杭州体育在线预约场馆" },
+  { need: "夏天极致凉快（杭州）", pick: "四牌楼防空洞", alt: "地铁纳凉点" },
+  { need: "免费停车（杭州）", pick: "邻里停查共享泊位", alt: "春节道路泊位免费政策" },
+  { need: "户外遛娃散步", pick: "城市公园绿道", alt: "西湖/南湖/东钱湖等代表公园" },
+  { need: "免费运动健身", pick: "浙里办查体育场地", alt: "各地公共体育馆错时免费" },
   { need: "手机免费充电", pick: "爱心驿家", alt: "图书馆电子阅览区" },
-  { need: "24 小时服务", pick: "拱墅智能驿家", alt: "西湖公厕 / 元驿站" },
+  { need: "换城市怎么查", pick: "先选「地市」筛选", alt: "杭州细、其他市看代表点+官方工具" },
 ];
 
 const EXTERNAL_TOOLS = [
+  {
+    name: "浙里办",
+    desc: "全省找公厕、找车位、政务便民服务",
+    url: "https://www.zjzwfw.gov.cn/",
+    tag: "全省",
+  },
+  {
+    name: "浙里文化圈",
+    desc: "全省公共文化场馆与活动预约",
+    url: "https://www.zjwhyy.com/",
+    tag: "全省",
+  },
   {
     name: "杭州图书馆服务网点",
     desc: "查询全市图书馆四级服务网络",
@@ -129,16 +158,18 @@ const EXTERNAL_TOOLS = [
     url: "http://www.zj.xinhuanet.com/20260508/b261af240c0a48f49a0a0975007a01f6/c.html",
     tag: "公园",
   },
-  {
-    name: "浙里办",
-    desc: "找公厕、找车位、政务便民服务",
-    url: "https://www.zjzwfw.gov.cn/",
-    tag: "便民",
-  },
 ];
 
-function mapLink(address) {
-  return `https://uri.amap.com/search?query=${encodeURIComponent("杭州 " + address)}`;
+function mapLink(address, city) {
+  const c = city || "杭州";
+  const prefix = c === "全省" ? "浙江" : c;
+  return `https://uri.amap.com/search?query=${encodeURIComponent(prefix + " " + address)}`;
+}
+
+function normalizeResource(r) {
+  if (!r.city) r.city = "杭州";
+  if (!r.mapUrl) r.mapUrl = mapLink(r.address, r.city);
+  return r;
 }
 
 const RESOURCES = [
@@ -672,6 +703,7 @@ METRO_COOLING_LINES.forEach(({ line, stations }) => {
       id: `metro-${line}-${station}`,
       name: `${station}站`,
       category: "metro",
+      city: "杭州",
       district: "杭州",
       address: `杭州地铁${line} ${station}站站厅层`,
       hours: "地铁运营时间内；夏季纳凉点",
@@ -695,7 +727,9 @@ if (typeof EXTRA_RESOURCES !== "undefined") {
   RESOURCES.push(...EXTRA_RESOURCES);
 }
 
-// 为每条资源补充 mapUrl
-RESOURCES.forEach((r) => {
-  if (!r.mapUrl) r.mapUrl = mapLink(r.address);
-});
+// 合并浙江省其他地市（data-zhejiang-cities.js）
+if (typeof ZHEJIANG_CITY_RESOURCES !== "undefined") {
+  RESOURCES.push(...ZHEJIANG_CITY_RESOURCES);
+}
+
+RESOURCES.forEach(normalizeResource);
