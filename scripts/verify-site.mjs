@@ -86,11 +86,13 @@ for (const [id, kw] of samples) {
   }
 }
 
-// 3. 地图链接应进入高德搜索页（含 city、callnative）
+// 3. 地图链接应进入高德搜索页（含 keyword、view=list、callnative）
 const hz = RESOURCES.find((r) => r.id === "lib-hz-main");
 if (!hz?.mapUrl?.includes("uri.amap.com/search")) fail("地图链接未使用高德搜索页");
+else if (!hz.mapUrl.includes("keyword=")) fail("地图链接未使用 keyword 参数");
+else if (!hz.mapUrl.includes("view=list")) fail("地图链接未设置 view=list");
 else if (!hz.mapUrl.includes("callnative=1")) fail("地图链接未设置 callnative=1");
-else ok(`高德搜索页 → ${decodeURIComponent(hz.mapUrl.split("query=")[1]?.split("&")[0] || "")}`);
+else ok(`高德搜索页 → ${decodeURIComponent(hz.mapUrl.split("keyword=")[1]?.split("&")[0] || "")}`);
 
 // 4. 不应再保留「仅杭州」硬编码在新建资源 mapUrl（抽查宁波）
 const nb = RESOURCES.find((r) => r.id === "lib-ningbo-main");

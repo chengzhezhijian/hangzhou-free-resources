@@ -126,14 +126,15 @@ const MapNav = (function () {
     return parts.filter(Boolean).join(" ");
   }
 
-  /** 高德 URI 搜索页（callnative=1 手机直跳 App 搜索结果） */
+  /** 高德 URI 搜索页（keyword 为必选参数；view=list 展示结果列表） */
   function buildUrl(resource, contextCity) {
     const query = buildQuery(resource, contextCity);
     if (!query) return null;
 
     const city = effectiveCity(resource, contextCity);
     const parts = [
-      `query=${encodeURIComponent(query)}`,
+      `keyword=${encodeURIComponent(query)}`,
+      `view=list`,
       `callnative=1`,
       `src=zhelihuimin`,
     ];

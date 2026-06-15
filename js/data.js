@@ -162,8 +162,16 @@ const EXTERNAL_TOOLS = [
 
 function mapLink(address, city) {
   const c = city || "杭州";
-  const prefix = c === "全省" ? "浙江" : c;
-  return `https://uri.amap.com/search?query=${encodeURIComponent(prefix + " " + address)}`;
+  const prefix = c === "全省" ? "浙江" : c.endsWith("市") ? c : `${c}市`;
+  const keyword = `${prefix} ${address}`;
+  const parts = [
+    `keyword=${encodeURIComponent(keyword)}`,
+    `view=list`,
+    `callnative=1`,
+    `src=zhelihuimin`,
+  ];
+  if (c !== "全省") parts.push(`city=${encodeURIComponent(prefix)}`);
+  return `https://uri.amap.com/search?${parts.join("&")}`;
 }
 
 function normalizeResource(r) {
