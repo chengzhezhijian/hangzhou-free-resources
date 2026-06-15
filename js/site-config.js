@@ -9,8 +9,7 @@ const SITE_CONFIG = {
    * 反馈链接：腾讯问卷优先；当前默认 GitHub Issues（无需注册即可用）
    * 创建腾讯问卷后替换为 https://wj.qq.com/s2/xxxxx/
    */
-  feedbackUrl:
-    "https://github.com/chengzhezhijian/hangzhou-free-resources/issues/new?template=feedback.yml",
+  feedbackUrl: "https://wj.qq.com/s2/27038162/ce58/",
 
   /** 页内反馈邮件收件人（feedbackUrl 为空时生效） */
   feedbackEmail: "",
