@@ -86,13 +86,19 @@ for (const [id, kw] of samples) {
   }
 }
 
-// 3. 不应再保留「仅杭州」硬编码在新建资源 mapUrl（抽查宁波）
+// 3. 地图链接应进入高德搜索页（含 city、callnative）
+const hz = RESOURCES.find((r) => r.id === "lib-hz-main");
+if (!hz?.mapUrl?.includes("uri.amap.com/search")) fail("地图链接未使用高德搜索页");
+else if (!hz.mapUrl.includes("callnative=1")) fail("地图链接未设置 callnative=1");
+else ok(`高德搜索页 → ${decodeURIComponent(hz.mapUrl.split("query=")[1]?.split("&")[0] || "")}`);
+
+// 4. 不应再保留「仅杭州」硬编码在新建资源 mapUrl（抽查宁波）
 const nb = RESOURCES.find((r) => r.id === "lib-ningbo-main");
 if (nb?.mapUrl?.includes(encodeURIComponent("杭州"))) {
   fail("宁波图书馆 mapUrl 仍含杭州");
 } else ok("宁波图书馆 mapUrl 已按地市生成");
 
-// 4. 全省工具浙里办不走地图
+// 5. 全省工具浙里办不走地图
 const zlb = RESOURCES.find((r) => r.id === "prov-zheliban");
 if (MapNav.buildUrl(zlb)) warn("浙里办仍生成地图链接（预期仅官网）");
 else ok("浙里办仅走官方平台");

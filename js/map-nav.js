@@ -1,5 +1,6 @@
 /**
- * 高德地图直达搜索词生成
+ * 高德地图直达 — 打开对应地址/关键词的搜索结果页
+ * @see https://lbs.amap.com/api/uri-api/guide
  */
 const MapNav = (function () {
   const CATEGORY_KEYWORD = {
@@ -18,7 +19,6 @@ const MapNav = (function () {
     wifi_pub: "公共WiFi",
   };
 
-  /** 官方工具类：地图一键搜什么 */
   const TOOL_SEARCH = {
     toilet: "公共厕所",
     charging: "充电桩",
@@ -31,7 +31,6 @@ const MapNav = (function () {
     wifi_pub: "免费WiFi",
   };
 
-  /** 不走地图、只走官网的工具（名称匹配） */
   const WEBSITE_ONLY_TOOLS = [
     "浙里文化圈",
     "邻里停",
@@ -47,14 +46,27 @@ const MapNav = (function () {
     return "杭州";
   }
 
-  function cityPrefix(city) {
-    if (!city || city === "全省") return "浙江省";
-    if (city.endsWith("市")) return city;
-    return `${city}市`;
+  function cityParam(city) {
+    if (!city || city === "全省") return "";
+    return city.endsWith("市") ? city : `${city}市`;
   }
 
-  function needsKeyword(name, keyword) {
-    return keyword && name && !name.includes(keyword);
+  function cityPrefix(city) {
+    if (!city || city === "全省") return "浙江省";
+    return cityParam(city);
+  }
+
+  function needsKeyword(text, keyword) {
+    return keyword && text && !text.includes(keyword);
+  }
+
+  function hasConcreteAddress(addr) {
+    return (
+      addr &&
+      addr.length > 5 &&
+      !/^(全市|浙江省|浙江|各)/.test(addr) &&
+      /[路街道巷弄号区县镇乡村站]/.test(addr)
+    );
   }
 
   function isWebsiteOnlyTool(resource) {
@@ -71,13 +83,14 @@ const MapNav = (function () {
     const city = effectiveCity(resource, contextCity);
     const prefix = cityPrefix(city);
     const name = (resource.fullName || resource.name || "").trim();
+    const shortName = name.replace(/（[^）]*）/g, "").trim();
+    const addr = (resource.address || "").trim();
 
     if (resource.category === "policy" && resource.isTool && isWebsiteOnlyTool(resource)) {
       return null;
     }
 
     if (resource.isTool) {
-      const toolKw = TOOL_SEARCH[resource.category] || TOOL_SEARCH[resource.subType] || name;
       if (TOOL_SEARCH[resource.category]) {
         return `${prefix} ${TOOL_SEARCH[resource.category]}`;
       }
@@ -86,22 +99,26 @@ const MapNav = (function () {
       if (/停车/.test(name)) return `${prefix} 停车场`;
       if (/充电|找桩/.test(name)) return `${prefix} 充电桩`;
       if (/驿/.test(name)) return `${prefix} 爱心驿站`;
-      return `${prefix} ${toolKw || name}`;
+      return `${prefix} ${name}`;
     }
 
     const kw = CATEGORY_KEYWORD[resource.category];
-    const addr = (resource.address || "").trim();
 
-    if (addr && !/^(全市|浙江省|浙江|各)/.test(addr) && addr.length > 6) {
-      const hasCityInAddr = /市/.test(addr);
-      const parts = [];
-      if (!hasCityInAddr) parts.push(prefix);
-      const shortName = name.replace(/（[^）]*）/g, "").trim();
-      if (shortName && !addr.includes(shortName)) parts.push(shortName);
-      parts.push(addr);
-      const joined = parts.join(" ");
-      if (needsKeyword(joined, kw)) parts.push(kw);
-      return parts.join(" ");
+    // 有具体地址 → 以地址为主搜索词，直达搜索结果页
+    if (hasConcreteAddress(addr)) {
+      if (/省|市/.test(addr)) {
+        const q = shortName && !addr.includes(shortName) ? `${shortName} ${addr}` : addr;
+        return needsKeyword(q, kw) ? `${q} ${kw}` : q;
+      }
+      const q = `${prefix} ${addr}`;
+      if (shortName && !addr.includes(shortName)) {
+        return needsKeyword(`${shortName} ${q}`, kw) ? `${shortName} ${q} ${kw}` : `${shortName} ${q}`;
+      }
+      return needsKeyword(q, kw) ? `${q} ${kw}` : q;
+    }
+
+    if (addr && addr.length > 4 && !/^(全市|浙江省|浙江|各)/.test(addr)) {
+      return `${prefix} ${name} ${addr}`.trim();
     }
 
     const parts = [prefix, name];
@@ -109,10 +126,21 @@ const MapNav = (function () {
     return parts.filter(Boolean).join(" ");
   }
 
+  /** 高德 URI 搜索页（callnative=1 手机直跳 App 搜索结果） */
   function buildUrl(resource, contextCity) {
     const query = buildQuery(resource, contextCity);
     if (!query) return null;
-    return `https://uri.amap.com/search?query=${encodeURIComponent(query)}`;
+
+    const city = effectiveCity(resource, contextCity);
+    const parts = [
+      `query=${encodeURIComponent(query)}`,
+      `callnative=1`,
+      `src=zhelihuimin`,
+    ];
+    const c = cityParam(city);
+    if (c) parts.push(`city=${encodeURIComponent(c)}`);
+
+    return `https://uri.amap.com/search?${parts.join("&")}`;
   }
 
   function copyText(resource, contextCity) {

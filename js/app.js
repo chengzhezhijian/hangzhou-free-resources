@@ -174,10 +174,7 @@
     }
 
     if (mapUrl) {
-      const label =
-        resource.isTool && /公厕|厕所|充电|停车|驿/.test(resource.name)
-          ? "地图找附近"
-          : "高德地图导航";
+      const label = resource.isTool ? "地图找附近" : "打开地图搜索";
       return { label, href: mapUrl, external: true };
     }
 
@@ -481,7 +478,7 @@
     }
     if (mapUrl && primary?.href !== mapUrl) {
       buttons.push(
-        `<a href="${mapUrl}" target="_blank" rel="noopener" class="btn-outline" data-track="nav_click" data-id="${r.id}">高德地图</a>`
+        `<a href="${mapUrl}" target="_blank" rel="noopener" class="btn-outline" data-track="nav_click" data-id="${r.id}">打开地图搜索</a>`
       );
     }
 
