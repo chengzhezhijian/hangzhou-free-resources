@@ -108,5 +108,25 @@ const zlb = RESOURCES.find((r) => r.id === "prov-zheliban");
 if (MapNav.buildUrl(zlb)) warn("浙里办仍生成地图链接（预期仅官网）");
 else ok("浙里办仅走官方平台");
 
+// 6. 地市定位：杭州常见坐标不应落入嘉兴/绍兴
+const geoCtx = vm.createContext({});
+vm.runInContext(
+  fs.readFileSync(path.join(JS_DIR, "geo.js"), "utf8") + ";globalThis.__GEO__ = GeoCity;",
+  geoCtx
+);
+const { resolveCity } = geoCtx.__GEO__;
+const geoCases = [
+  ["杭州主城", 30.2741, 120.1551, "杭州"],
+  ["市民中心", 30.25, 120.21, "杭州"],
+  ["临平", 30.42, 120.3, "杭州"],
+  ["钱塘东部", 30.28, 120.35, "杭州"],
+  ["嘉兴市区", 30.7461, 120.7555, "嘉兴"],
+];
+for (const [label, lat, lng, expect] of geoCases) {
+  const r = resolveCity(lat, lng);
+  if (!r.ok || r.city !== expect) fail(`定位 ${label} 应为 ${expect}，实际 ${r.city || r.reason}`);
+  else ok(`定位 ${label} → ${r.city}`);
+}
+
 console.log(`\n完成：${errors} 错误，${warnings} 警告`);
 process.exit(errors ? 1 : 0);

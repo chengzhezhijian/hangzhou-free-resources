@@ -675,7 +675,7 @@
         return;
       }
       applyCitySelection(result.city);
-      sessionStorage.setItem("hz_geo_city", result.city);
+      sessionStorage.setItem("hz_geo_city_v2", result.city);
       showGeoBanner(`已根据位置定位到「${result.city}」`, "success");
       track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -703,7 +703,7 @@
     if (state.city !== "全部") return;
 
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-    const cached = sessionStorage.getItem("hz_geo_city");
+    const cached = sessionStorage.getItem("hz_geo_city_v2");
     if (cached && CITIES.includes(cached)) {
       applyCitySelection(cached);
       showGeoBanner(`已为您选中「${cached}」`, "success");

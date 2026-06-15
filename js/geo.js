@@ -24,8 +24,18 @@ const GeoCity = (function () {
     return lng >= bbox[0] && lng <= bbox[1] && lat >= bbox[2] && lat <= bbox[3];
   }
 
-  function bboxArea(bbox) {
-    return (bbox[1] - bbox[0]) * (bbox[3] - bbox[2]);
+  function nearestAmong(lat, lng, names) {
+    let city = names[0];
+    let minKm = Infinity;
+    for (const name of names) {
+      const region = CITY_REGIONS[name];
+      const km = distanceKm(lat, lng, region.center.lat, region.center.lng);
+      if (km < minKm) {
+        minKm = km;
+        city = name;
+      }
+    }
+    return { city, distanceKm: Math.round(minKm) };
   }
 
   function toRad(deg) {
@@ -59,17 +69,17 @@ const GeoCity = (function () {
     const matched = [];
     for (const [name, region] of Object.entries(CITY_REGIONS)) {
       if (inBBox(lng, lat, region.bbox)) {
-        matched.push({ name, area: bboxArea(region.bbox) });
+        matched.push(name);
       }
     }
 
     if (matched.length === 1) {
-      return { ok: true, city: matched[0].name, method: "bbox" };
+      return { ok: true, city: matched[0], method: "bbox" };
     }
 
     if (matched.length > 1) {
-      matched.sort((a, b) => a.area - b.area);
-      return { ok: true, city: matched[0].name, method: "bbox-multi" };
+      const { city, distanceKm: km } = nearestAmong(lat, lng, matched);
+      return { ok: true, city, distanceKm: km, method: "bbox-nearest" };
     }
 
     let city = "杭州";
