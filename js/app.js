@@ -505,8 +505,11 @@
       );
     });
 
-    modal.showModal();
-    document.body.classList.add("sheet-open");
+    openOverlay("detailModal");
+  }
+
+  function closeDetailModal() {
+    closeOverlay("detailModal");
   }
 
   function renderGuide() {
@@ -739,70 +742,63 @@
     grid.querySelectorAll(".city-pill").forEach((btn) => {
       btn.addEventListener("click", () => {
         applyCitySelection(btn.dataset.city);
-        document.getElementById("citySheet")?.close();
+        closeOverlay("citySheet");
       });
     });
   }
 
-  function openSheet(dialog) {
-    if (!dialog) return;
-    dialog.showModal();
+  function openOverlay(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.hidden = false;
     document.body.classList.add("sheet-open");
   }
 
-  function closeSheet(dialog) {
-    if (!dialog) return;
-    dialog.close();
+  function closeOverlay(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.hidden = true;
     document.body.classList.remove("sheet-open");
   }
 
-  function mountFiltersToSheet(open) {
-    const inner = document.getElementById("sidebarInner");
-    const sheetBody = document.getElementById("filterSheetBody");
+  function expandSidebar(scroll) {
     const sidebar = document.getElementById("sidebar");
-    if (!inner || !sheetBody || !sidebar) return;
-    if (open) sheetBody.appendChild(inner);
-    else sidebar.appendChild(inner);
+    const toggle = document.getElementById("sidebarToggle");
+    if (!sidebar) return;
+    sidebar.classList.remove("sidebar--collapsed");
+    if (toggle) {
+      toggle.textContent = "收起";
+      toggle.setAttribute("aria-expanded", "true");
+    }
+    if (scroll) {
+      sidebar.classList.add("sidebar--highlight");
+      sidebar.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => sidebar.classList.remove("sidebar--highlight"), 700);
+    }
   }
 
   function initMobileChrome() {
-    const filterSheet = document.getElementById("filterSheet");
     const citySheet = document.getElementById("citySheet");
 
     document.getElementById("filterOpenBtn")?.addEventListener("click", () => {
-      mountFiltersToSheet(true);
-      openSheet(filterSheet);
+      expandSidebar(true);
     });
-    document.getElementById("filterSheetClose")?.addEventListener("click", () => {
-      mountFiltersToSheet(false);
-      closeSheet(filterSheet);
-    });
-    document.getElementById("filterSheetApply")?.addEventListener("click", () => {
-      mountFiltersToSheet(false);
-      closeSheet(filterSheet);
-      document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    document.getElementById("filterSheetReset")?.addEventListener("click", resetFilters);
-    filterSheet?.addEventListener("click", (e) => {
-      if (e.target === filterSheet) {
-        mountFiltersToSheet(false);
-        closeSheet(filterSheet);
-      }
-    });
-    filterSheet?.addEventListener("close", () => {
-      mountFiltersToSheet(false);
-      document.body.classList.remove("sheet-open");
+
+    document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("sidebarToggle");
+      if (!sidebar || !toggle) return;
+      const collapsed = sidebar.classList.toggle("sidebar--collapsed");
+      toggle.textContent = collapsed ? "展开" : "收起";
+      toggle.setAttribute("aria-expanded", String(!collapsed));
     });
 
     document.getElementById("cityQuickBtn")?.addEventListener("click", () => {
       renderCityGrid();
-      openSheet(citySheet);
+      openOverlay("citySheet");
     });
-    document.getElementById("citySheetClose")?.addEventListener("click", () => closeSheet(citySheet));
-    citySheet?.addEventListener("click", (e) => {
-      if (e.target === citySheet) closeSheet(citySheet);
-    });
-    citySheet?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+    document.getElementById("citySheetClose")?.addEventListener("click", () => closeOverlay("citySheet"));
+    document.getElementById("citySheetBackdrop")?.addEventListener("click", () => closeOverlay("citySheet"));
 
     document.getElementById("brandHome")?.addEventListener("click", (e) => {
       e.preventDefault();
@@ -837,11 +833,12 @@
       });
     }
 
-    [document.getElementById("detailModal"), document.getElementById("feedbackModal")].forEach(
-      (dialog) => {
-        dialog?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
-      }
-    );
+    [document.getElementById("feedbackModal")].forEach((dialog) => {
+      dialog?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+    });
+
+    document.getElementById("modalClose")?.addEventListener("click", closeDetailModal);
+    document.getElementById("detailBackdrop")?.addEventListener("click", closeDetailModal);
   }
 
   function resetFilters() {
@@ -870,8 +867,6 @@
     updateSubTypeVisibility();
     updateDistrictVisibility();
     renderCards();
-    mountFiltersToSheet(false);
-    document.getElementById("filterSheet")?.close();
   }
 
   function applyCitySelection(city) {
@@ -1024,18 +1019,6 @@
       state.page = 1;
       renderCards();
     });
-    document.getElementById("modalClose").addEventListener("click", () => {
-      document.getElementById("detailModal").close();
-      document.body.classList.remove("sheet-open");
-    });
-    const detailModal = document.getElementById("detailModal");
-    detailModal.addEventListener("click", (e) => {
-      if (e.target === detailModal) {
-        detailModal.close();
-        document.body.classList.remove("sheet-open");
-      }
-    });
-    detailModal.addEventListener("close", () => document.body.classList.remove("sheet-open"));
   }
 
   if (document.readyState === "loading") {

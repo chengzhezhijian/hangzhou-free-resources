@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=13" />
+  <link rel="stylesheet" href="css/style.css?v=14" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -97,6 +97,10 @@
 
   <main class="main">
     <aside class="sidebar" id="sidebar" aria-label="筛选条件">
+      <div class="sidebar-head" id="sidebarHead">
+        <h3>筛选条件</h3>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-expanded="true" aria-controls="sidebarInner">收起</button>
+      </div>
       <div class="sidebar-inner" id="sidebarInner">
         <div class="filter-block">
           <h3>资源大类</h3>
@@ -110,7 +114,7 @@
           <h3>设施筛选</h3>
           <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
         </div>
-        <div class="filter-block filter-block--desktop">
+        <div class="filter-block" id="cityFilterBlock">
           <h3>地市</h3>
           <div class="city-filter-row">
             <select id="cityFilter" class="select-input"></select>
@@ -250,29 +254,19 @@
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <dialog class="sheet-dialog filter-sheet" id="filterSheet">
-    <div class="sheet-handle" aria-hidden="true"></div>
-    <div class="sheet-header">
-      <h3>筛选条件</h3>
-      <button type="button" class="sheet-close" id="filterSheetClose" aria-label="关闭">×</button>
+  <div class="overlay-sheet" id="citySheet" hidden>
+    <button type="button" class="overlay-backdrop" id="citySheetBackdrop" aria-label="关闭"></button>
+    <div class="overlay-panel" role="dialog" aria-modal="true" aria-labelledby="citySheetTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-header">
+        <h3 id="citySheetTitle">选择地市</h3>
+        <button type="button" class="sheet-close" id="citySheetClose" aria-label="关闭">×</button>
+      </div>
+      <div class="sheet-body">
+        <div class="city-grid" id="cityGrid"></div>
+      </div>
     </div>
-    <div class="sheet-body" id="filterSheetBody"></div>
-    <div class="sheet-footer">
-      <button type="button" class="btn-secondary" id="filterSheetReset">重置</button>
-      <button type="button" class="btn-primary" id="filterSheetApply">查看结果</button>
-    </div>
-  </dialog>
-
-  <dialog class="sheet-dialog city-sheet" id="citySheet">
-    <div class="sheet-handle" aria-hidden="true"></div>
-    <div class="sheet-header">
-      <h3>选择地市</h3>
-      <button type="button" class="sheet-close" id="citySheetClose" aria-label="关闭">×</button>
-    </div>
-    <div class="sheet-body">
-      <div class="city-grid" id="cityGrid"></div>
-    </div>
-  </dialog>
+  </div>
 
   <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
     <div class="sheet-handle" aria-hidden="true"></div>
@@ -305,15 +299,18 @@
     </form>
   </dialog>
 
-  <dialog class="detail-modal sheet-dialog" id="detailModal">
-    <div class="sheet-handle" aria-hidden="true"></div>
-    <div class="modal-header">
-      <h3 id="modalTitle"></h3>
-      <button type="button" class="modal-close" id="modalClose" aria-label="关闭">×</button>
+  <div class="overlay-sheet detail-sheet" id="detailModal" hidden>
+    <button type="button" class="overlay-backdrop" id="detailBackdrop" aria-label="关闭"></button>
+    <div class="overlay-panel detail-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <h3 id="modalTitle"></h3>
+        <button type="button" class="modal-close" id="modalClose" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer modal-footer--sticky" id="modalFooter"></div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer modal-footer--sticky" id="modalFooter"></div>
-  </dialog>
+  </div>
 
   <script src="js/site-config.js?v=13"></script>
   <script src="js/geo.js?v=12"></script>
@@ -323,6 +320,6 @@
   <script src="js/data-extra-resources.js?v=9"></script>
   <script src="js/data-zhejiang-cities.js?v=9"></script>
   <script src="js/data.js?v=11"></script>
-  <script src="js/app.js?v=13"></script>
+  <script src="js/app.js?v=14"></script>
 </body>
 </html>
