@@ -160,10 +160,10 @@ const EXTERNAL_TOOLS = [
   },
 ];
 
-function mapLink(address, city) {
+function mapLink(address, city, name) {
   const c = city || "杭州";
   const prefix = c === "全省" ? "浙江" : c.endsWith("市") ? c : `${c}市`;
-  const keyword = `${prefix} ${address}`;
+  const keyword = (name || address || "").trim();
   const parts = [
     `keyword=${encodeURIComponent(keyword)}`,
     `view=list`,
@@ -177,9 +177,9 @@ function mapLink(address, city) {
 function normalizeResource(r) {
   if (!r.city) r.city = "杭州";
   if (typeof MapNav !== "undefined") {
-    r.mapUrl = MapNav.buildUrl(r) || r.mapUrl || mapLink(r.address, r.city);
+    r.mapUrl = MapNav.buildUrl(r) || r.mapUrl || mapLink(r.address, r.city, r.name);
   } else if (!r.mapUrl) {
-    r.mapUrl = mapLink(r.address, r.city);
+    r.mapUrl = mapLink(r.address, r.city, r.name);
   }
   return r;
 }

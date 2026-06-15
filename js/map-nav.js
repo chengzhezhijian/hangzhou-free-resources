@@ -1,6 +1,6 @@
 /**
- * 高德地图直达 — 打开对应地址/关键词的搜索结果页
- * @see https://lbs.amap.com/api/uri-api/guide
+ * 高德地图直达 — 按名称打开搜索结果页（城市由 URL city 参数限定）
+ * @see https://lbs.amap.com/api/uri-api/guide/search/search
  */
 const MapNav = (function () {
   const CATEGORY_KEYWORD = {
@@ -56,19 +56,6 @@ const MapNav = (function () {
     return cityParam(city);
   }
 
-  function needsKeyword(text, keyword) {
-    return keyword && text && !text.includes(keyword);
-  }
-
-  function hasConcreteAddress(addr) {
-    return (
-      addr &&
-      addr.length > 5 &&
-      !/^(全市|浙江省|浙江|各)/.test(addr) &&
-      /[路街道巷弄号区县镇乡村站]/.test(addr)
-    );
-  }
-
   function isWebsiteOnlyTool(resource) {
     if (!resource.isTool) return false;
     const n = resource.name || "";
@@ -82,9 +69,7 @@ const MapNav = (function () {
   function buildQuery(resource, contextCity) {
     const city = effectiveCity(resource, contextCity);
     const prefix = cityPrefix(city);
-    const name = (resource.fullName || resource.name || "").trim();
-    const shortName = name.replace(/（[^）]*）/g, "").trim();
-    const addr = (resource.address || "").trim();
+    const name = (resource.name || resource.fullName || "").trim();
 
     if (resource.category === "policy" && resource.isTool && isWebsiteOnlyTool(resource)) {
       return null;
@@ -102,28 +87,11 @@ const MapNav = (function () {
       return `${prefix} ${name}`;
     }
 
+    // 普通点位：仅搜名称，城市范围由 buildUrl 的 city 参数限定
+    if (name) return name;
+
     const kw = CATEGORY_KEYWORD[resource.category];
-
-    // 有具体地址 → 以地址为主搜索词，直达搜索结果页
-    if (hasConcreteAddress(addr)) {
-      if (/省|市/.test(addr)) {
-        const q = shortName && !addr.includes(shortName) ? `${shortName} ${addr}` : addr;
-        return needsKeyword(q, kw) ? `${q} ${kw}` : q;
-      }
-      const q = `${prefix} ${addr}`;
-      if (shortName && !addr.includes(shortName)) {
-        return needsKeyword(`${shortName} ${q}`, kw) ? `${shortName} ${q} ${kw}` : `${shortName} ${q}`;
-      }
-      return needsKeyword(q, kw) ? `${q} ${kw}` : q;
-    }
-
-    if (addr && addr.length > 4 && !/^(全市|浙江省|浙江|各)/.test(addr)) {
-      return `${prefix} ${name} ${addr}`.trim();
-    }
-
-    const parts = [prefix, name];
-    if (needsKeyword(name, kw)) parts.push(kw);
-    return parts.filter(Boolean).join(" ");
+    return kw ? `${prefix} ${kw}` : prefix;
   }
 
   /** 高德 URI 搜索页（keyword 为必选参数；view=list 展示结果列表） */

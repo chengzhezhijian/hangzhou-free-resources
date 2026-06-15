@@ -81,6 +81,9 @@ for (const [id, kw] of samples) {
   const url = MapNav.buildUrl(r, "宁波");
   if (!q || !q.includes(kw)) fail(`${id} 地图词缺少「${kw}」: ${q}`);
   else ok(`${id} → ${q}`);
+  if (id === "lib-hz-main" && /解放东路|市民中心J楼/.test(q)) {
+    fail(`${id} 地图词不应包含地址: ${q}`);
+  }
   if (id === "tool-toilet" && url && !url.includes(encodeURIComponent("公共厕所"))) {
     fail("公厕工具在宁波上下文中未生成公共厕所搜索");
   }
