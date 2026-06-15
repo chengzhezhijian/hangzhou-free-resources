@@ -5,20 +5,28 @@ const GeoCity = (function () {
   /** 浙江大致范围 */
   const ZJ_BOUNDS = { minLng: 118.0, maxLng: 123.2, minLat: 27.0, maxLat: 31.3 };
 
-  /** 11 地市行政中心近似坐标 */
-  const CITY_CENTERS = {
-    杭州: { lat: 30.2741, lng: 120.1551 },
-    宁波: { lat: 29.8683, lng: 121.544 },
-    温州: { lat: 28.0006, lng: 120.6994 },
-    嘉兴: { lat: 30.7461, lng: 120.7555 },
-    湖州: { lat: 30.8931, lng: 120.0881 },
-    绍兴: { lat: 30.0023, lng: 120.582 },
-    金华: { lat: 29.0789, lng: 119.6478 },
-    衢州: { lat: 28.9417, lng: 118.8743 },
-    舟山: { lat: 29.9853, lng: 122.2072 },
-    台州: { lat: 28.6564, lng: 121.4208 },
-    丽水: { lat: 28.4517, lng: 119.9229 },
+  /** 11 地市行政中心 + 大致矩形范围 [minLng, maxLng, minLat, maxLat] */
+  const CITY_REGIONS = {
+    杭州: { center: { lat: 30.2741, lng: 120.1551 }, bbox: [118.9, 120.5, 29.75, 30.65] },
+    宁波: { center: { lat: 29.8683, lng: 121.544 }, bbox: [121.0, 122.35, 29.35, 30.35] },
+    温州: { center: { lat: 28.0006, lng: 120.6994 }, bbox: [119.45, 121.55, 27.45, 28.55] },
+    嘉兴: { center: { lat: 30.7461, lng: 120.7555 }, bbox: [120.25, 121.45, 30.25, 31.05] },
+    湖州: { center: { lat: 30.8931, lng: 120.0881 }, bbox: [119.45, 120.65, 30.45, 31.25] },
+    绍兴: { center: { lat: 30.0023, lng: 120.582 }, bbox: [119.85, 121.25, 29.55, 30.25] },
+    金华: { center: { lat: 29.0789, lng: 119.6478 }, bbox: [119.15, 120.65, 28.75, 29.65] },
+    衢州: { center: { lat: 28.9417, lng: 118.8743 }, bbox: [118.15, 119.55, 28.45, 29.55] },
+    舟山: { center: { lat: 29.9853, lng: 122.2072 }, bbox: [121.75, 123.05, 29.65, 30.45] },
+    台州: { center: { lat: 28.6564, lng: 121.4208 }, bbox: [120.35, 122.05, 28.25, 29.55] },
+    丽水: { center: { lat: 28.4517, lng: 119.9229 }, bbox: [118.75, 120.55, 27.25, 28.85] },
   };
+
+  function inBBox(lng, lat, bbox) {
+    return lng >= bbox[0] && lng <= bbox[1] && lat >= bbox[2] && lat <= bbox[3];
+  }
+
+  function bboxArea(bbox) {
+    return (bbox[1] - bbox[0]) * (bbox[3] - bbox[2]);
+  }
 
   function toRad(deg) {
     return (deg * Math.PI) / 180;
@@ -48,17 +56,33 @@ const GeoCity = (function () {
       return { ok: false, reason: "outside" };
     }
 
+    const matched = [];
+    for (const [name, region] of Object.entries(CITY_REGIONS)) {
+      if (inBBox(lng, lat, region.bbox)) {
+        matched.push({ name, area: bboxArea(region.bbox) });
+      }
+    }
+
+    if (matched.length === 1) {
+      return { ok: true, city: matched[0].name, method: "bbox" };
+    }
+
+    if (matched.length > 1) {
+      matched.sort((a, b) => a.area - b.area);
+      return { ok: true, city: matched[0].name, method: "bbox-multi" };
+    }
+
     let city = "杭州";
     let minKm = Infinity;
-    for (const [name, center] of Object.entries(CITY_CENTERS)) {
-      const km = distanceKm(lat, lng, center.lat, center.lng);
+    for (const [name, region] of Object.entries(CITY_REGIONS)) {
+      const km = distanceKm(lat, lng, region.center.lat, region.center.lng);
       if (km < minKm) {
         minKm = km;
         city = name;
       }
     }
 
-    return { ok: true, city, distanceKm: Math.round(minKm) };
+    return { ok: true, city, distanceKm: Math.round(minKm), method: "nearest" };
   }
 
   function requestLocation() {
@@ -80,5 +104,5 @@ const GeoCity = (function () {
     });
   }
 
-  return { resolveCity, requestLocation, CITY_CENTERS };
+  return { resolveCity, requestLocation, CITY_REGIONS };
 })();

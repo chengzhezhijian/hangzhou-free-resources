@@ -168,7 +168,11 @@ function mapLink(address, city) {
 
 function normalizeResource(r) {
   if (!r.city) r.city = "杭州";
-  if (!r.mapUrl) r.mapUrl = mapLink(r.address, r.city);
+  if (typeof MapNav !== "undefined") {
+    r.mapUrl = MapNav.buildUrl(r) || r.mapUrl || mapLink(r.address, r.city);
+  } else if (!r.mapUrl) {
+    r.mapUrl = mapLink(r.address, r.city);
+  }
   return r;
 }
 

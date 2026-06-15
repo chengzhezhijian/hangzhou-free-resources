@@ -22,6 +22,7 @@ function build() {
   const context = vm.createContext({ console });
 
   const files = [
+    "map-nav.js",
     "data-study-spaces.js",
     "data-extra-resources.js",
     "data-zhejiang-cities.js",

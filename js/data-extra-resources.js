@@ -295,6 +295,7 @@ const EXTRA_RESOURCES = [
     "name": "浙里办 · 找公厕",
     "category": "toilet",
     "subType": "公厕查询",
+    "city": "杭州",
     "district": "杭州",
     "address": "浙里办APP",
     "hours": "查询周边公共厕所位置",

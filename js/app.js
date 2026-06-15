@@ -81,6 +81,16 @@
     return r.city || "杭州";
   }
 
+  function matchesCityFilter(r) {
+    if (state.city === "全部") return true;
+    if (state.city === "全省") return resourceCity(r) === "全省";
+    return resourceCity(r) === state.city || resourceCity(r) === "全省";
+  }
+
+  function scopedResources() {
+    return RESOURCES.filter(matchesCityFilter);
+  }
+
   function filterResources() {
     return RESOURCES.filter((r) => {
       if (state.category !== "all" && r.category !== state.category) return false;
@@ -89,13 +99,7 @@
         if (g !== state.group) return false;
       }
       if (state.category === "reading" && state.subType !== "all" && r.subType !== state.subType) return false;
-      if (state.city !== "全部") {
-        if (state.city === "全省") {
-          if (resourceCity(r) !== "全省") return false;
-        } else if (resourceCity(r) !== state.city) {
-          return false;
-        }
-      }
+      if (!matchesCityFilter(r)) return false;
       if (state.district !== "全部") {
         if (resourceCity(r) !== "杭州") return false;
         if (r.district !== state.district && r.district !== "杭州") return false;
@@ -128,9 +132,11 @@
   }
 
   function countByCategory() {
-    const filtered = state.group === "all"
-      ? RESOURCES
-      : RESOURCES.filter((r) => CATEGORY_TO_GROUP[r.category] === state.group);
+    const pool = scopedResources();
+    const filtered =
+      state.group === "all"
+        ? pool
+        : pool.filter((r) => CATEGORY_TO_GROUP[r.category] === state.group);
     const counts = {};
     RESOURCE_CATEGORIES.forEach((c) => {
       if (state.group !== "all" && c.id !== "all" && c.group !== state.group) {
@@ -140,9 +146,46 @@
       counts[c.id] =
         c.id === "all"
           ? filtered.length
-          : RESOURCES.filter((r) => r.category === c.id).length;
+          : pool.filter((r) => r.category === c.id).length;
     });
     return counts;
+  }
+
+  function resultCountLabel(total) {
+    if (state.city === "全部") return `共 ${total} 处`;
+    if (state.city === "全省") return `共 ${total} 处（全省通用）`;
+    const local = RESOURCES.filter((r) => resourceCity(r) === state.city).length;
+    const shared = RESOURCES.filter((r) => resourceCity(r) === "全省").length;
+    return `共 ${total} 处（${state.city} ${local} + 全省 ${shared}）`;
+  }
+
+  function getResourceMapUrl(resource) {
+    if (typeof MapNav === "undefined") return resource.mapUrl;
+    return MapNav.buildUrl(resource, state.city) || resource.mapUrl;
+  }
+
+  function getPrimaryAction(resource) {
+    const mapUrl = getResourceMapUrl(resource);
+    const websiteOnly =
+      typeof MapNav !== "undefined" && MapNav.isWebsiteOnlyTool(resource);
+
+    if (resource.isTool && resource.website && (websiteOnly || !mapUrl)) {
+      return { label: "打开官方平台", href: resource.website, external: true };
+    }
+
+    if (mapUrl) {
+      const label =
+        resource.isTool && /公厕|厕所|充电|停车|驿/.test(resource.name)
+          ? "地图找附近"
+          : "高德地图导航";
+      return { label, href: mapUrl, external: true };
+    }
+
+    if (resource.website) {
+      return { label: "打开官方平台", href: resource.website, external: true };
+    }
+
+    return null;
   }
 
   function renderHeroStats() {
@@ -186,6 +229,7 @@
       state.page = 1;
       track("filter_change", { field: "city", value: state.city });
       updateDistrictVisibility();
+      renderCategoryFilters();
       renderCards();
     };
     updateDistrictVisibility();
@@ -356,7 +400,7 @@
     const start = (state.page - 1) * PAGE_SIZE;
     const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
-    countEl.textContent = `共 ${filtered.length} 处`;
+    countEl.textContent = resultCountLabel(filtered.length);
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -399,6 +443,8 @@
       .join("");
 
     const features = (r.features || []).map((f) => `<li>${f}</li>`).join("");
+    const mapQuery =
+      typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
 
     document.getElementById("modalBody").innerHTML = `
       <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
@@ -407,6 +453,7 @@
       ${r.costType ? `<div class="modal-row"><label>费用</label><p>${COST_TYPE_LABELS[r.costType] || r.costType}</p></div>` : ""}
       ${r.fullName && r.fullName !== r.name ? `<div class="modal-row"><label>全称</label><p>${r.fullName}</p></div>` : ""}
       <div class="modal-row"><label>地址</label><p>${r.address}</p></div>
+      ${mapQuery ? `<div class="modal-row"><label>地图搜索</label><p class="map-query-preview">${mapQuery}</p></div>` : ""}
       <div class="modal-row"><label>开放时间</label><p>${r.hours}</p></div>
       ${r.phone ? `<div class="modal-row"><label>电话</label><p>${r.phone}</p></div>` : ""}
       ${r.transport ? `<div class="modal-row"><label>交通</label><p>${r.transport}</p></div>` : ""}
@@ -417,16 +464,28 @@
     `;
 
     const footer = document.getElementById("modalFooter");
-    const primaryLabel = r.isTool ? "打开官方平台" : "高德地图导航";
-    const primaryHref = r.isTool && r.website ? r.website : r.mapUrl;
-    const primaryClass = r.isTool ? "btn-primary" : "btn-primary";
+    const primary = getPrimaryAction(r);
+    const mapUrl = getResourceMapUrl(r);
 
-    footer.innerHTML = `
-      <a href="${primaryHref}" target="_blank" rel="noopener" class="${primaryClass}" data-track="nav_click" data-id="${r.id}" data-name="${r.name}">${primaryLabel}</a>
-      <button type="button" class="btn-outline" id="modalCopyAddress">复制地址</button>
-      ${!r.isTool && r.website ? `<a href="${r.website}" target="_blank" rel="noopener" class="btn-outline" data-track="website_click" data-id="${r.id}">更多信息</a>` : ""}
-      ${r.isTool && r.mapUrl ? `<a href="${r.mapUrl}" target="_blank" rel="noopener" class="btn-outline" data-track="nav_click" data-id="${r.id}">高德地图</a>` : ""}
-    `;
+    const buttons = [];
+    if (primary) {
+      buttons.push(
+        `<a href="${primary.href}" target="_blank" rel="noopener" class="btn-primary" data-track="nav_click" data-id="${r.id}" data-name="${r.name}">${primary.label}</a>`
+      );
+    }
+    buttons.push(`<button type="button" class="btn-outline" id="modalCopyAddress">复制导航词</button>`);
+    if (r.website && primary?.href !== r.website) {
+      buttons.push(
+        `<a href="${r.website}" target="_blank" rel="noopener" class="btn-outline" data-track="website_click" data-id="${r.id}">官方平台</a>`
+      );
+    }
+    if (mapUrl && primary?.href !== mapUrl) {
+      buttons.push(
+        `<a href="${mapUrl}" target="_blank" rel="noopener" class="btn-outline" data-track="nav_click" data-id="${r.id}">高德地图</a>`
+      );
+    }
+
+    footer.innerHTML = buttons.join("");
 
     footer.querySelectorAll("[data-track]").forEach((el) => {
       el.addEventListener("click", () => {
@@ -434,11 +493,14 @@
       });
     });
     footer.querySelector("#modalCopyAddress")?.addEventListener("click", () => {
-      const text = `杭州 ${r.address}`;
+      const text =
+        typeof MapNav !== "undefined"
+          ? MapNav.copyText(r, state.city)
+          : `${resourceCity(r)} ${r.address}`;
       navigator.clipboard?.writeText(text).then(
         () => {
           track("copy_address", { id: r.id, name: r.name });
-          alert("地址已复制，可粘贴到地图 App 搜索");
+          alert("导航关键词已复制，可粘贴到地图 App 搜索");
         },
         () => alert(text)
       );
