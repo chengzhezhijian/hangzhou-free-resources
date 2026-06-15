@@ -52,8 +52,9 @@ python3 -m http.server 8080
 
 | 配置项 | 说明 |
 |--------|------|
-| `baiduTongjiId` | 百度统计 Site ID，留空则不加载（[创建指南](docs/setup-feedback-analytics.md)） |
-| `feedbackUrl` | 腾讯问卷链接；当前默认 GitHub Issues 反馈 |
+| `baiduTongjiId` | 百度统计 Site ID（PV/来源/地域） |
+| `clarityProjectId` | Microsoft Clarity 项目 ID（点击热图/录屏） |
+| `feedbackUrl` | 腾讯问卷链接 |
 | `feedbackEmail` | 无问卷时，页内表单走 `mailto:` |
 | `analyticsDebug` | `true` 时在控制台打印埋点 |
 
@@ -70,15 +71,9 @@ python3 -m http.server 8080
 | `tool_click` | 点击官方工具 |
 | `feedback_open` / `feedback_submit` | 反馈流程 |
 
-百度后台查看自定义事件：**报告 → 访问分析 → 事件跟踪**（不在「受访页面」里）。
+百度后台查看自定义事件：**报告 → 访问分析 → 事件跟踪**（免费版可能无权限，已改用 Clarity 看点击行为）。
 
-| 事件类别 | 事件动作 | 含义 |
-|----------|----------|------|
-| 搜索 | 关键词 | 用户搜索 |
-| 筛选 | 切换条件 | 切换大类/类型/区县 |
-| 资源 | 查看详情 / 高德导航 / 复制地址 | 资源卡片交互 |
-| 工具 | 打开外链 | 官方工具点击 |
-| 反馈 | 打开问卷 | 点反馈按钮 |
+**Microsoft Clarity**：https://clarity.microsoft.com/projects/view/x7dvhuedcl — 可看热图、录屏、rage click。
 
 本地调试：打开控制台，或执行 `JSON.parse(localStorage.getItem('hz_analytics_log'))` 查看最近 200 条记录。
 
