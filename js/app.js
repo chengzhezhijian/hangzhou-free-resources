@@ -441,19 +441,31 @@
       hint.textContent = "请在 js/site-config.js 配置 feedbackUrl 或 feedbackEmail";
     }
 
-    const open = () => {
+    const applyFeedbackLinks = () => {
+      const url = cfg.feedbackUrl;
+      if (!url) return;
+      ["feedbackOpen", "feedbackFab"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.href = url;
+      });
+    };
+
+    applyFeedbackLinks();
+
+    const open = (e) => {
+      const url = cfg.feedbackUrl;
+      if (!url) {
+        e?.preventDefault();
+        modal.showModal();
+        return;
+      }
       track("feedback_open");
-      const isGithubIssue = cfg.feedbackUrl?.includes("github.com") && cfg.feedbackUrl.includes("/issues/new");
-      if (cfg.feedbackUrl && !isGithubIssue) {
-        window.open(cfg.feedbackUrl, "_blank", "noopener");
-        return;
+      if (url.includes("github.com") && url.includes("/issues/new")) {
+        e?.preventDefault();
+        const issueUrl = `${url}${url.includes("?") ? "&" : "?"}page=${encodeURIComponent(location.href)}`;
+        window.open(issueUrl, "_blank", "noopener");
       }
-      if (cfg.feedbackUrl && isGithubIssue) {
-        const url = `${cfg.feedbackUrl}${cfg.feedbackUrl.includes("?") ? "&" : "?"}page=${encodeURIComponent(location.href)}`;
-        window.open(url, "_blank", "noopener");
-        return;
-      }
-      modal.showModal();
+      // 腾讯问卷等外链：保留 <a> 默认跳转，避免弹窗拦截和缓存问题
     };
 
     document.getElementById("feedbackOpen").addEventListener("click", open);

@@ -910,6 +910,9 @@ a:hover {
   font-weight: 600;
   box-shadow: var(--shadow-lg);
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .feedback-fab:hover {
