@@ -3,7 +3,7 @@
  */
 const SITE_CONFIG = {
   /** 百度统计 Site ID — 在 https://tongji.baidu.com 创建站点后填入，见 docs/setup-feedback-analytics.md */
-  baiduTongjiId: "",
+  baiduTongjiId: "50a56e1094f56845c92f9c6dc7dc41e4",
 
   /**
    * 反馈链接：腾讯问卷优先；当前默认 GitHub Issues（无需注册即可用）
@@ -15,6 +15,6 @@ const SITE_CONFIG = {
   /** 页内反馈邮件收件人（feedbackUrl 为空时生效） */
   feedbackEmail: "",
 
-  /** 是否在本机控制台打印埋点（调试用）；上线后可改为 false */
-  analyticsDebug: true,
+  /** 是否在本机控制台打印埋点（调试用） */
+  analyticsDebug: false,
 };
