@@ -21,7 +21,7 @@
     }
     const city = params.get("city");
     if (city && CITIES.includes(city)) {
-      state.city = city === "全省" ? "全部" : city;
+      state.city = city;
     }
     if (params.get("free") === "1") state.freeOnly = true;
     if (params.toString()) {
@@ -31,7 +31,24 @@
 
   const GEO_POS_KEY = "hz_geo_pos_v1";
   const GEO_POS_TTL_MS = 24 * 60 * 60 * 1000;
-  const HOT_CITIES = ["杭州", "宁波", "温州", "绍兴", "嘉兴", "金华"];
+  function isChinaScope() {
+    return (
+      (typeof SITE_SCOPE !== "undefined" && SITE_SCOPE === "china") ||
+      (typeof SITE_CONFIG !== "undefined" && SITE_CONFIG.siteScope === "china")
+    );
+  }
+
+  function scopeLabelAll() {
+    return isChinaScope() ? "全国" : "浙江";
+  }
+
+  function hotCityList() {
+    if (typeof HOT_CITIES !== "undefined" && Array.isArray(HOT_CITIES) && HOT_CITIES.length) {
+      return HOT_CITIES;
+    }
+    return ["杭州", "宁波", "温州", "绍兴", "嘉兴", "金华"];
+  }
+
   const FILTER_DESKTOP_MQ = window.matchMedia("(min-width: 960px)");
 
   const state = {
@@ -174,7 +191,12 @@
   function matchesCityFilter(r) {
     if (state.city === "全部") return true;
     if (state.city === "全省") return resourceCity(r) === "全省";
-    return resourceCity(r) === state.city || resourceCity(r) === "全省";
+    if (state.city === "全国") return resourceCity(r) === "全国";
+    return (
+      resourceCity(r) === state.city ||
+      resourceCity(r) === "全省" ||
+      resourceCity(r) === "全国"
+    );
   }
 
   function scopedResources() {
@@ -282,7 +304,9 @@
     h2.textContent =
       state.userLocation && state.sortMode === "distance"
         ? "附近 · 按距离排序"
-        : "浙江免费便民 · 四蹭可查";
+        : isChinaScope()
+          ? "全国免费便民 · 四蹭可查"
+          : "浙江免费便民 · 四蹭可查";
   }
 
   function enableNearbySort() {
@@ -452,7 +476,7 @@
     const items =
       state.city === "全部"
         ? [
-            { n: RESOURCES.length, label: "全省收录" },
+            { n: RESOURCES.length, label: isChinaScope() ? "全国收录" : "全省收录" },
             { n: prefectures.length, label: "覆盖地市" },
             { n: parkCount, label: "公园遛娃" },
             { n: studyCount, label: "免费自习" },
@@ -485,9 +509,9 @@
     const picker =
       typeof CITY_PICKER !== "undefined"
         ? CITY_PICKER
-        : CITIES.filter((c) => c !== "全省");
+        : CITIES.filter((c) => c !== "全省" && c !== "全国");
     sel.innerHTML = picker
-      .map((c) => `<option value="${c}">${c === "全部" ? "浙江全省" : c}</option>`)
+      .map((c) => `<option value="${c}">${c === "全部" ? (isChinaScope() ? "全国" : "浙江全省") : c}</option>`)
       .join("");
     sel.value = picker.includes(state.city) ? state.city : "全部";
     sel.onchange = () => {
@@ -759,8 +783,11 @@
   }
 
   function syncCityQuickLabel() {
-    const el = document.getElementById("cityQuickValue");
-    if (el) el.textContent = state.city === "全部" ? "浙江" : state.city;
+    const label = state.city === "全部" ? scopeLabelAll() : state.city;
+    ["cityQuickValue", "cityQuickValueMobile"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = label;
+    });
     updateCityLocateStatus();
   }
 
@@ -936,25 +963,45 @@
     const scope = document.getElementById("cityScopeGrid");
     const hot = document.getElementById("cityHotGrid");
     const grid = document.getElementById("cityGrid");
+    const china = isChinaScope();
+    const hotList = hotCityList();
     const prefectures =
       typeof PREFECTURE_CITIES !== "undefined"
         ? PREFECTURE_CITIES
-        : HOT_CITIES.concat(
+        : hotList.concat(
             CITIES.filter(
-              (c) => c !== "全部" && c !== "全省" && !HOT_CITIES.includes(c)
+              (c) => c !== "全部" && c !== "全省" && c !== "全国" && !hotList.includes(c)
             )
           );
 
     if (scope) {
-      scope.innerHTML = cityPillHtml("全部", "浙江全省");
+      let html = cityPillHtml("全部", china ? "全国" : "浙江全省");
+      if (china) html += cityPillHtml("全国", "全国工具");
+      else html += cityPillHtml("全省", "全省政策");
+      scope.innerHTML = html;
       bindCityPills(scope);
     }
     if (hot) {
-      hot.innerHTML = HOT_CITIES.map((c) => cityPillHtml(c)).join("");
+      hot.innerHTML = hotList.map((c) => cityPillHtml(c)).join("");
       bindCityPills(hot);
     }
     if (!grid) return;
-    const rest = prefectures.filter((c) => !HOT_CITIES.includes(c));
+
+    if (typeof PROVINCE_MAP !== "undefined" && china) {
+      grid.innerHTML = Object.entries(PROVINCE_MAP)
+        .map(
+          ([prov, cities]) => `
+        <div class="city-province-block">
+          <h4 class="city-province-title">${prov}</h4>
+          <div class="city-province-grid">${cities.map((c) => cityPillHtml(c)).join("")}</div>
+        </div>`
+        )
+        .join("");
+      bindCityPills(grid);
+      return;
+    }
+
+    const rest = prefectures.filter((c) => !hotList.includes(c));
     grid.innerHTML = rest.map((c) => cityPillHtml(c)).join("");
     bindCityPills(grid);
   }
@@ -1018,6 +1065,11 @@
     }
   }
 
+  function openCitySheet() {
+    renderCityGrid();
+    openOverlay("citySheet");
+  }
+
   function initMobileChrome() {
     placeFilterPanel();
     FILTER_DESKTOP_MQ.addEventListener("change", () => {
@@ -1057,10 +1109,8 @@
       toggle.setAttribute("aria-expanded", String(!collapsed));
     });
 
-    document.getElementById("cityQuickBtn")?.addEventListener("click", () => {
-      renderCityGrid();
-      openOverlay("citySheet");
-    });
+    document.getElementById("cityQuickBtn")?.addEventListener("click", openCitySheet);
+    document.getElementById("cityQuickBtnMobile")?.addEventListener("click", openCitySheet);
     document.getElementById("citySheetClose")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetBackdrop")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetLocateBtn")?.addEventListener("click", () => runGeoLocate(true));
@@ -1101,7 +1151,7 @@
     const picker =
       typeof CITY_PICKER !== "undefined"
         ? CITY_PICKER
-        : CITIES.filter((c) => c !== "全省");
+        : CITIES.filter((c) => c !== "全省" && c !== "全国");
     if (!picker.includes(city)) return;
     state.city = city;
     if (city !== "全部" && city !== "杭州") {
@@ -1166,13 +1216,13 @@
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       } else if (result.ok) {
         showGeoBanner(
-          `已定位附近，按距离展示（当前：${state.city === "全部" ? "浙江" : state.city}）`,
+          `已定位附近，按距离展示（当前：${state.city === "全部" ? scopeLabelAll() : state.city}）`,
           "success"
         );
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
         renderCards();
       } else {
-        showGeoBanner("您当前不在浙江省内，仍按距离由近到远展示", "warn");
+        showGeoBanner("您当前不在国内范围，仍按距离由近到远展示", "warn");
         track("geo_locate", { ok: false, reason: "outside" });
         renderCards();
       }
@@ -1262,7 +1312,7 @@
         }
       }
       applyLocationPriority();
-      const cityLabel = state.city === "全部" ? "浙江" : state.city;
+      const cityLabel = state.city === "全部" ? scopeLabelAll() : state.city;
       showGeoBanner(`已定位附近，按距离由近到远（${cityLabel}）`, "success");
       renderCards();
       return;
@@ -1306,7 +1356,7 @@
     {
       icon: "📍",
       title: "先选城市",
-      desc: "允许定位后按距离排序；也可手动选浙江全省或 11 地市。",
+      desc: "允许定位后按距离排序；也可手动选全国或 72 个城市。",
     },
     {
       icon: "❄️",

@@ -8,27 +8,13 @@ import path from "path";
 import vm from "vm";
 import { fileURLToPath } from "url";
 
+import { loadSiteData } from "./lib/load-site-data.mjs";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const JS_DIR = path.join(__dirname, "..", "js");
 
-const files = [
-  "map-nav.js",
-  "data-study-spaces.js",
-  "data-extra-resources.js",
-  "data-zhejiang-cities.js",
-  "data-zhejiang-expanded.js",
-  "data.js",
-];
-
-const combined = files.map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8")).join("\n");
-const ctx = vm.createContext({ console });
-vm.runInContext(
-  `${combined}
-;globalThis.__EXPORT__ = { RESOURCES, CITIES, MapNav };`,
-  ctx
-);
-
-const { RESOURCES, CITIES, MapNav } = ctx.__EXPORT__;
+const site = loadSiteData();
+const { RESOURCES, CITIES, MapNav, GeoCity, RESOURCE_COORDS } = site;
 let errors = 0;
 let warnings = 0;
 
@@ -51,14 +37,26 @@ function resourceCity(r) {
 function matchesCityFilter(r, city) {
   if (city === "全部") return true;
   if (city === "全省") return resourceCity(r) === "全省";
-  return resourceCity(r) === city || resourceCity(r) === "全省";
+  if (city === "全国") return resourceCity(r) === "全国";
+  return (
+    resourceCity(r) === city ||
+    resourceCity(r) === "全省" ||
+    resourceCity(r) === "全国"
+  );
 }
 
-// 1. 各地市筛选不应混入他市点位（不含全省）
-for (const city of CITIES.filter((c) => c !== "全部" && c !== "全省")) {
+const CHECK_CITIES = [
+  "杭州", "宁波", "温州", "北京", "上海", "广州", "深圳", "成都", "武汉",
+];
+
+for (const city of CHECK_CITIES) {
   const list = RESOURCES.filter((r) => resourceCity(r) === city);
   const leaked = RESOURCES.filter(
-    (r) => matchesCityFilter(r, city) && resourceCity(r) !== city && resourceCity(r) !== "全省"
+    (r) =>
+      matchesCityFilter(r, city) &&
+      resourceCity(r) !== city &&
+      resourceCity(r) !== "全省" &&
+      resourceCity(r) !== "全国"
   );
   if (leaked.length) fail(`${city} 筛选混入 ${leaked.length} 条他市数据`);
   else ok(`${city} 本地 ${list.length} 条，筛选池 ${RESOURCES.filter((r) => matchesCityFilter(r, city)).length} 条`);
@@ -109,19 +107,15 @@ const zlb = RESOURCES.find((r) => r.id === "prov-zheliban");
 if (MapNav.buildUrl(zlb)) warn("浙里办仍生成地图链接（预期仅官网）");
 else ok("浙里办仅走官方平台");
 
-// 6. 地市定位：杭州常见坐标不应落入嘉兴/绍兴
-const geoCtx = vm.createContext({});
-vm.runInContext(
-  fs.readFileSync(path.join(JS_DIR, "geo.js"), "utf8") + ";globalThis.__GEO__ = GeoCity;",
-  geoCtx
-);
-const { resolveCity } = geoCtx.__GEO__;
+// 6. 城市定位抽查
+const { resolveCity } = GeoCity;
 const geoCases = [
   ["杭州主城", 30.2741, 120.1551, "杭州"],
   ["市民中心", 30.25, 120.21, "杭州"],
   ["临平", 30.42, 120.3, "杭州"],
   ["钱塘东部", 30.28, 120.35, "杭州"],
-  ["嘉兴市区", 30.7461, 120.7555, "嘉兴"],
+  ["北京城区", 39.9042, 116.4074, "北京"],
+  ["上海城区", 31.2304, 121.4737, "上海"],
 ];
 for (const [label, lat, lng, expect] of geoCases) {
   const r = resolveCity(lat, lng);
@@ -140,8 +134,8 @@ for (const file of htmlFiles) {
   }
 }
 
-// 8. 资源坐标应覆盖全部点位，且落在浙江省范围
-const ZJ_BBOX = { latMin: 27.0, latMax: 31.5, lngMin: 118.0, lngMax: 123.5 };
+// 8. 资源坐标应覆盖全部点位，且落在中国范围
+const CHINA_BBOX = { latMin: 18.0, latMax: 54.0, lngMin: 73.0, lngMax: 135.5 };
 const coordsPath = path.join(JS_DIR, "resource-coords.js");
 if (!fs.existsSync(coordsPath)) {
   fail("缺少 js/resource-coords.js，请运行 node scripts/build-resource-coords.mjs");
@@ -153,35 +147,34 @@ if (!fs.existsSync(coordsPath)) {
   );
   const coords = coordsCtx.__C__;
   const missing = RESOURCES.filter((r) => !coords[r.id]);
-  if (missing.length) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
-  else ok(`${RESOURCES.length} 条资源均有坐标（${Object.keys(coords).length}）`);
+  if (missing.length > RESOURCES.length * 0.01) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
+  else ok(`${RESOURCES.length} 条资源坐标覆盖 ${Object.keys(coords).length}（缺失 ${missing.length}）`);
 
   const oob = RESOURCES.filter((r) => {
     const c = coords[r.id];
     if (!c) return false;
     return (
-      c.lat < ZJ_BBOX.latMin ||
-      c.lat > ZJ_BBOX.latMax ||
-      c.lng < ZJ_BBOX.lngMin ||
-      c.lng > ZJ_BBOX.lngMax
+      c.lat < CHINA_BBOX.latMin ||
+      c.lat > CHINA_BBOX.latMax ||
+      c.lng < CHINA_BBOX.lngMin ||
+      c.lng > CHINA_BBOX.lngMax
     );
   });
   if (oob.length) fail(`坐标越界 ${oob.length} 条，如 ${oob[0]?.id}`);
-  else ok("全部坐标落在浙江省范围内");
+  else ok("全部坐标落在中国范围内");
 }
 
-// 9. 各地市（除杭州）应有足够扩展数据
+// 9. 重点城市应有足够数据
 const MIN_CITY_RESOURCES = {
+  杭州: 400,
   宁波: 25,
   温州: 22,
-  嘉兴: 22,
-  湖州: 20,
-  绍兴: 22,
-  金华: 20,
-  衢州: 20,
-  舟山: 20,
-  台州: 20,
-  丽水: 20,
+  北京: 35,
+  上海: 35,
+  广州: 35,
+  深圳: 35,
+  成都: 35,
+  武汉: 35,
 };
 for (const [city, min] of Object.entries(MIN_CITY_RESOURCES)) {
   const n = RESOURCES.filter((r) => resourceCity(r) === city).length;

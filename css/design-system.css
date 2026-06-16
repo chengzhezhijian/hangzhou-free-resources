@@ -1,0 +1,612 @@
+/**
+ * 全国蹭享地图 · App Store 风格设计系统
+ * 参考 iOS / Airbnb / Linear 移动端精致布局
+ */
+
+:root {
+  --ios-bg: #f2f2f7;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(60, 60, 67, 0.12);
+  --ios-label: #1c1c1e;
+  --ios-label-secondary: rgba(60, 60, 67, 0.6);
+  --ios-label-tertiary: rgba(60, 60, 67, 0.3);
+  --ios-blue: #007aff;
+  --ios-indigo: #5856d6;
+  --ios-teal: #0d9488;
+  --ios-radius-sm: 10px;
+  --ios-radius-md: 14px;
+  --ios-radius-lg: 20px;
+  --ios-radius-xl: 24px;
+  --ios-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  --ios-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.1);
+  --ios-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --tab-bar-h: calc(52px + env(safe-area-inset-bottom, 0px));
+  --nav-bar-h: 52px;
+  --accent: var(--ios-teal);
+  --accent-dark: #0f766e;
+  --accent-light: rgba(13, 148, 136, 0.12);
+}
+
+.app-ui {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC",
+    "Helvetica Neue", "Noto Sans SC", sans-serif;
+  background: var(--ios-bg);
+  color: var(--ios-label);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+.app-ui .site-header {
+  display: none;
+}
+
+.app-ui .site-footer {
+  display: none;
+}
+
+.app-ui .app-viewport {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--tab-bar-h);
+}
+
+/* ─── Glass top bar ─── */
+.app-ui .glass-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 10px;
+  background: rgba(242, 242, 247, 0.82);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--ios-separator);
+}
+
+.app-ui .glass-nav__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-ui .nav-brand-mini {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--ios-teal), var(--ios-indigo));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-ui .loc-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ios-bg-elevated);
+  box-shadow: var(--ios-shadow);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ios-label);
+  cursor: pointer;
+  transition: transform 0.15s var(--ios-spring);
+}
+
+.app-ui .loc-pill:active {
+  transform: scale(0.96);
+}
+
+/* ─── Scroll main ─── */
+.app-ui .scroll-main {
+  flex: 1;
+  padding: 0 16px 24px;
+}
+
+.app-ui .home-head {
+  padding: 8px 0 16px;
+}
+
+.app-ui .display-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.app-ui .display-sub {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  color: var(--ios-label-secondary);
+  font-weight: 500;
+}
+
+.app-ui .hero {
+  display: none;
+}
+
+/* ─── iOS Search ─── */
+.app-ui .discover-bar {
+  position: static;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.app-ui .discover-inner {
+  padding: 0;
+  gap: 10px;
+}
+
+.app-ui .loc-search-row {
+  display: block;
+}
+
+.app-ui .loc-search-row .loc-pill {
+  display: none;
+}
+
+.app-ui .search-box--inline {
+  width: 100%;
+}
+
+.app-ui .search-box {
+  background: rgba(118, 118, 128, 0.12);
+  border: none;
+  border-radius: var(--ios-radius-md);
+  padding: 0 12px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.app-ui .search-box:focus-within {
+  background: rgba(118, 118, 128, 0.18);
+}
+
+.app-ui .search-box input {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0 8px;
+}
+
+.app-ui .search-box input::placeholder {
+  color: var(--ios-label-tertiary);
+}
+
+/* ─── Perk & scene chips ─── */
+.app-ui .hero-perks,
+.app-ui .value-perks {
+  margin: 0 0 10px;
+  gap: 8px;
+}
+
+.app-ui .value-perk {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  border-radius: var(--ios-radius-sm);
+  border: none;
+  background: var(--ios-bg-elevated);
+  box-shadow: var(--ios-shadow);
+  color: var(--ios-label);
+}
+
+.app-ui .value-perk.is-active {
+  background: linear-gradient(135deg, var(--ios-teal), #14b8a6);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+}
+
+.app-ui .quick-scenes {
+  margin: 0 0 12px;
+  gap: 8px;
+}
+
+.app-ui .quick-scene {
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--ios-radius-sm);
+  border: none;
+  background: var(--ios-bg-elevated);
+  box-shadow: var(--ios-shadow);
+  color: var(--ios-label-secondary);
+}
+
+.app-ui .quick-scene.is-active {
+  background: var(--ios-label);
+  color: #fff;
+}
+
+/* ─── Segmented sort control ─── */
+.app-ui .sort-tabs {
+  display: flex;
+  padding: 3px;
+  background: rgba(118, 118, 128, 0.12);
+  border-radius: var(--ios-radius-sm);
+  margin-bottom: 12px;
+  gap: 0;
+}
+
+.app-ui .sort-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 7px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ios-label-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s var(--ios-spring);
+}
+
+.app-ui .sort-tab.is-active {
+  background: var(--ios-bg-elevated);
+  color: var(--ios-label);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.app-ui .sort-tab--filter {
+  flex: 0 0 auto;
+  min-width: 64px;
+}
+
+/* ─── Feed cards ─── */
+.app-ui .main {
+  display: block;
+  padding: 0;
+  max-width: none;
+}
+
+.app-ui .sidebar {
+  display: none;
+}
+
+.app-ui .content {
+  padding: 0;
+}
+
+.app-ui .content-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
+
+.app-ui .content-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.app-ui .result-count {
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+  font-weight: 500;
+}
+
+.app-ui .card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-ui .card {
+  background: var(--ios-bg-elevated);
+  border: none;
+  border-radius: var(--ios-radius-lg);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: var(--ios-shadow);
+  cursor: pointer;
+  transition: transform 0.18s var(--ios-spring), box-shadow 0.18s;
+}
+
+.app-ui .card:active {
+  transform: scale(0.985);
+}
+
+.app-ui .card::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ios-teal), var(--ios-indigo), #a855f7);
+}
+
+.app-ui .card-body {
+  padding: 14px 16px 16px;
+}
+
+.app-ui .card-title {
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.app-ui .card-meta {
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+  margin-top: 4px;
+}
+
+.app-ui .facility-tags {
+  margin-top: 10px;
+  gap: 6px;
+}
+
+.app-ui .facility-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--ios-bg);
+  color: var(--ios-label-secondary);
+}
+
+.app-ui .facility-tag.on {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.app-ui .hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.app-ui .stat-item {
+  background: var(--ios-bg-elevated);
+  border-radius: var(--ios-radius-md);
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: var(--ios-shadow);
+  border: none;
+}
+
+.app-ui .stat-item strong {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  color: var(--ios-teal);
+}
+
+.app-ui .stat-item span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--ios-label-secondary);
+  margin-top: 2px;
+}
+
+/* ─── iOS Tab bar ─── */
+.app-ui .bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tab-bar-h);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 0.5px solid var(--ios-separator);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 6px;
+  z-index: 200;
+}
+
+.app-ui .bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--ios-label-tertiary);
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 8px;
+  transition: color 0.15s;
+}
+
+.app-ui .bottom-nav-item.is-active {
+  color: var(--ios-teal);
+}
+
+.app-ui .bottom-nav-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+/* ─── Sheets ─── */
+.app-ui .overlay-panel {
+  border-radius: var(--ios-radius-xl) var(--ios-radius-xl) 0 0;
+  background: var(--ios-bg);
+  box-shadow: var(--ios-shadow-lg);
+}
+
+.app-ui .sheet-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-ui .city-province-block {
+  margin-bottom: 16px;
+}
+
+.app-ui .city-province-title {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui .city-province-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.app-ui .city-pill {
+  padding: 8px 14px;
+  border-radius: var(--ios-radius-sm);
+  border: none;
+  background: var(--ios-bg-elevated);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--ios-shadow);
+  cursor: pointer;
+}
+
+.app-ui .city-pill.is-active {
+  background: var(--ios-teal);
+  color: #fff;
+}
+
+.app-ui .btn-primary {
+  background: linear-gradient(135deg, var(--ios-teal), #14b8a6);
+  border: none;
+  border-radius: var(--ios-radius-md);
+  font-weight: 650;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+}
+
+.app-ui .feedback-fab {
+  bottom: calc(var(--tab-bar-h) + 12px);
+  background: linear-gradient(135deg, var(--ios-indigo), #7c3aed);
+  box-shadow: var(--ios-shadow-lg);
+}
+
+.app-ui .geo-banner {
+  border-radius: var(--ios-radius-md);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.app-ui .empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--ios-bg-elevated);
+  border-radius: var(--ios-radius-lg);
+  box-shadow: var(--ios-shadow);
+}
+
+.app-ui .onboard-card {
+  border-radius: var(--ios-radius-xl);
+  box-shadow: var(--ios-shadow-lg);
+}
+
+/* ─── Desktop ─── */
+.app-ui .card h3 {
+  margin: 0;
+  padding: 0 16px;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.app-ui .card-top {
+  padding: 12px 16px 0;
+}
+
+.app-ui .card-address,
+.app-ui .card-hours,
+.app-ui .card-meta {
+  padding: 0 16px;
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui .card .facility-tags {
+  padding: 0 16px 14px;
+}
+
+.app-ui .card-address {
+  margin-top: 6px;
+}
+
+@media (min-width: 960px) {
+  .app-ui .app-viewport {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 0;
+  }
+
+  .app-ui .site-header {
+    display: block;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid var(--ios-separator);
+  }
+
+  .app-ui .glass-nav {
+    display: none;
+  }
+
+  .app-ui .bottom-nav {
+    display: none;
+  }
+
+  .app-ui .app-viewport {
+    padding-bottom: 32px;
+  }
+
+  .app-ui .main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    padding: 0 24px 32px;
+  }
+
+  .app-ui .sidebar {
+    display: block;
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    background: var(--ios-bg-elevated);
+    border-radius: var(--ios-radius-lg);
+    box-shadow: var(--ios-shadow);
+    border: none;
+    padding: 16px;
+  }
+
+  .app-ui .scroll-main {
+    padding: 24px 24px 0;
+  }
+
+  .app-ui .discover-bar {
+    margin-bottom: 20px;
+  }
+
+  .app-ui .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+}

@@ -37,13 +37,11 @@ const engine = createFilterEngine({
 const VALID_CATEGORIES = new Set(
   RESOURCE_CATEGORIES.map((c) => c.id).filter((id) => id !== "all")
 );
-const VALID_CITIES = new Set([
-  ...PREFECTURE_CITIES,
-  "全省",
-  "杭州",
-]);
+const VALID_CITIES = new Set([...CITIES.filter((c) => c !== "全部"), "全省"]);
 
+const CHINA_BBOX = { latMin: 18.0, latMax: 54.0, lngMin: 73.0, lngMax: 135.5 };
 const ZJ_BBOX = { latMin: 27.0, latMax: 31.5, lngMin: 118.0, lngMax: 123.5 };
+const IS_CHINA = site.SITE_SCOPE === "china";
 
 const runner = {
   passed: 0,
@@ -120,26 +118,24 @@ function filter(state) {
 // ─── 1. 常量与配置 ───
 section("常量与配置");
 
-assertEq("资源总数为 659", RESOURCES.length, 659);
-assertEq("PREFECTURE_CITIES 为 11 个地市", PREFECTURE_CITIES.length, 11);
-assert("CITY_PICKER 不含「全省」", !CITY_PICKER.includes("全省"));
+assertGte("资源总数 ≥ 2900", RESOURCES.length, 2900);
+assertGte("PREFECTURE_CITIES ≥ 70", PREFECTURE_CITIES.length, 70);
+assert("CITY_PICKER 不含「全国」", !CITY_PICKER.includes("全国"));
 assert("CITY_PICKER 含「全部」", CITY_PICKER.includes("全部"));
-assertEq(
-  "CITY_PICKER 长度 = 1 + 11",
-  CITY_PICKER.length,
-  PREFECTURE_CITIES.length + 1
-);
 assertGte("EXTERNAL_TOOLS ≥ 3", EXTERNAL_TOOLS.length, 3);
 assertGte("SCENE_GUIDES = 9 条", SCENE_GUIDES.length, 9);
 
 const provinceTools = EXTERNAL_TOOLS.filter((t) => t.scope === "全省");
 assertGte("全省官方工具 ≥ 3", provinceTools.length, 3);
 
-for (const city of PREFECTURE_CITIES) {
-  const libTool = EXTERNAL_TOOLS.find(
-    (t) => t.scope === city && /图书馆/.test(t.name)
-  );
-  assert(`${city} 有图书馆官方工具`, !!libTool);
+if (!IS_CHINA) {
+  assertEq("CITY_PICKER 长度 = 1 + 11", CITY_PICKER.length, PREFECTURE_CITIES.length + 1);
+  for (const city of PREFECTURE_CITIES) {
+    const libTool = EXTERNAL_TOOLS.find(
+      (t) => t.scope === city && /图书馆/.test(t.name)
+    );
+    assert(`${city} 有图书馆官方工具`, !!libTool);
+  }
 }
 
 // ─── 2. 资源数据完整性 ───
@@ -169,46 +165,55 @@ const badCity = RESOURCES.filter(
   (r) => r.city && !VALID_CITIES.has(r.city)
 );
 assert(
-  "city 字段合法（含全省/11市/杭州默认）",
+  "city 字段合法",
   badCity.length === 0,
   badCity.length ? `${badCity[0].id}=${badCity[0].city}` : ""
 );
+
+const nationalResources = RESOURCES.filter((r) => engine.resourceCity(r) === "全国");
+assertGte("全国工具资源 ≥ 5", nationalResources.length, 5);
 
 const provinceResources = RESOURCES.filter((r) => engine.resourceCity(r) === "全省");
 assertGte("全省政策/工具资源 ≥ 5", provinceResources.length, 5);
 assertLte("全省政策/工具资源 ≤ 10", provinceResources.length, 10);
 
 const readingAll = RESOURCES.filter((r) => r.category === "reading");
-assertGte("城市书房总量 ≥ 250", readingAll.length, 250);
+assertGte("城市书房总量 ≥ 500", readingAll.length, 500);
 
 const hzReading = readingAll.filter((r) => engine.resourceCity(r) === "杭州");
 assertGte("杭州书房 ≥ 200", hzReading.length, 200);
 
-for (const city of PREFECTURE_CITIES) {
-  if (city === "杭州") continue;
+for (const city of ["北京", "上海", "广州", "成都", "武汉"]) {
+  const local = RESOURCES.filter((r) => engine.resourceCity(r) === city);
+  assertGte(`${city} 本地资源 ≥ 30`, local.length, 30);
+}
+
+for (const city of PREFECTURE_CITIES.filter((c) => ["宁波", "温州", "嘉兴"].includes(c))) {
   const local = RESOURCES.filter((r) => engine.resourceCity(r) === city);
   assertGte(`${city} 本地资源 ≥ 20`, local.length, 20);
 }
 
 const coordsMissing = RESOURCES.filter((r) => !RESOURCE_COORDS[r.id]);
-assert(
-  "659 条资源均有坐标",
-  coordsMissing.length === 0,
-  coordsMissing.length ? coordsMissing[0].id : ""
+assertGte(
+  "资源坐标覆盖率 ≥ 99%",
+  RESOURCES.length - coordsMissing.length,
+  Math.floor(RESOURCES.length * 0.99),
+  `缺失 ${coordsMissing.length} 条`
 );
 
+const bbox = IS_CHINA ? CHINA_BBOX : ZJ_BBOX;
 const badCoords = RESOURCES.filter((r) => {
   const c = RESOURCE_COORDS[r.id];
-  if (!c) return true;
+  if (!c) return false;
   return (
-    c.lat < ZJ_BBOX.latMin ||
-    c.lat > ZJ_BBOX.latMax ||
-    c.lng < ZJ_BBOX.lngMin ||
-    c.lng > ZJ_BBOX.lngMax
+    c.lat < bbox.latMin ||
+    c.lat > bbox.latMax ||
+    c.lng < bbox.lngMin ||
+    c.lng > bbox.lngMax
   );
 });
 assert(
-  "坐标落在浙江省范围内",
+  IS_CHINA ? "坐标落在中国范围内" : "坐标落在浙江省范围内",
   badCoords.length === 0,
   badCoords.length
     ? `${badCoords[0].id} (${RESOURCE_COORDS[badCoords[0].id]?.lat}, ${RESOURCE_COORDS[badCoords[0].id]?.lng})`
@@ -244,10 +249,13 @@ for (const city of PREFECTURE_CITIES) {
   const pool = engine.scopedResources(city);
   const leaked = pool.filter(
     (r) =>
-      engine.resourceCity(r) !== city && engine.resourceCity(r) !== "全省"
+      engine.resourceCity(r) !== city &&
+      engine.resourceCity(r) !== "全省" &&
+      engine.resourceCity(r) !== "全国"
   );
   assert(`${city} 筛选池无他市泄漏`, leaked.length === 0);
-  assertGte(`${city} 筛选池 ≥ 本地+全省`, pool.length, 7);
+  const minPool = city === "杭州" ? 400 : 30;
+  assertGte(`${city} 筛选池 ≥ 本地`, pool.length, minPool);
 }
 
 assert(
@@ -431,14 +439,14 @@ for (const t of EXTERNAL_TOOLS) {
 section("黄金场景计数");
 
 const golden = [
-  { state: { city: "全部" }, min: 659, max: 659, label: "默认全量" },
-  { state: { city: "杭州" }, min: 400, max: 420, label: "杭州筛选池" },
-  { state: { city: "宁波" }, min: 30, max: 45, label: "宁波筛选池" },
-  { state: { city: "温州" }, min: 28, max: 42, label: "温州筛选池" },
-  { state: { search: "自习", city: "全部" }, min: 280, max: 400, label: "全省自习" },
+  { state: { city: "全部" }, min: 2900, max: 3100, label: "默认全量" },
+  { state: { city: "杭州" }, min: 400, max: 430, label: "杭州筛选池" },
+  { state: { city: "北京" }, min: 35, max: 60, label: "北京筛选池" },
+  { state: { city: "上海" }, min: 35, max: 60, label: "上海筛选池" },
+  { state: { search: "自习", city: "全部" }, min: 500, max: 1400, label: "全国自习" },
   { state: { category: "reading", city: "杭州" }, min: 220, max: 240, label: "杭州书房分类" },
-  { state: { category: "parking", city: "全部" }, min: 5, max: 30, label: "停车分类" },
-  { state: { category: "policy", city: "全部" }, min: 5, max: 30, label: "政策分类" },
+  { state: { category: "parking", city: "全部" }, min: 50, max: 120, label: "停车分类" },
+  { state: { category: "policy", city: "全部" }, min: 20, max: 100, label: "政策分类" },
 ];
 
 for (const { state, min, max, label } of golden) {

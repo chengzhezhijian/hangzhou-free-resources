@@ -67,10 +67,12 @@ const CITY_CENTROIDS = {
 function loadResources() {
 const files = [
   "map-nav.js",
+  "data-china-config.js",
   "data-study-spaces.js",
   "data-extra-resources.js",
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
+  "data-china-nationwide.js",
   "data.js",
 ];
   const combined = files.map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8")).join("\n");
@@ -79,29 +81,51 @@ const files = [
   return ctx.__R__;
 }
 
+function jitterCoord(id, base) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = ((h << 5) - h + id.charCodeAt(i)) | 0;
+  const a = (Math.abs(h) % 10000) / 100000;
+  const b = (Math.abs(h >> 10) % 10000) / 100000;
+  return {
+    lat: +(base.lat + a - 0.05).toFixed(6),
+    lng: +(base.lng + b - 0.05).toFixed(6),
+    precision: "city",
+  };
+}
+
+function loadCityCenters(ctx) {
+  if (ctx.__CC__) return ctx.__CC__;
+  try {
+    const cfg = fs.readFileSync(path.join(JS_DIR, "data-china-config.js"), "utf8");
+    vm.runInContext(`${cfg}; globalThis.__CC__ = CITY_CENTERS;`, ctx);
+  } catch {
+    ctx.__CC__ = {};
+  }
+  return ctx.__CC__;
+}
+
 function geocodeQuery(resource) {
   const city = resource.city || "杭州";
+  const province = resource.province || "";
   const addr = (resource.address || "").trim();
   const name = (resource.fullName || resource.name || "").trim();
+  if (city === "全国" || city === "全省") return name || addr || null;
   if (addr) {
-    if (/^杭州/.test(addr) || /^浙江/.test(addr)) return addr;
-    if (city === "全省") return `浙江省${addr}`;
-    return `${city}${city.endsWith("市") ? "" : "市"}${addr}`;
+    if (/^[\u4e00-\u9fa5]{2,}/.test(addr)) return addr;
+    return `${province}${city}${addr}`;
   }
-  if (name) {
-    if (city === "全省") return `浙江省${name}`;
-    return `${city}${city.endsWith("市") ? "" : "市"}${name}`;
-  }
+  if (name) return `${city}${name}`;
   return null;
 }
 
-function fallbackCoord(resource) {
+function fallbackCoord(resource, cityCenters) {
   const city = resource.city || "杭州";
-  if (city === "杭州" || !city || city === "全省") {
+  if (city === "杭州" || !city || city === "全省" || city === "全国") {
     const d = resource.district;
     if (d && DISTRICT_CENTROIDS[d]) return { ...DISTRICT_CENTROIDS[d], precision: "district" };
     if (city === "杭州") return { ...DISTRICT_CENTROIDS.杭州, precision: "city" };
   }
+  if (cityCenters[city]) return jitterCoord(resource.id, cityCenters[city]);
   if (CITY_CENTROIDS[city]) return { ...CITY_CENTROIDS[city], precision: "city" };
   return null;
 }
@@ -132,7 +156,7 @@ async function amapGeocode(query, key) {
   return { lat, lng, precision: "geocode" };
 }
 
-async function resolveCoord(resource, cache, key) {
+async function resolveCoord(resource, cache, key, cityCenters) {
   if (resource.lat != null && resource.lng != null) {
     return { lat: resource.lat, lng: resource.lng, precision: "exact" };
   }
@@ -150,11 +174,13 @@ async function resolveCoord(resource, cache, key) {
       console.warn("!", resource.id, e.message);
     }
   }
-  return fallbackCoord(resource);
+  return fallbackCoord(resource, cityCenters);
 }
 
 async function main() {
+  const ctx = vm.createContext({ console });
   const resources = loadResources();
+  const cityCenters = loadCityCenters(ctx);
   const cache = loadCache();
   const key = process.env.AMAP_WEB_KEY || "";
   const coords = {};
@@ -163,7 +189,7 @@ async function main() {
   let city = 0;
 
   for (const r of resources) {
-    const c = await resolveCoord(r, cache, key);
+    const c = await resolveCoord(r, cache, key, cityCenters);
     if (!c) continue;
     coords[r.id] = { lat: +c.lat.toFixed(6), lng: +c.lng.toFixed(6), p: c.precision?.[0] || "?" };
     if (c.precision === "geocode" || c.precision === "exact") geocoded++;

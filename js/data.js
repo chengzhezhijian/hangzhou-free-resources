@@ -1,5 +1,5 @@
 /**
- * 浙江省公共免费资源数据（全省 11 地市 + 杭州细粒度扩展）
+ * 全国惠民地图 · 数据与配置（含浙江细粒度扩展）
  * 来源：政府公开信息整理，出行前请核实当日开放状态
  */
 const RESOURCE_CATEGORIES = [
@@ -82,7 +82,7 @@ const FACILITY_FILTERS = [
   { id: "open24", label: "24小时" },
 ];
 
-const CITIES = [
+let CITIES = [
   "全部",
   "全省",
   "杭州",
@@ -98,11 +98,11 @@ const CITIES = [
   "丽水",
 ];
 
-/** 城市选择器选项（不含易混淆的「全省」政策工具项） */
-const CITY_PICKER = CITIES.filter((c) => c !== "全省");
+/** 城市选择器选项（不含易混淆的「全省/全国」政策工具项） */
+let CITY_PICKER = CITIES.filter((c) => c !== "全省" && c !== "全国");
 
-/** 浙江 11 个地级市 */
-const PREFECTURE_CITIES = CITY_PICKER.filter((c) => c !== "全部");
+/** 地级市列表（不含「全部」） */
+let PREFECTURE_CITIES = CITY_PICKER.filter((c) => c !== "全部");
 
 /** 杭州区县（仅在地市=杭州时使用） */
 const DISTRICTS = [
@@ -118,15 +118,15 @@ const READING_SUBTYPES = [
 ];
 
 const SCENE_GUIDES = [
-  { need: "想蹭网、安静自习", pick: "图书馆自修区 / 城市书房", alt: "筛「蹭网」或点「免费自习」，杭州 200+ 条", category: "reading" },
+  { need: "想蹭网、安静自习", pick: "图书馆自修区 / 城市书房", alt: "筛「蹭网」或点「免费自习」，全国可查", category: "reading" },
   { need: "夏天想蹭空调", pick: "纳凉点 / 地铁纳凉 / 防空洞", alt: "点「纳凉」或筛「蹭空调」，7–8 月开放为主", category: "all", search: "纳凉" },
   { need: "手机快没电、想蹭水", pick: "爱心驿家 / 党群中心", alt: "筛「蹭电」「蹭水」，设施因站而异", category: "station" },
   { need: "带娃出门散步", pick: "城市公园 / 绿道", alt: "全省多数公园免费开放", category: "park" },
-  { need: "想省停车费", pick: "浙里办找车位 / 当地停车政策", alt: "杭州邻里停等已收录，全省用浙里办", category: "parking" },
+  { need: "想省停车费", pick: "当地政务 / 停车查询工具", alt: "点「找停车」或当地政务服务", category: "parking" },
   { need: "急找厕所", pick: "地图公厕工具 + 浙里办", alt: "选地市后可筛具体点位", category: "toilet" },
   { need: "手机或电车要蹭电", pick: "充电站 / 爱心驿家", alt: "筛「蹭电」或点充电标签", category: "charging" },
   { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费，各地公告为准", category: "sports" },
-  { need: "刚到浙江某市", pick: "点左上角选地市或开启定位", alt: "11 地市均有代表点位 + 全省官方工具" },
+  { need: "刚到一座城市", pick: "点左上角选城市或开启定位", alt: "72 城代表点位 + 全国官方工具" },
 ];
 
 const EXTERNAL_TOOLS = [
@@ -866,6 +866,15 @@ if (typeof ZHEJIANG_CITY_RESOURCES !== "undefined") {
 }
 if (typeof ZHEJIANG_EXPANDED_RESOURCES !== "undefined") {
   RESOURCES.push(...ZHEJIANG_EXPANDED_RESOURCES);
+}
+if (typeof CHINA_NATIONWIDE_RESOURCES !== "undefined") {
+  RESOURCES.push(...CHINA_NATIONWIDE_RESOURCES);
+}
+
+if (typeof NATIONWIDE_CITIES !== "undefined" && typeof SITE_SCOPE !== "undefined" && SITE_SCOPE === "china") {
+  CITIES = NATIONWIDE_CITIES.slice();
+  CITY_PICKER = CITIES.filter((c) => c !== "全国");
+  PREFECTURE_CITIES = CITY_PICKER.filter((c) => c !== "全部");
 }
 
 RESOURCES.forEach(normalizeResource);

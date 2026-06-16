@@ -3,10 +3,13 @@
  */
 const SITE_CONFIG = {
   /** 对外品牌名（页面展示用，不含部署域名） */
-  siteBrandName: "浙里惠民地图",
+  siteBrandName: "全国蹭享地图",
 
   /** 品牌副标题（全站 header 展示） */
-  siteTagline: "蹭网·蹭空调·蹭水·蹭电 · 浙江免费",
+  siteTagline: "蹭网·蹭空调·蹭水·蹭电 · 72城免费",
+
+  /** 数据范围：china = 全国版 */
+  siteScope: "china",
 
   /** 百度统计 Site ID — 见 docs/setup-feedback-analytics.md */
   baiduTongjiId: "50a56e1094f56845c92f9c6dc7dc41e4",

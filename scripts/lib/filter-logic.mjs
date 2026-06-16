@@ -112,7 +112,12 @@ export function createFilterEngine(deps) {
   function matchesCityFilter(r, city) {
     if (city === "全部") return true;
     if (city === "全省") return resourceCity(r) === "全省";
-    return resourceCity(r) === city || resourceCity(r) === "全省";
+    if (city === "全国") return resourceCity(r) === "全国";
+    return (
+      resourceCity(r) === city ||
+      resourceCity(r) === "全省" ||
+      resourceCity(r) === "全国"
+    );
   }
 
   function filterResources(state) {

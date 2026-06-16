@@ -9,10 +9,12 @@ const JS_DIR = path.join(ROOT, "js");
 
 const DATA_FILES = [
   "map-nav.js",
+  "data-china-config.js",
   "data-study-spaces.js",
   "data-extra-resources.js",
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
+  "data-china-nationwide.js",
   "data.js",
 ];
 
@@ -36,13 +38,16 @@ export function loadSiteData() {
   SCENE_GUIDES,
   DISTRICTS,
   MapNav,
+  SITE_SCOPE: typeof SITE_SCOPE !== "undefined" ? SITE_SCOPE : "zhejiang",
 };`,
     ctx
   );
 
   const geoCtx = vm.createContext({});
   vm.runInContext(
-    fs.readFileSync(path.join(JS_DIR, "geo.js"), "utf8") +
+    fs.readFileSync(path.join(JS_DIR, "data-china-config.js"), "utf8") +
+      "\n" +
+      fs.readFileSync(path.join(JS_DIR, "geo.js"), "utf8") +
       ";globalThis.__GEO__ = GeoCity;",
     geoCtx
   );
