@@ -53,17 +53,17 @@
     const el = document.getElementById("toolsGrid");
     if (!el || typeof EXTERNAL_TOOLS === "undefined") return;
 
-    const scopes = ["全省"];
+    const scopes = ["全国", "全省"];
     if (typeof CITIES !== "undefined") {
       CITIES.forEach((c) => {
-        if (c !== "全部" && c !== "全省" && !scopes.includes(c)) scopes.push(c);
+        if (c !== "全部" && c !== "全省" && c !== "全国" && !scopes.includes(c)) scopes.push(c);
       });
     }
 
     const sections = scopes
       .map((scope) => ({
         scope,
-        tools: EXTERNAL_TOOLS.filter((t) => (t.scope || "全省") === scope),
+        tools: EXTERNAL_TOOLS.filter((t) => (t.scope || "全国") === scope),
       }))
       .filter((s) => s.tools.length);
 
@@ -71,7 +71,7 @@
       .map(
         (s) => `
         <section class="tools-section">
-          <h3 class="tools-section-title">${s.scope === "全省" ? "全省通用" : s.scope}</h3>
+          <h3 class="tools-section-title">${s.scope === "全国" ? "全国通用" : s.scope === "全省" ? "浙江省" : s.scope}</h3>
           <div class="tools-section-grid">
             ${s.tools.map(toolCardHtml).join("")}
           </div>

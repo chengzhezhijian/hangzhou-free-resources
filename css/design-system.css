@@ -551,7 +551,41 @@
   margin-top: 6px;
 }
 
+.app-ui.subpage .subpage-main {
+  padding-bottom: calc(var(--tab-bar-h) + 16px);
+}
+
+@media (max-width: 959px) {
+  .app-ui.subpage .site-header {
+    display: none;
+  }
+
+  .app-ui.subpage .subpage-main {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+  }
+
+  .app-ui.subpage .page-head h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .app-ui.subpage .guide-card,
+  .app-ui.subpage .tool-card,
+  .app-ui.subpage .about-card {
+    border-radius: var(--ios-radius-lg);
+    box-shadow: var(--ios-shadow);
+    border: none;
+  }
+}
+
 @media (min-width: 960px) {
+  .app-ui.subpage .site-header {
+    display: block;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+  }
+
   .app-ui .app-viewport {
     max-width: 1200px;
     margin: 0 auto;

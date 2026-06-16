@@ -39,7 +39,7 @@
 
   function initFeedback() {
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-    const brand = cfg.siteBrandName || "浙里惠民地图";
+    const brand = cfg.siteBrandName || "全国蹭享地图";
     const modal = document.getElementById("feedbackModal");
     const form = document.getElementById("feedbackForm");
     const hint = document.getElementById("feedbackHint");
