@@ -29,6 +29,8 @@
 
   const GEO_POS_KEY = "hz_geo_pos_v1";
   const GEO_POS_TTL_MS = 24 * 60 * 60 * 1000;
+  const HOT_CITIES = ["杭州", "宁波", "温州", "绍兴", "嘉兴", "金华"];
+  const FILTER_DESKTOP_MQ = window.matchMedia("(min-width: 960px)");
 
   const state = {
     group: "all",
@@ -43,6 +45,7 @@
     yearRoundOnly: false,
     page: 1,
     userLocation: null,
+    sortMode: "comprehensive",
   };
 
   const CATEGORY_LABELS = Object.fromEntries(
@@ -121,6 +124,13 @@
     return `${prefix}${Math.round(km)} km`;
   }
 
+  function sortComprehensive(list) {
+    return [...list].sort((a, b) => {
+      if (!!a.featured !== !!b.featured) return b.featured - a.featured;
+      return (a.name || "").localeCompare(b.name || "", "zh-CN");
+    });
+  }
+
   function sortByDistance(list) {
     if (!state.userLocation) return list;
     return [...list].sort((a, b) => {
@@ -173,7 +183,10 @@
       }
       return true;
     });
-    return sortByDistance(list);
+    if (state.sortMode === "distance" && state.userLocation) {
+      return sortByDistance(list);
+    }
+    return sortComprehensive(list);
   }
 
   function countByCategory() {
@@ -197,7 +210,8 @@
   }
 
   function resultCountLabel(total) {
-    const sortHint = state.userLocation ? " · 近→远" : "";
+    const sortHint =
+      state.sortMode === "distance" && state.userLocation ? " · 近→远" : "";
     if (state.city === "全部") return `共 ${total} 处${sortHint}`;
     if (state.city === "全省") return `共 ${total} 处（全省通用）${sortHint}`;
     const local = RESOURCES.filter((r) => resourceCity(r) === state.city).length;
@@ -610,7 +624,34 @@
 
   function syncCityQuickLabel() {
     const el = document.getElementById("cityQuickValue");
-    if (el) el.textContent = state.city;
+    if (el) el.textContent = state.city === "全部" ? "浙江" : state.city;
+    updateCityLocateStatus();
+  }
+
+  function updateCityLocateStatus() {
+    const el = document.getElementById("cityLocateStatus");
+    if (!el) return;
+    if (state.userLocation) {
+      el.textContent =
+        state.city === "全部"
+          ? "已定位，可选城市或切「距离」排序"
+          : `已定位到「${state.city}」附近`;
+      return;
+    }
+    el.textContent = "开启定位后自动匹配城市";
+  }
+
+  function cityPillHtml(city) {
+    return `<button type="button" class="city-pill ${state.city === city ? "active" : ""}" data-city="${city}">${city}</button>`;
+  }
+
+  function bindCityPills(root) {
+    root.querySelectorAll(".city-pill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        applyCitySelection(btn.dataset.city);
+        closeOverlay("citySheet");
+      });
+    });
   }
 
   function countActiveFilters() {
@@ -629,10 +670,48 @@
 
   function updateFilterBadge() {
     const badge = document.getElementById("filterBadge");
+    const filterBtn = document.getElementById("filterOpenBtn");
     if (!badge) return;
     const n = countActiveFilters();
     badge.textContent = n;
     badge.hidden = n === 0;
+    if (filterBtn) filterBtn.classList.toggle("is-active", n > 0);
+  }
+
+  function updateFilterConfirmCount() {
+    const el = document.getElementById("filterConfirmCount");
+    if (!el) return;
+    const n = filterResources().length;
+    el.textContent = n ? `（${n}）` : "";
+  }
+
+  function updateSortTabs() {
+    document.querySelectorAll(".sort-tab[data-sort]").forEach((tab) => {
+      const active = tab.dataset.sort === state.sortMode;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
+    const distanceTab = document.getElementById("sortDistance");
+    if (distanceTab) {
+      distanceTab.classList.toggle("sort-tab--needs-geo", !state.userLocation);
+    }
+  }
+
+  function setSortMode(mode) {
+    if (mode === "distance" && !state.userLocation) {
+      runGeoLocate(true).then(() => {
+        if (state.userLocation) {
+          state.sortMode = "distance";
+          updateSortTabs();
+          renderCards();
+        }
+      });
+      return;
+    }
+    state.sortMode = mode;
+    updateSortTabs();
+    state.page = 1;
+    renderCards();
   }
 
   function renderActiveFilters() {
@@ -724,23 +803,48 @@
   function updateMobileChrome() {
     syncCityQuickLabel();
     updateFilterBadge();
+    updateSortTabs();
     renderActiveFilters();
     renderCityGrid();
+    updateFilterConfirmCount();
   }
 
   function renderCityGrid() {
+    const hot = document.getElementById("cityHotGrid");
     const grid = document.getElementById("cityGrid");
+    if (hot) {
+      hot.innerHTML = HOT_CITIES.map((c) => cityPillHtml(c)).join("");
+      bindCityPills(hot);
+    }
     if (!grid) return;
-    grid.innerHTML = CITIES.map(
-      (c) =>
-        `<button type="button" class="city-pill ${state.city === c ? "active" : ""}" data-city="${c}">${c}</button>`
-    ).join("");
-    grid.querySelectorAll(".city-pill").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        applyCitySelection(btn.dataset.city);
-        closeOverlay("citySheet");
-      });
-    });
+    const rest = CITIES.filter((c) => !HOT_CITIES.includes(c));
+    grid.innerHTML = rest.map((c) => cityPillHtml(c)).join("");
+    bindCityPills(grid);
+  }
+
+  function isFilterDesktop() {
+    return FILTER_DESKTOP_MQ.matches;
+  }
+
+  function placeFilterPanel() {
+    const inner = document.getElementById("sidebarInner");
+    const sidebar = document.getElementById("sidebar");
+    const mount = document.getElementById("filterSheetMount");
+    if (!inner || !sidebar || !mount) return;
+    if (isFilterDesktop()) {
+      sidebar.appendChild(inner);
+    } else {
+      mount.appendChild(inner);
+    }
+  }
+
+  function openFilterSheet() {
+    updateFilterConfirmCount();
+    openOverlay("filterSheet");
+  }
+
+  function closeFilterSheet() {
+    closeOverlay("filterSheet");
   }
 
   function openOverlay(id) {
@@ -758,6 +862,10 @@
   }
 
   function expandSidebar(scroll) {
+    if (!isFilterDesktop()) {
+      openFilterSheet();
+      return;
+    }
     const sidebar = document.getElementById("sidebar");
     const toggle = document.getElementById("sidebarToggle");
     if (!sidebar) return;
@@ -774,10 +882,33 @@
   }
 
   function initMobileChrome() {
-    const citySheet = document.getElementById("citySheet");
+    placeFilterPanel();
+    FILTER_DESKTOP_MQ.addEventListener("change", () => {
+      placeFilterPanel();
+      closeFilterSheet();
+    });
 
     document.getElementById("filterOpenBtn")?.addEventListener("click", () => {
-      expandSidebar(true);
+      if (isFilterDesktop()) {
+        expandSidebar(true);
+        return;
+      }
+      openFilterSheet();
+    });
+
+    document.getElementById("filterSheetClose")?.addEventListener("click", closeFilterSheet);
+    document.getElementById("filterSheetBackdrop")?.addEventListener("click", closeFilterSheet);
+    document.getElementById("filterResetBtn")?.addEventListener("click", () => {
+      resetFilters();
+      updateFilterConfirmCount();
+    });
+    document.getElementById("filterConfirmBtn")?.addEventListener("click", closeFilterSheet);
+
+    document.getElementById("sortComprehensive")?.addEventListener("click", () => {
+      setSortMode("comprehensive");
+    });
+    document.getElementById("sortDistance")?.addEventListener("click", () => {
+      setSortMode("distance");
     });
 
     document.getElementById("sidebarToggle")?.addEventListener("click", () => {
@@ -795,6 +926,7 @@
     });
     document.getElementById("citySheetClose")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetBackdrop")?.addEventListener("click", () => closeOverlay("citySheet"));
+    document.getElementById("citySheetLocateBtn")?.addEventListener("click", () => runGeoLocate(true));
 
     document.getElementById("modalClose")?.addEventListener("click", closeDetailModal);
     document.getElementById("detailBackdrop")?.addEventListener("click", closeDetailModal);
@@ -856,12 +988,13 @@
   async function runGeoLocate(manual) {
     if (typeof GeoCity === "undefined") return;
     const geoBtns = [
-      document.getElementById("geoLocateBtn"),
+      document.getElementById("citySheetLocateBtn"),
       document.getElementById("geoLocateBtnDesktop"),
     ].filter(Boolean);
     geoBtns.forEach((btn) => {
       btn.disabled = true;
       if (btn.id === "geoLocateBtnDesktop") btn.textContent = "定位中…";
+      else if (btn.id === "citySheetLocateBtn") btn.textContent = "定位中…";
     });
     if (manual) showGeoBanner("正在获取您的位置…", "info");
 
@@ -869,6 +1002,8 @@
       const pos = await GeoCity.requestLocation();
       state.userLocation = { lat: pos.lat, lng: pos.lng };
       saveUserLocation(pos.lat, pos.lng);
+      updateCityLocateStatus();
+      updateSortTabs();
 
       const result = GeoCity.resolveCity(pos.lat, pos.lng);
       const shouldPickCity =
@@ -878,14 +1013,20 @@
       if (shouldPickCity) {
         applyCitySelection(result.city);
         sessionStorage.setItem("hz_geo_city_v2", result.city);
-        showGeoBanner(`已定位「${result.city}」，按距离由近到远`, "success");
+        state.sortMode = "distance";
+        updateSortTabs();
+        showGeoBanner(`已定位「${result.city}」，已切换距离排序`, "success");
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       } else if (result.ok) {
-        showGeoBanner(`已获取位置，按距离由近到远（当前筛选：${state.city}）`, "success");
+        if (manual) state.sortMode = "distance";
+        updateSortTabs();
+        showGeoBanner(`已获取位置（当前筛选：${state.city === "全部" ? "浙江" : state.city}）`, "success");
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
         renderCards();
       } else {
-        showGeoBanner("您当前不在浙江省内，结果仍按距离排序", "warn");
+        if (manual) state.sortMode = "distance";
+        updateSortTabs();
+        showGeoBanner("您当前不在浙江省内，仍可按距离排序", "warn");
         track("geo_locate", { ok: false, reason: "outside" });
         renderCards();
       }
@@ -895,8 +1036,8 @@
       const denied = err && err.code === 1;
       showGeoBanner(
         denied
-          ? "定位未授权：点 📍 允许定位后，列表会显示距离"
-          : "定位失败，请点 📍 重试或检查系统定位是否开启",
+          ? "定位未授权：请在城市面板点「定位」并允许访问"
+          : "定位失败，请重试或检查系统定位是否开启",
         "warn"
       );
       track("geo_locate", { ok: false, reason: denied ? "denied" : "error" });
@@ -904,6 +1045,7 @@
       geoBtns.forEach((btn) => {
         btn.disabled = false;
         if (btn.id === "geoLocateBtnDesktop") btn.textContent = "📍 定位";
+        else if (btn.id === "citySheetLocateBtn") btn.textContent = "定位";
       });
     }
   }
@@ -948,21 +1090,19 @@
   }
 
   function updateDistanceHint() {
-    const btn = document.getElementById("geoLocateBtn");
-    if (btn) btn.classList.toggle("toolbar-btn--active", !!state.userLocation);
     if (state.userLocation) return;
     const el = document.getElementById("geoBanner");
     if (!el || el.hidden) {
-      showGeoBanner("点 📍 开启定位，列表将显示距离并由近到远排序", "info");
+      showGeoBanner("点左上角城市或「距离」开启定位，列表将显示远近", "info");
     }
   }
 
   function initGeo() {
     restoreUserLocation();
+    updateCityLocateStatus();
+    updateSortTabs();
 
-    const btn = document.getElementById("geoLocateBtn");
     const btnDesktop = document.getElementById("geoLocateBtnDesktop");
-    if (btn) btn.addEventListener("click", () => runGeoLocate(true));
     if (btnDesktop) btnDesktop.addEventListener("click", () => runGeoLocate(true));
 
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
@@ -974,7 +1114,7 @@
     }
 
     if (state.userLocation) {
-      showGeoBanner(`已获取位置，结果按距离由近到远`, "success");
+      showGeoBanner("已获取位置，可点「距离」按远近排序", "success");
       renderCards();
       return;
     }
@@ -1030,10 +1170,10 @@
     if (state.group !== "all") document.getElementById("groupFilter").value = state.group;
     if (state.category !== "all") renderCategoryFilters();
     if (state.category === "reading") updateSubTypeVisibility();
+    initMobileChrome();
     initGeo();
     renderCards();
     initSearch();
-    initMobileChrome();
 
     document.getElementById("resetFilters")?.addEventListener("click", resetFilters);
     document.getElementById("emptyReset")?.addEventListener("click", resetFilters);

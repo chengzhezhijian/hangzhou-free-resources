@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=22" />
+  <link rel="stylesheet" href="css/style.css?v=23" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -76,25 +76,26 @@
   <div class="discover-bar" id="discoverBar">
     <div class="discover-inner">
       <div class="geo-banner" id="geoBanner" hidden role="status"></div>
-      <div class="search-box">
-        <span class="search-icon" aria-hidden="true">⌕</span>
-        <input type="search" id="searchInput" placeholder="搜：自习、书房、停车、纳凉、公厕…" autocomplete="off" enterkeyhint="search" />
-        <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
-      </div>
-      <div class="quick-scenes" id="quickScenes" aria-label="常见需求"></div>
-      <div class="toolbar-row">
-        <button type="button" class="toolbar-btn" id="cityQuickBtn" aria-haspopup="dialog">
-          <span class="toolbar-btn-label">地市</span>
-          <span class="toolbar-btn-value" id="cityQuickValue">全部</span>
+      <div class="loc-search-row">
+        <button type="button" class="loc-pill" id="cityQuickBtn" aria-haspopup="dialog" aria-label="选择地市">
+          <span class="loc-pill-icon" aria-hidden="true">📍</span>
+          <span class="loc-pill-city" id="cityQuickValue">浙江</span>
+          <span class="loc-pill-caret" aria-hidden="true">▾</span>
         </button>
-        <button type="button" class="toolbar-btn" id="filterOpenBtn" aria-haspopup="dialog">
-          <span class="toolbar-btn-label">筛选</span>
+        <div class="search-box search-box--inline">
+          <input type="search" id="searchInput" placeholder="搜自习、停车、纳凉…" autocomplete="off" enterkeyhint="search" />
+          <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
+        </div>
+      </div>
+      <div class="sort-tabs" role="tablist" aria-label="排序与筛选">
+        <button type="button" class="sort-tab is-active" data-sort="comprehensive" id="sortComprehensive" role="tab" aria-selected="true">综合</button>
+        <button type="button" class="sort-tab" data-sort="distance" id="sortDistance" role="tab" aria-selected="false">距离</button>
+        <button type="button" class="sort-tab sort-tab--filter" id="filterOpenBtn" aria-haspopup="dialog">
+          筛选
           <span class="filter-badge" id="filterBadge" hidden>0</span>
         </button>
-        <button type="button" class="toolbar-btn toolbar-btn--icon" id="geoLocateBtn" title="根据当前位置选择地市" aria-label="定位">
-          📍
-        </button>
       </div>
+      <div class="quick-scenes" id="quickScenes" aria-label="常见需求"></div>
       <div class="active-filters" id="activeFilters" hidden></div>
     </div>
   </div>
@@ -190,16 +191,49 @@
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <div class="overlay-sheet" id="citySheet" hidden>
-    <button type="button" class="overlay-backdrop" id="citySheetBackdrop" aria-label="关闭"></button>
-    <div class="overlay-panel" role="dialog" aria-modal="true" aria-labelledby="citySheetTitle">
+  <div class="overlay-sheet" id="filterSheet" hidden>
+    <button type="button" class="overlay-backdrop" id="filterSheetBackdrop" aria-label="关闭"></button>
+    <div class="overlay-panel filter-panel" role="dialog" aria-modal="true" aria-labelledby="filterSheetTitle">
       <div class="sheet-handle" aria-hidden="true"></div>
       <div class="sheet-header">
-        <h3 id="citySheetTitle">选择地市</h3>
+        <h3 id="filterSheetTitle">筛选</h3>
+        <button type="button" class="sheet-close" id="filterSheetClose" aria-label="关闭">×</button>
+      </div>
+      <div class="sheet-body filter-sheet-body" id="filterSheetMount"></div>
+      <div class="sheet-footer">
+        <button type="button" class="btn-secondary" id="filterResetBtn">重置</button>
+        <button type="button" class="btn-primary" id="filterConfirmBtn">确定<span id="filterConfirmCount"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay-sheet" id="citySheet" hidden>
+    <button type="button" class="overlay-backdrop" id="citySheetBackdrop" aria-label="关闭"></button>
+    <div class="overlay-panel city-panel" role="dialog" aria-modal="true" aria-labelledby="citySheetTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-header">
+        <h3 id="citySheetTitle">选择城市</h3>
         <button type="button" class="sheet-close" id="citySheetClose" aria-label="关闭">×</button>
       </div>
-      <div class="sheet-body">
-        <div class="city-grid" id="cityGrid"></div>
+      <div class="sheet-body city-sheet-body">
+        <div class="city-locate-card">
+          <div class="city-locate-info">
+            <span class="city-locate-icon" aria-hidden="true">📍</span>
+            <div>
+              <p class="city-locate-title">当前定位</p>
+              <p class="city-locate-sub" id="cityLocateStatus">开启定位后自动匹配城市</p>
+            </div>
+          </div>
+          <button type="button" class="btn-locate" id="citySheetLocateBtn">定位</button>
+        </div>
+        <section class="city-section">
+          <h4 class="city-section-title">热门城市</h4>
+          <div class="city-hot" id="cityHotGrid"></div>
+        </section>
+        <section class="city-section">
+          <h4 class="city-section-title">全部地市</h4>
+          <div class="city-grid" id="cityGrid"></div>
+        </section>
       </div>
     </div>
   </div>
@@ -227,7 +261,7 @@
   <script src="js/data-zhejiang-expanded.js?v=22"></script>
   <script src="js/data.js?v=22"></script>
   <script src="js/resource-coords.js?v=22"></script>
-  <script src="js/layout.js?v=22"></script>
-  <script src="js/app.js?v=22"></script>
+  <script src="js/layout.js?v=23"></script>
+  <script src="js/app.js?v=23"></script>
 </body>
 </html>
