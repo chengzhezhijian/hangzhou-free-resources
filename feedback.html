@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d6e6e" />
-  <meta name="description" content="信息不准或缺了点位？30 秒提交纠错，帮助更多人找到浙江免费便民资源。" />
-  <title>提交反馈 · 浙里惠民地图</title>
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="description" content="全国蹭享地图：信息不准或缺了点位？30 秒提交纠错，帮助更多人找到免费蹭网、蹭空调资源。" />
+  <title>提交反馈 · 全国蹭享地图</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=28" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=32" />
+  <link rel="stylesheet" href="css/design-system.css?v=32" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -20,18 +21,18 @@
     })();
   </script>
 </head>
-<body data-page="feedback" class="subpage">
+<body data-page="feedback" class="app-ui subpage">
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="brand" id="brandHome">
-        <span class="brand-icon">浙</span>
+        <span class="brand-icon">蹭</span>
         <div class="brand-text">
-          <h1>浙里惠民地图</h1>
-          <p class="brand-sub">浙江免费便民 · 搜完即走</p>
+          <h1>全国蹭享地图</h1>
+          <p class="brand-sub">蹭网·蹭空调·蹭水·蹭电 · 72城免费</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
-        <a href="index.html" data-nav-page="map">地图</a>
+        <a href="index.html" data-nav-page="map">发现</a>
         <a href="guide.html" data-nav-page="guide">场景</a>
         <a href="tools.html" data-nav-page="tools">工具</a>
         <a href="about.html" data-nav-page="about">说明</a>
@@ -49,17 +50,17 @@
       <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary btn-primary--lg" id="feedbackOpen">30 秒提交纠错</a>
     </div>
     <p class="feedback-hint" id="feedbackHint"></p>
-    <p class="feedback-alt"><a href="index.html">← 返回地图查询</a></p>
+    <p class="feedback-alt"><a href="index.html">← 返回发现页</a></p>
   </main>
 
   <footer class="site-footer">
-    <p>浙里惠民地图 · 公益信息整理，出行请以官方公告为准</p>
+    <p>全国蹭享地图 · 公益信息整理，出行请以官方公告为准</p>
   </footer>
 
   <nav class="bottom-nav" aria-label="主导航">
     <a href="index.html" class="bottom-nav-item" data-nav-page="map">
       <span class="bottom-nav-icon">🗺</span>
-      <span>地图</span>
+      <span>发现</span>
     </a>
     <a href="guide.html" class="bottom-nav-item" data-nav-page="guide">
       <span class="bottom-nav-icon">💡</span>
@@ -75,7 +76,7 @@
     </a>
   </nav>
 
-  <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
+  <div class="feedback-modal sheet-dialog" id="feedbackModal" hidden role="dialog" aria-modal="true">
     <div class="sheet-handle" aria-hidden="true"></div>
     <div class="modal-header">
       <h3>提交反馈</h3>
@@ -104,10 +105,10 @@
         <button type="button" class="btn-secondary" id="feedbackCancel">取消</button>
       </div>
     </form>
-  </dialog>
+  </div>
 
-  <script src="js/site-config.js?v=17"></script>
-  <script src="js/analytics.js?v=15"></script>
-  <script src="js/layout.js?v=28"></script>
+  <script src="js/site-config.js?v=32"></script>
+  <script src="js/analytics.js?v=32"></script>
+  <script src="js/layout.js?v=32"></script>
 </body>
 </html>

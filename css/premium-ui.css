@@ -1,0 +1,396 @@
+/**
+ * Premium UI — 对标 App Store Top 10（Airbnb / Apple Maps / Linear）
+ * 动效、粘性布局、卡片层级、Sheet 弹簧曲线
+ */
+
+:root {
+  --premium-gradient: linear-gradient(135deg, #0d9488 0%, #6366f1 50%, #a855f7 100%);
+  --premium-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --premium-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --sticky-top: calc(env(safe-area-inset-top, 0px) + 48px);
+}
+
+/* ─── 滚动紧凑模式（Maps / Airbnb 大标题收起） ─── */
+.app-ui.is-scrolled .home-head,
+.app-ui.is-scrolled .hero-stats {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s var(--premium-ease-out), max-height 0.35s var(--premium-ease-out);
+}
+
+.app-ui .home-head,
+.app-ui .hero-stats {
+  transition: opacity 0.3s var(--premium-ease-out), max-height 0.35s var(--premium-ease-out);
+  max-height: 400px;
+}
+
+.app-ui.is-scrolled .glass-nav {
+  padding-bottom: 6px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.app-ui .discover-sticky {
+  position: sticky;
+  top: var(--sticky-top);
+  z-index: 90;
+  margin: 0 -16px;
+  padding: 0 16px 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(242, 242, 247, 0.97) 0%,
+    rgba(242, 242, 247, 0.92) 70%,
+    rgba(242, 242, 247, 0) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.app-ui.is-scrolled .discover-sticky {
+  top: calc(env(safe-area-inset-top, 0px) + 44px);
+}
+
+/* ─── 搜索框（Spotlight 风格） ─── */
+.app-ui .search-box {
+  position: relative;
+}
+
+.app-ui .search-box::before {
+  content: "⌕";
+  position: absolute;
+  left: 14px;
+  font-size: 1.1rem;
+  color: var(--ios-label-tertiary);
+  pointer-events: none;
+  line-height: 44px;
+}
+
+.app-ui .search-box input {
+  padding-left: 28px !important;
+}
+
+.app-ui .search-box.is-loading::after {
+  content: "";
+  position: absolute;
+  right: 40px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(13, 148, 136, 0.25);
+  border-top-color: var(--ios-teal);
+  border-radius: 50%;
+  animation: premium-spin 0.65s linear infinite;
+}
+
+@keyframes premium-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── 四蹭标签：横向磁吸滚动 + 选中弹簧 ─── */
+.app-ui .hero-perks {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 0 4px;
+}
+
+.app-ui .value-perk {
+  scroll-snap-align: start;
+  transition: transform 0.2s var(--premium-spring), box-shadow 0.2s;
+}
+
+.app-ui .value-perk:active {
+  transform: scale(0.94);
+}
+
+.app-ui #valuePerks {
+  display: none;
+}
+
+/* ─── Premium 卡片（Airbnb 列表项） ─── */
+.app-ui .card-premium {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-ui .card-premium::before {
+  display: none;
+}
+
+.app-ui .card-accent {
+  width: 4px;
+  flex-shrink: 0;
+  background: var(--premium-gradient);
+}
+
+.app-ui .card-accent--library,
+.app-ui .card-accent--reading {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+}
+
+.app-ui .card-accent--park {
+  background: linear-gradient(180deg, #22c55e, #14b8a6);
+}
+
+.app-ui .card-accent--station,
+.app-ui .card-accent--community {
+  background: linear-gradient(180deg, #f59e0b, #ef4444);
+}
+
+.app-ui .card-accent--bunker,
+.app-ui .card-accent--metro {
+  background: linear-gradient(180deg, #06b6d4, #3b82f6);
+}
+
+.app-ui .card-inner {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 36px 14px 14px;
+  position: relative;
+}
+
+.app-ui .card-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--ios-label-tertiary);
+  line-height: 1;
+}
+
+.app-ui .card-premium h3 {
+  padding: 0;
+  margin: 6px 0 0;
+  font-size: 1.02rem;
+  font-weight: 650;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.app-ui .card-premium .card-top {
+  padding: 0;
+}
+
+.app-ui .card-premium .card-address {
+  padding: 0;
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-ui .card-premium .card-hours {
+  display: none;
+}
+
+.app-ui .card-premium .facility-tags {
+  padding: 8px 0 0;
+  margin: 0;
+}
+
+.app-ui .card-premium .card-meta {
+  padding: 6px 0 0;
+}
+
+.app-ui .card-premium.card-enter {
+  animation: card-enter 0.45s var(--premium-ease-out) backwards;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.app-ui .card-premium:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.app-ui .card-premium:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.app-ui .card-premium:nth-child(3) {
+  animation-delay: 0.06s;
+}
+.app-ui .card-premium:nth-child(4) {
+  animation-delay: 0.08s;
+}
+.app-ui .card-premium:nth-child(5) {
+  animation-delay: 0.1s;
+}
+
+/* ─── 骨架屏 ─── */
+.app-ui .card-skeleton {
+  height: 96px;
+  border-radius: var(--ios-radius-lg);
+  background: linear-gradient(
+    90deg,
+    rgba(118, 118, 128, 0.08) 0%,
+    rgba(118, 118, 128, 0.14) 50%,
+    rgba(118, 118, 128, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* ─── Sheet 弹簧入场 ─── */
+.app-ui .overlay-sheet:not([hidden]) .overlay-panel {
+  animation: sheet-up 0.42s var(--premium-ease-out);
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.app-ui .overlay-sheet:not([hidden]) .overlay-backdrop {
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ─── 空状态 ─── */
+.app-ui .empty-state {
+  border: none;
+}
+
+.app-ui .empty-state::before {
+  content: "🔍";
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+/* ─── 分页 iOS 风格 ─── */
+.app-ui .pagination-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.app-ui .page-btn {
+  min-width: 88px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--ios-radius-md);
+  background: var(--ios-bg-elevated);
+  box-shadow: var(--ios-shadow);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--ios-teal);
+  cursor: pointer;
+  transition: transform 0.15s var(--premium-spring);
+}
+
+.app-ui .page-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.app-ui .page-btn:disabled {
+  opacity: 0.35;
+}
+
+/* ─── 详情 Sheet 顶栏渐变 ─── */
+.app-ui .detail-panel .modal-header {
+  background: var(--premium-gradient);
+  color: #fff;
+  border-radius: var(--ios-radius-xl) var(--ios-radius-xl) 0 0;
+  padding-top: 8px;
+}
+
+.app-ui .detail-panel .modal-header h3 {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-ui .detail-panel .modal-close {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ─── 新手引导 Premium ─── */
+.app-ui .onboard-card {
+  animation: sheet-up 0.5s var(--premium-ease-out);
+  border: none;
+  max-width: 340px;
+}
+
+.app-ui .onboard-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.app-ui .onboard-dot {
+  transition: transform 0.25s var(--premium-spring), background 0.25s;
+}
+
+.app-ui .onboard-dot.is-active {
+  transform: scale(1.25);
+}
+
+/* ─── Tab 指示条 ─── */
+.app-ui .bottom-nav-item {
+  position: relative;
+}
+
+.app-ui .bottom-nav-item.is-active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ios-teal);
+}
+
+/* ─── 结果数脉冲 ─── */
+.app-ui .result-count.is-updated {
+  animation: count-pop 0.35s var(--premium-spring);
+}
+
+@keyframes count-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+    color: var(--ios-teal);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-ui .card-premium.card-enter,
+  .app-ui .overlay-sheet:not([hidden]) .overlay-panel,
+  .app-ui .onboard-card {
+    animation: none;
+  }
+}

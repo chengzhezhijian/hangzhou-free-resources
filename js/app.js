@@ -603,23 +603,29 @@
       )
       .join("");
 
+    const cat = resource.category || "all";
+
     return `
-      <article class="card ${resource.featured ? "card-featured" : ""} ${resource.isTool ? "card-tool" : ""}" data-id="${resource.id}" tabindex="0" role="button" aria-label="查看${resource.name}详情">
-        <div class="card-top">
-          <span class="card-category ${resource.category}">${categoryLabel(resource)}</span>
-          <div class="card-badges">
-            ${distLabel ? `<span class="badge-distance" title="直线距离">${distLabel}</span>` : ""}
-            ${costBadge(resource)}
-            ${resource.featured ? '<span class="badge-star" title="推荐">★</span>' : ""}
-            ${resource.seasonal ? '<span class="badge-seasonal">夏季</span>' : ""}
+      <article class="card card-premium ${resource.featured ? "card-featured" : ""} ${resource.isTool ? "card-tool" : ""}" data-id="${resource.id}" tabindex="0" role="button" aria-label="查看${resource.name}详情">
+        <div class="card-accent card-accent--${cat}" aria-hidden="true"></div>
+        <div class="card-inner">
+          <div class="card-top">
+            <span class="card-category ${cat}">${categoryLabel(resource)}</span>
+            <div class="card-badges">
+              ${distLabel ? `<span class="badge-distance" title="直线距离">${distLabel}</span>` : ""}
+              ${costBadge(resource)}
+              ${resource.featured ? '<span class="badge-star" title="推荐">★</span>' : ""}
+              ${resource.seasonal ? '<span class="badge-seasonal">夏季</span>' : ""}
+            </div>
           </div>
-        </div>
-        <h3>${resource.name}</h3>
-        <p class="card-address">${resource.address}</p>
-        <p class="card-hours">${resource.hours}</p>
-        <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
-        <div class="card-meta">
-          <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
+          <h3>${resource.name}</h3>
+          <p class="card-address">${resource.address}</p>
+          <p class="card-hours">${resource.hours}</p>
+          <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
+          <div class="card-meta">
+            <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
+          </div>
+          <span class="card-chevron" aria-hidden="true">›</span>
         </div>
       </article>
     `;
@@ -660,6 +666,8 @@
     const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
     countEl.textContent = resultCountLabel(filtered.length);
+    if (typeof window.animateResultCount === "function") window.animateResultCount();
+    if (typeof window.syncPremiumUrl === "function") window.syncPremiumUrl(state);
     renderPagination(filtered.length, totalPages);
     updateMobileChrome();
     updateContentHeader();
@@ -686,6 +694,7 @@
         }
       });
     });
+    if (typeof window.markCardsEnter === "function") window.markCardsEnter();
   }
 
   function openModal(id) {
