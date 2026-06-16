@@ -739,9 +739,12 @@ if (typeof EXTRA_RESOURCES !== "undefined") {
   RESOURCES.push(...EXTRA_RESOURCES);
 }
 
-// 合并浙江省其他地市（data-zhejiang-cities.js）
+// 合并浙江省其他地市（全省工具 + 各地市扩展）
 if (typeof ZHEJIANG_CITY_RESOURCES !== "undefined") {
   RESOURCES.push(...ZHEJIANG_CITY_RESOURCES);
+}
+if (typeof ZHEJIANG_EXPANDED_RESOURCES !== "undefined") {
+  RESOURCES.push(...ZHEJIANG_EXPANDED_RESOURCES);
 }
 
 RESOURCES.forEach(normalizeResource);

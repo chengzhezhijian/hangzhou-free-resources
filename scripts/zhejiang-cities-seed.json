@@ -1,0 +1,337 @@
+[
+  {
+    "city": "宁波",
+    "libraries": [
+      {"name": "宁波图书馆（福庆馆/新馆）", "address": "浙江省宁波市鄞州区宁穿路2100号", "district": "鄞州区", "phone": "0574-83081090", "website": "https://www.nblib.cn/"},
+      {"name": "宁波图书馆（永丰馆）", "address": "浙江省宁波市海曙区永丰路135号", "district": "海曙区", "phone": "0574-87361567", "website": "https://www.nblib.cn/"},
+      {"name": "宁波少年儿童图书馆", "address": "浙江省宁波市鄞州区宁穿路1888号", "district": "鄞州区", "phone": "0574-81887001", "website": "https://www.nblib.cn/"},
+      {"name": "海曙区图书馆", "address": "浙江省宁波市海曙区沁园街345号（海曙区文体中心一、二楼）", "district": "海曙区", "phone": "0574-87166071", "website": "https://www.nblib.cn/information/1383"},
+      {"name": "江北区图书馆", "address": "浙江省宁波市江北区丽江西路77号", "district": "江北区", "phone": "0574-87660783", "website": "https://www.nblib.cn/category/196"},
+      {"name": "镇海区图书馆", "address": "浙江省宁波市镇海区人民路58号", "district": "镇海区", "phone": "0574-86291723", "website": "https://www.nblib.cn/category/196"},
+      {"name": "北仑区图书馆", "address": "浙江省宁波市北仑区中河南路288号", "district": "北仑区", "phone": "0574-86781992", "website": "https://www.nblib.cn/category/196"},
+      {"name": "鄞州区图书馆（宁波大学园区图书馆）", "address": "浙江省宁波市鄞州区钱湖南路928号", "district": "鄞州区", "phone": "0574-88126500", "website": "https://www.nblib.cn/category/196"},
+      {"name": "奉化区图书馆", "address": "浙江省宁波市奉化区锦屏街道大成路2号（城市文化中心）4号楼", "district": "奉化区", "phone": "0574-88905921", "website": "https://www.nblib.cn/category/196"},
+      {"name": "余姚市图书馆", "address": "浙江省宁波市余姚市北姚江路1号公共文化中心2号楼", "district": "余姚市", "phone": "0574-62705834", "website": "https://www.nblib.cn/category/196"},
+      {"name": "慈溪市图书馆", "address": "浙江省宁波市慈溪市浒山街道新城大道北路55号", "district": "慈溪市", "phone": "0574-63035720", "website": "https://www.nblib.cn/category/196"},
+      {"name": "宁海县图书馆", "address": "浙江省宁波市宁海县桃源街道桃源北路9号", "district": "宁海县", "phone": "0574-83556206", "website": "https://www.nblib.cn/category/196"},
+      {"name": "象山县图书馆（总馆）", "address": "浙江省宁波市象山县丹东街道丹阳路1249号", "district": "象山县", "phone": "0574-89505058", "website": "https://www.nblib.cn/information/1395"}
+    ],
+    "city_reading_rooms": [
+      {"name": "岭读城市书房", "address": "浙江省宁波市海曙区镇明路（镇明岭庙改建）", "district": "海曙区", "phone": null, "website": null},
+      {"name": "宋韵·堇书房（院士公园）", "address": "浙江省宁波市鄞州区院士公园", "district": "鄞州区", "phone": null, "website": null},
+      {"name": "蛟山阁城市书房", "address": "浙江省宁波市北仑区戚家山街道", "district": "北仑区", "phone": null, "website": null},
+      {"name": "半刻书房", "address": "浙江省宁波市镇海区", "district": "镇海区", "phone": null, "website": null},
+      {"name": "象山县城市书房·瑶琳馆", "address": "浙江省宁波市象山县丰饶路37号", "district": "象山县", "phone": null, "website": "https://www.nblib.cn/information/1395"}
+    ],
+    "free_museums": [
+      {"name": "宁波市天一阁博物院", "address": "浙江省宁波市海曙区天一街10号", "district": "海曙区", "phone": "0574-87293856", "website": "https://www.tianyige.com.cn/"},
+      {"name": "宁波博物院", "address": "浙江省宁波市鄞州区首南中路1000号", "district": "鄞州区", "phone": "0574-82815588", "website": "https://www.nbmuseum.cn/"},
+      {"name": "中国港口博物馆", "address": "浙江省宁波市北仑区春晓街道滨海新区洋沙山风景区", "district": "北仑区", "phone": null, "website": "https://www.nbmuseum.cn/"}
+    ],
+    "free_parks": [
+      {"name": "月湖公园", "address": "浙江省宁波市海曙区大书院巷与偃月街交叉路口附近", "district": "海曙区", "phone": "0574-83868555", "website": null},
+      {"name": "中山公园（中山广场）", "address": "浙江省宁波市海曙区解放北路", "district": "海曙区", "phone": null, "website": null},
+      {"name": "日湖公园", "address": "浙江省宁波市江北区日湖", "district": "江北区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.nblib.cn/"
+    }
+  },
+  {
+    "city": "温州",
+    "libraries": [
+      {"name": "温州市图书馆（市府路总馆）", "address": "浙江省温州市鹿城区市府路506号", "district": "鹿城区", "phone": "0577-88962666", "website": "https://www.wzlib.cn/"},
+      {"name": "温州市图书馆少儿分馆", "address": "浙江省温州市鹿城区园西巷2号", "district": "鹿城区", "phone": "0577-56610216", "website": "https://www.wzlib.cn/"},
+      {"name": "温州市图书馆老年分馆", "address": "浙江省温州市鹿城区黎明西路307弄25号", "district": "鹿城区", "phone": "0577-88855387", "website": "https://www.wzlib.cn/"},
+      {"name": "乐清市图书馆", "address": "浙江省温州市乐清市城东街道伯乐东路890号", "district": "乐清市", "phone": "0577-57178787", "website": "http://yqlib.zdlib.com/"},
+      {"name": "瑞安市图书馆", "address": "浙江省温州市瑞安市罗阳大道瑞安广场东首", "district": "瑞安市", "phone": "0577-66886992", "website": "https://ralib.cn/"},
+      {"name": "永嘉县图书馆", "address": "浙江省温州市永嘉县广场路61号", "district": "永嘉县", "phone": "0577-57673788", "website": null},
+      {"name": "平阳县图书馆", "address": "浙江省温州市平阳县昆阳镇天来巷8号", "district": "平阳县", "phone": "0577-63721230", "website": null},
+      {"name": "苍南县图书馆", "address": "浙江省温州市苍南县灵溪镇湖滨路58号", "district": "苍南县", "phone": "0577-64756022", "website": null},
+      {"name": "文成县图书馆", "address": "浙江省温州市文成县大峃镇伯温路118号4楼", "district": "文成县", "phone": "0577-67864376", "website": null},
+      {"name": "泰顺县图书馆", "address": "浙江省温州市泰顺县罗阳镇南大街书山弄5-8号", "district": "泰顺县", "phone": "0577-67583693", "website": null},
+      {"name": "洞头区图书馆", "address": "浙江省温州市洞头区新城二期市民活动中心", "district": "洞头区", "phone": "0577-63479315", "website": null}
+    ],
+    "city_reading_rooms": [
+      {"name": "县前城市书房", "address": "浙江省温州市鹿城区县前头165号", "district": "鹿城区", "phone": "0577-89975977", "website": "https://www.wzlib.cn/"},
+      {"name": "市府路城市书房", "address": "浙江省温州市鹿城区市府路506号温州市图书馆一楼西侧", "district": "鹿城区", "phone": null, "website": "https://www.wzlib.cn/"},
+      {"name": "南塘街城市书房", "address": "浙江省温州市鹿城区南塘住宅区5组团16幢2层", "district": "鹿城区", "phone": null, "website": "https://www.wzlib.cn/"},
+      {"name": "智慧谷城市书房", "address": "浙江省温州市鹿城区车站大道789号智慧谷H幢", "district": "鹿城区", "phone": null, "website": "https://www.wzlib.cn/"},
+      {"name": "世纪公园城市书房", "address": "浙江省温州市鹿城区世纪公园二期下沉商业用房60号店铺", "district": "鹿城区", "phone": null, "website": "https://www.wzlib.cn/"}
+    ],
+    "free_museums": [
+      {"name": "温州博物馆", "address": "浙江省温州市鹿城区市府路世纪广场", "district": "鹿城区", "phone": "0577-56988690", "website": "https://www.wzmuseum.cn/"},
+      {"name": "温州市规划展示中心", "address": "浙江省温州市鹿城区惠民路856号", "district": "鹿城区", "phone": "0577-89691120", "website": null},
+      {"name": "温州南戏博物馆", "address": "浙江省温州市鹿城区", "district": "鹿城区", "phone": null, "website": "https://www.wzmuseum.cn/"}
+    ],
+    "free_parks": [
+      {"name": "中山公园", "address": "浙江省温州市鹿城区公园路1号", "district": "鹿城区", "phone": "0577-88823040", "website": "https://wzzhzfj.wenzhou.gov.cn/"},
+      {"name": "世纪公园", "address": "浙江省温州市鹿城区中央绿轴区块（市府路与锦江路之间）", "district": "鹿城区", "phone": null, "website": null},
+      {"name": "九山公园", "address": "浙江省温州市鹿城区松台山", "district": "鹿城区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.wzlib.cn/"
+    }
+  },
+  {
+    "city": "嘉兴",
+    "libraries": [
+      {"name": "嘉兴市图书馆（总馆）", "address": "浙江省嘉兴市南湖区海盐塘路339号", "district": "南湖区", "phone": "0573-82535001", "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆南湖分馆（少年儿童图书馆）", "address": "浙江省嘉兴市南湖区少年路240号", "district": "南湖区", "phone": "0573-82535001", "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆秀洲分馆", "address": "浙江省嘉兴市秀洲区中山西路887号", "district": "秀洲区", "phone": "0573-82535001", "website": "https://www.jxlib.com/lib/"},
+      {"name": "秀洲区图书馆", "address": "浙江省嘉兴市秀洲区秀洲大道870号嘉兴市文化艺术中心3楼", "district": "秀洲区", "phone": "18857388998", "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆东栅街道分馆", "address": "浙江省嘉兴市南湖区火车头文化创意街区文创广场南侧", "district": "南湖区", "phone": "0573-82570752", "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆大桥镇分馆", "address": "浙江省嘉兴市南湖区大桥镇十八里西街596号（乡镇综合文化站西侧）", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆新塍镇分馆", "address": "浙江省嘉兴市秀洲区新塍镇蓬莱路830号", "district": "秀洲区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆洪合镇分馆", "address": "浙江省嘉兴市秀洲区洪合镇国贸路458号文化活动中心内", "district": "秀洲区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆余新镇分馆", "address": "浙江省嘉兴市南湖区余新镇余贤埭街", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "嘉兴市图书馆塘汇街道分馆", "address": "浙江省嘉兴市南湖区塘汇路1053号绿城柳岸禾风2期社区用房", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"}
+    ],
+    "city_reading_rooms": [
+      {"name": "市图书馆智慧书房", "address": "浙江省嘉兴市南湖区海盐塘路339号市图书馆一楼东侧", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "少年路智慧书房", "address": "浙江省嘉兴市南湖区少年路240号", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "云东社区智慧书房", "address": "浙江省嘉兴市南湖区云东路213号社区服务中心旁", "district": "南湖区", "phone": null, "website": "https://www.nanhu.gov.cn/art/2023/12/15/art_1229609728_59055275.html"},
+      {"name": "城南运河智慧书房", "address": "浙江省嘉兴市南湖区香槟路与龙腾路交叉口东150米运河公园内", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"},
+      {"name": "新嘉街道智慧书房", "address": "浙江省嘉兴市南湖区城北路326号", "district": "南湖区", "phone": null, "website": "https://www.jxlib.com/lib/"}
+    ],
+    "free_museums": [
+      {"name": "嘉兴博物馆（嘉兴马家浜文化博物馆）", "address": "浙江省嘉兴市南湖区海盐塘路485号", "district": "南湖区", "phone": "0573-83677092", "website": "https://www.jiaxing.gov.cn/art/2025/6/4/art_1229878404_59663056.html"},
+      {"name": "南湖革命纪念馆（南湖景区）", "address": "浙江省嘉兴市南湖区南溪西路1号", "district": "南湖区", "phone": null, "website": "https://www.jiaxing.gov.cn/"},
+      {"name": "揽秀园（南湖景区内）", "address": "浙江省嘉兴市南湖区南湖西侧", "district": "南湖区", "phone": null, "website": "https://www.nanhu.gov.cn/art/2023/10/12/art_1570689_59053522.html"}
+    ],
+    "free_parks": [
+      {"name": "南湖景区", "address": "浙江省嘉兴市南湖区南溪西路1号", "district": "南湖区", "phone": null, "website": "https://www.jiaxing.gov.cn/"},
+      {"name": "月河历史街区", "address": "浙江省嘉兴市南湖区月河历史街区", "district": "南湖区", "phone": null, "website": null},
+      {"name": "梅湾街", "address": "浙江省嘉兴市南湖区梅湾街", "district": "南湖区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.jxlib.com/lib/"
+    }
+  },
+  {
+    "city": "湖州",
+    "libraries": [
+      {"name": "湖州市图书馆", "address": "浙江省湖州市吴兴区龙王山路728号", "district": "吴兴区", "phone": "0572-2398518", "website": "http://www.hztsg.com/"},
+      {"name": "湖州市南浔区图书馆", "address": "浙江省湖州市南浔区南浔镇泰安路695、697、699号2幢", "district": "南浔区", "phone": "0572-3023369", "website": "https://www.nanxun.gov.cn/art/2025/4/14/art_1229861052_58930144.html"},
+      {"name": "德清县图书馆", "address": "浙江省湖州市德清县武康街道千秋东街2号", "district": "德清县", "phone": "0572-8066936", "website": "http://www.dqlib.com.cn/"},
+      {"name": "长兴县图书馆", "address": "浙江省湖州市长兴县龙山街道植物园路2号", "district": "长兴县", "phone": "0572-6256056", "website": null},
+      {"name": "安吉县图书馆", "address": "浙江省湖州市安吉县昌硕街道", "district": "安吉县", "phone": null, "website": null}
+    ],
+    "city_reading_rooms": [
+      {"name": "城市书房·小西街点", "address": "浙江省湖州市吴兴区小西街高巷28号", "district": "吴兴区", "phone": null, "website": "http://www.hztsg.com/"},
+      {"name": "城市书房·聚星103点", "address": "浙江省湖州市吴兴区红旗路103号湖州文创中心产业园一楼", "district": "吴兴区", "phone": null, "website": "http://www.hztsg.com/"},
+      {"name": "城市书房·图书馆点", "address": "浙江省湖州市吴兴区龙王山路728号湖州图书馆内", "district": "吴兴区", "phone": null, "website": "http://www.hztsg.com/"},
+      {"name": "垂虹公园城市书房", "address": "浙江省湖州市南浔区垂虹公园2号楼", "district": "南浔区", "phone": null, "website": "http://www.hztsg.com/"},
+      {"name": "双渎家园城市书房", "address": "浙江省湖州市吴兴区康山街道双渎家园16幢", "district": "吴兴区", "phone": null, "website": "http://www.hztsg.com/"}
+    ],
+    "free_museums": [
+      {"name": "湖州市博物馆", "address": "浙江省湖州市吴兴区龙王山路", "district": "吴兴区", "phone": null, "website": "http://www.hztsg.com/"},
+      {"name": "南浔区博物馆", "address": "浙江省湖州市南浔区", "district": "南浔区", "phone": null, "website": null},
+      {"name": "德清县博物馆", "address": "浙江省湖州市德清县武康街道", "district": "德清县", "phone": null, "website": null}
+    ],
+    "free_parks": [
+      {"name": "仁皇山公园", "address": "浙江省湖州市吴兴区龙王山路仁皇山新区", "district": "吴兴区", "phone": null, "website": null},
+      {"name": "爱山广场", "address": "浙江省湖州市吴兴区爱山广场", "district": "吴兴区", "phone": null, "website": null},
+      {"name": "项王公园", "address": "浙江省湖州市吴兴区项王公园", "district": "吴兴区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "http://www.hztsg.com/"
+    }
+  },
+  {
+    "city": "绍兴",
+    "libraries": [
+      {"name": "绍兴图书馆（文化中心新馆/总馆）", "address": "浙江省绍兴市越城区洋江西路530号", "district": "越城区", "phone": "0575-88338221", "website": "http://www.sxlib.com/"},
+      {"name": "绍兴图书馆（延安路历史文献馆）", "address": "浙江省绍兴市越城区延安路565号", "district": "越城区", "phone": "0575-88338221", "website": "http://www.sxlib.com/"},
+      {"name": "绍兴图书馆古越藏书楼", "address": "浙江省绍兴市越城区胜利西路503号", "district": "越城区", "phone": "0575-88338221", "website": "http://www.sxlib.com/"},
+      {"name": "绍兴市越城区图书馆", "address": "浙江省绍兴市越城区延安路565号", "district": "越城区", "phone": "0575-88338221", "website": "http://www.sxlib.com/"},
+      {"name": "越城区图书馆鉴湖分馆", "address": "浙江省绍兴市越城区鉴湖街道办事处文体活动中心内", "district": "越城区", "phone": "0575-88338221", "website": "http://www.sxlib.com/"},
+      {"name": "绍兴市柯桥区图书馆", "address": "浙江省绍兴市柯桥区明珠路396号", "district": "柯桥区", "phone": "0575-282868", "website": "https://www.0575lib.com/"},
+      {"name": "绍兴市上虞区图书馆", "address": "浙江省绍兴市上虞区市民中心一路2号", "district": "上虞区", "phone": "0575-82213864", "website": "http://www.sxlib.com/"},
+      {"name": "诸暨市图书馆", "address": "浙江省绍兴市诸暨市暨阳街道高湖路39号", "district": "诸暨市", "phone": "0575-870008164", "website": "http://www.sxlib.com/"},
+      {"name": "嵊州市图书馆", "address": "浙江省绍兴市嵊州市杨港路801号", "district": "嵊州市", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "新昌县图书馆", "address": "浙江省绍兴市新昌县七星街道鼓山西路128号", "district": "新昌县", "phone": "0575-86110701", "website": "http://www.sxlib.com/"}
+    ],
+    "city_reading_rooms": [
+      {"name": "树兰书房·府山馆", "address": "浙江省绍兴市越城区府山街道", "district": "越城区", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "树兰书房·西湖分馆", "address": "浙江省绍兴市越城区北海街道", "district": "越城区", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "越城区城南街道图书分馆", "address": "浙江省绍兴市越城区城南街道长城中学对面", "district": "越城区", "phone": null, "website": "https://www.sx.gov.cn/"},
+      {"name": "迪荡街道分馆（首家镇街分馆）", "address": "浙江省绍兴市越城区迪荡街道", "district": "越城区", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "柯桥区城市书房", "address": "浙江省绍兴市柯桥区（详见柯桥区图书馆官网）", "district": "柯桥区", "phone": "0575-282868", "website": "https://www.0575lib.com/"}
+    ],
+    "free_museums": [
+      {"name": "鲁迅故里（含鲁迅纪念馆等）", "address": "浙江省绍兴市越城区鲁迅中路241号", "district": "越城区", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "绍兴博物馆", "address": "浙江省绍兴市越城区偏门直街", "district": "越城区", "phone": null, "website": "http://www.sxlib.com/"},
+      {"name": "中国黄酒博物馆", "address": "浙江省绍兴市越城区", "district": "越城区", "phone": null, "website": null}
+    ],
+    "free_parks": [
+      {"name": "塔山公园", "address": "浙江省绍兴市越城区塔山", "district": "越城区", "phone": null, "website": null},
+      {"name": "蕺山公园", "address": "浙江省绍兴市越城区蕺山", "district": "越城区", "phone": null, "website": null},
+      {"name": "迪荡湖公园", "address": "浙江省绍兴市越城区迪荡湖", "district": "越城区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "http://www.sxlib.com/"
+    }
+  },
+  {
+    "city": "金华",
+    "libraries": [
+      {"name": "金华市图书馆（严济慈图书馆）", "address": "浙江省金华市婺城区永康街288号", "district": "婺城区", "phone": "0579-82385639", "website": "http://www.jhstsg.cn/"},
+      {"name": "义乌市图书馆", "address": "浙江省金华市义乌市宗泽东路35号", "district": "义乌市", "phone": "0579-85175000", "website": "https://www.yw.gov.cn/art/2023/2/21/art_1229444227_59419668.html"},
+      {"name": "东阳市图书馆", "address": "浙江省金华市东阳市吴宁街道黉门广场45号", "district": "东阳市", "phone": "0579-86099300", "website": "https://www.dongyang.gov.cn/art/2024/7/8/art_1229325917_59684133.html"},
+      {"name": "永康市图书馆", "address": "浙江省金华市永康市", "district": "永康市", "phone": null, "website": null},
+      {"name": "兰溪市图书馆", "address": "浙江省金华市兰溪市", "district": "兰溪市", "phone": null, "website": null}
+    ],
+    "city_reading_rooms": [
+      {"name": "悦读吧·东苑分馆", "address": "浙江省金华市婺城区义乌街676号", "district": "婺城区", "phone": null, "website": "http://www.jhstsg.cn/"},
+      {"name": "悦读吧·湖海塘分馆", "address": "浙江省金华市婺城区龙川路湖海塘小学旁", "district": "婺城区", "phone": null, "website": "http://www.jhstsg.cn/"},
+      {"name": "悦读吧·东关分馆", "address": "浙江省金华市婺城区东关", "district": "婺城区", "phone": null, "website": "http://www.jhstsg.cn/"},
+      {"name": "悦读吧·宾虹分馆", "address": "浙江省金华市婺城区兰溪街1212号", "district": "婺城区", "phone": null, "website": "http://www.jhstsg.cn/"},
+      {"name": "义乌市悦读吧（主题馆网络）", "address": "浙江省金华市义乌市（164个服务点，详见官网附件）", "district": "义乌市", "phone": "0579-85175000", "website": "https://www.yw.gov.cn/art/2023/2/21/art_1229444227_59419668.html"}
+    ],
+    "free_museums": [
+      {"name": "金华市博物馆", "address": "浙江省金华市婺城区东市北街128号", "district": "婺城区", "phone": "0579-82350800", "website": "https://ws.taoart.com/jinhua/tour_guide.htm"},
+      {"name": "八咏楼", "address": "浙江省金华市婺城区八咏路中段235号对面", "district": "婺城区", "phone": "0579-82326307", "website": "https://ws.taoart.com/jinhua/tour_guide.htm"},
+      {"name": "中国婺剧博物馆", "address": "浙江省金华市婺城区燕尾洲路208号中国婺剧院内", "district": "婺城区", "phone": "0579-82781118", "website": "http://www.wuzhougucheng.com/content/wjyjj.html"}
+    ],
+    "free_parks": [
+      {"name": "燕尾洲公园", "address": "浙江省金华市婺城区燕尾洲（三江交汇）", "district": "婺城区", "phone": null, "website": null},
+      {"name": "八咏公园", "address": "浙江省金华市婺城区八咏路", "district": "婺城区", "phone": null, "website": null},
+      {"name": "人民公园", "address": "浙江省金华市婺城区人民公园", "district": "婺城区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "http://www.jhstsg.cn/"
+    }
+  },
+  {
+    "city": "衢州",
+    "libraries": [
+      {"name": "衢州市图书馆", "address": "浙江省衢州市柯城区三江东路26号（文化艺术中心D座）", "district": "柯城区", "phone": null, "website": "https://www.qzlib.cn/"},
+      {"name": "柯城区图书馆", "address": "浙江省衢州市柯城区", "district": "柯城区", "phone": null, "website": "https://www.qzlib.cn/"},
+      {"name": "衢江区图书馆（新馆建设中）", "address": "浙江省衢州市衢江区东迹大道与百灵北路交叉处科教产业园（2024年搬迁）", "district": "衢江区", "phone": null, "website": "https://www.qjq.gov.cn/"},
+      {"name": "江山市图书馆", "address": "浙江省衢州市江山市", "district": "江山市", "phone": null, "website": "https://www.qzlib.cn/"},
+      {"name": "常山县图书馆", "address": "浙江省衢州市常山县天马街道人民路119号", "district": "常山县", "phone": null, "website": "https://www.qz.gov.cn/art/2024/6/4/art_1229567715_5312464.html"}
+    ],
+    "city_reading_rooms": [
+      {"name": "南孔书屋·人民路", "address": "浙江省衢州市常山县天马街道人民路119号（图书馆本馆一楼）", "district": "常山县", "phone": null, "website": "https://www.qz.gov.cn/art/2024/6/4/art_1229567715_5312464.html"},
+      {"name": "南孔书屋·柯城区文化中心", "address": "浙江省衢州市柯城区荷花街道荷花五路477号", "district": "柯城区", "phone": null, "website": "https://www.qz.gov.cn/art/2024/6/4/art_1229567715_5312464.html"},
+      {"name": "南孔书屋·新屋里", "address": "浙江省衢州市衢江区新北路47号", "district": "衢江区", "phone": null, "website": "https://www.qjq.gov.cn/art/2023/12/27/art_1229609469_59021947.html"},
+      {"name": "南孔书屋·廿里", "address": "浙江省衢州市衢江区廿里镇融金广场3楼", "district": "衢江区", "phone": null, "website": "https://www.qjq.gov.cn/art/2023/12/27/art_1229609469_59021947.html"},
+      {"name": "南孔书屋·望江苑", "address": "浙江省衢州市衢江区望江苑小区27幢望江苑未来社区邻里中心二楼2008室", "district": "衢江区", "phone": null, "website": "https://www.qjq.gov.cn/art/2023/12/27/art_1229609469_59021947.html"}
+    ],
+    "free_museums": [
+      {"name": "衢州市博物馆", "address": "浙江省衢州市柯城区新桥街98号", "district": "柯城区", "phone": null, "website": "https://www.qz.gov.cn/"},
+      {"name": "中国儒学馆", "address": "浙江省衢州市柯城区新桥街（孔庙旁）", "district": "柯城区", "phone": null, "website": "https://www.qz.gov.cn/"},
+      {"name": "孔氏南宗家庙", "address": "浙江省衢州市柯城区新桥街96号", "district": "柯城区", "phone": null, "website": "https://www.qz.gov.cn/"}
+    ],
+    "free_parks": [
+      {"name": "鹿鸣公园", "address": "浙江省衢州市柯城区白云街道九龙南路", "district": "柯城区", "phone": null, "website": null},
+      {"name": "府山公园", "address": "浙江省衢州市柯城区府山", "district": "柯城区", "phone": null, "website": null},
+      {"name": "信安湖绿道公园", "address": "浙江省衢州市柯城区信安湖沿岸", "district": "柯城区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.qzlib.cn/"
+    }
+  },
+  {
+    "city": "舟山",
+    "libraries": [
+      {"name": "舟山市图书馆", "address": "浙江省舟山市定海区新城海天大道610号", "district": "定海区（新城）", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "定海区图书馆", "address": "浙江省舟山市定海区环城西路98号", "district": "定海区", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "普陀区图书馆", "address": "浙江省舟山市普陀区东港街道海华路589号", "district": "普陀区", "phone": "0580-3806697", "website": "https://www.zsodl.cn/"},
+      {"name": "岱山县图书馆", "address": "浙江省舟山市岱山县高亭镇长河路", "district": "岱山县", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "嵊泗县图书馆", "address": "浙江省舟山市嵊泗县菜园镇望海路393号", "district": "嵊泗县", "phone": null, "website": "https://www.zsodl.cn/"}
+    ],
+    "city_reading_rooms": [
+      {"name": "岛与书房·沈家门渔港文旅驿站", "address": "浙江省舟山市普陀区沈家门滨港路235号", "district": "普陀区", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "岛与书房·昌正市场", "address": "浙江省舟山市普陀区昌正消费品综合市场二楼", "district": "普陀区", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "舟山市图书馆街区自助图书馆", "address": "浙江省舟山市定海区新城海天大道610号一楼外", "district": "定海区（新城）", "phone": null, "website": "https://www.zsodl.cn/zskfsj/index.htm"},
+      {"name": "海上图书馆（轮渡合作点）", "address": "浙江省舟山市（海峡轮渡等6家合作点）", "district": "全市", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "普陀区朱家尖分馆", "address": "浙江省舟山市普陀区朱家尖", "district": "普陀区", "phone": null, "website": "https://www.zsodl.cn/"}
+    ],
+    "free_museums": [
+      {"name": "舟山博物馆", "address": "浙江省舟山市定海区新城", "district": "定海区（新城）", "phone": null, "website": "https://www.zsodl.cn/"},
+      {"name": "沈院", "address": "浙江省舟山市普陀区东港街道应家湾水库旁", "district": "普陀区", "phone": null, "website": "https://www.putuo.gov.cn/"},
+      {"name": "沈家门渔都风情展馆", "address": "浙江省舟山市普陀区沈家门街道缪家塘路40号", "district": "普陀区", "phone": null, "website": "https://www.putuo.gov.cn/"}
+    ],
+    "free_parks": [
+      {"name": "海山公园", "address": "浙江省舟山市定海区海山", "district": "定海区", "phone": null, "website": null},
+      {"name": "定海古城公园", "address": "浙江省舟山市定海区定海古城", "district": "定海区", "phone": null, "website": null},
+      {"name": "滨海公园", "address": "浙江省舟山市定海区新城滨海大道", "district": "定海区（新城）", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.zsodl.cn/"
+    }
+  },
+  {
+    "city": "台州",
+    "libraries": [
+      {"name": "台州市图书馆", "address": "浙江省台州市椒江区和谐路168号", "district": "椒江区", "phone": null, "website": "http://www.tzlib.cn/"},
+      {"name": "椒江区图书馆", "address": "浙江省台州市椒江区东枫山路16号", "district": "椒江区", "phone": null, "website": "https://wgltj.zjtz.gov.cn/art/2019/7/24/art_1229075835_7.html"},
+      {"name": "临海市图书馆", "address": "浙江省台州市临海市东湖路35号", "district": "临海市", "phone": null, "website": "http://www.lhtsg.com/"},
+      {"name": "温岭市图书馆", "address": "浙江省台州市温岭市城西街道横湖北路18号", "district": "温岭市", "phone": "0576-81621033", "website": "http://www.wllib.cn/"},
+      {"name": "黄岩区图书馆", "address": "浙江省台州市黄岩区", "district": "黄岩区", "phone": null, "website": "http://www.tzlib.cn/"},
+      {"name": "路桥区图书馆", "address": "浙江省台州市路桥区", "district": "路桥区", "phone": null, "website": "http://www.tzlib.cn/"}
+    ],
+    "city_reading_rooms": [
+      {"name": "和合书吧（台州市图书馆东北角，首家）", "address": "浙江省台州市椒江区和谐路168号台州市图书馆东北角", "district": "椒江区", "phone": null, "website": "http://www.tzlib.cn/"},
+      {"name": "和合书吧·体育场路", "address": "浙江省台州市椒江区体育场路（台州市体育中心旁）", "district": "椒江区", "phone": null, "website": "http://www.tzlib.cn/"},
+      {"name": "和合e书吧001号", "address": "浙江省台州市妇女儿童医院门诊大厅", "district": "椒江区", "phone": null, "website": "https://wgltj.zjtz.gov.cn/art/2023/8/2/art_1229052967_58907632.html"},
+      {"name": "和合e书吧（S1线15站）", "address": "浙江省台州市域铁路S1线沿线15个站点", "district": "全市", "phone": null, "website": "http://www.tzlib.cn/"},
+      {"name": "椒江区和合书吧（图书馆内）", "address": "浙江省台州市椒江区东枫山路16号椒江区图书馆内", "district": "椒江区", "phone": null, "website": "https://wgltj.zjtz.gov.cn/art/2019/7/24/art_1229075835_7.html"}
+    ],
+    "free_museums": [
+      {"name": "台州市博物馆", "address": "浙江省台州市椒江区爱华路168号", "district": "椒江区", "phone": null, "website": "https://www.taizhoumuseum.com/"},
+      {"name": "台州市科技馆", "address": "浙江省台州市椒江区爱华路118号", "district": "椒江区", "phone": null, "website": "https://www.taizhoumuseum.com/"},
+      {"name": "黄岩博物馆", "address": "浙江省台州市黄岩区", "district": "黄岩区", "phone": null, "website": null}
+    ],
+    "free_parks": [
+      {"name": "市民广场", "address": "浙江省台州市椒江区爱华路与耀达路交口", "district": "椒江区", "phone": null, "website": null},
+      {"name": "椒江滨江公园", "address": "浙江省台州市椒江区椒江沿岸", "district": "椒江区", "phone": null, "website": null},
+      {"name": "临海东湖", "address": "浙江省台州市临海市东湖", "district": "临海市", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "http://www.tzlib.cn/"
+    }
+  },
+  {
+    "city": "丽水",
+    "libraries": [
+      {"name": "丽水市图书馆", "address": "浙江省丽水市莲都区寿元街234号", "district": "莲都区", "phone": "0578-2272261", "website": "https://www.lslibrary.com.cn/lishui"},
+      {"name": "莲都区图书馆", "address": "浙江省丽水市莲都区寿元街234号（与市图书馆同址）", "district": "莲都区", "phone": "0578-2272261", "website": "https://www.lslibrary.com.cn/liandu"},
+      {"name": "缙云县图书馆", "address": "浙江省丽水市缙云县五云街道溪滨南路45号", "district": "缙云县", "phone": null, "website": "https://www.lslibrary.com.cn/"},
+      {"name": "青田县图书馆", "address": "浙江省丽水市青田县瓯南街道伯温东路99号", "district": "青田县", "phone": null, "website": "https://www.lslibrary.com.cn/"},
+      {"name": "龙泉市图书馆", "address": "浙江省丽水市龙泉市", "district": "龙泉市", "phone": null, "website": "https://www.lslibrary.com.cn/"}
+    ],
+    "city_reading_rooms": [
+      {"name": "应星楼城市书房", "address": "浙江省丽水市莲都区大猷街南明湖畔应星楼", "district": "莲都区", "phone": null, "website": "https://www.lslibrary.com.cn/lishui"},
+      {"name": "东临阁城市书房", "address": "浙江省丽水市莲都区（市行政中心系列阅读空间）", "district": "莲都区", "phone": null, "website": "https://www.lslibrary.com.cn/lishui"},
+      {"name": "阳冰书房（缙云县图书馆西桥分馆）", "address": "浙江省丽水市缙云县", "district": "缙云县", "phone": null, "website": "https://www.lslibrary.com.cn/"},
+      {"name": "佑文书院（缙云乡镇城市书房）", "address": "浙江省丽水市缙云县西乡大集市西侧", "district": "缙云县", "phone": null, "website": "https://www.lslibrary.com.cn/"},
+      {"name": "莲城书房（莲都区图书馆内）", "address": "浙江省丽水市莲都区处州公园旁莲都区图书馆一楼", "district": "莲都区", "phone": "0578-2272261", "website": "https://www.lslibrary.com.cn/liandu"}
+    ],
+    "free_museums": [
+      {"name": "丽水市博物馆", "address": "浙江省丽水市莲都区大猷街30号（滨水公园西侧）", "district": "莲都区", "phone": "0578-2050928", "website": "https://www.lishui.gov.cn/art/2023/11/28/art_1229768144_57352470.html"},
+      {"name": "丽水市美术馆", "address": "浙江省丽水市莲都区", "district": "莲都区", "phone": null, "website": "https://www.lishui.gov.cn/"},
+      {"name": "丽水市非遗馆", "address": "浙江省丽水市莲都区", "district": "莲都区", "phone": null, "website": "https://www.lishui.gov.cn/"}
+    ],
+    "free_parks": [
+      {"name": "处州公园", "address": "浙江省丽水市莲都区花园路2号附近", "district": "莲都区", "phone": null, "website": null},
+      {"name": "滨水公园", "address": "浙江省丽水市莲都区大猷街瓯江畔", "district": "莲都区", "phone": null, "website": null},
+      {"name": "南明湖绿道公园", "address": "浙江省丽水市莲都区南明湖沿岸", "district": "莲都区", "phone": null, "website": null}
+    ],
+    "official_tools": {
+      "zheli_app": "https://www.zjzwfw.gov.cn/",
+      "library_reading_room_finder": "https://www.lslibrary.com.cn/lishui"
+    }
+  }
+]

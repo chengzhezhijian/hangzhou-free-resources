@@ -65,13 +65,14 @@ const CITY_CENTROIDS = {
 };
 
 function loadResources() {
-  const files = [
-    "map-nav.js",
-    "data-study-spaces.js",
-    "data-extra-resources.js",
-    "data-zhejiang-cities.js",
-    "data.js",
-  ];
+const files = [
+  "map-nav.js",
+  "data-study-spaces.js",
+  "data-extra-resources.js",
+  "data-zhejiang-cities.js",
+  "data-zhejiang-expanded.js",
+  "data.js",
+];
   const combined = files.map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8")).join("\n");
   const ctx = vm.createContext({ console });
   vm.runInContext(`${combined};globalThis.__R__ = RESOURCES;`, ctx);

@@ -26,6 +26,7 @@ function build() {
     "data-study-spaces.js",
     "data-extra-resources.js",
     "data-zhejiang-cities.js",
+    "data-zhejiang-expanded.js",
     "data.js",
   ];
   const combined = files

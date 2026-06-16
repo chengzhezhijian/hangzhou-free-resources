@@ -16,6 +16,7 @@ const files = [
   "data-study-spaces.js",
   "data-extra-resources.js",
   "data-zhejiang-cities.js",
+  "data-zhejiang-expanded.js",
   "data.js",
 ];
 
@@ -153,6 +154,25 @@ if (!fs.existsSync(coordsPath)) {
   const missing = RESOURCES.filter((r) => !coords[r.id]);
   if (missing.length) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
   else ok(`${RESOURCES.length} 条资源均有坐标（${Object.keys(coords).length}）`);
+}
+
+// 9. 各地市（除杭州）应有足够扩展数据
+const MIN_CITY_RESOURCES = {
+  宁波: 25,
+  温州: 22,
+  嘉兴: 22,
+  湖州: 20,
+  绍兴: 22,
+  金华: 20,
+  衢州: 20,
+  舟山: 20,
+  台州: 20,
+  丽水: 20,
+};
+for (const [city, min] of Object.entries(MIN_CITY_RESOURCES)) {
+  const n = RESOURCES.filter((r) => resourceCity(r) === city).length;
+  if (n < min) fail(`${city} 仅 ${n} 条，期望至少 ${min} 条`);
+  else ok(`${city} ${n} 条（≥${min}）`);
 }
 
 console.log(`\n完成：${errors} 错误，${warnings} 警告`);
