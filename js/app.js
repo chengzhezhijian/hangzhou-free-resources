@@ -28,7 +28,7 @@
   }
 
   const GEO_POS_KEY = "hz_geo_pos_v1";
-  const GEO_POS_TTL_MS = 30 * 60 * 1000;
+  const GEO_POS_TTL_MS = 24 * 60 * 60 * 1000;
 
   const state = {
     group: "all",
@@ -436,6 +436,7 @@
         <div class="card-top">
           <span class="card-category ${resource.category}">${categoryLabel(resource)}</span>
           <div class="card-badges">
+            ${distLabel ? `<span class="badge-distance" title="直线距离">${distLabel}</span>` : ""}
             ${costBadge(resource)}
             ${resource.featured ? '<span class="badge-star" title="推荐">★</span>' : ""}
             ${resource.seasonal ? '<span class="badge-seasonal">夏季</span>' : ""}
@@ -447,7 +448,6 @@
         <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
         <div class="card-meta">
           <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
-          ${distLabel ? `<span class="card-distance">${distLabel}</span>` : ""}
         </div>
       </article>
     `;
@@ -490,6 +490,7 @@
     countEl.textContent = resultCountLabel(filtered.length);
     renderPagination(filtered.length, totalPages);
     updateMobileChrome();
+    updateDistanceHint();
     renderQuickScenes();
 
     if (filtered.length === 0) {
@@ -867,27 +868,35 @@
     try {
       const pos = await GeoCity.requestLocation();
       state.userLocation = { lat: pos.lat, lng: pos.lng };
-      sessionStorage.setItem(
-        GEO_POS_KEY,
-        JSON.stringify({ lat: pos.lat, lng: pos.lng, at: Date.now() })
-      );
+      saveUserLocation(pos.lat, pos.lng);
 
       const result = GeoCity.resolveCity(pos.lat, pos.lng);
-      if (!result.ok) {
-        showGeoBanner("您当前不在浙江省内，结果仍按距离排序，请手动选地市", "warn");
+      const shouldPickCity =
+        result.ok &&
+        (manual || state.city === "全部" || state.city === result.city);
+
+      if (shouldPickCity) {
+        applyCitySelection(result.city);
+        sessionStorage.setItem("hz_geo_city_v2", result.city);
+        showGeoBanner(`已定位「${result.city}」，按距离由近到远`, "success");
+        track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
+      } else if (result.ok) {
+        showGeoBanner(`已获取位置，按距离由近到远（当前筛选：${state.city}）`, "success");
+        track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
+        renderCards();
+      } else {
+        showGeoBanner("您当前不在浙江省内，结果仍按距离排序", "warn");
         track("geo_locate", { ok: false, reason: "outside" });
         renderCards();
-        return;
       }
-      applyCitySelection(result.city);
-      sessionStorage.setItem("hz_geo_city_v2", result.city);
-      showGeoBanner(`已定位「${result.city}」，结果按距离由近到远`, "success");
-      track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
+
       document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       const denied = err && err.code === 1;
       showGeoBanner(
-        denied ? "定位权限未开启，请手动选择地市" : "定位失败，请手动选择地市",
+        denied
+          ? "定位未授权：点 📍 允许定位后，列表会显示距离"
+          : "定位失败，请点 📍 重试或检查系统定位是否开启",
         "warn"
       );
       track("geo_locate", { ok: false, reason: denied ? "denied" : "error" });
@@ -899,19 +908,52 @@
     }
   }
 
-  function restoreUserLocation() {
+  function saveUserLocation(lat, lng) {
+    const payload = JSON.stringify({ lat, lng, at: Date.now() });
     try {
-      const raw = sessionStorage.getItem(GEO_POS_KEY);
-      if (!raw) return;
+      localStorage.setItem(GEO_POS_KEY, payload);
+    } catch {
+      /* ignore */
+    }
+    try {
+      sessionStorage.setItem(GEO_POS_KEY, payload);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function restoreUserLocation() {
+    let raw = null;
+    try {
+      raw = localStorage.getItem(GEO_POS_KEY) || sessionStorage.getItem(GEO_POS_KEY);
+    } catch {
+      raw = sessionStorage.getItem(GEO_POS_KEY);
+    }
+    if (!raw) return false;
+    try {
       const p = JSON.parse(raw);
-      if (!p?.lat || !p?.lng) return;
+      if (!p?.lat || !p?.lng) return false;
       if (Date.now() - (p.at || 0) > GEO_POS_TTL_MS) {
+        localStorage.removeItem(GEO_POS_KEY);
         sessionStorage.removeItem(GEO_POS_KEY);
-        return;
+        return false;
       }
       state.userLocation = { lat: p.lat, lng: p.lng };
+      return true;
     } catch {
+      localStorage.removeItem(GEO_POS_KEY);
       sessionStorage.removeItem(GEO_POS_KEY);
+      return false;
+    }
+  }
+
+  function updateDistanceHint() {
+    const btn = document.getElementById("geoLocateBtn");
+    if (btn) btn.classList.toggle("toolbar-btn--active", !!state.userLocation);
+    if (state.userLocation) return;
+    const el = document.getElementById("geoBanner");
+    if (!el || el.hidden) {
+      showGeoBanner("点 📍 开启定位，列表将显示距离并由近到远排序", "info");
     }
   }
 
@@ -923,25 +965,26 @@
     if (btn) btn.addEventListener("click", () => runGeoLocate(true));
     if (btnDesktop) btnDesktop.addEventListener("click", () => runGeoLocate(true));
 
-    const params = new URLSearchParams(location.search);
-    if (params.get("city")) return;
-    if (state.city !== "全部") return;
-
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+    const params = new URLSearchParams(location.search);
     const cached = sessionStorage.getItem("hz_geo_city_v2");
-    if (cached && CITIES.includes(cached)) {
+
+    if (!params.get("city") && state.city === "全部" && cached && CITIES.includes(cached)) {
       applyCitySelection(cached);
-      if (state.userLocation) {
-        showGeoBanner(`已为您选中「${cached}」，按距离排序`, "success");
-      } else {
-        showGeoBanner(`已为您选中「${cached}」`, "success");
-      }
+    }
+
+    if (state.userLocation) {
+      showGeoBanner(`已获取位置，结果按距离由近到远`, "success");
+      renderCards();
       return;
     }
 
     if (cfg.autoLocateOnLoad !== false) {
       runGeoLocate(false);
+      return;
     }
+
+    updateDistanceHint();
   }
 
   function initSearch() {
@@ -987,9 +1030,9 @@
     if (state.group !== "all") document.getElementById("groupFilter").value = state.group;
     if (state.category !== "all") renderCategoryFilters();
     if (state.category === "reading") updateSubTypeVisibility();
+    initGeo();
     renderCards();
     initSearch();
-    initGeo();
     initMobileChrome();
 
     document.getElementById("resetFilters")?.addEventListener("click", resetFilters);

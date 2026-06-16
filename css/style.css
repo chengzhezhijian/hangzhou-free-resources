@@ -334,6 +334,12 @@ img {
   font-size: 1.1rem;
 }
 
+.toolbar-btn--active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
 .filter-badge {
   min-width: 18px;
   height: 18px;
@@ -674,6 +680,15 @@ img {
 .badge-cost.cost-tool { background: #dbeafe; color: #1e40af; }
 
 .badge-star { color: var(--gold); }
+.badge-distance {
+  font-size: 0.65rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+}
 .badge-seasonal {
   font-size: 0.65rem;
   padding: 0.12rem 0.4rem;
