@@ -43,7 +43,7 @@ const MapNav = (function () {
   function effectiveCity(resource, contextCity) {
     if (resource.city && resource.city !== "全省") return resource.city;
     if (contextCity && contextCity !== "全部" && contextCity !== "全省") return contextCity;
-    return "杭州";
+    return "全省";
   }
 
   function cityParam(city) {

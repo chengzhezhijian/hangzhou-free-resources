@@ -113,7 +113,7 @@ const ZHEJIANG_CITY_RESOURCES = [
     hours: "夏季",
     costType: "conditional",
     features: ["人防工程纳凉", "地铁纳凉", "驿站饮水"],
-    note: "杭州已细录；其他地市关注当地城管/国防动员公告",
+    note: "各地市夏季分别发布纳凉公告，杭州已细录防空洞/地铁站",
     facilities: { ac: true, water: true },
     seasonal: true,
     seasonalNote: "夏季各地市分别发布纳凉点",

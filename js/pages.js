@@ -38,20 +38,52 @@
     });
   }
 
+  function toolCardHtml(t) {
+    const scope = t.scope || "全省";
+    return `
+      <a href="${t.url}" target="_blank" rel="noopener" class="tool-card" data-tool="${t.name}" data-scope="${scope}">
+        <h4>${t.name}</h4>
+        <p>${t.desc}</p>
+        <span class="tool-tag">${t.tag || scope}</span>
+      </a>
+    `;
+  }
+
   function renderTools() {
     const el = document.getElementById("toolsGrid");
     if (!el || typeof EXTERNAL_TOOLS === "undefined") return;
-    el.innerHTML = EXTERNAL_TOOLS.map(
-      (t) => `
-        <a href="${t.url}" target="_blank" rel="noopener" class="tool-card" data-tool="${t.name}">
-          <h4>${t.name}</h4>
-          <p>${t.desc}</p>
-          <span class="tool-tag">${t.tag}</span>
-        </a>
+
+    const scopes = ["全省"];
+    if (typeof CITIES !== "undefined") {
+      CITIES.forEach((c) => {
+        if (c !== "全部" && c !== "全省" && !scopes.includes(c)) scopes.push(c);
+      });
+    }
+
+    const sections = scopes
+      .map((scope) => ({
+        scope,
+        tools: EXTERNAL_TOOLS.filter((t) => (t.scope || "全省") === scope),
+      }))
+      .filter((s) => s.tools.length);
+
+    el.innerHTML = sections
+      .map(
+        (s) => `
+        <section class="tools-section">
+          <h3 class="tools-section-title">${s.scope === "全省" ? "全省通用" : s.scope}</h3>
+          <div class="tools-section-grid">
+            ${s.tools.map(toolCardHtml).join("")}
+          </div>
+        </section>
       `
-    ).join("");
+      )
+      .join("");
+
     el.querySelectorAll(".tool-card").forEach((a) => {
-      a.addEventListener("click", () => track("tool_click", { tool: a.dataset.tool }));
+      a.addEventListener("click", () =>
+        track("tool_click", { tool: a.dataset.tool, scope: a.dataset.scope })
+      );
     });
   }
 

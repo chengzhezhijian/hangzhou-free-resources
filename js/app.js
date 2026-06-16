@@ -261,12 +261,15 @@
     const coveredCities = new Set(
       RESOURCES.map((r) => resourceCity(r)).filter((c) => c !== "全省")
     ).size;
-    const hangzhouCount = RESOURCES.filter((r) => resourceCity(r) === "杭州").length;
+    const provinceTools =
+      typeof EXTERNAL_TOOLS !== "undefined"
+        ? EXTERNAL_TOOLS.filter((t) => t.scope === "全省").length
+        : 3;
     const items = [
-      { n: RESOURCES.length, label: "免费点位" },
-      { n: hangzhouCount, label: "杭州可查" },
-      { n: counts.reading || 0, label: "书房自习" },
+      { n: RESOURCES.length, label: "收录点位" },
       { n: coveredCities, label: "覆盖地市" },
+      { n: counts.reading || 0, label: "书房自习" },
+      { n: provinceTools, label: "全省工具" },
     ];
     el.innerHTML = items
       .map(
@@ -304,7 +307,7 @@
 
   function updateDistrictVisibility() {
     const block = document.getElementById("districtBlock");
-    if (block) block.hidden = state.city !== "全部" && state.city !== "杭州";
+    if (block) block.hidden = state.city !== "杭州";
   }
 
   function renderCityFilter() {

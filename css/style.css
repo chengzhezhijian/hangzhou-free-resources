@@ -972,6 +972,30 @@ img {
   background: var(--bg-card);
 }
 
+.tools-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.tools-section-title {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+.tools-section:first-child .tools-section-title {
+  margin-top: 0;
+}
+
+.tools-section-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
 .guide-grid,
 .tools-grid,
 .about-grid {
