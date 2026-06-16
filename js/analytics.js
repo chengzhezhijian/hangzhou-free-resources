@@ -6,7 +6,7 @@
  */
 (function () {
   const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-  const DEBUG = cfg.analyticsDebug !== false;
+  const DEBUG = cfg.analyticsDebug === true;
 
   /** 事件名 → 百度事件类别 / 动作（中文，便于后台阅读） */
   const BAIDU_EVENT_MAP = {

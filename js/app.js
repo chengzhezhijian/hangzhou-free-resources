@@ -539,20 +539,27 @@
     });
   }
 
+  function feedbackPageContext() {
+    const params = new URLSearchParams(location.search);
+    const parts = [`页面路径：${location.pathname || "/"}`];
+    if (params.toString()) parts.push(`参数：${params.toString()}`);
+    if (state.city && state.city !== "全部") parts.push(`地市：${state.city}`);
+    return parts.join("\n");
+  }
+
   function initFeedback() {
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+    const brand = cfg.siteBrandName || "浙里惠民地图";
     const modal = document.getElementById("feedbackModal");
     const form = document.getElementById("feedbackForm");
     const hint = document.getElementById("feedbackHint");
 
     if (cfg.feedbackUrl?.includes("wj.qq.com")) {
       hint.innerHTML = `通过 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">腾讯问卷</a> 提交反馈`;
-    } else if (cfg.feedbackUrl?.includes("github.com")) {
-      hint.innerHTML = `通过 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">GitHub 反馈</a> 提交（无需登录 GitHub 也可查看已收集反馈）`;
     } else if (cfg.feedbackEmail) {
-      hint.textContent = `或通过页内表单，我们将发送至 ${cfg.feedbackEmail}`;
+      hint.textContent = `也可使用下方表单，我们将发送至 ${cfg.feedbackEmail}`;
     } else {
-      hint.textContent = "请在 js/site-config.js 配置 feedbackUrl 或 feedbackEmail";
+      hint.textContent = `欢迎为「${brand}」提交纠错与建议`;
     }
 
     const applyFeedbackLinks = () => {
@@ -574,12 +581,6 @@
         return;
       }
       track("feedback_open");
-      if (url.includes("github.com") && url.includes("/issues/new")) {
-        e?.preventDefault();
-        const issueUrl = `${url}${url.includes("?") ? "&" : "?"}page=${encodeURIComponent(location.href)}`;
-        window.open(issueUrl, "_blank", "noopener");
-      }
-      // 腾讯问卷等外链：保留 <a> 默认跳转，避免弹窗拦截和缓存问题
     };
 
     document.getElementById("feedbackOpen").addEventListener("click", open);
@@ -596,15 +597,15 @@
       const type = data.get("type");
       const content = data.get("content");
       const contact = data.get("contact") || "未留";
-      const body = `类型：${type}\n内容：${content}\n联系方式：${contact}\n页面：${location.href}`;
+      const body = `类型：${type}\n内容：${content}\n联系方式：${contact}\n${feedbackPageContext()}`;
       track("feedback_submit", { type, hasContact: contact !== "未留" });
 
       if (cfg.feedbackEmail) {
-        location.href = `mailto:${cfg.feedbackEmail}?subject=${encodeURIComponent("杭城免费资源地图反馈")}&body=${encodeURIComponent(body)}`;
+        location.href = `mailto:${cfg.feedbackEmail}?subject=${encodeURIComponent(`${brand}用户反馈`)}&body=${encodeURIComponent(body)}`;
       } else {
         navigator.clipboard?.writeText(body).then(
-          () => alert("反馈内容已复制，请发送至你的反馈渠道（配置 feedbackEmail 或 feedbackUrl）"),
-          () => alert(body)
+          () => alert("反馈内容已复制，请粘贴到反馈渠道发送"),
+          () => alert("反馈内容复制失败，请手动填写反馈表单")
         );
       }
       form.reset();

@@ -1,0 +1,11 @@
+{
+  "name": "浙里惠民地图",
+  "short_name": "惠民地图",
+  "description": "浙江省免费公益资源查询",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f5",
+  "theme_color": "#0d6e6e",
+  "lang": "zh-CN"
+}

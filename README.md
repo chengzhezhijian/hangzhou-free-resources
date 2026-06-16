@@ -2,7 +2,7 @@
 
 浙江省**全品类**公益免费资源查询网站。
 
-**在线地址**：https://chengzhezhijian.github.io/hangzhou-free-resources/
+**在线访问**：浙里惠民地图（GitHub Pages 部署，地址仅用于运维配置，不在站内展示）
 
 ## 覆盖范围
 
