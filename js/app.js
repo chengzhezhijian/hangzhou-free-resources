@@ -20,7 +20,7 @@
       if (clear) clear.hidden = !q;
     }
     const city = params.get("city");
-    if (city) state.city = city;
+    if (city && CITIES.includes(city)) state.city = city;
     if (params.get("free") === "1") state.freeOnly = true;
     if (params.toString()) {
       track("landing_params", Object.fromEntries(params.entries()));
@@ -197,6 +197,7 @@
   function renderHeroStats() {
     const counts = countByCategory();
     const el = document.getElementById("heroStats");
+    if (!el) return;
     const coveredCities = new Set(
       RESOURCES.map((r) => resourceCity(r)).filter((c) => c !== "全省")
     ).size;
@@ -548,107 +549,6 @@
     closeOverlay("detailModal");
   }
 
-  function renderGuide() {
-    document.getElementById("guideGrid").innerHTML = SCENE_GUIDES.map(
-      (g) => `
-        <div class="guide-card">
-          <h4>${g.need}</h4>
-          <div class="pick">👉 ${g.pick}</div>
-          <div class="alt">备选：${g.alt}</div>
-        </div>
-      `
-    ).join("");
-  }
-
-  function renderTools() {
-    document.getElementById("toolsGrid").innerHTML = EXTERNAL_TOOLS.map(
-      (t) => `
-        <a href="${t.url}" target="_blank" rel="noopener" class="tool-card" data-tool="${t.name}">
-          <h4>${t.name}</h4>
-          <p>${t.desc}</p>
-          <span class="tool-tag">${t.tag}</span>
-        </a>
-      `
-    ).join("");
-    document.getElementById("toolsGrid").querySelectorAll(".tool-card").forEach((a) => {
-      a.addEventListener("click", () => track("tool_click", { tool: a.dataset.tool }));
-    });
-  }
-
-  function feedbackPageContext() {
-    const params = new URLSearchParams(location.search);
-    const parts = [`页面路径：${location.pathname || "/"}`];
-    if (params.toString()) parts.push(`参数：${params.toString()}`);
-    if (state.city && state.city !== "全部") parts.push(`地市：${state.city}`);
-    return parts.join("\n");
-  }
-
-  function initFeedback() {
-    const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-    const brand = cfg.siteBrandName || "浙里惠民地图";
-    const modal = document.getElementById("feedbackModal");
-    const form = document.getElementById("feedbackForm");
-    const hint = document.getElementById("feedbackHint");
-
-    if (cfg.feedbackUrl?.includes("wj.qq.com")) {
-      hint.innerHTML = `通过 <a href="${cfg.feedbackUrl}" target="_blank" rel="noopener">腾讯问卷</a> 提交反馈`;
-    } else if (cfg.feedbackEmail) {
-      hint.textContent = `也可使用下方表单，我们将发送至 ${cfg.feedbackEmail}`;
-    } else {
-      hint.textContent = `欢迎为「${brand}」提交纠错与建议`;
-    }
-
-    const applyFeedbackLinks = () => {
-      const url = cfg.feedbackUrl;
-      if (!url) return;
-      ["feedbackOpen", "feedbackFab"].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.href = url;
-      });
-    };
-
-    applyFeedbackLinks();
-
-    const open = (e) => {
-      const url = cfg.feedbackUrl;
-      if (!url) {
-        e?.preventDefault();
-        modal.showModal();
-        return;
-      }
-      track("feedback_open");
-    };
-
-    document.getElementById("feedbackOpen").addEventListener("click", open);
-    document.getElementById("feedbackFab").addEventListener("click", open);
-    document.getElementById("feedbackClose").addEventListener("click", () => modal.close());
-    document.getElementById("feedbackCancel").addEventListener("click", () => modal.close());
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.close();
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const type = data.get("type");
-      const content = data.get("content");
-      const contact = data.get("contact") || "未留";
-      const body = `类型：${type}\n内容：${content}\n联系方式：${contact}\n${feedbackPageContext()}`;
-      track("feedback_submit", { type, hasContact: contact !== "未留" });
-
-      if (cfg.feedbackEmail) {
-        location.href = `mailto:${cfg.feedbackEmail}?subject=${encodeURIComponent(`${brand}用户反馈`)}&body=${encodeURIComponent(body)}`;
-      } else {
-        navigator.clipboard?.writeText(body).then(
-          () => alert("反馈内容已复制，请粘贴到反馈渠道发送"),
-          () => alert("反馈内容复制失败，请手动填写反馈表单")
-        );
-      }
-      form.reset();
-      modal.close();
-    });
-  }
-
   function syncCityQuickLabel() {
     const el = document.getElementById("cityQuickValue");
     if (el) el.textContent = state.city;
@@ -837,43 +737,6 @@
     document.getElementById("citySheetClose")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetBackdrop")?.addEventListener("click", () => closeOverlay("citySheet"));
 
-    document.getElementById("brandHome")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    const navItems = document.querySelectorAll(".bottom-nav-item");
-    navItems.forEach((item) => {
-      item.addEventListener("click", () => {
-        navItems.forEach((n) => n.classList.remove("is-active"));
-        item.classList.add("is-active");
-      });
-    });
-
-    const sections = ["resources", "guide", "tools", "about"];
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const id = entry.target.id;
-            navItems.forEach((n) => {
-              n.classList.toggle("is-active", n.dataset.nav === id);
-            });
-          });
-        },
-        { rootMargin: "-40% 0px -45% 0px", threshold: 0 }
-      );
-      sections.forEach((id) => {
-        const sec = document.getElementById(id);
-        if (sec) observer.observe(sec);
-      });
-    }
-
-    [document.getElementById("feedbackModal")].forEach((dialog) => {
-      dialog?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
-    });
-
     document.getElementById("modalClose")?.addEventListener("click", closeDetailModal);
     document.getElementById("detailBackdrop")?.addEventListener("click", closeDetailModal);
   }
@@ -1020,6 +883,8 @@
   }
 
   function init() {
+    if (!document.getElementById("cardGrid")) return;
+
     applyUrlParams();
     renderHeroStats();
     renderQuickScenes();
@@ -1032,28 +897,26 @@
     if (state.freeOnly) document.getElementById("freeOnly").checked = true;
     if (state.city !== "全部") document.getElementById("cityFilter").value = state.city;
     if (state.group !== "all") document.getElementById("groupFilter").value = state.group;
+    if (state.category !== "all") renderCategoryFilters();
     if (state.category === "reading") updateSubTypeVisibility();
     renderCards();
-    renderGuide();
-    renderTools();
     initSearch();
-    initFeedback();
     initGeo();
     initMobileChrome();
 
-    document.getElementById("resetFilters").addEventListener("click", resetFilters);
-    document.getElementById("emptyReset").addEventListener("click", resetFilters);
-    document.getElementById("featuredOnly").addEventListener("change", (e) => {
+    document.getElementById("resetFilters")?.addEventListener("click", resetFilters);
+    document.getElementById("emptyReset")?.addEventListener("click", resetFilters);
+    document.getElementById("featuredOnly")?.addEventListener("change", (e) => {
       state.featuredOnly = e.target.checked;
       state.page = 1;
       renderCards();
     });
-    document.getElementById("freeOnly").addEventListener("change", (e) => {
+    document.getElementById("freeOnly")?.addEventListener("change", (e) => {
       state.freeOnly = e.target.checked;
       state.page = 1;
       renderCards();
     });
-    document.getElementById("yearRoundOnly").addEventListener("change", (e) => {
+    document.getElementById("yearRoundOnly")?.addEventListener("change", (e) => {
       state.yearRoundOnly = e.target.checked;
       state.page = 1;
       renderCards();

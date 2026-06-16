@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d6e6e" />
+  <meta name="description" content="信息不准或缺了点位？30 秒提交纠错，帮助更多人找到浙江免费便民资源。" />
+  <title>提交反馈 · 浙里惠民地图</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=17" />
+  <script>
+    var _hmt = _hmt || [];
+    (function () {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?50a56e1094f56845c92f9c6dc7dc41e4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</head>
+<body data-page="feedback" class="subpage">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand" id="brandHome">
+        <span class="brand-icon">浙</span>
+        <div class="brand-text">
+          <h1>浙里惠民地图</h1>
+          <p class="brand-sub">浙江免费便民 · 搜完即走</p>
+        </div>
+      </a>
+      <nav class="header-nav" aria-label="桌面导航">
+        <a href="index.html" data-nav-page="map">地图</a>
+        <a href="guide.html" data-nav-page="guide">场景</a>
+        <a href="tools.html" data-nav-page="tools">工具</a>
+        <a href="about.html" data-nav-page="about">说明</a>
+        <a href="feedback.html" data-nav-page="feedback">反馈</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="subpage-main subpage-main--center">
+    <div class="page-head">
+      <h2>信息不准？缺了点位？</h2>
+      <p class="section-desc">你的一条反馈，能帮到下一个找免费资源的人</p>
+    </div>
+    <div class="feedback-actions">
+      <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary btn-primary--lg" id="feedbackOpen">30 秒提交纠错</a>
+    </div>
+    <p class="feedback-hint" id="feedbackHint"></p>
+    <p class="feedback-alt"><a href="index.html">← 返回地图查询</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <p>浙里惠民地图 · 公益信息整理，出行请以官方公告为准</p>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="主导航">
+    <a href="index.html" class="bottom-nav-item" data-nav-page="map">
+      <span class="bottom-nav-icon">🗺</span>
+      <span>地图</span>
+    </a>
+    <a href="guide.html" class="bottom-nav-item" data-nav-page="guide">
+      <span class="bottom-nav-icon">💡</span>
+      <span>场景</span>
+    </a>
+    <a href="tools.html" class="bottom-nav-item" data-nav-page="tools">
+      <span class="bottom-nav-icon">🔧</span>
+      <span>工具</span>
+    </a>
+    <a href="about.html" class="bottom-nav-item" data-nav-page="about">
+      <span class="bottom-nav-icon">ℹ️</span>
+      <span>说明</span>
+    </a>
+  </nav>
+
+  <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="modal-header">
+      <h3>提交反馈</h3>
+      <button type="button" class="modal-close" id="feedbackClose" aria-label="关闭">×</button>
+    </div>
+    <form class="feedback-form" id="feedbackForm">
+      <label class="form-label">
+        反馈类型
+        <select name="type" class="select-input" required>
+          <option value="纠错">信息纠错</option>
+          <option value="新增">新增点位</option>
+          <option value="建议">功能建议</option>
+          <option value="其他">其他</option>
+        </select>
+      </label>
+      <label class="form-label">
+        反馈内容
+        <textarea name="content" class="form-textarea" rows="4" placeholder="请描述问题或新点位名称、地址、开放时间…" required></textarea>
+      </label>
+      <label class="form-label">
+        联系方式（选填）
+        <input type="text" name="contact" class="form-input" placeholder="微信 / 手机 / 邮箱" />
+      </label>
+      <div class="modal-footer feedback-form-footer">
+        <button type="submit" class="btn-primary">发送反馈</button>
+        <button type="button" class="btn-secondary" id="feedbackCancel">取消</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/site-config.js?v=17"></script>
+  <script src="js/analytics.js?v=15"></script>
+  <script src="js/layout.js?v=17"></script>
+</body>
+</html>

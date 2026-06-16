@@ -12,11 +12,11 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="浙里惠民地图" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title>浙里惠民地图 · 浙江免费公共服务查询</title>
+  <title>浙里惠民地图 · 免费点位查询</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=16" />
+  <link rel="stylesheet" href="css/style.css?v=17" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -41,10 +41,10 @@
     })(window, document, "clarity", "script", "x7dvhuedcl");
   </script>
 </head>
-<body>
+<body data-page="map">
   <header class="site-header">
     <div class="header-inner">
-      <a href="#" class="brand" id="brandHome">
+      <a href="index.html" class="brand" id="brandHome">
         <span class="brand-icon">浙</span>
         <div class="brand-text">
           <h1>浙里惠民地图</h1>
@@ -52,11 +52,11 @@
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
-        <a href="#resources">资源</a>
-        <a href="#guide">场景</a>
-        <a href="#tools">工具</a>
-        <a href="#about">说明</a>
-        <a href="#feedback">反馈</a>
+        <a href="index.html" data-nav-page="map">地图</a>
+        <a href="guide.html" data-nav-page="guide">场景</a>
+        <a href="tools.html" data-nav-page="tools">工具</a>
+        <a href="about.html" data-nav-page="about">说明</a>
+        <a href="feedback.html" data-nav-page="feedback">反馈</a>
       </nav>
     </div>
   </header>
@@ -165,92 +165,24 @@
     </section>
   </main>
 
-  <section class="guide-section page-section" id="guide">
-    <div class="section-inner">
-      <h2>我这种情况，去哪？</h2>
-      <p class="section-desc">按你的当下需求选，比翻分类更快</p>
-      <div class="guide-grid" id="guideGrid"></div>
-    </div>
-  </section>
-
-  <section class="tools-section page-section" id="tools">
-    <div class="section-inner">
-      <h2>官方实时查询</h2>
-      <p class="section-desc">海量动态数据（如900+驿家）以官方平台为准，这里帮你一键跳转</p>
-      <div class="tools-grid" id="toolsGrid"></div>
-    </div>
-  </section>
-
-  <section class="about-section page-section" id="about">
-    <div class="section-inner about-inner">
-      <h2>使用前知道这些</h2>
-      <div class="about-grid">
-        <div class="about-card">
-          <h4>图书馆</h4>
-          <p>免证阅览，凭证借书。WiFi 需读者证/短信认证，电子阅览每日约 2 小时。自修区请保持安静。</p>
-        </div>
-        <div class="about-card">
-          <h4>覆盖范围</h4>
-          <p>杭州：图书馆、223+ 书房、纳凉、停车等细录。其他 10 市：市图书馆 + 城市书房工具 + 代表公园/博物馆 + 浙里办入口。</p>
-        </div>
-        <div class="about-card">
-          <h4>城市书房</h4>
-          <p>杭州邻里阅读空间已逐条收录；其他地市提供官方查询工具卡片，海量点位请点「官方平台」。</p>
-        </div>
-        <div class="about-card">
-          <h4>爱心驿家</h4>
-          <p>全市数百家，设施因站而异。腾讯地图搜「爱心驿站」可筛饮水机、空调、24 小时。</p>
-        </div>
-        <div class="about-card">
-          <h4>停车</h4>
-          <p>杭州：邻里停 1.7 万+ 共享泊位、春节道路免费等已收录。其他地市：通过浙里办 / 各地分厅查询。</p>
-        </div>
-        <div class="about-card">
-          <h4>公园与体育</h4>
-          <p>全市 747 个城市公园免费开放；945 个校园室外场地免费。节假日多家公共体育馆免费开放。</p>
-        </div>
-        <div class="about-card">
-          <h4>夏季纳凉</h4>
-          <p>杭州：防空洞、地铁 82 站已细录。其他地市：关注当地城管、国防动员夏季公告，或全省政策卡片。</p>
-        </div>
-        <div class="about-card">
-          <h4>免责声明</h4>
-          <p>信息来源于政府公开资料，不保证实时准确。开放时间与设施以场馆当日公告为准。</p>
-        </div>
-      </div>
-      <p class="about-footer">数据整理日期：2026-06-15</p>
-    </div>
-  </section>
-
-  <section class="feedback-section page-section" id="feedback">
-    <div class="section-inner feedback-inner">
-      <h2>信息不准？缺了点位？</h2>
-      <p class="section-desc">你的一条反馈，能帮到下一个找免费资源的人</p>
-      <div class="feedback-actions">
-        <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary" id="feedbackOpen">30 秒提交纠错</a>
-      </div>
-      <p class="feedback-hint" id="feedbackHint"></p>
-    </div>
-  </section>
-
   <footer class="site-footer">
     <p>浙里惠民地图 · 公益信息整理，出行请以官方公告为准</p>
   </footer>
 
   <nav class="bottom-nav" id="bottomNav" aria-label="主导航">
-    <a href="#resources" class="bottom-nav-item is-active" data-nav="resources">
+    <a href="index.html" class="bottom-nav-item" data-nav-page="map">
       <span class="bottom-nav-icon">🗺</span>
       <span>地图</span>
     </a>
-    <a href="#guide" class="bottom-nav-item" data-nav="guide">
+    <a href="guide.html" class="bottom-nav-item" data-nav-page="guide">
       <span class="bottom-nav-icon">💡</span>
       <span>场景</span>
     </a>
-    <a href="#tools" class="bottom-nav-item" data-nav="tools">
+    <a href="tools.html" class="bottom-nav-item" data-nav-page="tools">
       <span class="bottom-nav-icon">🔧</span>
       <span>工具</span>
     </a>
-    <a href="#about" class="bottom-nav-item" data-nav="about">
+    <a href="about.html" class="bottom-nav-item" data-nav-page="about">
       <span class="bottom-nav-icon">ℹ️</span>
       <span>说明</span>
     </a>
@@ -272,37 +204,6 @@
     </div>
   </div>
 
-  <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
-    <div class="sheet-handle" aria-hidden="true"></div>
-    <div class="modal-header">
-      <h3>提交反馈</h3>
-      <button type="button" class="modal-close" id="feedbackClose" aria-label="关闭">×</button>
-    </div>
-    <form class="feedback-form" id="feedbackForm">
-      <label class="form-label">
-        反馈类型
-        <select name="type" class="select-input" required>
-          <option value="纠错">信息纠错</option>
-          <option value="新增">新增点位</option>
-          <option value="建议">功能建议</option>
-          <option value="其他">其他</option>
-        </select>
-      </label>
-      <label class="form-label">
-        反馈内容
-        <textarea name="content" class="form-textarea" rows="4" placeholder="请描述问题或新点位名称、地址、开放时间…" required></textarea>
-      </label>
-      <label class="form-label">
-        联系方式（选填）
-        <input type="text" name="contact" class="form-input" placeholder="微信 / 手机 / 邮箱" />
-      </label>
-      <div class="modal-footer feedback-form-footer">
-        <button type="submit" class="btn-primary">发送反馈</button>
-        <button type="button" class="btn-secondary" id="feedbackCancel">取消</button>
-      </div>
-    </form>
-  </dialog>
-
   <div class="overlay-sheet detail-sheet" id="detailModal" hidden>
     <button type="button" class="overlay-backdrop" id="detailBackdrop" aria-label="关闭"></button>
     <div class="overlay-panel detail-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -316,14 +217,15 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=15"></script>
+  <script src="js/site-config.js?v=17"></script>
   <script src="js/geo.js?v=12"></script>
   <script src="js/map-nav.js?v=11"></script>
   <script src="js/analytics.js?v=15"></script>
   <script src="js/data-study-spaces.js?v=9"></script>
   <script src="js/data-extra-resources.js?v=9"></script>
   <script src="js/data-zhejiang-cities.js?v=9"></script>
-  <script src="js/data.js?v=16"></script>
-  <script src="js/app.js?v=16"></script>
+  <script src="js/data.js?v=17"></script>
+  <script src="js/layout.js?v=17"></script>
+  <script src="js/app.js?v=17"></script>
 </body>
 </html>

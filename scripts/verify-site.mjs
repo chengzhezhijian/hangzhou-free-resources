@@ -129,10 +129,15 @@ for (const [label, lat, lng, expect] of geoCases) {
 }
 
 // 7. 页面源码不应明文暴露 GitHub Pages 域名
-const indexHtml = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-if (/chengzhezhijian\.github\.io/i.test(indexHtml)) {
-  fail("index.html 不应包含 GitHub Pages 明文域名");
-} else ok("index.html 未暴露 GitHub Pages 域名");
+const htmlFiles = ["index.html", "guide.html", "tools.html", "about.html", "feedback.html"];
+for (const file of htmlFiles) {
+  const html = fs.readFileSync(path.join(__dirname, "..", file), "utf8");
+  if (/chengzhezhijian\.github\.io/i.test(html)) {
+    fail(`${file} 不应包含 GitHub Pages 明文域名`);
+  } else {
+    ok(`${file} 未暴露 GitHub Pages 域名`);
+  }
+}
 
 console.log(`\n完成：${errors} 错误，${warnings} 警告`);
 process.exit(errors ? 1 : 0);

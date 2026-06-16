@@ -75,13 +75,13 @@ const READING_SUBTYPES = [
 ];
 
 const SCENE_GUIDES = [
-  { need: "想安静自习、有 WiFi", pick: "图书馆自修区 / 城市书房", alt: "杭州 200+ 书房可筛选" },
-  { need: "手机快没电、想喝水", pick: "爱心驿家 / 党群中心", alt: "部分 24 小时，设施看站点" },
-  { need: "夏天想凉快（杭州）", pick: "防空洞 / 地铁纳凉站", alt: "7–8 月开放，以当地公告为准" },
-  { need: "想省停车费（杭州）", pick: "邻里停查共享泊位", alt: "春节等长假部分道路免费" },
-  { need: "带娃出门散步", pick: "城市公园 / 绿道", alt: "全省多数公园免费开放" },
-  { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费开放" },
-  { need: "急找厕所", pick: "公厕工具 + 浙里办", alt: "杭州可筛具体点位" },
+  { need: "想安静自习、有 WiFi", pick: "图书馆自修区 / 城市书房", alt: "杭州 200+ 书房可筛选", category: "reading" },
+  { need: "手机快没电、想喝水", pick: "爱心驿家 / 党群中心", alt: "部分 24 小时，设施看站点", category: "station" },
+  { need: "夏天想凉快（杭州）", pick: "防空洞 / 地铁纳凉站", alt: "7–8 月开放，以当地公告为准", category: "bunker" },
+  { need: "想省停车费（杭州）", pick: "邻里停查共享泊位", alt: "春节等长假部分道路免费", category: "parking" },
+  { need: "带娃出门散步", pick: "城市公园 / 绿道", alt: "全省多数公园免费开放", category: "park" },
+  { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费开放", category: "sports" },
+  { need: "急找厕所", pick: "公厕工具 + 浙里办", alt: "杭州可筛具体点位", category: "toilet" },
   { need: "刚到浙江某市", pick: "先点「📍 定位」或选地市", alt: "杭州细、其他市看代表点" },
 ];
 
