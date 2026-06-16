@@ -185,6 +185,15 @@
     return null;
   }
 
+  const QUICK_SCENES = [
+    { label: "📖 免费自习", category: "reading", search: "" },
+    { label: "🅿️ 找停车", category: "parking", search: "" },
+    { label: "🧊 纳凉", category: "bunker", search: "" },
+    { label: "🚻 公厕", category: "toilet", search: "" },
+    { label: "🔌 充电", category: "charging", search: "" },
+    { label: "🌳 遛娃", category: "park", search: "" },
+  ];
+
   function renderHeroStats() {
     const counts = countByCategory();
     const el = document.getElementById("heroStats");
@@ -193,10 +202,10 @@
     ).size;
     const hangzhouCount = RESOURCES.filter((r) => resourceCity(r) === "杭州").length;
     const items = [
+      { n: RESOURCES.length, label: "免费点位" },
+      { n: hangzhouCount, label: "杭州可查" },
+      { n: counts.reading || 0, label: "书房自习" },
       { n: coveredCities, label: "覆盖地市" },
-      { n: hangzhouCount, label: "杭州细录" },
-      { n: counts.reading || 0, label: "书房" },
-      { n: RESOURCES.length, label: "总收录" },
     ];
     el.innerHTML = items
       .map(
@@ -204,6 +213,32 @@
           `<div class="stat-item"><strong>${i.n}</strong><span>${i.label}</span></div>`
       )
       .join("");
+  }
+
+  function renderQuickScenes() {
+    const el = document.getElementById("quickScenes");
+    if (!el) return;
+    el.innerHTML = QUICK_SCENES.map(
+      (s) =>
+        `<button type="button" class="quick-scene ${state.category === s.category ? "is-active" : ""}" data-category="${s.category}" data-search="${s.search}">${s.label}</button>`
+    ).join("");
+    el.querySelectorAll(".quick-scene").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.category = btn.dataset.category;
+        state.group = "all";
+        state.search = btn.dataset.search || "";
+        state.page = 1;
+        document.getElementById("searchInput").value = state.search;
+        document.getElementById("searchClear").hidden = !state.search;
+        document.getElementById("groupFilter").value = "all";
+        renderCategoryFilters();
+        updateSubTypeVisibility();
+        updateMobileChrome();
+        renderCards();
+        track("filter_change", { field: "quick_scene", value: state.category });
+        document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
   }
 
   function updateDistrictVisibility() {
@@ -400,6 +435,7 @@
     countEl.textContent = resultCountLabel(filtered.length);
     renderPagination(filtered.length, totalPages);
     updateMobileChrome();
+    renderQuickScenes();
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -517,7 +553,7 @@
       (g) => `
         <div class="guide-card">
           <h4>${g.need}</h4>
-          <div class="pick">首选：${g.pick}</div>
+          <div class="pick">👉 ${g.pick}</div>
           <div class="alt">备选：${g.alt}</div>
         </div>
       `
@@ -868,6 +904,7 @@
     updateSubTypeVisibility();
     updateDistrictVisibility();
     renderCards();
+    renderQuickScenes();
   }
 
   function applyCitySelection(city) {
@@ -985,6 +1022,7 @@
   function init() {
     applyUrlParams();
     renderHeroStats();
+    renderQuickScenes();
     renderGroupFilter();
     renderCityFilter();
     renderCategoryFilters();

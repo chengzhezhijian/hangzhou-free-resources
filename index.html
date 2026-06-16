@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0d6e6e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="description" content="浙江省免费公共资源大全：11地市图书馆、城市书房、停车、公园、公厕、体育、纳凉点等。杭州细粒度收录，其他地市代表点+官方工具。" />
-  <meta name="keywords" content="浙江免费资源,杭州城市书房,宁波图书馆,浙里办,免费停车,纳凉点,爱心驿家" />
-  <meta property="og:title" content="浙里惠民地图 · 浙江公益资源大全" />
-  <meta property="og:description" content="覆盖浙江省11地市，杭州400+细录，图书馆、书房、公园、停车、纳凉等公益资源一站查询。" />
+  <meta name="description" content="在浙江找免费自习、书房、停车、纳凉、公厕、充电？选城市搜索，一键高德导航。政府公益资源，一站查。" />
+  <meta name="keywords" content="浙江免费资源,杭州城市书房,免费自习,免费停车,纳凉点,爱心驿家,公厕" />
+  <meta property="og:title" content="浙里惠民地图 · 浙江免费公共服务在哪找？" />
+  <meta property="og:description" content="自习、停车、纳凉、充电、遛娃…选城市就能查，点一下导航过去。政府免费资源合集。" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="浙里惠民地图" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title>浙里惠民地图 · 浙江公益资源大全</title>
+  <title>浙里惠民地图 · 浙江免费公共服务查询</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=15" />
+  <link rel="stylesheet" href="css/style.css?v=16" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -48,7 +48,7 @@
         <span class="brand-icon">浙</span>
         <div class="brand-text">
           <h1>浙里惠民地图</h1>
-          <p class="brand-sub">浙江公益免费资源</p>
+          <p class="brand-sub">浙江免费便民 · 搜完即走</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
@@ -64,9 +64,10 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="hero-badge">全省 · 11地市 · 杭州细录</span>
-        <h2 class="hero-title">浙江省免费公益资源一站查询</h2>
-        <p class="hero-desc">图书馆、书房、公园、停车、纳凉、驿家等。杭州 400+ 细录，其他地市代表点 + 官方工具。</p>
+        <span class="hero-badge">政府免费 · 11 地市 · 杭州最全</span>
+        <h2 class="hero-title">在浙江，哪儿能免费自习、停车、纳凉？</h2>
+        <p class="hero-hook">选城市 → 搜你要做的事 → 点「高德地图导航」。不用挨个问，不用翻公众号。</p>
+        <p class="hero-desc">收录图书馆、城市书房、公园、公厕、爱心驿家、纳凉点、停车政策等。杭州 400+ 条可直达导航，其他市代表点位 + 浙里办官方入口。</p>
         <div class="hero-stats" id="heroStats"></div>
       </div>
     </div>
@@ -77,9 +78,10 @@
       <div class="geo-banner" id="geoBanner" hidden role="status"></div>
       <div class="search-box">
         <span class="search-icon" aria-hidden="true">⌕</span>
-        <input type="search" id="searchInput" placeholder="搜索名称或地址" autocomplete="off" enterkeyhint="search" />
+        <input type="search" id="searchInput" placeholder="搜：自习、书房、停车、纳凉、公厕…" autocomplete="off" enterkeyhint="search" />
         <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
       </div>
+      <div class="quick-scenes" id="quickScenes" aria-label="常见需求"></div>
       <div class="toolbar-row">
         <button type="button" class="toolbar-btn" id="cityQuickBtn" aria-haspopup="dialog">
           <span class="toolbar-btn-label">地市</span>
@@ -151,13 +153,13 @@
 
     <section class="content" id="resources">
       <div class="content-header">
-        <h2>资源列表</h2>
+        <h2>附近免费点位</h2>
         <span class="result-count" id="resultCount"></span>
       </div>
       <div class="card-grid" id="cardGrid"></div>
       <div class="pagination-wrap" id="pagination" hidden></div>
       <div class="empty-state" id="emptyState" hidden>
-        <p>没有找到匹配的资源</p>
+        <p>没找到合适的？换个关键词，或点上方「自习 / 停车」等快捷标签</p>
         <button type="button" class="btn-secondary" id="emptyReset">清除筛选</button>
       </div>
     </section>
@@ -165,23 +167,23 @@
 
   <section class="guide-section page-section" id="guide">
     <div class="section-inner">
-      <h2>按场景选点</h2>
-      <p class="section-desc">根据你的需求，快速找到最合适的公益场所</p>
+      <h2>我这种情况，去哪？</h2>
+      <p class="section-desc">按你的当下需求选，比翻分类更快</p>
       <div class="guide-grid" id="guideGrid"></div>
     </div>
   </section>
 
   <section class="tools-section page-section" id="tools">
     <div class="section-inner">
-      <h2>官方查询工具</h2>
-      <p class="section-desc">动态数据请通过以下官方渠道实时查询</p>
+      <h2>官方实时查询</h2>
+      <p class="section-desc">海量动态数据（如900+驿家）以官方平台为准，这里帮你一键跳转</p>
       <div class="tools-grid" id="toolsGrid"></div>
     </div>
   </section>
 
   <section class="about-section page-section" id="about">
     <div class="section-inner about-inner">
-      <h2>使用说明</h2>
+      <h2>使用前知道这些</h2>
       <div class="about-grid">
         <div class="about-card">
           <h4>图书馆</h4>
@@ -222,17 +224,17 @@
 
   <section class="feedback-section page-section" id="feedback">
     <div class="section-inner feedback-inner">
-      <h2>发现错误或新点位？</h2>
-      <p class="section-desc">你的反馈能帮我们验证需求、修正数据。感谢每一位纠错者。</p>
+      <h2>信息不准？缺了点位？</h2>
+      <p class="section-desc">你的一条反馈，能帮到下一个找免费资源的人</p>
       <div class="feedback-actions">
-        <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary" id="feedbackOpen">提交反馈</a>
+        <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary" id="feedbackOpen">30 秒提交纠错</a>
       </div>
       <p class="feedback-hint" id="feedbackHint"></p>
     </div>
   </section>
 
   <footer class="site-footer">
-    <p>浙里惠民地图 · 出行前请核实官方公告</p>
+    <p>浙里惠民地图 · 公益信息整理，出行请以官方公告为准</p>
   </footer>
 
   <nav class="bottom-nav" id="bottomNav" aria-label="主导航">
@@ -321,7 +323,7 @@
   <script src="js/data-study-spaces.js?v=9"></script>
   <script src="js/data-extra-resources.js?v=9"></script>
   <script src="js/data-zhejiang-cities.js?v=9"></script>
-  <script src="js/data.js?v=11"></script>
-  <script src="js/app.js?v=15"></script>
+  <script src="js/data.js?v=16"></script>
+  <script src="js/app.js?v=16"></script>
 </body>
 </html>
