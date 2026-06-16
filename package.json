@@ -1,0 +1,11 @@
+{
+  "name": "hangzhou-free-resources",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/test-data-logic.mjs",
+    "test:data": "node scripts/test-data-logic.mjs",
+    "verify": "node scripts/verify-site.mjs",
+    "test:all": "node scripts/verify-site.mjs && node scripts/test-data-logic.mjs"
+  }
+}

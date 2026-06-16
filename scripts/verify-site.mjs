@@ -69,7 +69,7 @@ const samples = [
   ["lib-hz-main", "图书馆"],
   ["tool-toilet", "公共厕所"],
   ["read-ningbo-tool", "城市书房"],
-  ["lib-ningbo-main", "图书馆"],
+  ["lib-ningbo-xp3amp", "图书馆"],
 ];
 
 for (const [id, kw] of samples) {
@@ -99,7 +99,7 @@ else if (!hz.mapUrl.includes("callnative=1")) fail("地图链接未设置 callna
 else ok(`高德搜索页 → ${decodeURIComponent(hz.mapUrl.split("keyword=")[1]?.split("&")[0] || "")}`);
 
 // 4. 不应再保留「仅杭州」硬编码在新建资源 mapUrl（抽查宁波）
-const nb = RESOURCES.find((r) => r.id === "lib-ningbo-main");
+const nb = RESOURCES.find((r) => r.id === "lib-ningbo-xp3amp");
 if (nb?.mapUrl?.includes(encodeURIComponent("杭州"))) {
   fail("宁波图书馆 mapUrl 仍含杭州");
 } else ok("宁波图书馆 mapUrl 已按地市生成");
@@ -140,7 +140,8 @@ for (const file of htmlFiles) {
   }
 }
 
-// 8. 资源坐标应覆盖全部点位
+// 8. 资源坐标应覆盖全部点位，且落在浙江省范围
+const ZJ_BBOX = { latMin: 27.0, latMax: 31.5, lngMin: 118.0, lngMax: 123.5 };
 const coordsPath = path.join(JS_DIR, "resource-coords.js");
 if (!fs.existsSync(coordsPath)) {
   fail("缺少 js/resource-coords.js，请运行 node scripts/build-resource-coords.mjs");
@@ -154,6 +155,19 @@ if (!fs.existsSync(coordsPath)) {
   const missing = RESOURCES.filter((r) => !coords[r.id]);
   if (missing.length) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
   else ok(`${RESOURCES.length} 条资源均有坐标（${Object.keys(coords).length}）`);
+
+  const oob = RESOURCES.filter((r) => {
+    const c = coords[r.id];
+    if (!c) return false;
+    return (
+      c.lat < ZJ_BBOX.latMin ||
+      c.lat > ZJ_BBOX.latMax ||
+      c.lng < ZJ_BBOX.lngMin ||
+      c.lng > ZJ_BBOX.lngMax
+    );
+  });
+  if (oob.length) fail(`坐标越界 ${oob.length} 条，如 ${oob[0]?.id}`);
+  else ok("全部坐标落在浙江省范围内");
 }
 
 // 9. 各地市（除杭州）应有足够扩展数据

@@ -141,9 +141,9 @@ const RESOURCE_COORDS = {
     "p": "g"
   },
   "sta-yunzhou": {
-    "lat": 28.657005,
-    "lng": 115.876998,
-    "p": "g"
+    "lat": 30.259,
+    "lng": 120.13,
+    "p": "d"
   },
   "bunker-sipailou": {
     "lat": 30.236381,
@@ -1791,9 +1791,9 @@ const RESOURCE_COORDS = {
     "p": "g"
   },
   "park-hubin": {
-    "lat": 28.657005,
-    "lng": 115.876998,
-    "p": "g"
+    "lat": 30.252,
+    "lng": 120.158,
+    "p": "d"
   },
   "park-taiziwan": {
     "lat": 30.235702,
@@ -1806,9 +1806,9 @@ const RESOURCE_COORDS = {
     "p": "g"
   },
   "park-huagang": {
-    "lat": 28.657005,
-    "lng": 115.876998,
-    "p": "g"
+    "lat": 30.233,
+    "lng": 120.145,
+    "p": "d"
   },
   "park-liulang": {
     "lat": 30.235702,

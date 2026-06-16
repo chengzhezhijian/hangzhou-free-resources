@@ -264,6 +264,43 @@
     return counts;
   }
 
+  function updateContentHeader() {
+    const h2 = document.getElementById("contentTitle");
+    if (!h2) return;
+    h2.textContent =
+      state.userLocation && state.sortMode === "distance"
+        ? "附近免费点位"
+        : "浙江免费点位";
+  }
+
+  function enableNearbySort() {
+    if (!state.userLocation) return;
+    state.sortMode = "distance";
+    updateSortTabs();
+    updateContentHeader();
+  }
+
+  function syncCityFromLocation() {
+    if (!state.userLocation || typeof GeoCity === "undefined") return false;
+    if (new URLSearchParams(location.search).get("city")) return false;
+    const result = GeoCity.resolveCity(state.userLocation.lat, state.userLocation.lng);
+    if (!result.ok) return false;
+    if (state.city === "全部" || state.city === result.city) {
+      sessionStorage.setItem("hz_geo_city_v2", result.city);
+      if (state.city !== result.city) {
+        applyCitySelection(result.city);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function applyLocationPriority() {
+    enableNearbySort();
+    updateCityLocateStatus();
+    updateContentHeader();
+  }
+
   function resultCountLabel(total) {
     const sortHint =
       state.sortMode === "distance" && state.userLocation ? " · 近→远" : "";
@@ -526,7 +563,8 @@
     countEl.textContent = resultCountLabel(filtered.length);
     renderPagination(filtered.length, totalPages);
     updateMobileChrome();
-    updateDistanceHint();
+    updateContentHeader();
+    if (!state.userLocation) updateDistanceHint();
     renderQuickScenes();
 
     if (filtered.length === 0) {
@@ -998,6 +1036,7 @@
     updateDistrictVisibility();
     state.page = 1;
     track("filter_change", { field: "city", value: state.city });
+    if (state.userLocation) enableNearbySort();
     renderCategoryFilters();
     renderHeroStats();
     renderCards();
@@ -1029,7 +1068,7 @@
       state.userLocation = { lat: pos.lat, lng: pos.lng };
       saveUserLocation(pos.lat, pos.lng);
       updateCityLocateStatus();
-      updateSortTabs();
+      enableNearbySort();
 
       const result = GeoCity.resolveCity(pos.lat, pos.lng);
       const shouldPickCity =
@@ -1037,22 +1076,23 @@
         (manual || state.city === "全部" || state.city === result.city);
 
       if (shouldPickCity) {
-        applyCitySelection(result.city);
         sessionStorage.setItem("hz_geo_city_v2", result.city);
-        state.sortMode = "distance";
-        updateSortTabs();
-        showGeoBanner(`已定位「${result.city}」，已切换距离排序`, "success");
+        if (state.city !== result.city) {
+          applyCitySelection(result.city);
+        } else {
+          renderCards();
+        }
+        showGeoBanner(`已定位「${result.city}」，按距离由近到远展示`, "success");
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       } else if (result.ok) {
-        if (manual) state.sortMode = "distance";
-        updateSortTabs();
-        showGeoBanner(`已获取位置（当前筛选：${state.city === "全部" ? "浙江" : state.city}）`, "success");
+        showGeoBanner(
+          `已定位附近，按距离展示（当前：${state.city === "全部" ? "浙江" : state.city}）`,
+          "success"
+        );
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
         renderCards();
       } else {
-        if (manual) state.sortMode = "distance";
-        updateSortTabs();
-        showGeoBanner("您当前不在浙江省内，仍可按距离排序", "warn");
+        showGeoBanner("您当前不在浙江省内，仍按距离由近到远展示", "warn");
         track("geo_locate", { ok: false, reason: "outside" });
         renderCards();
       }
@@ -1119,28 +1159,31 @@
     if (state.userLocation) return;
     const el = document.getElementById("geoBanner");
     if (!el || el.hidden) {
-      showGeoBanner("点左上角城市或「距离」开启定位，列表将显示远近", "info");
+      showGeoBanner("允许定位后，将自动按您附近由近到远展示", "info");
     }
   }
 
   function initGeo() {
-    restoreUserLocation();
     updateCityLocateStatus();
-    updateSortTabs();
 
     const btnDesktop = document.getElementById("geoLocateBtnDesktop");
     if (btnDesktop) btnDesktop.addEventListener("click", () => runGeoLocate(true));
 
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
     const params = new URLSearchParams(location.search);
-    const cached = sessionStorage.getItem("hz_geo_city_v2");
-
-    if (!params.get("city") && state.city === "全部" && cached && CITIES.includes(cached)) {
-      applyCitySelection(cached);
-    }
 
     if (state.userLocation) {
-      showGeoBanner("已获取位置，可点「距离」按远近排序", "success");
+      if (!params.get("city")) {
+        if (!syncCityFromLocation()) {
+          const cached = sessionStorage.getItem("hz_geo_city_v2");
+          if (state.city === "全部" && cached && CITIES.includes(cached)) {
+            applyCitySelection(cached);
+          }
+        }
+      }
+      applyLocationPriority();
+      const cityLabel = state.city === "全部" ? "浙江" : state.city;
+      showGeoBanner(`已定位附近，按距离由近到远（${cityLabel}）`, "success");
       renderCards();
       return;
     }
@@ -1183,7 +1226,7 @@
     {
       icon: "📍",
       title: "先选城市",
-      desc: "点左上角 📍 选「浙江全省」或 11 个地市，支持一键定位自动匹配。",
+      desc: "允许定位后自动匹配城市，列表按您附近由近到远展示；也可手动选地市。",
     },
     {
       icon: "🔍",
@@ -1269,7 +1312,9 @@
     if (!document.getElementById("cardGrid")) return;
 
     applyUrlParams();
-    restoreUserLocation();
+    if (restoreUserLocation()) {
+      state.sortMode = "distance";
+    }
     renderHeroStats();
     renderQuickScenes();
     renderCityFilter();
