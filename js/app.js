@@ -27,6 +27,9 @@
     }
   }
 
+  const GEO_POS_KEY = "hz_geo_pos_v1";
+  const GEO_POS_TTL_MS = 30 * 60 * 1000;
+
   const state = {
     group: "all",
     category: "all",
@@ -39,6 +42,7 @@
     freeOnly: false,
     yearRoundOnly: false,
     page: 1,
+    userLocation: null,
   };
 
   const CATEGORY_LABELS = Object.fromEntries(
@@ -91,8 +95,48 @@
     return RESOURCES.filter(matchesCityFilter);
   }
 
+  function resourceCoord(resource) {
+    const c =
+      typeof RESOURCE_COORDS !== "undefined" ? RESOURCE_COORDS[resource.id] : null;
+    return c ? { lat: c.lat, lng: c.lng, p: c.p } : null;
+  }
+
+  function resourceDistanceKm(resource) {
+    if (!state.userLocation || typeof GeoCity === "undefined") return null;
+    const c = resourceCoord(resource);
+    if (!c) return null;
+    return GeoCity.distanceKm(
+      state.userLocation.lat,
+      state.userLocation.lng,
+      c.lat,
+      c.lng
+    );
+  }
+
+  function formatDistance(km, approx) {
+    if (km == null || !Number.isFinite(km)) return "";
+    const prefix = approx ? "约 " : "";
+    if (km < 1) return `${prefix}${Math.max(1, Math.round(km * 1000))} m`;
+    if (km < 10) return `${prefix}${km.toFixed(1)} km`;
+    return `${prefix}${Math.round(km)} km`;
+  }
+
+  function sortByDistance(list) {
+    if (!state.userLocation) return list;
+    return [...list].sort((a, b) => {
+      const da = resourceDistanceKm(a);
+      const db = resourceDistanceKm(b);
+      if (da == null && db == null) return 0;
+      if (da == null) return 1;
+      if (db == null) return -1;
+      if (Math.abs(da - db) > 0.001) return da - db;
+      if (!!a.featured !== !!b.featured) return b.featured - a.featured;
+      return (a.name || "").localeCompare(b.name || "", "zh-CN");
+    });
+  }
+
   function filterResources() {
-    return RESOURCES.filter((r) => {
+    const list = RESOURCES.filter((r) => {
       if (state.category !== "all" && r.category !== state.category) return false;
       if (state.category === "all" && state.group !== "all") {
         const g = CATEGORY_TO_GROUP[r.category];
@@ -129,6 +173,7 @@
       }
       return true;
     });
+    return sortByDistance(list);
   }
 
   function countByCategory() {
@@ -152,11 +197,12 @@
   }
 
   function resultCountLabel(total) {
-    if (state.city === "全部") return `共 ${total} 处`;
-    if (state.city === "全省") return `共 ${total} 处（全省通用）`;
+    const sortHint = state.userLocation ? " · 近→远" : "";
+    if (state.city === "全部") return `共 ${total} 处${sortHint}`;
+    if (state.city === "全省") return `共 ${total} 处（全省通用）${sortHint}`;
     const local = RESOURCES.filter((r) => resourceCity(r) === state.city).length;
     const shared = RESOURCES.filter((r) => resourceCity(r) === "全省").length;
-    return `共 ${total} 处（${state.city} ${local} + 全省 ${shared}）`;
+    return `共 ${total} 处（${state.city} ${local} + 全省 ${shared}）${sortHint}`;
   }
 
   function getResourceMapUrl(resource) {
@@ -372,6 +418,11 @@
   }
 
   function renderCard(resource) {
+    const distKm = resourceDistanceKm(resource);
+    const coord = resourceCoord(resource);
+    const approx = coord && (coord.p === "d" || coord.p === "c");
+    const distLabel = formatDistance(distKm, approx);
+
     const facilities = Object.keys(FACILITY_LABELS)
       .filter((f) => hasFacility(resource, f))
       .map(
@@ -394,7 +445,10 @@
         <p class="card-address">${resource.address}</p>
         <p class="card-hours">${resource.hours}</p>
         <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
-        <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
+        <div class="card-meta">
+          <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
+          ${distLabel ? `<span class="card-distance">${distLabel}</span>` : ""}
+        </div>
       </article>
     `;
   }
@@ -481,8 +535,12 @@
     const features = (r.features || []).map((f) => `<li>${f}</li>`).join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
+    const distKm = resourceDistanceKm(r);
+    const coord = resourceCoord(r);
+    const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
 
     document.getElementById("modalBody").innerHTML = `
+      ${distLabel ? `<div class="modal-row"><label>直线距离</label><p>${distLabel}</p></div>` : ""}
       <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
       ${r.district ? `<div class="modal-row"><label>区县</label><p>${r.district}</p></div>` : ""}
       <div class="modal-row"><label>类型</label><p>${categoryLabel(r)}</p></div>
@@ -808,15 +866,22 @@
 
     try {
       const pos = await GeoCity.requestLocation();
+      state.userLocation = { lat: pos.lat, lng: pos.lng };
+      sessionStorage.setItem(
+        GEO_POS_KEY,
+        JSON.stringify({ lat: pos.lat, lng: pos.lng, at: Date.now() })
+      );
+
       const result = GeoCity.resolveCity(pos.lat, pos.lng);
       if (!result.ok) {
-        showGeoBanner("您当前不在浙江省内，请手动选择地市", "warn");
+        showGeoBanner("您当前不在浙江省内，结果仍按距离排序，请手动选地市", "warn");
         track("geo_locate", { ok: false, reason: "outside" });
+        renderCards();
         return;
       }
       applyCitySelection(result.city);
       sessionStorage.setItem("hz_geo_city_v2", result.city);
-      showGeoBanner(`已根据位置定位到「${result.city}」`, "success");
+      showGeoBanner(`已定位「${result.city}」，结果按距离由近到远`, "success");
       track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
@@ -834,7 +899,25 @@
     }
   }
 
+  function restoreUserLocation() {
+    try {
+      const raw = sessionStorage.getItem(GEO_POS_KEY);
+      if (!raw) return;
+      const p = JSON.parse(raw);
+      if (!p?.lat || !p?.lng) return;
+      if (Date.now() - (p.at || 0) > GEO_POS_TTL_MS) {
+        sessionStorage.removeItem(GEO_POS_KEY);
+        return;
+      }
+      state.userLocation = { lat: p.lat, lng: p.lng };
+    } catch {
+      sessionStorage.removeItem(GEO_POS_KEY);
+    }
+  }
+
   function initGeo() {
+    restoreUserLocation();
+
     const btn = document.getElementById("geoLocateBtn");
     const btnDesktop = document.getElementById("geoLocateBtnDesktop");
     if (btn) btn.addEventListener("click", () => runGeoLocate(true));
@@ -848,7 +931,11 @@
     const cached = sessionStorage.getItem("hz_geo_city_v2");
     if (cached && CITIES.includes(cached)) {
       applyCitySelection(cached);
-      showGeoBanner(`已为您选中「${cached}」`, "success");
+      if (state.userLocation) {
+        showGeoBanner(`已为您选中「${cached}」，按距离排序`, "success");
+      } else {
+        showGeoBanner(`已为您选中「${cached}」`, "success");
+      }
       return;
     }
 
@@ -886,6 +973,7 @@
     if (!document.getElementById("cardGrid")) return;
 
     applyUrlParams();
+    restoreUserLocation();
     renderHeroStats();
     renderQuickScenes();
     renderGroupFilter();

@@ -1,2 +1,3 @@
 .DS_Store
 miniprogram/data/
+scripts/.geocode-cache.json

@@ -139,5 +139,21 @@ for (const file of htmlFiles) {
   }
 }
 
+// 8. 资源坐标应覆盖全部点位
+const coordsPath = path.join(JS_DIR, "resource-coords.js");
+if (!fs.existsSync(coordsPath)) {
+  fail("缺少 js/resource-coords.js，请运行 node scripts/build-resource-coords.mjs");
+} else {
+  const coordsCtx = vm.createContext({});
+  vm.runInContext(
+    fs.readFileSync(coordsPath, "utf8") + ";globalThis.__C__ = RESOURCE_COORDS;",
+    coordsCtx
+  );
+  const coords = coordsCtx.__C__;
+  const missing = RESOURCES.filter((r) => !coords[r.id]);
+  if (missing.length) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
+  else ok(`${RESOURCES.length} 条资源均有坐标（${Object.keys(coords).length}）`);
+}
+
 console.log(`\n完成：${errors} 错误，${warnings} 警告`);
 process.exit(errors ? 1 : 0);

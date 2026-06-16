@@ -114,5 +114,5 @@ const GeoCity = (function () {
     });
   }
 
-  return { resolveCity, requestLocation, CITY_REGIONS };
+  return { resolveCity, requestLocation, distanceKm, CITY_REGIONS };
 })();

@@ -740,6 +740,22 @@ img {
   color: var(--ink-faint);
 }
 
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.card-distance {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  white-space: nowrap;
+}
+
 .pagination-wrap {
   display: flex;
   align-items: center;
