@@ -16,6 +16,22 @@ const JS_DIR = path.join(ROOT, "js");
 const OUT = path.join(JS_DIR, "resource-coords.js");
 const CACHE = path.join(__dirname, ".geocode-cache.json");
 
+function loadEnvFile() {
+  const envPath = path.join(ROOT, ".env");
+  if (!fs.existsSync(envPath)) return;
+  for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (key && val && process.env[key] == null) process.env[key] = val;
+  }
+}
+
+loadEnvFile();
+
 const DISTRICT_CENTROIDS = {
   上城: { lat: 30.242, lng: 120.169 },
   拱墅: { lat: 30.319, lng: 120.142 },
