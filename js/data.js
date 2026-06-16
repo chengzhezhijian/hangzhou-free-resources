@@ -61,6 +61,12 @@ const CITIES = [
   "丽水",
 ];
 
+/** 城市选择器选项（不含易混淆的「全省」政策工具项） */
+const CITY_PICKER = CITIES.filter((c) => c !== "全省");
+
+/** 浙江 11 个地级市 */
+const PREFECTURE_CITIES = CITY_PICKER.filter((c) => c !== "全部");
+
 /** 杭州区县（仅在地市=杭州时使用） */
 const DISTRICTS = [
   "全部", "上城", "拱墅", "西湖", "滨江", "萧山", "余杭", "富阳", "临平", "钱塘", "临安", "桐庐", "淳安", "建德",
@@ -807,7 +813,9 @@ METRO_COOLING_LINES.forEach(({ line, stations }) => {
 
 // 合并城市书房 / 邻里阅读空间（data-study-spaces.js）
 if (typeof STUDY_SPACES !== "undefined") {
-  RESOURCES.push(...STUDY_SPACES);
+  RESOURCES.push(
+    ...STUDY_SPACES.map((r) => ({ ...r, city: r.city || "杭州" }))
+  );
 }
 // 合并停车、公园、公厕、体育等扩展资源（data-extra-resources.js）
 if (typeof EXTRA_RESOURCES !== "undefined") {

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=24" />
+  <link rel="stylesheet" href="css/style.css?v=25" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -108,45 +108,42 @@
       </div>
       <div class="sidebar-inner" id="sidebarInner">
         <div class="filter-block">
-          <h3>资源大类</h3>
-          <select id="groupFilter" class="select-input"></select>
-        </div>
-        <div class="filter-block">
-          <h3>资源类型</h3>
+          <h3>类型</h3>
           <div class="chip-group chip-group-scroll" id="categoryFilters"></div>
         </div>
-        <div class="filter-block">
-          <h3>设施筛选</h3>
-          <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
-        </div>
-        <div class="filter-block" id="cityFilterBlock">
+        <details class="filter-more" id="filterMore">
+          <summary>更多筛选</summary>
+          <div class="filter-more-body">
+            <div class="filter-block">
+              <h3>设施</h3>
+              <div class="chip-group chip-group-wrap" id="facilityFilters"></div>
+            </div>
+            <div class="filter-block" id="districtBlock">
+              <h3>杭州区县</h3>
+              <select id="districtFilter" class="select-input"></select>
+            </div>
+            <div class="filter-block filter-block--toggles">
+              <label class="checkbox-row">
+                <input type="checkbox" id="featuredOnly" />
+                <span>仅看推荐</span>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" id="freeOnly" />
+                <span>仅看完全免费</span>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" id="yearRoundOnly" />
+                <span>仅看全年开放</span>
+              </label>
+            </div>
+          </div>
+        </details>
+        <div class="filter-block filter-block--desktop-city" id="cityFilterBlock">
           <h3>地市</h3>
           <div class="city-filter-row">
             <select id="cityFilter" class="select-input"></select>
             <button type="button" id="geoLocateBtnDesktop" class="btn-geo" title="根据当前位置自动选择地市">📍 定位</button>
           </div>
-        </div>
-        <div class="filter-block" id="districtBlock">
-          <h3>杭州区县</h3>
-          <select id="districtFilter" class="select-input"></select>
-        </div>
-        <div class="filter-block" id="subTypeBlock" hidden>
-          <h3>书房子类</h3>
-          <select id="subTypeFilter" class="select-input"></select>
-        </div>
-        <div class="filter-block">
-          <label class="checkbox-row">
-            <input type="checkbox" id="featuredOnly" />
-            <span>仅看推荐</span>
-          </label>
-          <label class="checkbox-row">
-            <input type="checkbox" id="freeOnly" />
-            <span>仅看完全免费</span>
-          </label>
-          <label class="checkbox-row">
-            <input type="checkbox" id="yearRoundOnly" />
-            <span>仅看全年开放</span>
-          </label>
         </div>
         <button type="button" class="btn-reset" id="resetFilters">重置筛选</button>
       </div>
@@ -227,6 +224,10 @@
           <button type="button" class="btn-locate" id="citySheetLocateBtn">定位</button>
         </div>
         <section class="city-section">
+          <h4 class="city-section-title">浏览范围</h4>
+          <div class="city-hot" id="cityScopeGrid"></div>
+        </section>
+        <section class="city-section">
           <h4 class="city-section-title">热门城市</h4>
           <div class="city-hot" id="cityHotGrid"></div>
         </section>
@@ -234,6 +235,19 @@
           <h4 class="city-section-title">全部地市</h4>
           <div class="city-grid" id="cityGrid"></div>
         </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="onboard-overlay" id="onboardOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="onboardTitle">
+    <div class="onboard-card">
+      <div class="onboard-progress" id="onboardProgress" aria-hidden="true"></div>
+      <div class="onboard-icon" id="onboardIcon" aria-hidden="true">📍</div>
+      <h3 class="onboard-title" id="onboardTitle">先选城市</h3>
+      <p class="onboard-desc" id="onboardDesc">点左上角 📍 选浙江全省或具体地市，也可一键定位。</p>
+      <div class="onboard-actions">
+        <button type="button" class="onboard-skip" id="onboardSkip">跳过</button>
+        <button type="button" class="btn-primary onboard-next" id="onboardNext">下一步</button>
       </div>
     </div>
   </div>
@@ -257,11 +271,12 @@
   <script src="js/analytics.js?v=15"></script>
   <script src="js/data-study-spaces.js?v=9"></script>
   <script src="js/data-extra-resources.js?v=9"></script>
-  <script src="js/data-zhejiang-cities.js?v=24"></script>
-  <script src="js/data-zhejiang-expanded.js?v=24"></script>
-  <script src="js/data.js?v=24"></script>
-  <script src="js/resource-coords.js?v=24"></script>
-  <script src="js/layout.js?v=24"></script>
-  <script src="js/app.js?v=24"></script>
+  <script src="js/data-zhejiang-cities.js?v=25"></script>
+  <script src="js/data-zhejiang-expanded.js?v=25"></script>
+  <script src="js/data.js?v=25"></script>
+  <script src="js/resource-coords.js?v=25"></script>
+  <script src="js/layout.js?v=25"></script>
+  <script src="js/map-nav.js?v=25"></script>
+  <script src="js/app.js?v=25"></script>
 </body>
 </html>

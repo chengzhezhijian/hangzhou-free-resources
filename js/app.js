@@ -20,7 +20,9 @@
       if (clear) clear.hidden = !q;
     }
     const city = params.get("city");
-    if (city && CITIES.includes(city)) state.city = city;
+    if (city && CITIES.includes(city)) {
+      state.city = city === "全省" ? "全部" : city;
+    }
     if (params.get("free") === "1") state.freeOnly = true;
     if (params.toString()) {
       track("landing_params", Object.fromEntries(params.entries()));
@@ -65,6 +67,78 @@
     open24: "24h",
   };
 
+  const SEARCH_INTENTS = [
+    {
+      pattern: /自习|自修|看书|阅读室/,
+      match: (r) =>
+        r.category === "reading" ||
+        r.category === "library" ||
+        hasFacility(r, "study") ||
+        /书房|阅读|自习|图书馆/.test(
+          [r.name, r.fullName, r.subType, ...(r.features || []), r.note].filter(Boolean).join("")
+        ),
+    },
+    {
+      pattern: /书房|阅读空间|邻里阅读/,
+      match: (r) =>
+        r.category === "reading" ||
+        /书房|阅读/.test([r.name, r.fullName, r.subType].filter(Boolean).join("")),
+    },
+    {
+      pattern: /图书馆/,
+      match: (r) => r.category === "library" || /图书馆/.test(r.name || ""),
+    },
+    {
+      pattern: /停车|泊位/,
+      match: (r) => r.category === "parking" || /停车|泊位/.test([r.name, r.note].filter(Boolean).join("")),
+    },
+    {
+      pattern: /纳凉|凉快|避暑/,
+      match: (r) =>
+        ["bunker", "metro", "community", "station"].includes(r.category) ||
+        /纳凉|避暑|防空洞/.test([r.name, r.note].filter(Boolean).join("")),
+    },
+    {
+      pattern: /公厕|厕所|卫生间/,
+      match: (r) => r.category === "toilet" || /公厕|厕所/.test([r.name, r.note].filter(Boolean).join("")),
+    },
+    {
+      pattern: /充电|充电桩/,
+      match: (r) => r.category === "charging" || /充电/.test([r.name, r.note].filter(Boolean).join("")),
+    },
+    {
+      pattern: /公园|遛娃|散步/,
+      match: (r) => r.category === "park" || /公园|绿道/.test([r.name, r.note].filter(Boolean).join("")),
+    },
+  ];
+
+  function resourceSearchHaystack(r) {
+    const parts = [
+      r.name,
+      r.fullName,
+      r.subType,
+      resourceCity(r),
+      r.address,
+      r.district,
+      r.transport,
+      r.note,
+      CATEGORY_LABELS[r.category],
+      ...(r.features || []),
+    ];
+    if (hasFacility(r, "study")) parts.push("自习", "可自习", "自修");
+    if (r.category === "reading") parts.push("城市书房", "书房", "自习", "阅读");
+    if (r.category === "library") parts.push("图书馆", "自习", "自修");
+    return parts.filter(Boolean).join(" ").toLowerCase();
+  }
+
+  function matchesSearch(r, query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    const hay = resourceSearchHaystack(r);
+    if (hay.includes(q)) return true;
+    return SEARCH_INTENTS.some((intent) => intent.pattern.test(q) && intent.match(r));
+  }
+
   function hasFacility(resource, facilityId) {
     const val = resource.facilities[facilityId];
     return val === true || val === "partial";
@@ -78,10 +152,7 @@
   }
 
   function visibleCategories() {
-    if (state.group === "all") return RESOURCE_CATEGORIES;
-    return RESOURCE_CATEGORIES.filter(
-      (c) => c.id === "all" || c.group === state.group
-    );
+    return RESOURCE_CATEGORIES;
   }
 
   function resourceCity(r) {
@@ -164,23 +235,7 @@
       for (const f of state.facilities) {
         if (!hasFacility(r, f)) return false;
       }
-      if (state.search) {
-        const q = state.search.toLowerCase();
-        const hay = [
-          r.name,
-          r.fullName,
-          r.subType,
-          r.city,
-          r.address,
-          r.district,
-          r.transport,
-          r.note,
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
+      if (state.search && !matchesSearch(r, state.search)) return false;
       return true;
     });
     if (state.sortMode === "distance" && state.userLocation) {
@@ -213,10 +268,7 @@
     const sortHint =
       state.sortMode === "distance" && state.userLocation ? " · 近→远" : "";
     if (state.city === "全部") return `共 ${total} 处${sortHint}`;
-    if (state.city === "全省") return `共 ${total} 处（全省通用）${sortHint}`;
-    const local = RESOURCES.filter((r) => resourceCity(r) === state.city).length;
-    const shared = RESOURCES.filter((r) => resourceCity(r) === "全省").length;
-    return `共 ${total} 处（${state.city} ${local} + 全省 ${shared}）${sortHint}`;
+    return `共 ${total} 处 · ${state.city}${sortHint}`;
   }
 
   function getResourceMapUrl(resource) {
@@ -255,22 +307,32 @@
   ];
 
   function renderHeroStats() {
-    const counts = countByCategory();
     const el = document.getElementById("heroStats");
     if (!el) return;
-    const coveredCities = new Set(
-      RESOURCES.map((r) => resourceCity(r)).filter((c) => c !== "全省")
-    ).size;
-    const provinceTools =
-      typeof EXTERNAL_TOOLS !== "undefined"
-        ? EXTERNAL_TOOLS.filter((t) => t.scope === "全省").length
-        : 3;
-    const items = [
-      { n: RESOURCES.length, label: "收录点位" },
-      { n: coveredCities, label: "覆盖地市" },
-      { n: counts.reading || 0, label: "书房自习" },
-      { n: provinceTools, label: "全省工具" },
-    ];
+    const pool = scopedResources();
+    const prefectures =
+      typeof PREFECTURE_CITIES !== "undefined"
+        ? PREFECTURE_CITIES
+        : ["杭州", "宁波", "温州", "嘉兴", "湖州", "绍兴", "金华", "衢州", "舟山", "台州", "丽水"];
+    const readingCount = pool.filter((r) => r.category === "reading").length;
+    const libraryCount = pool.filter((r) => r.category === "library").length;
+    const items =
+      state.city === "全部"
+        ? [
+            { n: RESOURCES.length, label: "全省收录" },
+            { n: prefectures.length, label: "覆盖地市" },
+            { n: readingCount, label: "书房自习" },
+            { n: libraryCount, label: "图书馆" },
+          ]
+        : [
+            { n: pool.length, label: `${state.city}可查` },
+            {
+              n: pool.filter((r) => resourceCity(r) === state.city).length,
+              label: "本地点位",
+            },
+            { n: readingCount, label: "书房自习" },
+            { n: libraryCount, label: "图书馆" },
+          ];
     el.innerHTML = items
       .map(
         (i) =>
@@ -294,9 +356,7 @@
         state.page = 1;
         document.getElementById("searchInput").value = state.search;
         document.getElementById("searchClear").hidden = !state.search;
-        document.getElementById("groupFilter").value = "all";
         renderCategoryFilters();
-        updateSubTypeVisibility();
         updateMobileChrome();
         renderCards();
         track("filter_change", { field: "quick_scene", value: state.category });
@@ -313,58 +373,18 @@
   function renderCityFilter() {
     const sel = document.getElementById("cityFilter");
     if (!sel) return;
-    sel.innerHTML = CITIES.map(
-      (c) => `<option value="${c}" ${state.city === c ? "selected" : ""}>${c}</option>`
-    ).join("");
+    const picker =
+      typeof CITY_PICKER !== "undefined"
+        ? CITY_PICKER
+        : CITIES.filter((c) => c !== "全省");
+    sel.innerHTML = picker
+      .map((c) => `<option value="${c}">${c === "全部" ? "浙江全省" : c}</option>`)
+      .join("");
+    sel.value = picker.includes(state.city) ? state.city : "全部";
     sel.onchange = () => {
-      state.city = sel.value;
-      if (state.city !== "全部" && state.city !== "杭州") {
-        state.district = "全部";
-        document.getElementById("districtFilter").value = "全部";
-      }
-      state.page = 1;
-      track("filter_change", { field: "city", value: state.city });
-      updateDistrictVisibility();
-      renderCategoryFilters();
-      renderCards();
+      applyCitySelection(sel.value);
     };
     updateDistrictVisibility();
-  }
-
-  function updateSubTypeVisibility() {
-    const block = document.getElementById("subTypeBlock");
-    block.hidden = state.category !== "reading";
-  }
-
-  function renderGroupFilter() {
-    const sel = document.getElementById("groupFilter");
-    sel.innerHTML = CATEGORY_GROUPS.map(
-      (g) =>
-        `<option value="${g.id}" ${state.group === g.id ? "selected" : ""}>${g.label}</option>`
-    ).join("");
-    sel.onchange = () => {
-      state.group = sel.value;
-      state.category = "all";
-      state.page = 1;
-      track("filter_change", { field: "group", value: state.group });
-      renderCategoryFilters();
-      updateSubTypeVisibility();
-      renderCards();
-    };
-  }
-
-  function renderSubTypeFilter() {
-    const sel = document.getElementById("subTypeFilter");
-    sel.innerHTML = READING_SUBTYPES.map(
-      (s) =>
-        `<option value="${s.id}" ${state.subType === s.id ? "selected" : ""}>${s.label}</option>`
-    ).join("");
-    sel.onchange = () => {
-      state.subType = sel.value;
-      state.page = 1;
-      renderCards();
-    };
-    updateSubTypeVisibility();
   }
 
   function renderCategoryFilters() {
@@ -385,7 +405,6 @@
         state.page = 1;
         track("filter_change", { field: "category", value: state.category });
         renderCategoryFilters();
-        updateSubTypeVisibility();
         renderCards();
       });
     });
@@ -644,8 +663,9 @@
     el.textContent = "开启定位后自动匹配城市";
   }
 
-  function cityPillHtml(city) {
-    return `<button type="button" class="city-pill ${state.city === city ? "active" : ""}" data-city="${city}">${city}</button>`;
+  function cityPillHtml(city, label) {
+    const text = label || city;
+    return `<button type="button" class="city-pill ${state.city === city ? "active" : ""}" data-city="${city}">${text}</button>`;
   }
 
   function bindCityPills(root) {
@@ -659,9 +679,7 @@
 
   function countActiveFilters() {
     let n = 0;
-    if (state.group !== "all") n++;
     if (state.category !== "all") n++;
-    if (state.subType !== "all") n++;
     if (state.city !== "全部") n++;
     if (state.district !== "全部") n++;
     if (state.facilities.size) n += state.facilities.size;
@@ -730,15 +748,10 @@
 
     if (state.city !== "全部") addChip("city", state.city);
     if (state.district !== "全部") addChip("district", state.district);
-    if (state.group !== "all") {
-      const g = CATEGORY_GROUPS.find((x) => x.id === state.group);
-      addChip("group", g?.label || state.group);
-    }
     if (state.category !== "all") {
       const c = RESOURCE_CATEGORIES.find((x) => x.id === state.category);
       addChip("category", c?.label || state.category);
     }
-    if (state.subType !== "all") addChip("subType", state.subType);
     state.facilities.forEach((f) => {
       const item = FACILITY_FILTERS.find((x) => x.id === f);
       addChip(`facility:${f}`, item?.label || f);
@@ -770,18 +783,9 @@
     else if (key === "district") {
       state.district = "全部";
       document.getElementById("districtFilter").value = "全部";
-    } else if (key === "group") {
-      state.group = "all";
-      document.getElementById("groupFilter").value = "all";
-      renderCategoryFilters();
-      updateSubTypeVisibility();
     } else if (key === "category") {
       state.category = "all";
       renderCategoryFilters();
-      updateSubTypeVisibility();
-    } else if (key === "subType") {
-      state.subType = "all";
-      document.getElementById("subTypeFilter").value = "all";
     } else if (key.startsWith("facility:")) {
       state.facilities.delete(key.slice(9));
       renderFacilityFilters();
@@ -813,14 +817,28 @@
   }
 
   function renderCityGrid() {
+    const scope = document.getElementById("cityScopeGrid");
     const hot = document.getElementById("cityHotGrid");
     const grid = document.getElementById("cityGrid");
+    const prefectures =
+      typeof PREFECTURE_CITIES !== "undefined"
+        ? PREFECTURE_CITIES
+        : HOT_CITIES.concat(
+            CITIES.filter(
+              (c) => c !== "全部" && c !== "全省" && !HOT_CITIES.includes(c)
+            )
+          );
+
+    if (scope) {
+      scope.innerHTML = cityPillHtml("全部", "浙江全省");
+      bindCityPills(scope);
+    }
     if (hot) {
       hot.innerHTML = HOT_CITIES.map((c) => cityPillHtml(c)).join("");
       bindCityPills(hot);
     }
     if (!grid) return;
-    const rest = CITIES.filter((c) => !HOT_CITIES.includes(c));
+    const rest = prefectures.filter((c) => !HOT_CITIES.includes(c));
     grid.innerHTML = rest.map((c) => cityPillHtml(c)).join("");
     bindCityPills(grid);
   }
@@ -954,18 +972,20 @@
     document.getElementById("yearRoundOnly").checked = false;
     document.getElementById("districtFilter").value = "全部";
     document.getElementById("cityFilter").value = "全部";
-    document.getElementById("groupFilter").value = "all";
-    document.getElementById("subTypeFilter").value = "all";
     renderCategoryFilters();
     renderFacilityFilters();
-    updateSubTypeVisibility();
     updateDistrictVisibility();
+    renderHeroStats();
     renderCards();
     renderQuickScenes();
   }
 
   function applyCitySelection(city) {
-    if (!CITIES.includes(city)) return;
+    const picker =
+      typeof CITY_PICKER !== "undefined"
+        ? CITY_PICKER
+        : CITIES.filter((c) => c !== "全省");
+    if (!picker.includes(city)) return;
     state.city = city;
     if (city !== "全部" && city !== "杭州") {
       state.district = "全部";
@@ -977,6 +997,9 @@
     syncCityQuickLabel();
     updateDistrictVisibility();
     state.page = 1;
+    track("filter_change", { field: "city", value: state.city });
+    renderCategoryFilters();
+    renderHeroStats();
     renderCards();
   }
 
@@ -1155,6 +1178,93 @@
     });
   }
 
+  const ONBOARD_KEY = "zheli_onboard_v1";
+  const ONBOARD_STEPS = [
+    {
+      icon: "📍",
+      title: "先选城市",
+      desc: "点左上角 📍 选「浙江全省」或 11 个地市，支持一键定位自动匹配。",
+    },
+    {
+      icon: "🔍",
+      title: "搜你想做的事",
+      desc: "搜「自习」会匹配城市书房、图书馆；还有停车、纳凉、公厕等关键词。",
+    },
+    {
+      icon: "🏷️",
+      title: "点场景标签",
+      desc: "上方有自习、停车、纳凉等快捷标签，比翻分类更快。",
+    },
+    {
+      icon: "🗺️",
+      title: "导航过去",
+      desc: "点卡片查看详情，再点「高德地图导航」即可出发。",
+    },
+  ];
+
+  function initOnboarding() {
+    const overlay = document.getElementById("onboardOverlay");
+    if (!overlay) return;
+    try {
+      if (localStorage.getItem(ONBOARD_KEY) === "1") return;
+    } catch {
+      /* ignore */
+    }
+
+    let step = 0;
+    const iconEl = document.getElementById("onboardIcon");
+    const titleEl = document.getElementById("onboardTitle");
+    const descEl = document.getElementById("onboardDesc");
+    const progressEl = document.getElementById("onboardProgress");
+    const nextBtn = document.getElementById("onboardNext");
+    const skipBtn = document.getElementById("onboardSkip");
+
+    function renderStep() {
+      const s = ONBOARD_STEPS[step];
+      if (iconEl) iconEl.textContent = s.icon;
+      if (titleEl) titleEl.textContent = s.title;
+      if (descEl) descEl.textContent = s.desc;
+      if (progressEl) {
+        progressEl.innerHTML = ONBOARD_STEPS.map(
+          (_, i) => `<span class="onboard-dot ${i === step ? "is-active" : ""}"></span>`
+        ).join("");
+      }
+      if (nextBtn) {
+        nextBtn.textContent = step === ONBOARD_STEPS.length - 1 ? "开始使用" : "下一步";
+      }
+    }
+
+    function finish() {
+      overlay.hidden = true;
+      document.body.classList.remove("sheet-open");
+      try {
+        localStorage.setItem(ONBOARD_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      track("onboard_complete", { step });
+    }
+
+    function open() {
+      overlay.hidden = false;
+      document.body.classList.add("sheet-open");
+      renderStep();
+      track("onboard_open", {});
+    }
+
+    nextBtn?.addEventListener("click", () => {
+      if (step >= ONBOARD_STEPS.length - 1) {
+        finish();
+        return;
+      }
+      step += 1;
+      renderStep();
+    });
+    skipBtn?.addEventListener("click", finish);
+
+    window.setTimeout(open, 600);
+  }
+
   function init() {
     if (!document.getElementById("cardGrid")) return;
 
@@ -1162,21 +1272,21 @@
     restoreUserLocation();
     renderHeroStats();
     renderQuickScenes();
-    renderGroupFilter();
     renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();
     renderDistrictFilter();
-    renderSubTypeFilter();
     if (state.freeOnly) document.getElementById("freeOnly").checked = true;
-    if (state.city !== "全部") document.getElementById("cityFilter").value = state.city;
-    if (state.group !== "all") document.getElementById("groupFilter").value = state.group;
+    if (state.city !== "全部") {
+      const citySel = document.getElementById("cityFilter");
+      if (citySel) citySel.value = state.city;
+    }
     if (state.category !== "all") renderCategoryFilters();
-    if (state.category === "reading") updateSubTypeVisibility();
     initMobileChrome();
     initGeo();
     renderCards();
     initSearch();
+    initOnboarding();
 
     document.getElementById("resetFilters")?.addEventListener("click", resetFilters);
     document.getElementById("emptyReset")?.addEventListener("click", resetFilters);

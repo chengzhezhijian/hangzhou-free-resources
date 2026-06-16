@@ -541,6 +541,10 @@ img {
     display: none;
   }
 
+  .filter-block--desktop-city {
+    display: none;
+  }
+
   .hero-hook {
     display: none;
   }
@@ -703,6 +707,139 @@ img {
   font-family: inherit;
   font-size: 0.88rem;
   color: var(--ink-faint);
+  cursor: pointer;
+}
+
+.filter-more {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.filter-more summary {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.filter-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-more summary::after {
+  content: "▾";
+  float: right;
+  color: var(--ink-faint);
+}
+
+.filter-more[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.filter-more-body {
+  padding: 0 0.85rem 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+.filter-block--toggles {
+  margin-bottom: 0;
+}
+
+.city-pill--scope {
+  min-width: 100%;
+  font-weight: 700;
+}
+
+/* Onboarding */
+.onboard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.onboard-overlay[hidden] {
+  display: none !important;
+}
+
+.onboard-card {
+  width: min(360px, 100%);
+  padding: 1.35rem 1.25rem 1.15rem;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.onboard-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.onboard-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.onboard-dot.is-active {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.onboard-icon {
+  font-size: 2.25rem;
+  line-height: 1;
+  margin-bottom: 0.65rem;
+}
+
+.onboard-title {
+  margin: 0 0 0.45rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.onboard-desc {
+  margin: 0 0 1.15rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.onboard-actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.onboard-skip {
+  flex: 1;
+  min-height: var(--touch-min);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.onboard-next {
+  flex: 1.4;
+  min-height: var(--touch-min);
+  border: none;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
@@ -1754,6 +1891,10 @@ img {
 
   .sidebar-inner {
     padding: 1.1rem;
+  }
+
+  .filter-block--desktop-city {
+    display: block;
   }
 
   .toolbar-row .toolbar-btn:not(.toolbar-btn--icon):first-child {
