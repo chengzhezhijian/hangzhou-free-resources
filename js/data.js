@@ -20,6 +20,43 @@ const RESOURCE_CATEGORIES = [
   { id: "policy", label: "免费政策", icon: "📋", group: "policy" },
 ];
 
+/** 核心卖点：四蹭（直观引流，对应设施筛选 id） */
+const VALUE_PERKS = [
+  { id: "wifi", label: "📶 蹭网", short: "蹭网", facility: "wifi", desc: "图书馆、城市书房免费 WiFi" },
+  { id: "ac", label: "❄️ 蹭空调", short: "蹭空调", facility: "ac", desc: "纳凉点、图书馆、驿家空调" },
+  { id: "water", label: "💧 蹭水", short: "蹭水", facility: "water", desc: "爱心驿家、党群中心饮水" },
+  { id: "charge", label: "🔌 蹭电", short: "蹭电", facility: "charge", desc: "充电站、驿家插座" },
+];
+
+/** 筛选 chips 展示顺序：高频需求优先（all 始终首位） */
+const CATEGORY_DISPLAY_ORDER = [
+  "all",
+  "park",
+  "reading",
+  "library",
+  "parking",
+  "toilet",
+  "bunker",
+  "metro",
+  "charging",
+  "station",
+  "community",
+  "museum",
+  "sports",
+  "wifi_pub",
+  "policy",
+];
+
+/** 顶部快捷场景（按用户需求频次排序） */
+const QUICK_SCENES = [
+  { label: "🌳 遛娃", category: "park", search: "" },
+  { label: "📖 免费自习", category: "reading", search: "" },
+  { label: "🅿️ 找停车", category: "parking", search: "" },
+  { label: "🚻 公厕", category: "toilet", search: "" },
+  { label: "🧊 纳凉", category: "all", search: "纳凉" },
+  { label: "🔌 充电", category: "charging", search: "" },
+];
+
 const CATEGORY_GROUPS = [
   { id: "all", label: "全部大类" },
   { id: "culture", label: "文化阅读" },
@@ -37,11 +74,11 @@ const COST_TYPE_LABELS = {
 };
 
 const FACILITY_FILTERS = [
-  { id: "wifi", label: "WiFi" },
-  { id: "water", label: "饮水" },
-  { id: "ac", label: "空调" },
+  { id: "wifi", label: "蹭网" },
+  { id: "ac", label: "蹭空调" },
+  { id: "water", label: "蹭水" },
+  { id: "charge", label: "蹭电" },
   { id: "study", label: "可自习" },
-  { id: "charge", label: "充电" },
   { id: "open24", label: "24小时" },
 ];
 
@@ -81,13 +118,14 @@ const READING_SUBTYPES = [
 ];
 
 const SCENE_GUIDES = [
-  { need: "想安静自习、有 WiFi", pick: "图书馆自修区 / 城市书房", alt: "先选地市，全省均可筛；杭州 200+ 条", category: "reading" },
-  { need: "手机快没电、想喝水", pick: "爱心驿家 / 党群中心", alt: "全省站点设施因站而异，腾讯地图可筛 24 小时", category: "station" },
-  { need: "夏天想凉快", pick: "纳凉点 / 地铁纳凉 / 防空洞", alt: "选地市后查当地公告，7–8 月开放为主", category: "bunker" },
-  { need: "想省停车费", pick: "浙里办找车位 / 当地停车政策", alt: "杭州邻里停等已收录，全省用浙里办", category: "parking" },
+  { need: "想蹭网、安静自习", pick: "图书馆自修区 / 城市书房", alt: "筛「蹭网」或点「免费自习」，杭州 200+ 条", category: "reading" },
+  { need: "夏天想蹭空调", pick: "纳凉点 / 地铁纳凉 / 防空洞", alt: "点「纳凉」或筛「蹭空调」，7–8 月开放为主", category: "all", search: "纳凉" },
+  { need: "手机快没电、想蹭水", pick: "爱心驿家 / 党群中心", alt: "筛「蹭电」「蹭水」，设施因站而异", category: "station" },
   { need: "带娃出门散步", pick: "城市公园 / 绿道", alt: "全省多数公园免费开放", category: "park" },
-  { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费，各地公告为准", category: "sports" },
+  { need: "想省停车费", pick: "浙里办找车位 / 当地停车政策", alt: "杭州邻里停等已收录，全省用浙里办", category: "parking" },
   { need: "急找厕所", pick: "地图公厕工具 + 浙里办", alt: "选地市后可筛具体点位", category: "toilet" },
+  { need: "手机或电车要蹭电", pick: "充电站 / 爱心驿家", alt: "筛「蹭电」或点充电标签", category: "charging" },
+  { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费，各地公告为准", category: "sports" },
   { need: "刚到浙江某市", pick: "点左上角选地市或开启定位", alt: "11 地市均有代表点位 + 全省官方工具" },
 ];
 

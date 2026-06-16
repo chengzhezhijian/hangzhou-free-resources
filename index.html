@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0d6e6e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="description" content="在浙江找免费自习、书房、停车、纳凉、公厕、充电？选城市搜索，一键高德导航。政府公益资源，一站查。" />
-  <meta name="keywords" content="浙江免费资源,浙江城市书房,全省免费自习,免费停车,纳凉点,爱心驿家,公厕" />
-  <meta property="og:title" content="浙里惠民地图 · 浙江免费公共服务在哪找？" />
-  <meta property="og:description" content="自习、停车、纳凉、充电、遛娃…选城市就能查，点一下导航过去。政府免费资源合集。" />
+  <meta name="description" content="浙江哪儿能蹭网、蹭空调、蹭水、蹭电？政府免费场地一站查，还能遛娃、自习、找停车。选城市点标签，高德导航直达。" />
+  <meta name="keywords" content="浙江蹭网,蹭空调,蹭水,蹭电,免费WiFi,纳凉点,爱心驿家,浙江免费自习,免费停车" />
+  <meta property="og:title" content="浙里惠民地图 · 蹭网蹭空调蹭水蹭电" />
+  <meta property="og:description" content="出门蹭网、蹭空调、蹭水、蹭电 — 政府公益场地浙江 11 地市可查，遛娃自习停车也能一站搜。" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="浙里惠民地图" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title>浙里惠民地图 · 免费点位查询</title>
+  <title>浙里惠民地图 · 蹭网蹭空调蹭水蹭电</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=26" />
+  <link rel="stylesheet" href="css/style.css?v=29" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -64,10 +64,11 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="hero-badge">政府免费 · 浙江 11 地市 · 一站查询</span>
-        <h2 class="hero-title">在浙江，哪儿能免费自习、停车、纳凉？</h2>
-        <p class="hero-hook">选城市 → 搜你要做的事 → 点「高德地图导航」。不用挨个问，不用翻公众号。</p>
-        <p class="hero-desc">收录全省图书馆、城市书房、公园、公厕、爱心驿家、纳凉点与停车政策。11 个地市均有代表点位与官方查询入口，杭州细录最全。</p>
+        <span class="hero-badge">政府免费 · 四蹭可查 · 浙江 11 地市</span>
+        <h2 class="hero-title">出门哪儿能蹭网、蹭空调、蹭水、蹭电？</h2>
+        <p class="hero-hook">图书馆、纳凉点、爱心驿家…政府公益场地一站查。还能遛娃、自习、找停车，点标签即筛、高德导航。</p>
+        <p class="hero-desc">先点下方四蹭标签，或搜「自习」「纳凉」；11 地市均有代表点位，杭州细录最全。出行前请核实当日开放。</p>
+        <div class="hero-perks" id="heroPerks" data-value-perks aria-label="四蹭快捷筛选"></div>
         <div class="hero-stats" id="heroStats"></div>
       </div>
     </div>
@@ -83,7 +84,7 @@
           <span class="loc-pill-caret" aria-hidden="true">▾</span>
         </button>
         <div class="search-box search-box--inline">
-          <input type="search" id="searchInput" placeholder="搜自习、停车、纳凉…" autocomplete="off" enterkeyhint="search" />
+          <input type="search" id="searchInput" placeholder="搜蹭网、纳凉、自习、停车…" autocomplete="off" enterkeyhint="search" />
           <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
         </div>
       </div>
@@ -95,6 +96,7 @@
           <span class="filter-badge" id="filterBadge" hidden>0</span>
         </button>
       </div>
+      <div class="value-perks" id="valuePerks" data-value-perks aria-label="四蹭筛选"></div>
       <div class="quick-scenes" id="quickScenes" aria-label="常见需求"></div>
       <div class="active-filters" id="activeFilters" hidden></div>
     </div>
@@ -151,13 +153,13 @@
 
     <section class="content" id="resources">
       <div class="content-header">
-        <h2 id="contentTitle">浙江免费点位</h2>
+        <h2 id="contentTitle">浙江免费便民 · 四蹭可查</h2>
         <span class="result-count" id="resultCount"></span>
       </div>
       <div class="card-grid" id="cardGrid"></div>
       <div class="pagination-wrap" id="pagination" hidden></div>
       <div class="empty-state" id="emptyState" hidden>
-        <p>没找到合适的？换个关键词，或点上方「自习 / 停车」等快捷标签</p>
+        <p>没找到合适的？试试「蹭网 / 蹭空调」或上方遛娃、自习标签</p>
         <button type="button" class="btn-secondary" id="emptyReset">清除筛选</button>
       </div>
     </section>
@@ -273,10 +275,10 @@
   <script src="js/data-extra-resources.js?v=9"></script>
   <script src="js/data-zhejiang-cities.js?v=26"></script>
   <script src="js/data-zhejiang-expanded.js?v=26"></script>
-  <script src="js/data.js?v=26"></script>
-  <script src="js/resource-coords.js?v=26"></script>
-  <script src="js/layout.js?v=26"></script>
-  <script src="js/map-nav.js?v=26"></script>
-  <script src="js/app.js?v=26"></script>
+  <script src="js/data.js?v=29"></script>
+  <script src="js/resource-coords.js?v=29"></script>
+  <script src="js/layout.js?v=29"></script>
+  <script src="js/map-nav.js?v=29"></script>
+  <script src="js/app.js?v=29"></script>
 </body>
 </html>

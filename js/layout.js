@@ -103,9 +103,18 @@
     });
   }
 
+  function initBrandSub() {
+    const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+    const tagline = cfg.siteTagline || "浙江免费便民 · 搜完即走";
+    document.querySelectorAll(".brand-sub").forEach((el) => {
+      el.textContent = tagline;
+    });
+  }
+
   function init() {
     initNav();
     initBrand();
+    initBrandSub();
     initFeedback();
   }
 

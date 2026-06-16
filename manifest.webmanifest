@@ -1,7 +1,7 @@
 {
   "name": "浙里惠民地图",
   "short_name": "惠民地图",
-  "description": "在浙江找免费自习、停车、纳凉、充电 — 选城市搜索，一键导航",
+  "description": "蹭网、蹭空调、蹭水、蹭电 — 浙江政府免费场地，遛娃自习停车也能查",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

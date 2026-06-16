@@ -59,11 +59,11 @@
   );
 
   const FACILITY_LABELS = {
-    wifi: "WiFi",
-    water: "饮水",
-    ac: "空调",
-    study: "自习",
-    charge: "充电",
+    wifi: "蹭网",
+    water: "蹭水",
+    ac: "蹭空调",
+    study: "可自习",
+    charge: "蹭电",
     open24: "24h",
   };
 
@@ -152,7 +152,19 @@
   }
 
   function visibleCategories() {
-    return RESOURCE_CATEGORIES;
+    const order =
+      typeof CATEGORY_DISPLAY_ORDER !== "undefined"
+        ? CATEGORY_DISPLAY_ORDER
+        : RESOURCE_CATEGORIES.map((c) => c.id);
+    const byId = Object.fromEntries(RESOURCE_CATEGORIES.map((c) => [c.id, c]));
+    return order.map((id) => byId[id]).filter(Boolean);
+  }
+
+  function isQuickSceneActive(scene) {
+    if (scene.search) {
+      return state.search === scene.search && state.category === scene.category;
+    }
+    return state.category === scene.category && !state.search;
   }
 
   function resourceCity(r) {
@@ -269,8 +281,8 @@
     if (!h2) return;
     h2.textContent =
       state.userLocation && state.sortMode === "distance"
-        ? "附近免费点位"
-        : "浙江免费点位";
+        ? "附近 · 按距离排序"
+        : "浙江免费便民 · 四蹭可查";
   }
 
   function enableNearbySort() {
@@ -334,41 +346,125 @@
     return null;
   }
 
-  const QUICK_SCENES = [
-    { label: "📖 免费自习", category: "reading", search: "" },
-    { label: "🅿️ 找停车", category: "parking", search: "" },
-    { label: "🧊 纳凉", category: "bunker", search: "" },
-    { label: "🚻 公厕", category: "toilet", search: "" },
-    { label: "🔌 充电", category: "charging", search: "" },
-    { label: "🌳 遛娃", category: "park", search: "" },
-  ];
+  function isPerkActive(perk) {
+    return (
+      state.facilities.has(perk.facility) &&
+      state.facilities.size === 1 &&
+      state.category === "all" &&
+      !state.search
+    );
+  }
+
+  function applyValuePerk(perk) {
+    state.category = "all";
+    state.group = "all";
+    state.search = "";
+    state.facilities.clear();
+    state.facilities.add(perk.facility);
+    state.page = 1;
+    document.getElementById("searchInput").value = "";
+    document.getElementById("searchClear").hidden = true;
+    renderCategoryFilters();
+    renderFacilityFilters();
+    renderValuePerks();
+    updateMobileChrome();
+    renderCards();
+    track("filter_change", { field: "value_perk", value: perk.id });
+  }
+
+  let valuePerksBound = false;
+  function renderValuePerks() {
+    const perks = typeof VALUE_PERKS !== "undefined" ? VALUE_PERKS : [];
+    if (!perks.length) return;
+    document.querySelectorAll("[data-value-perks]").forEach((el) => {
+      el.innerHTML = perks
+        .map(
+          (p) =>
+            `<button type="button" class="value-perk ${isPerkActive(p) ? "is-active" : ""}" data-facility="${p.facility}" title="${p.desc}">${p.label}</button>`
+        )
+        .join("");
+    });
+    if (!valuePerksBound) {
+      valuePerksBound = true;
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".value-perk");
+        if (!btn) return;
+        const perk = perks.find((p) => p.facility === btn.dataset.facility);
+        if (perk) applyValuePerk(perk);
+      });
+    }
+  }
+
+  function renderQuickScenes() {
+    const el = document.getElementById("quickScenes");
+    if (!el || typeof QUICK_SCENES === "undefined") return;
+    el.innerHTML = QUICK_SCENES.map(
+      (s) =>
+        `<button type="button" class="quick-scene ${isQuickSceneActive(s) ? "is-active" : ""}" data-category="${s.category}" data-search="${s.search}">${s.label}</button>`
+    ).join("");
+    el.querySelectorAll(".quick-scene").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const scene = QUICK_SCENES.find(
+          (s) => s.category === btn.dataset.category && s.search === btn.dataset.search
+        );
+        state.category = scene?.category || btn.dataset.category;
+        state.group = "all";
+        state.search = scene?.search || btn.dataset.search || "";
+        state.page = 1;
+        state.facilities.clear();
+        document.getElementById("searchInput").value = state.search;
+        document.getElementById("searchClear").hidden = !state.search;
+        renderCategoryFilters();
+        renderValuePerks();
+        updateMobileChrome();
+        renderCards();
+        track("filter_change", {
+          field: "quick_scene",
+          value: state.search || state.category,
+        });
+        document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
 
   function renderHeroStats() {
     const el = document.getElementById("heroStats");
     if (!el) return;
     const pool = scopedResources();
+    const perks = typeof VALUE_PERKS !== "undefined" ? VALUE_PERKS : [];
+    if (perks.length) {
+      el.innerHTML = perks
+        .map((p) => {
+          const n = pool.filter((r) => hasFacility(r, p.facility)).length;
+          return `<div class="stat-item stat-item--perk"><strong>${n}</strong><span>${p.short}</span></div>`;
+        })
+        .join("");
+      return;
+    }
     const prefectures =
       typeof PREFECTURE_CITIES !== "undefined"
         ? PREFECTURE_CITIES
         : ["杭州", "宁波", "温州", "嘉兴", "湖州", "绍兴", "金华", "衢州", "舟山", "台州", "丽水"];
     const readingCount = pool.filter((r) => r.category === "reading").length;
     const libraryCount = pool.filter((r) => r.category === "library").length;
+    const parkCount = pool.filter((r) => r.category === "park").length;
+    const studyCount = readingCount + libraryCount;
     const items =
       state.city === "全部"
         ? [
             { n: RESOURCES.length, label: "全省收录" },
             { n: prefectures.length, label: "覆盖地市" },
-            { n: readingCount, label: "书房自习" },
-            { n: libraryCount, label: "图书馆" },
+            { n: parkCount, label: "公园遛娃" },
+            { n: studyCount, label: "免费自习" },
           ]
         : [
             { n: pool.length, label: `${state.city}可查` },
+            { n: parkCount, label: "公园遛娃" },
+            { n: studyCount, label: "免费自习" },
             {
-              n: pool.filter((r) => resourceCity(r) === state.city).length,
-              label: "本地点位",
+              n: pool.filter((r) => r.category === "parking").length,
+              label: "停车相关",
             },
-            { n: readingCount, label: "书房自习" },
-            { n: libraryCount, label: "图书馆" },
           ];
     el.innerHTML = items
       .map(
@@ -376,30 +472,6 @@
           `<div class="stat-item"><strong>${i.n}</strong><span>${i.label}</span></div>`
       )
       .join("");
-  }
-
-  function renderQuickScenes() {
-    const el = document.getElementById("quickScenes");
-    if (!el) return;
-    el.innerHTML = QUICK_SCENES.map(
-      (s) =>
-        `<button type="button" class="quick-scene ${state.category === s.category ? "is-active" : ""}" data-category="${s.category}" data-search="${s.search}">${s.label}</button>`
-    ).join("");
-    el.querySelectorAll(".quick-scene").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        state.category = btn.dataset.category;
-        state.group = "all";
-        state.search = btn.dataset.search || "";
-        state.page = 1;
-        document.getElementById("searchInput").value = state.search;
-        document.getElementById("searchClear").hidden = !state.search;
-        renderCategoryFilters();
-        updateMobileChrome();
-        renderCards();
-        track("filter_change", { field: "quick_scene", value: state.category });
-        document.getElementById("resources")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    });
   }
 
   function updateDistrictVisibility() {
@@ -440,8 +512,10 @@
       btn.addEventListener("click", () => {
         state.category = btn.dataset.category;
         state.page = 1;
+        state.facilities.clear();
         track("filter_change", { field: "category", value: state.category });
         renderCategoryFilters();
+        renderValuePerks();
         renderCards();
       });
     });
@@ -460,6 +534,7 @@
         else state.facilities.add(id);
         state.page = 1;
         renderFacilityFilters();
+        renderValuePerks();
         renderCards();
       });
     });
@@ -566,6 +641,7 @@
     updateContentHeader();
     if (!state.userLocation) updateDistanceHint();
     renderQuickScenes();
+    renderValuePerks();
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -824,9 +900,11 @@
     } else if (key === "category") {
       state.category = "all";
       renderCategoryFilters();
+      renderValuePerks();
     } else if (key.startsWith("facility:")) {
       state.facilities.delete(key.slice(9));
       renderFacilityFilters();
+      renderValuePerks();
     } else if (key === "featured") {
       state.featuredOnly = false;
       document.getElementById("featuredOnly").checked = false;
@@ -1014,6 +1092,7 @@
     renderFacilityFilters();
     updateDistrictVisibility();
     renderHeroStats();
+    renderValuePerks();
     renderCards();
     renderQuickScenes();
   }
@@ -1039,6 +1118,7 @@
     if (state.userLocation) enableNearbySort();
     renderCategoryFilters();
     renderHeroStats();
+    renderValuePerks();
     renderCards();
   }
 
@@ -1226,17 +1306,17 @@
     {
       icon: "📍",
       title: "先选城市",
-      desc: "允许定位后自动匹配城市，列表按您附近由近到远展示；也可手动选地市。",
+      desc: "允许定位后按距离排序；也可手动选浙江全省或 11 地市。",
     },
     {
-      icon: "🔍",
-      title: "搜你想做的事",
-      desc: "搜「自习」会匹配城市书房、图书馆；还有停车、纳凉、公厕等关键词。",
+      icon: "❄️",
+      title: "点四蹭标签",
+      desc: "蹭网、蹭空调、蹭水、蹭电 — 最直观，一点筛出图书馆、纳凉点、驿家等。",
     },
     {
       icon: "🏷️",
-      title: "点场景标签",
-      desc: "上方有自习、停车、纳凉等快捷标签，比翻分类更快。",
+      title: "或点场景标签",
+      desc: "遛娃、免费自习、找停车、公厕、纳凉…按大家常搜的顺序排在下面。",
     },
     {
       icon: "🗺️",
@@ -1317,6 +1397,7 @@
     }
     renderHeroStats();
     renderQuickScenes();
+    renderValuePerks();
     renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();

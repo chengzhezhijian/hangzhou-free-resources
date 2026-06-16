@@ -130,7 +130,7 @@ assertEq(
   PREFECTURE_CITIES.length + 1
 );
 assertGte("EXTERNAL_TOOLS ≥ 3", EXTERNAL_TOOLS.length, 3);
-assertGte("SCENE_GUIDES = 8 条", SCENE_GUIDES.length, 8);
+assertGte("SCENE_GUIDES = 9 条", SCENE_GUIDES.length, 9);
 
 const provinceTools = EXTERNAL_TOOLS.filter((t) => t.scope === "全省");
 assertGte("全省官方工具 ≥ 3", provinceTools.length, 3);
