@@ -65,6 +65,20 @@
   const DROP_ITEM_FONT_MAX = 13.6;
   const DROP_ACTION_FONT_MIN = 10;
   const DROP_ACTION_FONT_MAX = 13;
+  const LOC_PILL_FONT_MIN = 10;
+  const LOC_PILL_FONT_MAX = 13;
+  const NAV_BRAND_FONT_MIN = 13.5;
+  const NAV_BRAND_FONT_MAX = 16.8;
+  const DETAIL_TITLE_FONT_MIN = 14;
+  const DETAIL_TITLE_FONT_MAX = 18;
+  const SHEET_ACTION_FONT_MIN = 11;
+  const SHEET_ACTION_FONT_MAX = 16;
+  const FILTER_CHIP_FONT_MIN = 10;
+  const FILTER_CHIP_FONT_MAX = 13;
+  const CITY_PILL_FONT_MIN = 10;
+  const CITY_PILL_FONT_MAX = 12;
+  const FSS_OPT_FONT_MIN = 11;
+  const FSS_OPT_FONT_MAX = 13;
 
   const SORT_OPTIONS = [
     { id: "comprehensive", label: "综合排序" },
@@ -506,8 +520,7 @@
       const quick = btn.dataset.quick;
       btn.addEventListener("click", () => openToolbarDrop(`quick-${quick}`, "more", btn));
     });
-    syncToolbarChipFonts();
-    window.requestAnimationFrame(() => syncToolbarChipFonts());
+    scheduleAdaptiveFonts();
   }
 
   function renderSortDropPanel() {
@@ -537,6 +550,7 @@
     seg.querySelectorAll("[data-sort]").forEach((btn) => {
       btn.addEventListener("click", () => setSortMode(btn.dataset.sort));
     });
+    scheduleAdaptiveFonts();
   }
 
   function renderQuickDropPanel(kind) {
@@ -653,7 +667,7 @@
           renderFacilityFilters();
           renderCards();
           renderQuickDropPanel("quick-facility");
-          window.requestAnimationFrame(() => syncDropPanelFonts());
+          window.requestAnimationFrame(() => scheduleAdaptiveFonts());
         });
       });
       panel.querySelector("#quickFacilityReset")?.addEventListener("click", () => {
@@ -772,13 +786,135 @@
     }
   }
 
-  function syncToolbarDropPosition() {
+  function syncSortDropPanelFonts() {
+    const panel = document.getElementById("sortDropPanel");
+    if (!panel || panel.hidden) return;
+    panel.querySelectorAll(".sort-drop-item").forEach((item) => {
+      if (item.clientWidth <= 0) return;
+      const checkW = item.querySelector(".sort-drop-check")?.offsetWidth || 0;
+      const padX = 32 + checkW;
+      const px = fitElementFontSize(item, item.clientWidth - padX, DROP_ITEM_FONT_MIN, 14);
+      item.style.setProperty("--sort-drop-item-font-size", `${px}px`);
+    });
+  }
+
+  function syncLocPillFonts() {
+    document.querySelectorAll(".loc-pill").forEach((pill) => {
+      if (getComputedStyle(pill).display === "none" || pill.clientWidth <= 0) return;
+      const cityEl = pill.querySelector(".loc-pill-city");
+      if (!cityEl) return;
+      const style = getComputedStyle(pill);
+      const iconW = pill.querySelector(".loc-pill-icon")?.offsetWidth || 0;
+      const caretW = pill.querySelector(".loc-pill-caret")?.offsetWidth || 0;
+      const padX =
+        parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + iconW + caretW + 8;
+      const px = fitElementFontSize(cityEl, pill.clientWidth - padX, LOC_PILL_FONT_MIN, LOC_PILL_FONT_MAX);
+      pill.style.setProperty("--loc-pill-font-size", `${px}px`);
+    });
+  }
+
+  function syncNavBrandFont() {
+    const row = document.querySelector(".glass-nav__row");
+    const brand = row?.querySelector(".nav-brand-mini");
+    if (!brand || getComputedStyle(brand).display === "none" || !row?.clientWidth) return;
+    const pillW = row.querySelector(".loc-pill")?.offsetWidth || 0;
+    const gap = parseFloat(getComputedStyle(row).gap) || 10;
+    const avail = row.clientWidth - pillW - gap - 4;
+    if (avail <= 0) return;
+    const px = fitElementFontSize(brand, avail, NAV_BRAND_FONT_MIN, NAV_BRAND_FONT_MAX);
+    brand.style.setProperty("--nav-brand-font-size", `${px}px`);
+  }
+
+  function syncSheetActionFonts(root) {
+    if (!root) return;
+    root.querySelectorAll(".btn-primary, .btn-secondary, .btn-outline, .btn-locate").forEach((btn) => {
+      if (btn.clientWidth <= 0) return;
+      const padX = btn.classList.contains("btn-locate") ? 16 : 24;
+      const px = fitElementFontSize(btn, btn.clientWidth - padX, SHEET_ACTION_FONT_MIN, SHEET_ACTION_FONT_MAX);
+      btn.style.setProperty("--sheet-action-font-size", `${px}px`);
+    });
+  }
+
+  function syncFilterDropFooters() {
+    document.querySelectorAll(".filter-drop-footer, .sheet-footer").forEach((footer) => {
+      if (footer.closest("[hidden]")) return;
+      syncSheetActionFonts(footer);
+    });
+  }
+
+  function syncDetailSheetFonts() {
+    const modal = document.getElementById("detailModal");
+    if (!modal || modal.hidden) return;
+    const title = document.getElementById("modalTitle");
+    const header = modal.querySelector(".modal-header");
+    if (title && header?.clientWidth) {
+      const closeW = modal.querySelector(".modal-close")?.offsetWidth || 40;
+      const px = fitElementFontSize(title, header.clientWidth - closeW - 28, DETAIL_TITLE_FONT_MIN, DETAIL_TITLE_FONT_MAX);
+      title.style.setProperty("--detail-title-font-size", `${px}px`);
+    }
+    syncSheetActionFonts(modal.querySelector(".modal-footer"));
+  }
+
+  function syncActiveFilterChipFonts() {
+    document.querySelectorAll(".filter-chip").forEach((chip) => {
+      if (chip.clientWidth <= 0) return;
+      const btnW = chip.querySelector("button")?.offsetWidth || 18;
+      const px = fitElementFontSize(chip, chip.clientWidth - btnW - 18, FILTER_CHIP_FONT_MIN, FILTER_CHIP_FONT_MAX);
+      chip.style.setProperty("--filter-chip-font-size", `${px}px`);
+    });
+  }
+
+  function syncCityPanelFonts() {
+    const sheet = document.getElementById("citySheet");
+    if (!sheet || sheet.hidden) return;
+    sheet.querySelectorAll(".city-pill").forEach((pill) => {
+      if (pill.clientWidth <= 0) return;
+      const px = fitElementFontSize(pill, pill.clientWidth - 18, CITY_PILL_FONT_MIN, CITY_PILL_FONT_MAX);
+      pill.style.setProperty("--city-pill-font-size", `${px}px`);
+    });
+    syncSheetActionFonts(sheet.querySelector(".city-locate-card"));
+  }
+
+  function syncFssOptFonts() {
+    document.querySelectorAll(".fss-opt").forEach((opt) => {
+      if (opt.clientWidth <= 0) return;
+      const px = fitElementFontSize(opt, opt.clientWidth - 20, FSS_OPT_FONT_MIN, FSS_OPT_FONT_MAX);
+      opt.style.setProperty("--fss-opt-font-size", `${px}px`);
+    });
+  }
+
+  function syncEmptyStateFonts() {
+    const empty = document.getElementById("emptyState");
+    if (!empty || empty.hidden) return;
+    syncSheetActionFonts(empty);
+  }
+
+  function syncAdaptiveFonts() {
     syncToolbarChipFonts();
-    if (!toolbarDropKind) return;
-    const trigger = resolveToolbarTrigger(toolbarDropKind);
-    updateToolbarDropTop(trigger);
-    updateToolbarDropAnchor(toolbarDropKind, trigger);
     syncDropPanelFonts();
+    syncSortDropPanelFonts();
+    syncLocPillFonts();
+    syncNavBrandFont();
+    syncDetailSheetFonts();
+    syncFilterDropFooters();
+    syncActiveFilterChipFonts();
+    syncCityPanelFonts();
+    syncFssOptFonts();
+    syncEmptyStateFonts();
+  }
+
+  function scheduleAdaptiveFonts() {
+    syncAdaptiveFonts();
+    window.requestAnimationFrame(() => syncAdaptiveFonts());
+  }
+
+  function syncToolbarDropPosition() {
+    if (toolbarDropKind) {
+      const trigger = resolveToolbarTrigger(toolbarDropKind);
+      updateToolbarDropTop(trigger);
+      updateToolbarDropAnchor(toolbarDropKind, trigger);
+    }
+    syncAdaptiveFonts();
   }
 
   function resolveToolbarTrigger(kind) {
@@ -905,12 +1041,7 @@
     layer.hidden = false;
     document.body.classList.add("toolbar-drop-open");
     syncToolbarDropUi();
-    syncDropPanelFonts();
-    syncToolbarChipFonts();
-    window.requestAnimationFrame(() => {
-      syncDropPanelFonts();
-      syncToolbarChipFonts();
-    });
+    scheduleAdaptiveFonts();
     if (kind === "filter") {
       window.setTimeout(() => focusFilterArea(toolbarDropFocus), 40);
     }
@@ -933,7 +1064,7 @@
     document.documentElement.style.removeProperty("--toolbar-drop-anchor-width");
     document.getElementById("quickDropPanel")?.style.removeProperty("--drop-item-font-size");
     syncToolbarDropUi();
-    window.requestAnimationFrame(() => syncToolbarChipFonts());
+    scheduleAdaptiveFonts();
   }
 
   function syncToolbarDropUi() {
@@ -1318,6 +1449,7 @@
     if (filtered.length === 0) {
       grid.innerHTML = "";
       empty.hidden = false;
+      scheduleAdaptiveFonts();
       return;
     }
 
@@ -1325,12 +1457,14 @@
 
     if (design?.groupList) {
       renderGroupedCards(filtered, grid);
+      scheduleAdaptiveFonts();
       return;
     }
 
     grid.innerHTML = pageItems.map(renderCard).join("");
     bindCardClicks(grid);
     if (typeof window.markCardsEnter === "function") window.markCardsEnter();
+    scheduleAdaptiveFonts();
   }
 
   function formatFeatureLabel(text) {
@@ -1446,6 +1580,7 @@
     });
 
     openOverlay("detailModal");
+    scheduleAdaptiveFonts();
   }
 
   function closeDetailModal() {
@@ -1475,6 +1610,7 @@
       if (el) el.textContent = label;
     });
     updateCityLocateStatus();
+    scheduleAdaptiveFonts();
   }
 
   function updateCityLocateStatus() {
@@ -1637,6 +1773,7 @@
       });
       chip.addEventListener("click", () => clearFilterKey(chip.dataset.clear));
     });
+    scheduleAdaptiveFonts();
   }
 
   function clearFilterKey(key) {
@@ -1718,12 +1855,14 @@
         )
         .join("");
       bindCityPills(grid);
+      scheduleAdaptiveFonts();
       return;
     }
 
     const rest = prefectures.filter((c) => !hotList.includes(c));
     grid.innerHTML = rest.map((c) => cityPillHtml(c)).join("");
     bindCityPills(grid);
+    scheduleAdaptiveFonts();
   }
 
   function isFilterDesktop() {
@@ -1760,6 +1899,7 @@
     if (!el) return;
     el.hidden = false;
     document.body.classList.add("sheet-open");
+    scheduleAdaptiveFonts();
   }
 
   function closeOverlay(id) {
@@ -2303,6 +2443,7 @@
       state.page = 1;
       renderCards();
     });
+    scheduleAdaptiveFonts();
   }
 
   if (document.readyState === "loading") {

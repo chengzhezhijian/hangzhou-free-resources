@@ -11,6 +11,7 @@ const appJs = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf8");
 const designLayouts = fs.readFileSync(path.join(ROOT, "css", "design-layouts.css"), "utf8");
+const styleCss = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
 const premiumCss = fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8");
 const designSystem = fs.readFileSync(path.join(ROOT, "css", "design-system.css"), "utf8");
 const quickCategoryBlock = appJs.split('if (kind === "quick-category")')[1]?.split('if (kind === "quick-facility")')[0] || "";
@@ -86,6 +87,13 @@ ok("设施下拉标签结构", /quick-drop-item__label/.test(quickFacilityBlock)
 ok("设施下拉无完成按钮", !/quickFacilityDone/.test(appJs));
 ok("重置按钮字号变量", /--drop-action-font-size/.test(designLayouts) && /quickFacilityReset/.test(appJs) && /DROP_ACTION_FONT_MIN/.test(appJs));
 ok("工具栏标签字号变量", /--chip-label-font-size/.test(designLayouts) && /syncToolbarChipFonts/.test(appJs));
+ok("全站自适应入口", /function syncAdaptiveFonts/.test(appJs) && /scheduleAdaptiveFonts/.test(appJs));
+ok("城市 pill 字号变量", /--loc-pill-font-size/.test(designSystem + designLayouts) && /syncLocPillFonts/.test(appJs));
+ok("详情标题字号变量", /--detail-title-font-size/.test(premiumCss) && /syncDetailSheetFonts/.test(appJs));
+ok("Sheet 按钮字号变量", /--sheet-action-font-size/.test(designLayouts + styleCss) && /syncSheetActionFonts/.test(appJs));
+ok("城市面板 pill 字号", /--city-pill-font-size/.test(designLayouts) && /syncCityPanelFonts/.test(appJs));
+ok("筛选 chip 字号变量", /--filter-chip-font-size/.test(designLayouts) && /syncActiveFilterChipFonts/.test(appJs));
+ok("排序下拉字号变量", /--sort-drop-item-font-size/.test(designLayouts) && /syncSortDropPanelFonts/.test(appJs));
 ok(
   "下拉层移出 sticky",
   /scroll-main[\s\S]*?<\/div>\s*\n\s*<div class="toolbar-drop-layer" id="toolbarDropLayer"/.test(indexHtml)

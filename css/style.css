@@ -1683,8 +1683,12 @@ img {
 .sheet-footer .btn-primary,
 .sheet-footer .btn-secondary {
   flex: 1;
+  min-width: 0;
   justify-content: center;
   min-height: var(--touch-min);
+  font-size: var(--sheet-action-font-size, clamp(0.75rem, 3vw, 0.9375rem));
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .city-grid {

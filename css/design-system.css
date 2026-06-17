@@ -99,7 +99,7 @@
 }
 
 .app-ui .nav-brand-mini {
-  font-size: 1.05rem;
+  font-size: var(--nav-brand-font-size, clamp(0.875rem, 4vw, 1.05rem));
   font-weight: 700;
   letter-spacing: -0.03em;
   background: var(--nav-brand-gradient);
@@ -115,6 +115,8 @@
 
 .app-ui .loc-pill {
   flex-shrink: 0;
+  max-width: 46%;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -128,6 +130,14 @@
   color: var(--ios-label);
   cursor: pointer;
   transition: transform 0.15s var(--ios-spring);
+}
+
+.app-ui .loc-pill-city {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--loc-pill-font-size, clamp(0.6875rem, 2.8vw, 0.8125rem));
 }
 
 .app-ui .loc-pill:active {

@@ -59,8 +59,13 @@
 }
 
 .filter-toolbar-layout .loc-search-row .loc-pill-city {
-  font-size: 0.75rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 600;
+  font-size: var(--loc-pill-font-size, clamp(0.625rem, 2.6vw, 0.75rem));
 }
 
 .filter-toolbar-layout .loc-search-row .loc-pill-icon,
@@ -358,11 +363,15 @@
 .app-ui .city-province-grid .city-pill,
 .app-ui .city-hot .city-pill,
 .app-ui .city-grid .city-pill {
+  min-width: 0;
   min-height: 0;
   padding: 6px 11px;
-  font-size: 0.75rem;
+  font-size: var(--city-pill-font-size, clamp(0.625rem, 2.4vw, 0.75rem));
   font-weight: 600;
   border-radius: var(--ios-radius-xs, 10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .app-ui .city-hot {
@@ -393,12 +402,12 @@
 
 .fss-opt {
   flex: 1;
-  min-width: 88px;
+  min-width: 0;
   padding: 9px 10px;
   border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.12));
   border-radius: 9px;
   background: var(--ios-bg, #f2f2f7);
-  font-size: 0.8rem;
+  font-size: var(--fss-opt-font-size, clamp(0.72rem, 2.8vw, 0.8rem));
   font-weight: 600;
   color: var(--ios-label, #1c1c1e);
   cursor: pointer;
@@ -687,7 +696,7 @@
   border: none;
   border-bottom: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.06));
   background: transparent;
-  font-size: 0.875rem;
+  font-size: var(--sort-drop-item-font-size, clamp(0.75rem, 2.8vw, 0.875rem));
   font-weight: 500;
   color: var(--ios-label);
   cursor: pointer;
@@ -829,6 +838,10 @@
 .filter-drop-footer .btn-primary,
 .filter-drop-footer .btn-secondary {
   flex: 1;
+  min-width: 0;
+  font-size: var(--sheet-action-font-size, clamp(0.6875rem, 3vw, 1rem));
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 body.toolbar-drop-open {
@@ -1142,4 +1155,55 @@ body.toolbar-drop-open {
   .design-card-tile .card-grid {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
+}
+
+/* ─── 全站文字/按钮自适应 token ─── */
+.app-ui .filter-chip {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--filter-chip-font-size, clamp(0.625rem, 2.6vw, 0.8125rem));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-ui .empty-state .btn-secondary {
+  min-width: 0;
+  font-size: var(--sheet-action-font-size, clamp(0.75rem, 3vw, 0.875rem));
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-ui .city-locate-card .btn-locate {
+  flex-shrink: 0;
+  min-width: 0;
+  font-size: var(--sheet-action-font-size, clamp(0.6875rem, 2.8vw, 0.8125rem));
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium h3 {
+  min-width: 0;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-address,
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-hours,
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-district {
+  min-width: 0;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .facility-tag {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-drop-header h3 {
+  min-width: 0;
+  font-size: clamp(0.875rem, 3.6vw, 1rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

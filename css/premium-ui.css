@@ -369,6 +369,21 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--detail-title-font-size, clamp(0.9375rem, 4.5vw, 1.125rem));
+}
+
+.app-ui .detail-panel .modal-footer--sticky .btn-primary,
+.app-ui .detail-panel .modal-footer--sticky .btn-secondary,
+.app-ui .detail-panel .modal-footer--sticky .btn-outline {
+  min-width: 0;
+  font-size: var(--sheet-action-font-size, clamp(0.75rem, 3vw, 1rem));
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .app-ui .detail-panel .modal-close {

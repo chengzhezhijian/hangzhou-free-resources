@@ -167,6 +167,32 @@ function segmentOrder(doc) {
   return [...doc.querySelectorAll("#filterToolbar [data-quick]")].map((btn) => btn.dataset.quick);
 }
 
+function ensureLayoutMetrics(doc, win) {
+  const setW = (el, w) => {
+    if (!el) return;
+    Object.defineProperty(el, "clientWidth", { configurable: true, get: () => w });
+    Object.defineProperty(el, "offsetWidth", { configurable: true, get: () => w });
+  };
+  setW(doc.getElementById("cityQuickBtn"), 108);
+  setW(doc.querySelector(".glass-nav__row"), 343);
+  setW(doc.querySelector(".nav-brand-mini"), 220);
+  doc.querySelectorAll(".ft-chip--quick").forEach((el) => setW(el, 88));
+  doc.querySelectorAll(".city-pill").forEach((el) => setW(el, 96));
+  doc.querySelectorAll(".sort-drop-item").forEach((el) => setW(el, 200));
+  const header = doc.querySelector(".detail-panel .modal-header");
+  setW(header, 320);
+  setW(doc.getElementById("modalTitle"), 260);
+  doc
+    .querySelectorAll("#modalFooter .btn-primary, #modalFooter .btn-outline, #modalFooter .btn-secondary")
+    .forEach((el) => setW(el, 120));
+  setW(doc.getElementById("emptyReset"), 140);
+  doc.querySelectorAll(".loc-pill-icon, .loc-pill-caret, .sort-drop-check").forEach((el) => {
+    Object.defineProperty(el, "offsetWidth", { configurable: true, get: () => 12 });
+  });
+  setW(doc.querySelector(".detail-panel .modal-close"), 36);
+  win.dispatchEvent(new win.Event("resize"));
+}
+
 const HANGZHOU = { lat: 30.2741, lng: 120.1551 };
 
 async function run() {
@@ -528,6 +554,75 @@ async function run() {
     ok("城市面板:热门城市存在", doc.querySelectorAll("#cityHotGrid .city-pill").length >= 3);
     ok("未定位:顶部 pill 默认文案", doc.getElementById("cityQuickValue")?.textContent === "选择城市");
     ok("美团搜索框 class", doc.querySelector(".search-box--meituan") !== null);
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 12：全站文字/按钮自适应
+  // ───────────────────────────────────────────────
+  {
+    const { doc, window } = boot({ geo: "error" });
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+
+    ok("自适应:工具栏 chip 字号", !!doc.getElementById("quickSortBtn")?.style.getPropertyValue("--chip-label-font-size"));
+
+    doc.getElementById("cityQuickBtn").click();
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+    const hotPill = doc.querySelector("#cityHotGrid .city-pill");
+    ok("自适应:城市 pill 字号", !!hotPill?.style.getPropertyValue("--city-pill-font-size"));
+    doc.getElementById("citySheetBackdrop").click();
+    await tick();
+
+    doc.getElementById("cityQuickBtn").click();
+    await tick();
+    doc.querySelector('#cityHotGrid .city-pill[data-city="杭州"]')?.click();
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+    const locVar = doc.getElementById("cityQuickBtn")?.style.getPropertyValue("--loc-pill-font-size");
+    ok("自适应:glass-nav 城市 pill 字号", !!locVar && parseFloat(locVar) >= 10);
+
+    const brandVar = doc.querySelector(".nav-brand-mini")?.style.getPropertyValue("--nav-brand-font-size");
+    ok("自适应:glass-nav 品牌字号", !!brandVar && parseFloat(brandVar) >= 13.5);
+
+    doc.getElementById("quickSortBtn").click();
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+    ok(
+      "自适应:排序下拉项字号",
+      !!doc.getElementById("quickDropPanel")?.style.getPropertyValue("--drop-item-font-size")
+    );
+    doc.getElementById("toolbarDropBackdrop").click();
+    await tick();
+
+    const searchInput = doc.getElementById("searchInput");
+    searchInput.value = "聚沙邻里";
+    searchInput.dispatchEvent(new window.Event("input", { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 250));
+    await tick();
+    doc.querySelector('[data-id="study-jusha"]')?.click();
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+    const titleVar = doc.getElementById("modalTitle")?.style.getPropertyValue("--detail-title-font-size");
+    ok("自适应:详情标题字号", !!titleVar && parseFloat(titleVar) >= 14);
+    const footerBtn = doc.querySelector("#modalFooter .btn-primary, #modalFooter .btn-outline");
+    ok("自适应:详情 footer 按钮字号", !!footerBtn?.style.getPropertyValue("--sheet-action-font-size"));
+    doc.getElementById("detailBackdrop")?.click();
+    await tick();
+
+    searchInput.value = "zzzznotfound999";
+    searchInput.dispatchEvent(new window.Event("input", { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 250));
+    await tick();
+    ensureLayoutMetrics(doc, window);
+    await tick();
+    const emptyBtn = doc.getElementById("emptyReset");
+    ok("自适应:空状态按钮字号", !!emptyBtn?.style.getPropertyValue("--sheet-action-font-size"));
   }
 
   // ── 汇总 ──
