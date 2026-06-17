@@ -57,8 +57,8 @@ const QS = dataCtx.QS;
 console.log("\n═══ 产品需求 ═══");
 assert("全国版 SITE_SCOPE", SITE_SCOPE === "china");
 assert("资源规模 ≥ 2900", RESOURCES.length >= 2900);
-assert("四蹭卖点 4 项", VP?.length === 4);
-assert("四蹭顺序：蹭网优先", VP?.[0]?.id === "wifi");
+assert("设施卖点 4 项", VP?.length === 4);
+assert("设施顺序：WiFi 优先", VP?.[0]?.id === "wifi");
 assert("场景标签 6 项", QS?.length === 6);
 assert("场景首项：遛娃", QS?.[0]?.category === "park");
 
@@ -72,9 +72,9 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /class="app-ui"/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=32/],
-  ["Premium 交互脚本", /ui-premium\.js\?v=32/],
-  ["四蹭标签容器", /id="heroPerks"/],
+  ["Premium 样式", /premium-ui\.css\?v=33/],
+  ["Premium 交互脚本", /ui-premium\.js\?v=33/],
+  ["设施标签容器", /id="heroPerks"/],
   ["iOS 分段排序", /sort-tabs/],
   ["底部 Tab", /bottom-nav/],
   ["Sheet 详情", /detailModal/],
@@ -104,7 +104,7 @@ assert("设计系统 Tab 毛玻璃", /backdrop-filter/.test(designCss));
 console.log("\n═══ 用户路径 ═══");
 
 const journeyWifi = filter({ facilities: ["wifi"], city: "全部" });
-assert("路径A：全国蹭网 ≥ 200", journeyWifi.length >= 200);
+assert("路径A：全国免费WiFi ≥ 200", journeyWifi.length >= 200);
 
 const journeyBeijing = filter({ city: "北京" });
 assert("路径B：北京 ≥ 35 条", journeyBeijing.length >= 35);

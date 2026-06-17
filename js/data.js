@@ -20,12 +20,12 @@ const RESOURCE_CATEGORIES = [
   { id: "policy", label: "免费政策", icon: "📋", group: "policy" },
 ];
 
-/** 核心卖点：四蹭（直观引流，对应设施筛选 id） */
+/** 核心卖点：高频设施（对应设施筛选 id） */
 const VALUE_PERKS = [
-  { id: "wifi", label: "📶 蹭网", short: "蹭网", facility: "wifi", desc: "图书馆、城市书房免费 WiFi" },
-  { id: "ac", label: "❄️ 蹭空调", short: "蹭空调", facility: "ac", desc: "纳凉点、图书馆、驿家空调" },
-  { id: "water", label: "💧 蹭水", short: "蹭水", facility: "water", desc: "爱心驿家、党群中心饮水" },
-  { id: "charge", label: "🔌 蹭电", short: "蹭电", facility: "charge", desc: "充电站、驿家插座" },
+  { id: "wifi", label: "📶 免费WiFi", short: "WiFi", facility: "wifi", desc: "图书馆、城市书房免费无线网络" },
+  { id: "ac", label: "❄️ 有空调", short: "空调", facility: "ac", desc: "纳凉点、图书馆、驿家空调" },
+  { id: "water", label: "💧 可饮水", short: "饮水", facility: "water", desc: "爱心驿家、党群中心饮水" },
+  { id: "charge", label: "🔌 可充电", short: "充电", facility: "charge", desc: "充电站、驿家插座" },
 ];
 
 /** 筛选 chips 展示顺序：高频需求优先（all 始终首位） */
@@ -74,10 +74,10 @@ const COST_TYPE_LABELS = {
 };
 
 const FACILITY_FILTERS = [
-  { id: "wifi", label: "蹭网" },
-  { id: "ac", label: "蹭空调" },
-  { id: "water", label: "蹭水" },
-  { id: "charge", label: "蹭电" },
+  { id: "wifi", label: "免费WiFi" },
+  { id: "ac", label: "有空调" },
+  { id: "water", label: "可饮水" },
+  { id: "charge", label: "可充电" },
   { id: "study", label: "可自习" },
   { id: "open24", label: "24小时" },
 ];
@@ -118,13 +118,13 @@ const READING_SUBTYPES = [
 ];
 
 const SCENE_GUIDES = [
-  { need: "想蹭网、安静自习", pick: "图书馆自修区 / 城市书房", alt: "筛「蹭网」或点「免费自习」，全国可查", category: "reading" },
-  { need: "夏天想蹭空调", pick: "纳凉点 / 地铁纳凉 / 防空洞", alt: "点「纳凉」或筛「蹭空调」，7–8 月开放为主", category: "all", search: "纳凉" },
-  { need: "手机快没电、想蹭水", pick: "爱心驿家 / 党群中心", alt: "筛「蹭电」「蹭水」，设施因站而异", category: "station" },
+  { need: "想连 WiFi 安静自习", pick: "图书馆自修区 / 城市书房", alt: "筛「免费WiFi」或点「免费自习」，全国可查", category: "reading" },
+  { need: "夏天想找空调纳凉", pick: "纳凉点 / 地铁纳凉 / 防空洞", alt: "点「纳凉」或筛「有空调」，7–8 月开放为主", category: "all", search: "纳凉" },
+  { need: "手机快没电、想喝杯水", pick: "爱心驿家 / 党群中心", alt: "筛「可充电」「可饮水」，设施因站而异", category: "station" },
   { need: "带娃出门散步", pick: "城市公园 / 绿道", alt: "全省多数公园免费开放", category: "park" },
   { need: "想省停车费", pick: "当地政务 / 停车查询工具", alt: "点「找停车」或当地政务服务", category: "parking" },
   { need: "急找厕所", pick: "地图公厕工具 + 当地政务", alt: "选城市后可筛具体点位", category: "toilet" },
-  { need: "手机或电车要蹭电", pick: "充电站 / 爱心驿家", alt: "筛「蹭电」或点充电标签", category: "charging" },
+  { need: "手机或电车要充电", pick: "充电站 / 爱心驿家", alt: "筛「可充电」或点充电标签", category: "charging" },
   { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费，各地公告为准", category: "sports" },
   { need: "刚到一座城市", pick: "点左上角选城市或开启定位", alt: "72 城代表点位 + 全国官方工具" },
 ];
@@ -142,7 +142,7 @@ const EXTERNAL_TOOLS = [
     desc: "全国驿站，可筛饮水/充电/24小时",
     url: "https://map.qq.com/",
     scope: "全国",
-    tag: "蹭水蹭电",
+    tag: "饮水充电",
   },
   {
     name: "高德地图 · 公厕与充电",
@@ -156,7 +156,7 @@ const EXTERNAL_TOOLS = [
     desc: "全国图书馆行业信息与咨询",
     url: "https://www.nlc.cn/",
     scope: "全国",
-    tag: "蹭网",
+    tag: "免费WiFi",
   },
   {
     name: "浙里办",

@@ -1,11 +1,11 @@
 {
-  "name": "全国蹭享地图",
-  "short_name": "蹭享地图",
-  "description": "蹭网、蹭空调、蹭水、蹭电 — 72城政府免费场地，App级体验",
-  "start_url": "./",
-  "scope": "./",
+  "name": "全国惠民地图",
+  "short_name": "惠民地图",
+  "description": "政府免费便民 · 72城自习、纳凉、WiFi、充电，搜完即走",
+  "start_url": "/hangzhou-free-resources/?v=33",
   "display": "standalone",
   "background_color": "#f2f2f7",
   "theme_color": "#0d9488",
-  "lang": "zh-CN"
+  "lang": "zh-CN",
+  "icons": []
 }

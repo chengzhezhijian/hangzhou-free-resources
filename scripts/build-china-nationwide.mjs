@@ -288,7 +288,7 @@ function mkLibrary(city, province, item, featured = false) {
     seasonal: false,
     featured: !!featured,
     website: item.website || "",
-    features: ["公共图书馆", "可自习", "蹭网"],
+    features: ["公共图书馆", "可自习", "免费WiFi"],
     note: item.note || "",
   };
 }
@@ -309,7 +309,7 @@ function mkReading(city, province, name, i) {
     facilities: { ...READ_FAC },
     seasonal: false,
     featured: i === 0,
-    features: ["城市书房", "免费阅览", "蹭网"],
+    features: ["城市书房", "免费阅览", "免费WiFi"],
     note: "具体开放以当地公告为准",
   };
 }
@@ -377,11 +377,11 @@ function cityTools(city, province, gov) {
     { name: `${city} · 政务服务`, category: "policy", url: zwfw, features: ["找公厕", "找车位", "政务便民"], featured: true },
     { name: `${city} · 公共厕所查询`, category: "toilet", url: zwfw, features: ["公厕地图"], note: "海量点位以官方平台为准" },
     { name: `${city} · 停车查询`, category: "parking", url: zwfw, features: ["道路泊位", "公共停车场"] },
-    { name: `${city} · 爱心驿站`, category: "station", url: "https://map.qq.com/", features: ["蹭水", "蹭电", "休息"], note: "腾讯地图搜「爱心驿站」", facilities: STATION_FAC },
+    { name: `${city} · 爱心驿站`, category: "station", url: "https://map.qq.com/", features: ["可饮水", "可充电", "休息"], note: "腾讯地图搜「爱心驿站」", facilities: STATION_FAC },
     { name: `${city} · 公共体育场馆`, category: "sports", url: zwfw, features: ["免费/低收费场馆"], note: "节假日部分免费开放" },
-    { name: `${city} · 充电查询`, category: "charging", url: "https://www.amap.com/", features: ["公共充电", "蹭电"], note: "高德地图搜充电站" },
-    { name: `${city} · 夏季纳凉`, category: "bunker", url: zwfw, features: ["纳凉点", "蹭空调"], note: "7–8 月以当地公告为准", seasonal: true },
-    { name: `${city}城市书房分布`, category: "reading", url: zwfw, features: ["城市书房", "蹭网"], note: "海量网点请用当地官方平台", facilities: READ_FAC, featured: true },
+    { name: `${city} · 充电查询`, category: "charging", url: "https://www.amap.com/", features: ["公共充电", "可充电"], note: "高德地图搜充电站" },
+    { name: `${city} · 夏季纳凉`, category: "bunker", url: zwfw, features: ["纳凉点", "有空调"], note: "7–8 月以当地公告为准", seasonal: true },
+    { name: `${city}城市书房分布`, category: "reading", url: zwfw, features: ["城市书房", "免费WiFi"], note: "海量网点请用当地官方平台", facilities: READ_FAC, featured: true },
   ].map((s) => mkTool(city, province, s));
 }
 
@@ -429,7 +429,7 @@ function generateCity(cityMeta, province) {
       hours: "工作日 9:00—17:30",
       facilities: { water: true, ac: true, charge: "partial", wifi: "partial" },
       seasonal: false,
-      features: ["蹭水", "蹭空调", "休息"],
+      features: ["可饮水", "有空调", "休息"],
       note: "设施因中心而异",
     });
   }
@@ -443,10 +443,10 @@ function nationalTools() {
   const list = [
     { name: "国家政务服务平台", category: "policy", city: "全国", url: "https://www.gov.cn/", features: ["全国政务", "跨省办事"], featured: true },
     { name: "国务院客户端", category: "policy", city: "全国", url: "https://www.gov.cn/", features: ["政策查询", "便民服务"] },
-    { name: "腾讯地图 · 全国爱心驿站", category: "station", city: "全国", url: "https://map.qq.com/", features: ["蹭水", "蹭电", "全国驿站"], note: "地图搜「爱心驿站」可筛选" },
+    { name: "腾讯地图 · 全国爱心驿站", category: "station", city: "全国", url: "https://map.qq.com/", features: ["可饮水", "可充电", "全国驿站"], note: "地图搜「爱心驿站」可筛选" },
     { name: "高德地图 · 全国公厕", category: "toilet", city: "全国", url: "https://www.amap.com/", features: ["公厕", "实时查询"] },
-    { name: "高德地图 · 全国充电站", category: "charging", city: "全国", url: "https://www.amap.com/", features: ["蹭电", "电车充电"] },
-    { name: "全国公共图书馆咨询", category: "library", city: "全国", url: "https://www.nlc.cn/", features: ["图书馆", "蹭网自习"] },
+    { name: "高德地图 · 全国充电站", category: "charging", city: "全国", url: "https://www.amap.com/", features: ["可充电", "电车充电"] },
+    { name: "全国公共图书馆咨询", category: "library", city: "全国", url: "https://www.nlc.cn/", features: ["图书馆", "免费WiFi自习"] },
     { name: "中国志愿服务 · 驿站", category: "station", city: "全国", url: "https://www.chinavolunteer.cn/", features: ["志愿驿站", "休息饮水"] },
     { name: "文化和旅游部公共服务", category: "policy", city: "全国", url: "https://www.mct.gov.cn/", features: ["文化场馆", "免费政策"] },
   ];

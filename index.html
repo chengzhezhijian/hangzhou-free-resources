@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0d9488" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="description" content="全国哪儿能蹭网、蹭空调、蹭水、蹭电？72 城政府免费场地一站查，遛娃自习停车也能筛。点标签即搜、高德导航。" />
-  <meta name="keywords" content="全国蹭网,蹭空调,免费WiFi,纳凉点,城市书房,爱心驿站,全国免费停车" />
-  <meta property="og:title" content="全国蹭享地图 · 蹭网蹭空调蹭水蹭电" />
-  <meta property="og:description" content="App 级体验 · 72 城政府免费场地 · 四蹭标签一点即筛" />
+  <meta name="description" content="全国哪儿能免费自习、纳凉、充电？72 城政府免费场地一站查，WiFi、停车、公厕也能筛。点标签即搜、高德导航。" />
+  <meta name="keywords" content="全国免费资源,免费WiFi,纳凉点,城市书房,爱心驿站,全国免费停车,免费自习" />
+  <meta property="og:title" content="全国惠民地图 · 免费公共服务在哪找？" />
+  <meta property="og:description" content="选城市 · 点设施标签 · 高德导航。72 城政府免费场地合集。" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="全国蹭享地图" />
+  <meta property="og:site_name" content="全国惠民地图" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title>全国蹭享地图 · 蹭网蹭空调蹭水蹭电</title>
+  <title>全国惠民地图 · 免费点位查询</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=32" />
-  <link rel="stylesheet" href="css/design-system.css?v=32" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=32" />
+  <link rel="stylesheet" href="css/style.css?v=33" />
+  <link rel="stylesheet" href="css/design-system.css?v=33" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=33" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -40,10 +40,10 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="brand" id="brandHome">
-        <span class="brand-icon">蹭</span>
+        <span class="brand-icon">惠</span>
         <div class="brand-text">
-          <h1>全国蹭享地图</h1>
-          <p class="brand-sub">蹭网·蹭空调·蹭水·蹭电 · 72城免费</p>
+          <h1>全国惠民地图</h1>
+          <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
@@ -64,17 +64,17 @@
           <span class="loc-pill-city" id="cityQuickValueMobile">全国</span>
           <span aria-hidden="true">▾</span>
         </button>
-        <span class="nav-brand-mini">全国蹭享地图</span>
+        <span class="nav-brand-mini">全国惠民地图</span>
       </div>
     </header>
 
     <div class="scroll-main">
       <section class="home-head">
-        <h2 class="display-title">出门哪儿能<br />蹭网、蹭空调？</h2>
-        <p class="display-sub">政府免费场地 · 72 城可查 · 点标签即筛</p>
+        <h2 class="display-title">出门哪儿能<br />免费自习、纳凉？</h2>
+        <p class="display-sub">选城市 · 点设施标签 · 高德导航过去</p>
       </section>
 
-      <div class="hero-stats" id="heroStats" aria-label="四蹭统计"></div>
+      <div class="hero-stats" id="heroStats" aria-label="设施统计"></div>
 
       <div class="discover-sticky">
       <div class="discover-bar" id="discoverBar">
@@ -87,11 +87,11 @@
               <span class="loc-pill-caret" aria-hidden="true">▾</span>
             </button>
             <div class="search-box search-box--inline">
-              <input type="search" id="searchInput" placeholder="搜蹭网、纳凉、自习、停车…" autocomplete="off" enterkeyhint="search" />
+              <input type="search" id="searchInput" placeholder="搜自习、纳凉、WiFi、停车…" autocomplete="off" enterkeyhint="search" />
               <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
             </div>
           </div>
-          <div class="hero-perks" id="heroPerks" data-value-perks aria-label="四蹭快捷筛选"></div>
+          <div class="hero-perks" id="heroPerks" data-value-perks aria-label="设施快捷筛选"></div>
           <div class="sort-tabs" role="tablist" aria-label="排序与筛选">
             <button type="button" class="sort-tab is-active" data-sort="comprehensive" id="sortComprehensive" role="tab" aria-selected="true">综合</button>
             <button type="button" class="sort-tab" data-sort="distance" id="sortDistance" role="tab" aria-selected="false">距离</button>
@@ -148,13 +148,13 @@
 
         <section class="content" id="resources">
           <div class="content-header">
-            <h2 id="contentTitle">全国免费便民 · 四蹭可查</h2>
+            <h2 id="contentTitle">全国免费便民 · 按设施筛选</h2>
             <span class="result-count" id="resultCount"></span>
           </div>
           <div class="card-grid" id="cardGrid"></div>
           <div class="pagination-wrap" id="pagination" hidden></div>
           <div class="empty-state" id="emptyState" hidden>
-            <p>没找到合适的？试试「蹭网 / 蹭空调」或上方场景标签</p>
+            <p>没找到合适的？试试「免费WiFi / 有空调」或上方场景标签</p>
             <button type="button" class="btn-secondary" id="emptyReset">清除筛选</button>
           </div>
         </section>
@@ -182,7 +182,7 @@
   </div>
 
   <footer class="site-footer">
-    <p>全国蹭享地图 · 公益信息整理，出行请以官方公告为准</p>
+    <p>全国惠民地图 · 公益信息整理，出行请以官方公告为准</p>
   </footer>
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
@@ -264,20 +264,20 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=32"></script>
-  <script src="js/data-china-config.js?v=32"></script>
-  <script src="js/geo.js?v=32"></script>
-  <script src="js/map-nav.js?v=32"></script>
-  <script src="js/analytics.js?v=32"></script>
-  <script src="js/data-study-spaces.js?v=32"></script>
-  <script src="js/data-extra-resources.js?v=32"></script>
-  <script src="js/data-zhejiang-cities.js?v=32"></script>
-  <script src="js/data-zhejiang-expanded.js?v=32"></script>
-  <script src="js/data-china-nationwide.js?v=32"></script>
-  <script src="js/data.js?v=32"></script>
-  <script src="js/resource-coords.js?v=32"></script>
-  <script src="js/layout.js?v=32"></script>
-  <script src="js/ui-premium.js?v=32"></script>
-  <script src="js/app.js?v=32"></script>
+  <script src="js/site-config.js?v=33"></script>
+  <script src="js/data-china-config.js?v=33"></script>
+  <script src="js/geo.js?v=33"></script>
+  <script src="js/map-nav.js?v=33"></script>
+  <script src="js/analytics.js?v=33"></script>
+  <script src="js/data-study-spaces.js?v=33"></script>
+  <script src="js/data-extra-resources.js?v=33"></script>
+  <script src="js/data-zhejiang-cities.js?v=33"></script>
+  <script src="js/data-zhejiang-expanded.js?v=33"></script>
+  <script src="js/data-china-nationwide.js?v=33"></script>
+  <script src="js/data.js?v=33"></script>
+  <script src="js/resource-coords.js?v=33"></script>
+  <script src="js/layout.js?v=33"></script>
+  <script src="js/ui-premium.js?v=33"></script>
+  <script src="js/app.js?v=33"></script>
 </body>
 </html>

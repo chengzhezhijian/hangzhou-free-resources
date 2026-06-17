@@ -76,11 +76,11 @@
   );
 
   const FACILITY_LABELS = {
-    wifi: "蹭网",
-    water: "蹭水",
-    ac: "蹭空调",
+    wifi: "免费WiFi",
+    water: "可饮水",
+    ac: "有空调",
     study: "可自习",
-    charge: "蹭电",
+    charge: "可充电",
     open24: "24h",
   };
 
@@ -305,8 +305,8 @@
       state.userLocation && state.sortMode === "distance"
         ? "附近 · 按距离排序"
         : isChinaScope()
-          ? "全国免费便民 · 四蹭可查"
-          : "浙江免费便民 · 四蹭可查";
+          ? "全国免费便民 · 按设施筛选"
+          : "浙江免费便民 · 按设施筛选";
   }
 
   function enableNearbySort() {
@@ -697,6 +697,17 @@
     if (typeof window.markCardsEnter === "function") window.markCardsEnter();
   }
 
+  function formatFeatureLabel(text) {
+    const map = {
+      蹭网: "免费WiFi",
+      蹭网自习: "免费WiFi · 可自习",
+      蹭空调: "有空调",
+      蹭水: "可饮水",
+      蹭电: "可充电",
+    };
+    return map[text] || text;
+  }
+
   function openModal(id) {
     const r = RESOURCES.find((x) => x.id === id);
     if (!r) return;
@@ -716,7 +727,7 @@
       })
       .join("");
 
-    const features = (r.features || []).map((f) => `<li>${f}</li>`).join("");
+    const features = (r.features || []).map((f) => `<li>${formatFeatureLabel(f)}</li>`).join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
     const distKm = resourceDistanceKm(r);
@@ -1369,8 +1380,8 @@
     },
     {
       icon: "❄️",
-      title: "点四蹭标签",
-      desc: "蹭网、蹭空调、蹭水、蹭电 — 最直观，一点筛出图书馆、纳凉点、驿家等。",
+      title: "点设施标签",
+      desc: "免费WiFi、有空调、可饮水、可充电 — 一点筛出图书馆、纳凉点、驿家等。",
     },
     {
       icon: "🏷️",

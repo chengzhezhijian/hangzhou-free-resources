@@ -90,7 +90,7 @@
   }
 }
 
-/* ─── 四蹭标签：横向磁吸滚动 + 选中弹簧 ─── */
+/* ─── 设施标签：横向磁吸滚动 + 选中弹簧 ─── */
 .app-ui .hero-perks {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
