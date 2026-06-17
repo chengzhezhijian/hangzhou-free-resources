@@ -68,6 +68,7 @@
 
   let toolbarDropKind = null;
   let toolbarDropFocus = "more";
+  let toolbarDropAnchor = null;
 
   const state = {
     group: "all",
@@ -462,27 +463,12 @@
     track("filter_change", { field: "value_perk", value: perk.id });
   }
 
-  let valuePerksBound = false;
   function renderValuePerks() {
-    const perks = typeof VALUE_PERKS !== "undefined" ? VALUE_PERKS : [];
-    if (!perks.length) return;
+    // 按需求移除 4 个设施快捷项，避免与顶部三筛选入口重复。
     document.querySelectorAll("[data-value-perks]").forEach((el) => {
-      el.innerHTML = perks
-        .map(
-          (p) =>
-            `<button type="button" class="value-perk ${isPerkActive(p) ? "is-active" : ""}" data-facility="${p.facility}" title="${p.desc}">${p.label}</button>`
-        )
-        .join("");
+      el.innerHTML = "";
+      el.hidden = true;
     });
-    if (!valuePerksBound) {
-      valuePerksBound = true;
-      document.addEventListener("click", (e) => {
-        const btn = e.target.closest(".value-perk");
-        if (!btn) return;
-        const perk = perks.find((p) => p.facility === btn.dataset.facility);
-        if (perk) applyValuePerk(perk);
-      });
-    }
   }
 
   function renderFilterToolbar() {
@@ -502,7 +488,7 @@
 
     el.querySelectorAll("[data-quick]").forEach((btn) => {
       const quick = btn.dataset.quick;
-      btn.addEventListener("click", () => openToolbarDrop(`quick-${quick}`));
+      btn.addEventListener("click", () => openToolbarDrop(`quick-${quick}`, "more", btn));
     });
   }
 
@@ -650,11 +636,57 @@
     });
   }
 
-  function updateToolbarDropTop() {
+  function updateToolbarDropTop(triggerEl = null) {
     const sticky = document.querySelector(".discover-sticky");
     if (!sticky) return;
-    const bottom = sticky.getBoundingClientRect().bottom;
-    document.documentElement.style.setProperty("--toolbar-drop-top", `${bottom}px`);
+    const stickyRect = sticky.getBoundingClientRect();
+    const triggerRect = triggerEl?.getBoundingClientRect?.();
+    const top = triggerRect ? Math.max(stickyRect.top, triggerRect.bottom + 4) : stickyRect.bottom;
+    document.documentElement.style.setProperty("--toolbar-drop-top", `${top}px`);
+  }
+
+  function resolveToolbarTrigger(kind) {
+    const map = {
+      "quick-scene": "quickSceneBtn",
+      "quick-facility": "quickFacilityBtn",
+      "quick-sort": "quickSortBtn",
+      sort: "sortTriggerBtn",
+      filter: "filterOpenBtn",
+    };
+    const id = map[kind];
+    if (!id) return null;
+    return document.getElementById(id);
+  }
+
+  function calcToolbarDropWidth(kind, triggerRect, viewportWidth) {
+    const preset =
+      kind === "quick-sort" || kind === "sort"
+        ? 220
+        : kind === "quick-facility"
+          ? 336
+          : 300;
+    const minWidth = kind === "quick-sort" || kind === "sort" ? 176 : 236;
+    const desired = Math.max(preset, Math.round((triggerRect?.width || 0) + 88));
+    return Math.min(Math.max(desired, minWidth), Math.max(minWidth, viewportWidth - 24));
+  }
+
+  function updateToolbarDropAnchor(kind, triggerEl = null) {
+    const trigger = triggerEl || resolveToolbarTrigger(kind);
+    if (!trigger || kind === "filter") {
+      toolbarDropAnchor = null;
+      document.documentElement.style.removeProperty("--toolbar-drop-anchor-left");
+      document.documentElement.style.removeProperty("--toolbar-drop-anchor-width");
+      return;
+    }
+    const rect = trigger.getBoundingClientRect();
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+    const width = calcToolbarDropWidth(kind, rect, viewportWidth);
+    const gutter = 12;
+    const maxLeft = Math.max(gutter, viewportWidth - width - gutter);
+    const left = Math.min(Math.max(rect.left, gutter), maxLeft);
+    toolbarDropAnchor = { left, width };
+    document.documentElement.style.setProperty("--toolbar-drop-anchor-left", `${left}px`);
+    document.documentElement.style.setProperty("--toolbar-drop-anchor-width", `${width}px`);
   }
 
   function focusFilterArea(area = "more") {
@@ -672,7 +704,7 @@
     target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function openToolbarDrop(kind, focusArea = "more") {
+  function openToolbarDrop(kind, focusArea = "more", triggerEl = null) {
     const areaMap = {
       "quick-scene": "scenes",
       "quick-facility": "facilities",
@@ -693,7 +725,9 @@
       closeToolbarDrop();
       return;
     }
-    updateToolbarDropTop();
+    const trigger = triggerEl || resolveToolbarTrigger(kind);
+    updateToolbarDropTop(trigger);
+    updateToolbarDropAnchor(kind, trigger);
     const layer = document.getElementById("toolbarDropLayer");
     const sortPanel = document.getElementById("sortDropPanel");
     const quickPanel = document.getElementById("quickDropPanel");
@@ -739,6 +773,9 @@
     document.body.classList.remove("toolbar-drop-open");
     toolbarDropKind = null;
     toolbarDropFocus = "more";
+    toolbarDropAnchor = null;
+    document.documentElement.style.removeProperty("--toolbar-drop-anchor-left");
+    document.documentElement.style.removeProperty("--toolbar-drop-anchor-width");
     syncToolbarDropUi();
   }
 
@@ -756,14 +793,14 @@
     });
   }
 
-  function toggleSortDropdown() {
+  function toggleSortDropdown(triggerEl = null) {
     if (toolbarDropKind === "sort") closeToolbarDrop();
-    else openToolbarDrop("sort");
+    else openToolbarDrop("sort", "sort", triggerEl);
   }
 
-  function toggleFilterDropdown() {
+  function toggleFilterDropdown(triggerEl = null) {
     if (toolbarDropKind === "filter") closeToolbarDrop();
-    else openToolbarDrop("filter");
+    else openToolbarDrop("filter", "more", triggerEl);
   }
 
   function renderQuickScenes() {
@@ -1160,50 +1197,39 @@
     const modal = document.getElementById("detailModal");
     document.getElementById("modalTitle").textContent = r.fullName || r.name;
 
-    const facilityBadges = Object.entries(FACILITY_LABELS)
+    const facilityRows = Object.entries(FACILITY_LABELS)
       .map(([key, label]) => {
         const val = r.facilities[key];
-        const status = val === true ? "on" : val === "partial" ? "partial" : "off";
-        return `<span class="detail-facility detail-facility--${status}">
-          <span class="detail-facility__icon">${FACILITY_ICONS[key] || "•"}</span>
-          <span>${label}</span>
-        </span>`;
+        let text = "无";
+        if (val === true) text = "有";
+        if (val === "partial") text = "部分提供";
+        return `<div class="modal-row"><label>${label}</label><p>${text}</p></div>`;
       })
       .join("");
 
-    const features = (r.features || [])
-      .map((f) => `<span class="detail-tag">${formatFeatureLabel(f)}</span>`)
-      .join("");
+    const features = (r.features || []).map((f) => `<li>${formatFeatureLabel(f)}</li>`).join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
     const distKm = resourceDistanceKm(r);
     const coord = resourceCoord(r);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
-    const locationLabel = `${resourceCity(r)}${r.district ? ` · ${r.district}` : ""}`;
-    const costLabel = r.costType ? COST_TYPE_LABELS[r.costType] || r.costType : "";
 
     document.getElementById("modalBody").innerHTML = `
-      <section class="detail-overview">
-        ${distLabel ? `<span class="detail-pill detail-pill--distance">📏 ${distLabel}</span>` : ""}
-        <span class="detail-pill">🏷️ ${categoryLabel(r)}</span>
-        ${costLabel ? `<span class="detail-pill">💰 ${costLabel}</span>` : ""}
-        <span class="detail-pill">🏙️ ${locationLabel}</span>
-      </section>
-      <section class="detail-lines">
-        ${r.fullName && r.fullName !== r.name ? `<div class="detail-line"><span class="detail-line__icon">🧾</span><span>${r.fullName}</span></div>` : ""}
-        <div class="detail-line"><span class="detail-line__icon">📍</span><span>${r.address || "地址待补充"}</span></div>
-        <div class="detail-line"><span class="detail-line__icon">🕒</span><span>${r.hours || "开放时间见现场公示"}</span></div>
-        ${r.phone ? `<div class="detail-line"><span class="detail-line__icon">☎️</span><span>${r.phone}</span></div>` : ""}
-        ${r.transport ? `<div class="detail-line"><span class="detail-line__icon">🚌</span><span>${r.transport}</span></div>` : ""}
-        ${r.seasonalNote ? `<div class="detail-line"><span class="detail-line__icon">🌤️</span><span>${r.seasonalNote}</span></div>` : ""}
-        ${mapQuery ? `<div class="detail-line detail-line--map"><span class="detail-line__icon">🧭</span><span class="map-query-preview">${mapQuery}</span></div>` : ""}
-      </section>
-      <section class="detail-section">
-        <h4>设施</h4>
-        <div class="detail-facilities">${facilityBadges || '<span class="detail-tag">设施信息待补充</span>'}</div>
-      </section>
-      ${features ? `<section class="detail-section"><h4>特色</h4><div class="detail-tags">${features}</div></section>` : ""}
-      ${r.note ? `<section class="detail-section"><h4>备注</h4><p class="detail-note">${r.note}</p></section>` : ""}
+      ${distLabel ? `<div class="modal-row"><label>直线距离</label><p>${distLabel}</p></div>` : ""}
+      <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
+      ${r.district ? `<div class="modal-row"><label>区县</label><p>${r.district}</p></div>` : ""}
+      <div class="modal-row"><label>类型</label><p>${categoryLabel(r)}</p></div>
+      ${r.costType ? `<div class="modal-row"><label>费用</label><p>${COST_TYPE_LABELS[r.costType] || r.costType}</p></div>` : ""}
+      ${r.fullName && r.fullName !== r.name ? `<div class="modal-row"><label>全称</label><p>${r.fullName}</p></div>` : ""}
+      <div class="modal-row"><label>地址</label><p>${r.address}</p></div>
+      ${mapQuery ? `<div class="modal-row"><label>地图搜索</label><p class="map-query-preview">${mapQuery}</p></div>` : ""}
+      <div class="modal-row"><label>开放时间</label><p>${r.hours}</p></div>
+      ${r.phone ? `<div class="modal-row"><label>电话</label><p>${r.phone}</p></div>` : ""}
+      ${r.transport ? `<div class="modal-row"><label>交通</label><p>${r.transport}</p></div>` : ""}
+      ${r.seasonalNote ? `<div class="modal-row"><label>季节说明</label><p>${r.seasonalNote}</p></div>` : ""}
+      ${facilityRows}
+      ${features ? `<div class="modal-row"><label>特色</label><ul class="modal-features">${features}</ul></div>` : ""}
+      ${r.note ? `<div class="modal-row"><label>备注</label><p>${r.note}</p></div>` : ""}
     `;
 
     const footer = document.getElementById("modalFooter");
@@ -1516,13 +1542,13 @@
     }
   }
 
-  function openFilterSheet(focusArea = "more") {
+  function openFilterSheet(focusArea = "more", triggerEl = null) {
     if (isFilterDesktop()) {
       expandSidebar(true);
       window.setTimeout(() => focusFilterArea(focusArea), 40);
       return;
     }
-    openToolbarDrop("filter", focusArea);
+    openToolbarDrop("filter", focusArea, triggerEl);
   }
 
   function closeFilterSheet() {
@@ -1599,7 +1625,10 @@
     });
 
     window.addEventListener("resize", () => {
-      if (toolbarDropKind) updateToolbarDropTop();
+      if (!toolbarDropKind) return;
+      const trigger = resolveToolbarTrigger(toolbarDropKind);
+      updateToolbarDropTop(trigger);
+      updateToolbarDropAnchor(toolbarDropKind, trigger);
     });
 
     document.getElementById("sidebarToggle")?.addEventListener("click", () => {
@@ -2053,7 +2082,7 @@
           const n = countActiveFilters();
           return `筛选${n ? `<span class="filter-badge">${n}</span>` : ""}`;
         },
-        openFilterSheet: () => openFilterSheet(),
+        openFilterSheet,
         toggleSortDropdown,
         sortModeLabel,
       });

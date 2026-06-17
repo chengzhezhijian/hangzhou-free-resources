@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 套 UX 候选模板 · 全国惠民地图</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Noto Sans SC", sans-serif; background: #0c0c10; color: #f3f3f5; padding: 20px 14px 44px; }
+    h1 { margin: 0; font-size: 1.35rem; }
+    .sub { margin: 8px 0 0; color: #a0a0ab; font-size: 0.86rem; line-height: 1.6; max-width: 920px; }
+    .back-link {
+      margin-top: 10px;
+      display: inline-flex;
+      font-size: 0.76rem;
+      color: #8cc5ff;
+      text-decoration: none;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; max-width: 1440px; margin: 18px auto 0; }
+    .cell { background: #15151b; border: 1px solid #26262f; border-radius: 14px; overflow: hidden; }
+    .meta { padding: 10px 12px; border-bottom: 1px solid #24242d; }
+    .meta strong { font-size: 0.93rem; }
+    .meta p { margin: 4px 0 0; color: #9494a0; font-size: 0.74rem; line-height: 1.45; }
+    iframe { width: 100%; height: 620px; border: none; background: #fff; }
+    .acts { display: flex; gap: 8px; padding: 10px 12px; }
+    .acts a {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 9px;
+      padding: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      background: #007aff;
+    }
+    .acts a.secondary { background: #2e2e38; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>5 套 UX 候选模板</h1>
+  <p class="sub">用于视觉决策的快速体验对比：保留 10 套结构机制兼容性，本页仅归整 5 套高可比候选，支持直接打开真实首页验收。</p>
+  <a class="back-link" href="./ab-design.html?v=47" target="_blank" rel="noopener">← 打开 10 套结构总览（ab-design）</a>
+  <div class="grid" id="grid"></div>
+  <script>
+    const CANDIDATES = [
+      { id: "d01", name: "标准单行", desc: "稳态基准，适合默认投放。" },
+      { id: "d03", name: "分类 Tab", desc: "结构清晰，适合类型导向浏览。" },
+      { id: "d05", name: "设施筛选", desc: "设施决策快，适合功能诉求明确场景。" },
+      { id: "d08", name: "分区目录", desc: "目录分区强，适合内容深度浏览。" },
+      { id: "d10", name: "办事引导", desc: "步骤式引导，适合低熟悉度用户。" },
+    ];
+
+    const grid = document.getElementById("grid");
+    CANDIDATES.forEach((d) => {
+      const cell = document.createElement("article");
+      cell.className = "cell";
+      cell.innerHTML = `
+        <div class="meta">
+          <strong>${d.id} · ${d.name}</strong>
+          <p>${d.desc}</p>
+        </div>
+        <iframe loading="lazy" src="../index.html?design=${d.id}&v=47&lab=1" title="${d.name}"></iframe>
+        <div class="acts">
+          <a href="../index.html?design=${d.id}&v=47" target="_blank" rel="noopener">全屏体验</a>
+          <a class="secondary" href="./ab-design.html?v=47#${d.id}" target="_blank" rel="noopener">看 10 套总览</a>
+        </div>`;
+      grid.appendChild(cell);
+    });
+  </script>
+</body>
+</html>

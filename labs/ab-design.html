@@ -10,6 +10,34 @@
     body { margin: 0; font-family: "Noto Sans SC", sans-serif; background: #0c0c10; color: #eee; padding: 20px 14px 48px; }
     h1 { margin: 0 0 8px; font-size: 1.4rem; }
     .sub { color: #888; font-size: 0.88rem; line-height: 1.55; max-width: 920px; }
+    .candidate-wrap { margin-top: 14px; max-width: 1080px; }
+    .candidate-title { margin: 0 0 8px; font-size: 0.9rem; color: #d6d6de; font-weight: 700; }
+    .candidate-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .candidate-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #f5f5f7;
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    .candidate-list a:hover { border-color: rgba(0, 122, 255, 0.52); background: rgba(0, 122, 255, 0.18); }
+    .candidate-action {
+      margin-top: 8px;
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 9px;
+      background: #007aff;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; max-width: 1500px; margin: 20px auto 0; }
     .cell { background: #16161c; border-radius: 14px; overflow: hidden; border: 1px solid #2a2a32; }
     .cell.top { border-color: #ffd60a; }
@@ -25,9 +53,21 @@
 </head>
 <body>
   <h1>整站 UX AB · 美团/淘宝单行筛选</h1>
-  <p class="sub">统一规范：搜索框下方<strong>仅一行</strong>横滑筛选；排序为「综合排序 ▾」下拉（综合/距离/评分）；点「筛选」从工具栏<strong>向下</strong>展开，非底部 Sheet。</p>
+  <p class="sub">统一规范：搜索框下方<strong>仅一行</strong>横滑筛选；排序为「综合排序 ▾」下拉（综合/距离/评分）；点「筛选」从工具栏<strong>向下</strong>展开，非底部 Sheet。保留 10 套结构机制，并新增 5 套候选模板供快速决策。</p>
+  <section class="candidate-wrap" aria-label="5套候选模板">
+    <h2 class="candidate-title">5 套候选模板（可直接体验）</h2>
+    <div class="candidate-list" id="candidateList"></div>
+    <a class="candidate-action" href="./ux-candidates.html?v=47" target="_blank">打开 5 套候选对比页</a>
+  </section>
   <div class="grid" id="grid"></div>
   <script>
+    const CANDIDATES = [
+      { id: "d01", name: "标准单行", reason: "基准稳态" },
+      { id: "d03", name: "分类 Tab", reason: "分类明确" },
+      { id: "d05", name: "设施筛选", reason: "设施导向" },
+      { id: "d08", name: "分区目录", reason: "目录浏览" },
+      { id: "d10", name: "办事引导", reason: "引导决策" },
+    ];
     const DESIGNS = [
       { id: "d01", name: "标准单行", dim: "基准", desc: "设施 | 场景 | 综合·距离·筛选" },
       { id: "d02", name: "搜索优先", dim: "交互", desc: "场景 | 排序，行列表" },
@@ -40,6 +80,11 @@
       { id: "d09", name: "高密度", dim: "交互", desc: "合并 Chip 单行 + 极简列表" },
       { id: "d10", name: "办事引导", dim: "筛选", desc: "①②③ 内联单行 + 场景" },
     ];
+    const candidateList = document.getElementById("candidateList");
+    candidateList.innerHTML = CANDIDATES.map(
+      (d) =>
+        `<a href="../index.html?design=${d.id}&v=47" target="_blank" rel="noopener">${d.id} · ${d.name}<span>· ${d.reason}</span></a>`
+    ).join("");
     const grid = document.getElementById("grid");
     DESIGNS.forEach((d, i) => {
       const cell = document.createElement("div");
@@ -50,9 +95,9 @@
           <span class="dim">${d.dim}</span>
           <small>${d.desc}</small>
         </div>
-        <iframe loading="lazy" src="../index.html?design=${d.id}&v=46&lab=1" title="${d.name}"></iframe>
+        <iframe loading="lazy" src="../index.html?design=${d.id}&v=47&lab=1" title="${d.name}"></iframe>
         <div class="acts">
-          <a class="primary" href="../index.html?design=${d.id}&v=46" target="_blank">全屏验收</a>
+          <a class="primary" href="../index.html?design=${d.id}&v=47" target="_blank">全屏验收</a>
         </div>`;
       grid.appendChild(cell);
     });

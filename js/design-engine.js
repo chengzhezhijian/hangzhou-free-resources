@@ -154,10 +154,12 @@ const DesignEngine = (function () {
     });
     root.querySelector("#sortTriggerBtn")?.addEventListener("click", (e) => {
       e.stopPropagation();
-      api.toggleSortDropdown?.();
+      api.toggleSortDropdown?.(e.currentTarget);
     });
     document.getElementById("designLocateBtn")?.addEventListener("click", () => api.runGeoLocate?.(true));
-    root.querySelector("#filterOpenBtn")?.addEventListener("click", () => api.openFilterSheet?.());
+    root.querySelector("#filterOpenBtn")?.addEventListener("click", (e) => {
+      api.openFilterSheet?.(undefined, e.currentTarget);
+    });
   }
 
   function mountFilterRow(design) {

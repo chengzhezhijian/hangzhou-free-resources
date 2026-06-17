@@ -72,7 +72,7 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /\bapp-ui\b/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=46/],
+  ["Premium 样式", /premium-ui\.css\?v=47/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
   ["设计挂载点", /id="filterToolbar"/],
@@ -155,6 +155,7 @@ assert("文案变体 10 套", (() => {
 assert("文案 AB 报告", fs.existsSync(path.join(ROOT, "docs/ab-copy-results.json")));
 assert("首页对比墙", fs.existsSync(path.join(ROOT, "labs/ab-homepage.html")));
 assert("整站设计对比墙", fs.existsSync(path.join(ROOT, "labs/ab-design.html")));
+assert("5套UX候选对比墙", fs.existsSync(path.join(ROOT, "labs/ux-candidates.html")));
 
 // ─── Report ───
 const total = runner.passed + runner.failed;

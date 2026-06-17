@@ -46,7 +46,13 @@ for (const v of Object.values(variants)) {
 ok("design-layouts.css 存在", fs.existsSync(path.join(ROOT, "css/design-layouts.css")));
 ok("design-engine.js 存在", fs.existsSync(path.join(ROOT, "js/design-engine.js")));
 ok("对比墙存在", fs.existsSync(path.join(ROOT, "labs/ab-design.html")));
+ok("5套候选页存在", fs.existsSync(path.join(ROOT, "labs/ux-candidates.html")));
 ok("单行筛选栏存在", /filter-toolbar/.test(fs.readFileSync(path.join(ROOT, "css/design-layouts.css"), "utf8")));
+ok(
+  "对比页含5套候选入口",
+  /5 套候选模板/.test(fs.readFileSync(path.join(ROOT, "labs/ab-design.html"), "utf8")) &&
+    /ux-candidates\.html/.test(fs.readFileSync(path.join(ROOT, "labs/ab-design.html"), "utf8"))
+);
 
 const modes = new Set(Object.values(variants).map((v) => v.cardMode));
 ok("≥4 种卡片形态", modes.size >= 4);
@@ -72,7 +78,7 @@ ${Object.values(variants)
   )
   .join("\n")}
 
-预览：[labs/ab-design.html](../labs/ab-design.html) · \`?design=d01&v=46\`
+预览：[labs/ab-design.html](../labs/ab-design.html) · \`?design=d01&v=47\`
 `;
 fs.writeFileSync(path.join(ROOT, "docs/ab-design-report.md"), md);
 console.log("📄 docs/ab-design-report.md\n");

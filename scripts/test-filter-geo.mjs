@@ -141,6 +141,8 @@ async function run() {
     ok("未定位:快捷筛选-排序按钮存在", !!doc.getElementById("quickSortBtn"));
     ok("未定位:快捷筛选带下箭头", doc.getElementById("quickSortBtn")?.textContent.includes("▾"));
     ok("未定位:移除筛选图标按钮", !doc.getElementById("searchFilterBtn"));
+    ok("未定位:四个快捷设施项已隐藏", doc.querySelectorAll("[data-value-perks] .value-perk").length === 0);
+    ok("未定位:快捷设施容器隐藏", doc.getElementById("heroPerks")?.hidden === true);
     const seg = doc.getElementById("filterSortSegment");
     ok("未定位:排序段已渲染", !!seg && seg.querySelectorAll(".fss-opt").length === 3);
     ok(
@@ -171,6 +173,10 @@ async function run() {
 
     const quickPanel = doc.getElementById("quickDropPanel");
     ok("场景下拉:快捷面板可见", quickPanel.hidden === false);
+    ok(
+      "场景下拉:锚点变量已写入",
+      !!doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-left").trim()
+    );
     ok("场景下拉:标题正确", /场景/.test(quickPanel.textContent || ""));
     ok("场景下拉:含场景条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 2);
     ok("场景下拉:不打开大筛选框", doc.getElementById("filterDropPanel").hidden === true);
