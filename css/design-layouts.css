@@ -21,18 +21,75 @@
 
 .filter-toolbar-layout .discover-inner,
 .has-design-variant .discover-inner {
-  gap: 2px;
+  gap: 0;
+}
+
+.filter-toolbar-layout .loc-search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .filter-toolbar-layout .loc-search-row .loc-pill {
+  display: inline-flex;
   min-width: 0;
-  padding: 0 8px;
-  height: 36px;
-  font-size: 0.78rem;
+  max-width: 34%;
+  padding: 0 6px;
+  height: 32px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.1));
+  background: var(--ios-bg-elevated, #fff);
+  box-shadow: none;
+  gap: 2px;
 }
 
-.filter-toolbar-layout .search-box {
-  height: 36px;
+.filter-toolbar-layout .loc-search-row .loc-pill-city {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.filter-toolbar-layout .loc-search-row .loc-pill-icon,
+.filter-toolbar-layout .loc-search-row .loc-pill-caret {
+  font-size: 0.62rem;
+  line-height: 1;
+}
+
+.filter-toolbar-layout .search-box--meituan {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px 0 28px;
+  border-radius: 4px;
+  border: none;
+  background: var(--search-bg, #f2f2f7);
+}
+
+.filter-toolbar-layout .search-box--meituan:focus-within {
+  background: var(--search-bg-focus, #ebebf0);
+}
+
+.filter-toolbar-layout .search-box--meituan::before {
+  left: 9px;
+  font-size: 0.9rem;
+  line-height: 32px;
+}
+
+.filter-toolbar-layout .search-box--meituan input {
+  height: 32px;
+  padding: 0 24px 0 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.filter-toolbar-layout .search-box--meituan .search-clear {
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--ios-label-secondary, #636366);
 }
 
 .filter-toolbar-layout .content-header h2,
@@ -158,6 +215,29 @@
     max-width: 420px;
   }
 
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
+    max-width: 520px;
+  }
+
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row .loc-pill {
+    display: inline-flex;
+    height: 34px;
+    font-size: 0.75rem;
+  }
+
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--meituan {
+    height: 34px;
+  }
+
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--meituan::before {
+    line-height: 34px;
+  }
+
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--meituan input {
+    height: 34px;
+    font-size: 0.875rem;
+  }
+
   .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick {
     height: 32px;
     padding: 0 12px;
@@ -216,11 +296,20 @@
 
 /* ─── 搜索框右侧轻量筛选入口（仅默认首页移动端） ─── */
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline {
-  width: 100%;
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row .loc-pill {
+  display: inline-flex;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline,
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--meituan {
+  width: auto;
+  flex: 1;
+  min-width: 0;
 }
 
 .app-ui .city-pill.active,
@@ -339,7 +428,7 @@
 
 .filter-segment {
   border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.1));
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--ios-bg-elevated, #fff);
   overflow: hidden;
 }
@@ -372,8 +461,13 @@
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .active-filters {
-  margin-top: 0.2rem;
+  margin-top: 0;
   padding-bottom: 0;
+  gap: 0.25rem;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .filter-segment {
+  border-radius: 4px;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick {
@@ -384,9 +478,9 @@
   background: transparent;
   color: var(--ios-label, #1c1c1e);
   font-weight: 560;
-  height: 30px;
-  padding: 0 8px;
-  gap: 3px;
+  height: 28px;
+  padding: 0 6px;
+  gap: 2px;
   box-shadow: none;
   position: relative;
 }

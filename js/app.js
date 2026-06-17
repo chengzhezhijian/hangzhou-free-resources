@@ -1296,8 +1296,24 @@
     closeOverlay("detailModal");
   }
 
+  function cityQuickDisplayLabel() {
+    if (state.city !== "全部") return state.city;
+    if (state.userLocation && typeof GeoCity !== "undefined") {
+      try {
+        const cached = sessionStorage.getItem("hz_geo_city_v2");
+        if (cached && CITIES.includes(cached)) return cached;
+        const { lat, lng } = state.userLocation;
+        const result = GeoCity.resolveCity(lat, lng);
+        if (result?.ok && result.city) return result.city;
+      } catch {
+        /* ignore */
+      }
+    }
+    return "选择城市";
+  }
+
   function syncCityQuickLabel() {
-    const label = state.city === "全部" ? scopeLabelAll() : state.city;
+    const label = cityQuickDisplayLabel();
     ["cityQuickValue", "cityQuickValueMobile"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.textContent = label;
@@ -1309,10 +1325,24 @@
     const el = document.getElementById("cityLocateStatus");
     if (!el) return;
     if (state.userLocation) {
-      el.textContent =
-        state.city === "全部"
-          ? "已定位，可选城市或切「距离」排序"
-          : `已定位到「${state.city}」附近`;
+      const near =
+        state.city !== "全部"
+          ? state.city
+          : (() => {
+              try {
+                const cached = sessionStorage.getItem("hz_geo_city_v2");
+                if (cached) return cached;
+                if (typeof GeoCity !== "undefined") {
+                  const { lat, lng } = state.userLocation;
+                  const result = GeoCity.resolveCity(lat, lng);
+                  if (result?.ok) return result.city;
+                }
+              } catch {
+                /* ignore */
+              }
+              return null;
+            })();
+      el.textContent = near ? `已定位到「${near}」附近` : "已定位，请选城市或按距离排序";
       return;
     }
     el.textContent = "开启定位后自动匹配城市";
@@ -1495,6 +1525,7 @@
   }
 
   function renderCityGrid() {
+    const scopeSection = document.getElementById("cityScopeSection");
     const scope = document.getElementById("cityScopeGrid");
     const hot = document.getElementById("cityHotGrid");
     const grid = document.getElementById("cityGrid");
@@ -1509,11 +1540,10 @@
             )
           );
 
+    if (scopeSection) scopeSection.hidden = true;
     if (scope) {
-      let html = cityPillHtml("全部", china ? "全部" : "浙江全省");
-      if (!china) html += cityPillHtml("全省", "全省");
-      scope.innerHTML = html;
-      bindCityPills(scope);
+      scope.innerHTML = "";
+      scope.hidden = true;
     }
     if (hot) {
       hot.innerHTML = hotList.map((c) => cityPillHtml(c)).join("");
@@ -1894,7 +1924,7 @@
     {
       icon: "📍",
       title: "先选城市",
-      desc: "允许定位后按距离排序；也可手动选全国或 72 个城市。",
+      desc: "允许定位后自动匹配城市；也可在面板里选 72 个代表城市。",
     },
     {
       icon: "❄️",

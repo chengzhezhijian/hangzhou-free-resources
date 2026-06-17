@@ -315,12 +315,12 @@ img {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.15rem;
   max-width: 38%;
-  min-height: var(--touch-min);
-  padding: 0 0.55rem;
+  min-height: 32px;
+  padding: 0 0.45rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   background: var(--bg-card);
   font-family: inherit;
   cursor: pointer;
@@ -328,22 +328,22 @@ img {
 }
 
 .loc-pill-icon {
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   line-height: 1;
 }
 
 .loc-pill-city {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .loc-pill-caret {
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   color: var(--ink-faint);
-  margin-left: 0.05rem;
+  margin-left: 0;
 }
 
 .search-box--inline {
@@ -353,14 +353,43 @@ img {
 
 .search-box--inline input {
   width: 100%;
-  min-height: var(--touch-min);
-  padding: 0.65rem 2.25rem 0.65rem 0.75rem;
+  min-height: 32px;
+  padding: 0.45rem 2rem 0.45rem 0.65rem;
   font-size: 16px;
   font-family: inherit;
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   background: var(--bg-card);
   outline: none;
+}
+
+.search-box--meituan {
+  position: relative;
+  border-radius: 4px;
+  background: #f2f2f7;
+  border: none;
+}
+
+.search-box--meituan input {
+  border: none;
+  background: transparent;
+  min-height: 32px;
+  padding: 0 1.75rem 0 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.search-box--meituan input:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.search-box--meituan .search-clear {
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
 }
 
 .search-box--inline input:focus {
@@ -520,8 +549,8 @@ img {
 
 .active-filters {
   display: flex;
-  gap: 0.35rem;
-  margin-top: 0.3rem;
+  gap: 0.25rem;
+  margin-top: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -2031,6 +2060,10 @@ img {
 
   .sort-tabs {
     display: none;
+  }
+
+  .app-ui.filter-toolbar-layout .loc-search-row .loc-pill {
+    display: inline-flex;
   }
 
   .loc-pill {

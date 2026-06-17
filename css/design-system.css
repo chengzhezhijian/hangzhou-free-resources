@@ -164,15 +164,29 @@
 
 .app-ui .discover-inner {
   padding: 0;
-  gap: 6px;
+  gap: 0;
+}
+
+.app-ui.filter-toolbar-layout .discover-inner {
+  gap: 0;
 }
 
 .app-ui .loc-search-row {
   display: block;
 }
 
+.app-ui.filter-toolbar-layout .loc-search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .app-ui .loc-search-row .loc-pill {
   display: none;
+}
+
+.app-ui.filter-toolbar-layout .loc-search-row .loc-pill {
+  display: inline-flex;
 }
 
 .app-ui .search-box--inline {

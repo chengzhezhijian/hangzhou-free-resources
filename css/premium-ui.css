@@ -46,7 +46,7 @@
   top: var(--sticky-top);
   z-index: 90;
   margin: 0 -16px;
-  padding: 0 16px 4px;
+  padding: 0 16px 2px;
   background: var(--discover-sticky-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -71,8 +71,18 @@
   line-height: 44px;
 }
 
+.app-ui .search-box--meituan::before {
+  left: 9px;
+  font-size: 0.9rem;
+  line-height: 32px;
+}
+
 .app-ui .search-box input {
   padding-left: 28px !important;
+}
+
+.app-ui .search-box--meituan input {
+  padding-left: 0 !important;
 }
 
 .app-ui .search-box.is-loading::after {

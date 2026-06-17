@@ -16,15 +16,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/theme-switch.js?v=50"></script>
-  <script src="js/design-variants.js?v=50"></script>
-  <script src="js/copy-variants.js?v=50"></script>
-  <link rel="stylesheet" href="css/style.css?v=50" />
-  <link rel="stylesheet" href="css/design-system.css?v=50" />
-  <link rel="stylesheet" href="css/themes/variants.css?v=50" />
-  <link rel="stylesheet" href="css/copy-variants.css?v=50" />
-  <link rel="stylesheet" href="css/design-layouts.css?v=50" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=50" />
+  <script src="js/theme-switch.js?v=51"></script>
+  <script src="js/design-variants.js?v=51"></script>
+  <script src="js/copy-variants.js?v=51"></script>
+  <link rel="stylesheet" href="css/style.css?v=51" />
+  <link rel="stylesheet" href="css/design-system.css?v=51" />
+  <link rel="stylesheet" href="css/themes/variants.css?v=51" />
+  <link rel="stylesheet" href="css/copy-variants.css?v=51" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=51" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=51" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -67,7 +67,7 @@
       <div class="glass-nav__row">
         <button type="button" class="loc-pill" id="cityQuickBtnMobile" aria-haspopup="dialog" aria-label="选择城市">
           <span aria-hidden="true">📍</span>
-          <span class="loc-pill-city" id="cityQuickValueMobile">全国</span>
+          <span class="loc-pill-city" id="cityQuickValueMobile">选择城市</span>
           <span aria-hidden="true">▾</span>
         </button>
         <span class="nav-brand-mini">全国惠民地图</span>
@@ -90,10 +90,10 @@
           <div class="loc-search-row">
             <button type="button" class="loc-pill" id="cityQuickBtn" aria-haspopup="dialog" aria-label="选择城市">
               <span class="loc-pill-icon" aria-hidden="true">📍</span>
-              <span class="loc-pill-city" id="cityQuickValue">全国</span>
+              <span class="loc-pill-city" id="cityQuickValue">选择城市</span>
               <span class="loc-pill-caret" aria-hidden="true">▾</span>
             </button>
-            <div class="search-box search-box--inline">
+            <div class="search-box search-box--inline search-box--meituan">
               <input type="search" id="searchInput" placeholder="搜自习、纳凉、WiFi、停车…" autocomplete="off" enterkeyhint="search" />
               <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
             </div>
@@ -249,7 +249,7 @@
           </div>
           <button type="button" class="btn-locate" id="citySheetLocateBtn">定位</button>
         </div>
-        <section class="city-section">
+        <section class="city-section" id="cityScopeSection" hidden aria-hidden="true">
           <h4 class="city-section-title">浏览范围</h4>
           <div class="city-hot" id="cityScopeGrid"></div>
         </section>
@@ -270,7 +270,7 @@
       <div class="onboard-progress" id="onboardProgress" aria-hidden="true"></div>
       <div class="onboard-icon" id="onboardIcon" aria-hidden="true">📍</div>
       <h3 class="onboard-title" id="onboardTitle">先选城市</h3>
-      <p class="onboard-desc" id="onboardDesc">点左上角 📍 选全国或具体城市，也可一键定位。</p>
+      <p class="onboard-desc" id="onboardDesc">点左上角 📍 选城市或一键定位。</p>
       <div class="onboard-actions">
         <button type="button" class="onboard-skip" id="onboardSkip">跳过</button>
         <button type="button" class="btn-primary onboard-next" id="onboardNext">下一步</button>
@@ -291,22 +291,22 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=50"></script>
-  <script src="js/copy-switch.js?v=50"></script>
-  <script src="js/data-china-config.js?v=50"></script>
-  <script src="js/geo.js?v=50"></script>
-  <script src="js/map-nav.js?v=50"></script>
-  <script src="js/analytics.js?v=50"></script>
-  <script src="js/data-study-spaces.js?v=50"></script>
-  <script src="js/data-extra-resources.js?v=50"></script>
-  <script src="js/data-zhejiang-cities.js?v=50"></script>
-  <script src="js/data-zhejiang-expanded.js?v=50"></script>
-  <script src="js/data-china-nationwide.js?v=50"></script>
-  <script src="js/data.js?v=50"></script>
-  <script src="js/resource-coords.js?v=50"></script>
-  <script src="js/layout.js?v=50"></script>
-  <script src="js/design-engine.js?v=50"></script>
-  <script src="js/ui-premium.js?v=50"></script>
-  <script src="js/app.js?v=50"></script>
+  <script src="js/site-config.js?v=51"></script>
+  <script src="js/copy-switch.js?v=51"></script>
+  <script src="js/data-china-config.js?v=51"></script>
+  <script src="js/geo.js?v=51"></script>
+  <script src="js/map-nav.js?v=51"></script>
+  <script src="js/analytics.js?v=51"></script>
+  <script src="js/data-study-spaces.js?v=51"></script>
+  <script src="js/data-extra-resources.js?v=51"></script>
+  <script src="js/data-zhejiang-cities.js?v=51"></script>
+  <script src="js/data-zhejiang-expanded.js?v=51"></script>
+  <script src="js/data-china-nationwide.js?v=51"></script>
+  <script src="js/data.js?v=51"></script>
+  <script src="js/resource-coords.js?v=51"></script>
+  <script src="js/layout.js?v=51"></script>
+  <script src="js/design-engine.js?v=51"></script>
+  <script src="js/ui-premium.js?v=51"></script>
+  <script src="js/app.js?v=51"></script>
 </body>
 </html>

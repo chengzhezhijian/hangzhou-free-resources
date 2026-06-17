@@ -366,6 +366,20 @@ async function run() {
     ok("详情:仍保留地址行", !!doc.querySelector("#modalBody .detail-lines .detail-line"));
   }
 
+  // ───────────────────────────────────────────────
+  // 场景 10：城市面板无「全国/全部」浏览范围
+  // ───────────────────────────────────────────────
+  {
+    const { doc } = boot({ geo: "error" });
+    await tick();
+
+    ok("城市面板:浏览范围区隐藏", doc.getElementById("cityScopeSection")?.hidden === true);
+    ok("城市面板:无全部 pill", !doc.querySelector('#cityScopeGrid .city-pill[data-city="全部"]'));
+    ok("城市面板:热门城市存在", doc.querySelectorAll("#cityHotGrid .city-pill").length >= 3);
+    ok("未定位:顶部 pill 默认文案", doc.getElementById("cityQuickValue")?.textContent === "选择城市");
+    ok("美团搜索框 class", doc.querySelector(".search-box--meituan") !== null);
+  }
+
   // ── 汇总 ──
   console.log("\n═══ 定位 / 筛选交互（jsdom） ═══\n");
   const total = pass + fail;
