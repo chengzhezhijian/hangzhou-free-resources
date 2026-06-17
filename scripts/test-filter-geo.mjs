@@ -344,6 +344,28 @@ async function run() {
     ok(`${label}:杭州激活态 aria`, active?.getAttribute("aria-pressed") === "true");
   }
 
+  // ───────────────────────────────────────────────
+  // 场景 9：详情页不重复展示与标题相同的导航词
+  // ───────────────────────────────────────────────
+  {
+    const { doc, window } = boot({ geo: "error" });
+    await tick();
+
+    const searchInput = doc.getElementById("searchInput");
+    searchInput.value = "聚沙邻里";
+    searchInput.dispatchEvent(new window.Event("input", { bubbles: true }));
+    await new Promise((r) => setTimeout(r, 250));
+    await tick();
+
+    const card = doc.querySelector('[data-id="study-jusha"]');
+    card?.click();
+    await tick();
+
+    ok("详情:标题为资源名", doc.getElementById("modalTitle")?.textContent === "聚沙邻里中心城市书房");
+    ok("详情:隐藏重复导航词行", !doc.querySelector("#modalBody .detail-line--map"));
+    ok("详情:仍保留地址行", !!doc.querySelector("#modalBody .detail-lines .detail-line"));
+  }
+
   // ── 汇总 ──
   console.log("\n═══ 定位 / 筛选交互（jsdom） ═══\n");
   const total = pass + fail;

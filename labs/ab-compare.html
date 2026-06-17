@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/design-system.css?v=48" />
-  <link rel="stylesheet" href="../css/themes/variants.css?v=48" />
+  <link rel="stylesheet" href="../css/design-system.css?v=49" />
+  <link rel="stylesheet" href="../css/themes/variants.css?v=49" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -162,7 +162,7 @@
     async function init() {
       let scores = {};
       try {
-        const r = await fetch("../docs/ab-test-results.json?v=48");
+        const r = await fetch("../docs/ab-test-results.json?v=49");
         const data = await r.json();
         data.ranked.forEach((t) => { scores[t.id] = t; });
         document.getElementById("top3").innerHTML = data.ranked.slice(0, 3)
@@ -193,7 +193,7 @@
             <span>层级<b>${s.breakdown.hierarchy.score}</b></span>
           </div>` : ""}
           <div class="actions" data-theme="${t.id}">
-            <a href="../index.html?theme=${t.id}&v=48" class="primary">全站预览</a>
+            <a href="../index.html?theme=${t.id}&v=49" class="primary">全站预览</a>
             <a href="../docs/ab-test-report.md">报告</a>
           </div>`;
         grid.appendChild(card);

@@ -116,10 +116,24 @@ const MapNav = (function () {
     return buildQuery(resource, contextCity) || resource.address || resource.name;
   }
 
+  function normalizeQueryText(text) {
+    return (text || "").replace(/\s+/g, "").trim();
+  }
+
+  /** 导航词与详情标题/名称/地址完全一致时，详情页无需再展示预览行 */
+  function isRedundantDetailQuery(resource, query) {
+    if (!query) return true;
+    const normalizedQuery = normalizeQueryText(query);
+    return [resource.fullName || resource.name, resource.name, resource.fullName, resource.address]
+      .filter(Boolean)
+      .some((field) => normalizeQueryText(field) === normalizedQuery);
+  }
+
   return {
     buildQuery,
     buildUrl,
     copyText,
+    isRedundantDetailQuery,
     isWebsiteOnlyTool,
     CATEGORY_KEYWORD,
   };

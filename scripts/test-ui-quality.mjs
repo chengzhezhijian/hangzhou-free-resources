@@ -52,6 +52,7 @@ ok("下拉锚点变量", /--toolbar-drop-anchor-left/.test(designLayouts));
 ok("下拉锚点定位逻辑", /updateToolbarDropAnchor/.test(appJs));
 ok("详情页图标化概览", /class=\"detail-overview\"/.test(appJs) && /detail-pill--distance/.test(appJs));
 ok("详情页图标行与设施标签", /class=\"detail-lines\"/.test(appJs) && /detail-facilities/.test(appJs) && /detail-facility__icon/.test(appJs));
+ok("详情页隐藏重复导航词", /isRedundantDetailQuery/.test(appJs) && /showMapQuery/.test(appJs));
 ok("详情页叠层渐变头", /--detail-header-gradient/.test(premiumCss) && /detail-panel::before/.test(premiumCss));
 ok("移除四个快捷设施项渲染", /renderValuePerks[\s\S]*el\.innerHTML = \"\"[\s\S]*el\.hidden = true/.test(appJs));
 ok("发现页有搜索", /id="searchInput"/.test(indexHtml));

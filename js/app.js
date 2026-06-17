@@ -1213,6 +1213,9 @@
       .join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
+    const showMapQuery =
+      mapQuery &&
+      !(typeof MapNav !== "undefined" && MapNav.isRedundantDetailQuery?.(r, mapQuery));
     const distKm = resourceDistanceKm(r);
     const coord = resourceCoord(r);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
@@ -1233,7 +1236,7 @@
         ${r.phone ? `<div class="detail-line"><span class="detail-line__icon">☎️</span><span>${r.phone}</span></div>` : ""}
         ${r.transport ? `<div class="detail-line"><span class="detail-line__icon">🚌</span><span>${r.transport}</span></div>` : ""}
         ${r.seasonalNote ? `<div class="detail-line"><span class="detail-line__icon">🌤️</span><span>${r.seasonalNote}</span></div>` : ""}
-        ${mapQuery ? `<div class="detail-line detail-line--map"><span class="detail-line__icon">🧭</span><span class="map-query-preview">${mapQuery}</span></div>` : ""}
+        ${showMapQuery ? `<div class="detail-line detail-line--map"><span class="detail-line__icon">🧭</span><span class="map-query-preview">${mapQuery}</span></div>` : ""}
       </section>
       <section class="detail-section">
         <h4>设施</h4>

@@ -98,7 +98,7 @@
     async function init() {
       let scores = {};
       try {
-        const r = await fetch("../docs/ab-copy-results.json?v=48");
+        const r = await fetch("../docs/ab-copy-results.json?v=49");
         const data = await r.json();
         data.ranked.forEach((t) => { scores[t.id] = t; });
         document.getElementById("top3").innerHTML = data.ranked.slice(0, 3)
@@ -125,11 +125,11 @@
             <iframe
               title="${c.name}"
               loading="lazy"
-              src="../index.html?copy=${c.id}&v=48&lab=1"
+              src="../index.html?copy=${c.id}&v=49&lab=1"
             ></iframe>
           </div>
           <div class="actions">
-            <a class="primary" href="../index.html?copy=${c.id}&v=48" target="_blank">全屏验收</a>
+            <a class="primary" href="../index.html?copy=${c.id}&v=49" target="_blank">全屏验收</a>
             <a href="../docs/ab-copy-report.md" target="_blank">报告</a>
           </div>`;
         grid.appendChild(cell);

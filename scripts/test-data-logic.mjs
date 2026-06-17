@@ -400,6 +400,14 @@ const toiletTool = RESOURCES.find((r) => r.id === "tool-toilet");
 if (toiletTool) {
   const q = MapNav.buildQuery(toiletTool, "宁波");
   assert("公厕工具搜索词含公共厕所", q && q.includes("公共厕所"));
+  assert("公厕工具导航词非重复", !MapNav.isRedundantDetailQuery(toiletTool, q));
+}
+
+const jusha = RESOURCES.find((r) => r.id === "study-jusha");
+if (jusha) {
+  const q = MapNav.buildQuery(jusha, "杭州");
+  assert("聚沙邻里 mapQuery 与名称一致", q === jusha.name);
+  assert("聚沙邻里详情页应隐藏重复导航词", MapNav.isRedundantDetailQuery(jusha, q));
 }
 
 // ─── 8. 地理定位 ───
