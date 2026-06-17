@@ -72,7 +72,7 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /class="app-ui"/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=36/],
+  ["Premium 样式", /premium-ui\.css\?v=38/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
   ["设计挂载点", /id="designPrimaryMount"/],

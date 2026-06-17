@@ -39,7 +39,8 @@ for (const v of Object.values(variants)) {
   ok(`${v.id} 有描述`, !!v.description);
   ok(`${v.id} cardMode 合法`, requiredModes.has(v.cardMode));
   ok(`${v.id} filterPrimary 合法`, requiredPrimary.has(v.filterPrimary));
-  ok(`${v.id} layout 完整`, v.layout && "hero" in v.layout);
+  ok(`${v.id} layout 完整`, v.layout && "heroMode" in v.layout);
+  ok(`${v.id} 无数字统计`, v.layout.stats === false);
 }
 
 ok("design-layouts.css 存在", fs.existsSync(path.join(ROOT, "css/design-layouts.css")));

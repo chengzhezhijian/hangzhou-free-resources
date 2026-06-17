@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "发现",
+  "usingComponents": {
+    "tab-nav": "/components/tab-nav/tab-nav"
+  }
+}

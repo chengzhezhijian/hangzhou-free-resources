@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>整站 UX AB · 10 套结构交互</title>
+  <title>整站 UX AB · UED 10 套</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; }
@@ -17,28 +17,28 @@
     .meta strong { font-size: 0.95rem; }
     .meta small { display: block; color: #888; font-size: 0.72rem; margin-top: 4px; line-height: 1.45; }
     .dim { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 6px; background: #252530; font-size: 0.65rem; font-weight: 600; }
-    iframe { width: 100%; height: 560px; border: none; background: #fff; }
+    iframe { width: 100%; height: 580px; border: none; background: #fff; }
     .acts { display: flex; gap: 8px; padding: 10px 12px; }
     .acts a { flex: 1; text-align: center; padding: 9px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; text-decoration: none; background: #252530; color: #fff; }
     .acts a.primary { background: #007aff; }
   </style>
 </head>
 <body>
-  <h1>整站 UX AB · 10 套结构 / 交互 / 筛选</h1>
-  <p class="sub">每套差异包括：信息架构、首屏结构、主筛选控件（大类宫格 / 场景磁贴 / 设施矩阵 / Tab / 向导…）、列表形态（Feed / 双列 / 单行 / 分区目录）、分页与排序逻辑。非仅换色换字。</p>
+  <h1>整站 UX AB · UED 重构版</h1>
+  <p class="sub">UED 原则：紧凑首屏、主次字号分明（标题 17px / 正文 14px / 辅助 11px）、列表信息更全（含地址/分类/城市）、无数字统计块。筛选统一为 Chip 栏，不再用大磁贴占屏。</p>
   <div class="grid" id="grid"></div>
   <script>
     const DESIGNS = [
-      { id: "d01", name: "经典信息流", dim: "结构", desc: "Hero+设施+场景+排序+Premium 卡片" },
-      { id: "d02", name: "搜索首屏", dim: "交互", desc: "巨型搜索独占，单行列表，筛选进 Sheet" },
-      { id: "d03", name: "大类宫格", dim: "结构", desc: "6 大类宫格主筛选，双列 Tile 卡片" },
-      { id: "d04", name: "场景磁贴", dim: "筛选", desc: "2 列大场景磁贴替代设施标签" },
-      { id: "d05", name: "设施矩阵", dim: "筛选", desc: "2×2 设施多选矩阵为主交互" },
-      { id: "d06", name: "附近优先", dim: "交互", desc: "定位条+默认距离排序+行式列表" },
-      { id: "d07", name: "探索双列", dim: "结构", desc: "分类 Tab 横滑 + 双列密网格" },
-      { id: "d08", name: "分区目录", dim: "结构", desc: "按类型分区折叠，无分页目录浏览" },
-      { id: "d09", name: "极简条目", dim: "交互", desc: "合并 Chip 栏 + 系统设置式单行列表" },
-      { id: "d10", name: "办事向导", dim: "筛选", desc: "三步向导：城市→场景→结果" },
+      { id: "d01", name: "标准发现", dim: "结构", desc: "紧凑标题 + 设施 Chip + 场景 + 完整卡片" },
+      { id: "d02", name: "搜索直达", dim: "交互", desc: "搜索为主，场景辅筛，行列表含地址" },
+      { id: "d03", name: "分类浏览", dim: "结构", desc: "大类横滑 Chip + 双列卡片" },
+      { id: "d04", name: "场景优先", dim: "筛选", desc: "场景 Chip 主筛 + 设施辅筛" },
+      { id: "d05", name: "设施组合", dim: "筛选", desc: "设施 Chip 多选 + 场景辅行" },
+      { id: "d06", name: "附近发现", dim: "交互", desc: "定位 Chip + 距离排序 + 行列表" },
+      { id: "d07", name: "双列探索", dim: "结构", desc: "分类 Tab + 设施辅筛 + 双列卡片" },
+      { id: "d08", name: "分区索引", dim: "结构", desc: "大类 Chip + 按类型分区列表" },
+      { id: "d09", name: "高密度列表", dim: "交互", desc: "合并 Chip + 单行列表含地址" },
+      { id: "d10", name: "办事引导", dim: "筛选", desc: "三步引导条 + 场景 Chip" },
     ];
     const grid = document.getElementById("grid");
     DESIGNS.forEach((d, i) => {
@@ -50,9 +50,9 @@
           <span class="dim">${d.dim}</span>
           <small>${d.desc}</small>
         </div>
-        <iframe loading="lazy" src="../index.html?design=${d.id}&v=36&lab=1" title="${d.name}"></iframe>
+        <iframe loading="lazy" src="../index.html?design=${d.id}&v=37&lab=1" title="${d.name}"></iframe>
         <div class="acts">
-          <a class="primary" href="../index.html?design=${d.id}&v=36" target="_blank">全屏验收</a>
+          <a class="primary" href="../index.html?design=${d.id}&v=37" target="_blank">全屏验收</a>
         </div>`;
       grid.appendChild(cell);
     });

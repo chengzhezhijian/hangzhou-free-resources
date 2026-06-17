@@ -4,15 +4,15 @@
 
 | ID | 名称 | 维度 | 主筛选 | 卡片 | 说明 |
 |----|------|------|--------|------|------|
-| d01 | 经典信息流 | 结构 | perks | premium | Hero+四设施标签+场景+分段排序+卡片 Feed（当前基线） |
-| d02 | 搜索首屏 | 交互 | search | row | 巨型搜索框独占首屏，单行紧凑列表，筛选全进 Sheet |
-| d03 | 大类宫格 | 结构 | groups | tile | 6 大类宫格点选（文化/避暑/出行…），双列卡片 |
-| d04 | 场景磁贴 | 筛选 | scenes | premium | 2 列大场景磁贴为主筛选，弱化设施标签 |
-| d05 | 设施矩阵 | 筛选 | facilities | premium | 2×2 大按钮多选设施，场景降为次要行 |
-| d06 | 附近优先 | 交互 | locate | row | 定位条+距离排序默认，列表左侧突出距离 |
-| d07 | 探索双列 | 结构 | tabs | tile | 顶部分类 Tab 横滑 + 双列密卡片网格 |
-| d08 | 分区目录 | 结构 | groups | compact | 按类型分区折叠展示，无分页，目录式浏览 |
-| d09 | 极简条目 | 交互 | merged | minimal | 单行条目列表 + 合并类型/设施 Chip 栏 |
-| d10 | 办事向导 | 筛选 | wizard | premium | 三步向导：选城市→选场景→选设施，分步解锁列表 |
+| d01 | 标准发现 | 结构 | perks | premium | 紧凑标题 + 搜索 + 设施 Chip + 场景 + 完整卡片 |
+| d02 | 搜索直达 | 交互 | search | row | 搜索为主，场景 Chip 辅筛，行列表含地址 |
+| d03 | 分类浏览 | 结构 | groups | tile | 大类横滑 Chip + 双列卡片含地址 |
+| d04 | 场景优先 | 筛选 | scenes | premium | 场景 Chip 主筛 + 设施辅筛 + 标准卡片 |
+| d05 | 设施组合 | 筛选 | facilities | premium | 设施 Chip 多选 + 场景辅行 + 标准卡片 |
+| d06 | 附近发现 | 交互 | locate | row | 定位 Chip + 设施辅筛，行列表突出距离与地址 |
+| d07 | 双列探索 | 结构 | tabs | tile | 分类 Tab + 设施辅筛 + 双列密卡片 |
+| d08 | 分区索引 | 结构 | groups | compact | 大类 Chip + 按类型分区列表，无分页 |
+| d09 | 高密度列表 | 交互 | merged | minimal | 合并 Chip 栏 + 单行高密度列表 |
+| d10 | 办事引导 | 筛选 | wizard | premium | 三步引导条 + 场景 Chip + 标准卡片 |
 
 预览：[labs/ab-design.html](../labs/ab-design.html) · `?design=d01`

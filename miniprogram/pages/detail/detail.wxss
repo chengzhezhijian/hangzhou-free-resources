@@ -1,0 +1,77 @@
+.page {
+  min-height: 100vh;
+  padding: 32rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
+  box-sizing: border-box;
+}
+
+.head {
+  margin-bottom: 32rpx;
+}
+
+.head__cat {
+  display: block;
+  font-size: 22rpx;
+  color: #0d9488;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.head__name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.head__dist {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #0d9488;
+}
+
+.block {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.block__label {
+  display: block;
+  font-size: 22rpx;
+  color: #8e8e93;
+  margin-bottom: 6rpx;
+}
+
+.block__value {
+  display: block;
+  font-size: 28rpx;
+  color: #1c1c1e;
+  line-height: 1.5;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.tag {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  background: #f2f2f7;
+  color: #636366;
+}
+
+.actions {
+  margin-top: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.action {
+  width: 100% !important;
+}

@@ -218,10 +218,14 @@
     return c ? { lat: c.lat, lng: c.lng, p: c.p } : null;
   }
 
+  function coordIsPrecise(c) {
+    return c && (c.p === "g" || c.p === "e");
+  }
+
   function resourceDistanceKm(resource) {
     if (!state.userLocation || typeof GeoCity === "undefined") return null;
     const c = resourceCoord(resource);
-    if (!c) return null;
+    if (!c || !coordIsPrecise(c)) return null;
     return GeoCity.distanceKm(
       state.userLocation.lat,
       state.userLocation.lng,
@@ -659,12 +663,14 @@
     const distKm = resourceDistanceKm(resource);
     const coord = resourceCoord(resource);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
+    const catShort = categoryLabel(resource).replace(/[^\u4e00-\u9fa5]/g, "").slice(0, 2) || "点";
     return `
-      <article class="card card-row" data-id="${resource.id}" tabindex="0" role="button">
-        ${distLabel ? `<span class="card-row__dist">${distLabel}</span>` : ""}
+      <article class="card card-row" data-id="${resource.id}" tabindex="0" role="button" aria-label="${resource.name}">
+        ${distLabel ? `<span class="card-row__dist">${distLabel}</span>` : `<span class="card-row__cat">${catShort}</span>`}
         <div class="card-row__body">
           <h3>${resource.name}</h3>
-          <p>${categoryLabel(resource)} · ${resourceCity(resource)}</p>
+          <p class="card-row__addr">${resource.address || ""}</p>
+          <p class="card-row__meta">${categoryLabel(resource)} · ${resourceCity(resource)}</p>
         </div>
         <span class="card-row__go">›</span>
       </article>`;
@@ -673,18 +679,20 @@
   function renderTileCard(resource) {
     const cat = resource.category || "all";
     return `
-      <article class="card card-tile" data-id="${resource.id}" tabindex="0" role="button">
+      <article class="card card-tile" data-id="${resource.id}" tabindex="0" role="button" aria-label="${resource.name}">
         <div class="card-tile__icon">${RESOURCE_CATEGORIES.find((c) => c.id === cat)?.icon || "◎"}</div>
         <h3>${resource.name}</h3>
-        <p>${resourceCity(resource)}</p>
+        <p class="card-tile__addr">${resource.address || ""}</p>
+        <p class="card-tile__meta">${categoryLabel(resource)} · ${resourceCity(resource)}</p>
       </article>`;
   }
 
   function renderCompactCard(resource) {
     return `
-      <article class="card card-compact" data-id="${resource.id}" tabindex="0" role="button">
+      <article class="card card-compact" data-id="${resource.id}" tabindex="0" role="button" aria-label="${resource.name}">
         <h3>${resource.name}</h3>
-        <p>${categoryLabel(resource)} · ${resource.address}</p>
+        <p class="card-compact__addr">${resource.address || ""}</p>
+        <p class="card-compact__meta">${categoryLabel(resource)} · ${resourceCity(resource)}${resource.hours ? " · " + resource.hours : ""}</p>
       </article>`;
   }
 
@@ -692,9 +700,12 @@
     const distKm = resourceDistanceKm(resource);
     const distLabel = formatDistance(distKm, false);
     return `
-      <article class="card card-minimal" data-id="${resource.id}" tabindex="0" role="button">
-        <span class="card-minimal__title">${resource.name}</span>
-        <span class="card-minimal__meta">${distLabel || categoryLabel(resource)}</span>
+      <article class="card card-minimal" data-id="${resource.id}" tabindex="0" role="button" aria-label="${resource.name}">
+        <div class="card-minimal__main">
+          <span class="card-minimal__title">${resource.name}</span>
+          <span class="card-minimal__sub">${resource.address || categoryLabel(resource)}</span>
+        </div>
+        <span class="card-minimal__meta">${distLabel || resourceCity(resource)}</span>
       </article>`;
   }
 
@@ -724,8 +735,8 @@
         const items = buckets.get(cat) || [];
         const label = CATEGORY_LABELS[cat] || cat;
         return `<section class="design-group-section">
-          <h3 class="design-group-heading">${label}<span>${items.length}</span></h3>
-          <div class="design-group-items">${items.slice(0, 24).map(renderCompactCard).join("")}</div>
+          <h3 class="design-group-heading">${label}</h3>
+          <div class="design-group-items">${items.slice(0, 36).map(renderCompactCard).join("")}</div>
         </section>`;
       })
       .join("");
@@ -1640,7 +1651,11 @@
     } else if (designInit?.defaultSort === "distance") {
       state.sortMode = "distance";
     }
-    if (!designInit?.layout || designInit.layout.stats !== false) renderHeroStats();
+    if (designInit && !designInit.layout?.stats) {
+      document.getElementById("heroStats")?.replaceChildren();
+    } else if (!designInit) {
+      renderHeroStats();
+    }
     if (!designInit?.layout || designInit.layout.quickScenes !== false) renderQuickScenes();
     if (!designInit?.layout || designInit.layout.perks !== false) renderValuePerks();
     renderCityFilter();

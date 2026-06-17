@@ -1,100 +1,120 @@
 #!/usr/bin/env node
 /**
- * 将网站 data-*.js 合并为小程序可用的 JSON
+ * 将网站数据导出为微信小程序可用模块（全国版 + 坐标 + 字段瘦身）
  * 用法: node scripts/build-miniprogram-data.mjs
  */
 import fs from "fs";
 import path from "path";
 import vm from "vm";
 import { fileURLToPath } from "url";
+import { loadSiteData } from "./lib/load-site-data.mjs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..");
-const JS_DIR = path.join(ROOT, "js");
-const OUT_DIR = path.join(ROOT, "miniprogram", "data");
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const OUT_DIR = path.join(ROOT, "miniprogram", "packageData", "data");
 
-function runDataFile(filename, context) {
-  const code = fs.readFileSync(path.join(JS_DIR, filename), "utf8");
-  vm.runInContext(code, context);
+function slimResource(r, coords) {
+  const c = coords[r.id];
+  const facilities = [];
+  if (r.facilities) {
+    for (const [k, v] of Object.entries(r.facilities)) {
+      if (v === true || v === "partial") facilities.push(k);
+    }
+  }
+  const item = {
+    id: r.id,
+    name: r.name,
+    city: r.city || "杭州",
+    category: r.category,
+  };
+  if (r.district) item.district = r.district;
+  if (r.address) item.address = r.address;
+  if (r.hours) item.hours = r.hours;
+  if (r.note) item.note = r.note;
+  if (r.subType) item.subType = r.subType;
+  if (facilities.length) item.facilities = facilities;
+  if (r.costType && r.costType !== "free") item.costType = r.costType;
+  if (r.featured) item.featured = true;
+  if (r.seasonal) item.seasonal = true;
+  if (r.isTool) item.isTool = true;
+  if (c?.lat != null && c?.lng != null) {
+    item.lat = c.lat;
+    item.lng = c.lng;
+  }
+  return item;
 }
 
 function build() {
-  const context = vm.createContext({ console });
+  const site = loadSiteData();
+  const {
+    RESOURCES,
+    RESOURCE_CATEGORIES,
+    CATEGORY_GROUPS,
+    COST_TYPE_LABELS,
+    FACILITY_FILTERS,
+    CITY_PICKER,
+    DISTRICTS,
+    SCENE_GUIDES,
+    SITE_SCOPE,
+    RESOURCE_COORDS,
+  } = site;
 
-  const files = [
-    "map-nav.js",
-    "data-study-spaces.js",
-    "data-extra-resources.js",
-    "data-zhejiang-cities.js",
-    "data-zhejiang-expanded.js",
-    "data.js",
-  ];
-  const combined = files
-    .map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8"))
-    .join("\n");
+  const extraCtx = vm.createContext({ console });
+  vm.runInContext(fs.readFileSync(path.join(ROOT, "js", "data.js"), "utf8"), extraCtx);
+
+  let CITY_CENTERS = {};
+  const cfgCtx = vm.createContext({});
   vm.runInContext(
-    `${combined}\n;(() => {
-      globalThis.__EXPORT__ = {
-        RESOURCES,
-        RESOURCE_CATEGORIES,
-        CATEGORY_GROUPS,
-        COST_TYPE_LABELS,
-        FACILITY_FILTERS,
-        CITIES,
-        DISTRICTS,
-        READING_SUBTYPES,
-        SCENE_GUIDES,
-        EXTERNAL_TOOLS,
-      };
-    })();`,
-    context
+    fs.readFileSync(path.join(ROOT, "js", "data-china-config.js"), "utf8") +
+      ";globalThis.__CC = CITY_CENTERS;",
+    cfgCtx
   );
+  CITY_CENTERS = cfgCtx.__CC || {};
 
-  const exported = context.__EXPORT__;
-  const RESOURCES = exported?.RESOURCES;
-  const RESOURCE_CATEGORIES = exported.RESOURCE_CATEGORIES;
-  const CATEGORY_GROUPS = exported.CATEGORY_GROUPS;
-  const COST_TYPE_LABELS = exported.COST_TYPE_LABELS;
-  const FACILITY_FILTERS = exported.FACILITY_FILTERS;
-  const CITIES = exported.CITIES;
-  const DISTRICTS = exported.DISTRICTS;
-  const READING_SUBTYPES = exported.READING_SUBTYPES;
-  const SCENE_GUIDES = exported.SCENE_GUIDES;
-  const EXTERNAL_TOOLS = exported.EXTERNAL_TOOLS;
-
-  if (!Array.isArray(RESOURCES)) {
-    throw new Error("RESOURCES 未生成，请检查 js/data.js 加载顺序");
-  }
+  const slim = RESOURCES.map((r) => slimResource(r, RESOURCE_COORDS));
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const resourcesPath = path.join(OUT_DIR, "resources.json");
-  const metaPath = path.join(OUT_DIR, "meta.json");
+  const meta = {
+    siteScope: SITE_SCOPE || "china",
+    siteBrandName: "全国惠民地图",
+    siteTagline: "政府免费便民 · 72城搜完即走",
+    resourceCategories: RESOURCE_CATEGORIES,
+    categoryGroups: CATEGORY_GROUPS,
+    costTypeLabels: COST_TYPE_LABELS,
+    facilityFilters: FACILITY_FILTERS,
+    valuePerks: extraCtx.VALUE_PERKS,
+    quickScenes: extraCtx.QUICK_SCENES,
+    cities: CITY_PICKER,
+    districts: DISTRICTS,
+    sceneGuides: SCENE_GUIDES,
+    cityCenters: CITY_CENTERS,
+    generatedAt: new Date().toISOString(),
+    total: slim.length,
+  };
 
-  fs.writeFileSync(resourcesPath, JSON.stringify(RESOURCES));
   fs.writeFileSync(
-    metaPath,
-    JSON.stringify({
-      resourceCategories: RESOURCE_CATEGORIES,
-      categoryGroups: CATEGORY_GROUPS,
-      costTypeLabels: COST_TYPE_LABELS,
-      facilityFilters: FACILITY_FILTERS,
-      cities: CITIES,
-      districts: DISTRICTS,
-      readingSubtypes: READING_SUBTYPES,
-      sceneGuides: SCENE_GUIDES,
-      externalTools: EXTERNAL_TOOLS,
-      generatedAt: new Date().toISOString(),
-      total: RESOURCES.length,
-    })
+    path.join(OUT_DIR, "resources.js"),
+    `/** 自动生成 · build-miniprogram-data */\nmodule.exports = ${JSON.stringify(slim)};\n`
+  );
+  fs.writeFileSync(
+    path.join(OUT_DIR, "meta.js"),
+    `/** 自动生成 · build-miniprogram-data */\nmodule.exports = ${JSON.stringify(meta)};\n`
   );
 
-  const resourcesSize = fs.statSync(resourcesPath).size;
-  const metaSize = fs.statSync(metaPath).size;
+  const resSize = fs.statSync(path.join(OUT_DIR, "resources.js")).size;
+  const metaSize = fs.statSync(path.join(OUT_DIR, "meta.js")).size;
 
-  console.log(`✓ 已生成 ${RESOURCES.length} 条资源`);
-  console.log(`  ${resourcesPath} (${(resourcesSize / 1024).toFixed(1)} KB)`);
-  console.log(`  ${metaPath} (${(metaSize / 1024).toFixed(1)} KB)`);
+  console.log(`✓ 小程序数据已生成 ${slim.length} 条`);
+  console.log(`  resources.js ${(resSize / 1024).toFixed(1)} KB`);
+  console.log(`  meta.js ${(metaSize / 1024).toFixed(1)} KB`);
+  if (resSize > 1.8 * 1024 * 1024) {
+    console.warn("⚠ resources.js 接近 2MB 分包上限，可考虑按省拆分");
+  }
 }
 
-build();
+try {
+  build();
+} catch (e) {
+  console.error(e);
+  process.exit(1);
+}

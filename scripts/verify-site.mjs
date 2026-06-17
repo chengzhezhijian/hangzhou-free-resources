@@ -150,6 +150,20 @@ if (!fs.existsSync(coordsPath)) {
   if (missing.length > RESOURCES.length * 0.01) fail(`坐标缺失 ${missing.length} 条，如 ${missing[0]?.id}`);
   else ok(`${RESOURCES.length} 条资源坐标覆盖 ${Object.keys(coords).length}（缺失 ${missing.length}）`);
 
+  let geocoded = 0;
+  let district = 0;
+  for (const r of RESOURCES) {
+    const c = coords[r.id];
+    if (!c) continue;
+    if (c.p === "g" || c.p === "e") geocoded++;
+    else if (c.p === "d") district++;
+  }
+  if (geocoded / RESOURCES.length < 0.9) {
+    fail(`地理编码坐标占比 ${((geocoded / RESOURCES.length) * 100).toFixed(1)}% 低于 90%`);
+  } else ok(`地理编码坐标 ${geocoded}/${RESOURCES.length}（≥90%）`);
+  if (district > 15) fail(`区县粗坐标 ${district} 条超过 15`);
+  else ok(`区县粗坐标 ${district} 条（≤15）`);
+
   const oob = RESOURCES.filter((r) => {
     const c = coords[r.id];
     if (!c) return false;

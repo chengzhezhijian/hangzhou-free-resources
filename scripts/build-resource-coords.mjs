@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import { fileURLToPath } from "url";
+import { COORD_ANCHORS } from "./lib/coord-anchors.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -104,17 +105,41 @@ function loadCityCenters(ctx) {
   return ctx.__CC__;
 }
 
+function cityLabel(city) {
+  if (!city || city === "全部" || city === "全国" || city === "全省") return "";
+  return city.endsWith("市") ? city : `${city}市`;
+}
+
 function geocodeQuery(resource) {
   const city = resource.city || "杭州";
   const province = resource.province || "";
   const addr = (resource.address || "").trim();
   const name = (resource.fullName || resource.name || "").trim();
   if (city === "全国" || city === "全省") return name || addr || null;
+  const cp = cityLabel(city);
   if (addr) {
-    if (/^[\u4e00-\u9fa5]{2,}/.test(addr)) return addr;
+    if (cp && (addr.includes(city) || addr.startsWith(cp))) return addr;
+    if (/^[\u4e00-\u9fa5]{2,}/.test(addr)) return `${cp}${addr}`;
     return `${province}${city}${addr}`;
   }
-  if (name) return `${city}${name}`;
+  if (name) return `${cp}${name}`;
+  return null;
+}
+
+function cacheLookup(cache, query, resource) {
+  if (!query) return null;
+  if (cache[query]) return cache[query];
+  const city = resource.city || "杭州";
+  const cp = cityLabel(city);
+  const variants = new Set([
+    query,
+    `${cp}${query}`,
+    `${city}${query}`,
+    `${city}市${query}`,
+  ]);
+  for (const k of variants) {
+    if (cache[k]) return cache[k];
+  }
   return null;
 }
 
@@ -142,11 +167,13 @@ function saveCache(cache) {
   fs.writeFileSync(CACHE, JSON.stringify(cache, null, 2));
 }
 
-async function amapGeocode(query, key) {
+async function amapGeocode(query, key, city) {
   const url = new URL("https://restapi.amap.com/v3/geocode/geo");
   url.searchParams.set("address", query);
   url.searchParams.set("key", key);
-  url.searchParams.set("city", "浙江");
+  if (city && city !== "全部" && city !== "全国" && city !== "全省") {
+    url.searchParams.set("city", cityLabel(city) || city);
+  }
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -160,12 +187,16 @@ async function resolveCoord(resource, cache, key, cityCenters) {
   if (resource.lat != null && resource.lng != null) {
     return { lat: resource.lat, lng: resource.lng, precision: "exact" };
   }
+  if (COORD_ANCHORS[resource.id]) {
+    return COORD_ANCHORS[resource.id];
+  }
   const query = geocodeQuery(resource);
-  if (query && cache[query]) return cache[query];
+  const cached = cacheLookup(cache, query, resource);
+  if (cached) return cached;
   if (query && key) {
     try {
       await new Promise((r) => setTimeout(r, 120));
-      const hit = await amapGeocode(query, key);
+      const hit = await amapGeocode(query, key, resource.city || "杭州");
       if (hit) {
         cache[query] = hit;
         return hit;

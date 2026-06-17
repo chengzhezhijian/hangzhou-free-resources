@@ -1,0 +1,29 @@
+<view class="page" wx:if="{{loading}}">
+  <view class="loading-wrap">加载中…</view>
+</view>
+
+<view class="page" wx:else>
+  <view class="intro">
+    <text class="intro__title">我这种情况，去哪找？</text>
+    <text class="intro__sub">点场景直达首页筛选，72 城均可查</text>
+  </view>
+
+  <view class="guide-list">
+    <view
+      wx:for="{{guides}}"
+      wx:key="id"
+      class="guide-card"
+      data-index="{{index}}"
+      bindtap="goScene"
+    >
+      <text class="guide-card__icon">{{item.icon}}</text>
+      <view class="guide-card__body">
+        <text class="guide-card__title">{{item.title}}</text>
+        <text class="guide-card__desc">{{item.desc}}</text>
+      </view>
+      <text class="guide-card__go">›</text>
+    </view>
+  </view>
+</view>
+
+<tab-nav current="guide" />

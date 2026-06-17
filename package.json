@@ -10,9 +10,12 @@
     "test:ab": "node scripts/ab-theme-test.mjs",
     "test:copy": "node scripts/ab-copy-test.mjs",
     "test:design": "node scripts/ab-design-test.mjs",
-    "test:all": "node scripts/verify-site.mjs && node scripts/test-data-logic.mjs && node scripts/test-product-flows.mjs && node scripts/ab-theme-test.mjs && node scripts/ab-copy-test.mjs && node scripts/ab-design-test.mjs",
+    "test:distance": "node scripts/test-distance-accuracy.mjs",
+    "test:ui": "node scripts/test-ui-quality.mjs",
+    "test:all": "node scripts/verify-site.mjs && node scripts/test-data-logic.mjs && node scripts/test-distance-accuracy.mjs && node scripts/test-ui-quality.mjs && node scripts/test-product-flows.mjs && node scripts/ab-theme-test.mjs && node scripts/ab-copy-test.mjs && node scripts/ab-design-test.mjs",
     "build:china": "node scripts/build-china-nationwide.mjs",
     "build:coords": "AMAP_WEB_KEY= node scripts/build-resource-coords.mjs",
-    "build:all": "node scripts/build-china-nationwide.mjs && AMAP_WEB_KEY= node scripts/build-resource-coords.mjs"
+    "build:all": "node scripts/build-china-nationwide.mjs && AMAP_WEB_KEY= node scripts/build-resource-coords.mjs",
+    "build:miniprogram": "node scripts/build-miniprogram-data.mjs"
   }
 }

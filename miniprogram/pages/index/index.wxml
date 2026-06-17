@@ -1,0 +1,92 @@
+<view class="page" wx:if="{{loading}}">
+  <view class="loading-wrap">正在加载点位数据…</view>
+</view>
+
+<view class="page page--ready" wx:else>
+  <view class="hero">
+    <text class="hero__title">免费自习、纳凉、WiFi 在哪？</text>
+    <text class="hero__sub">选城市 · 点标签 · 导航过去</text>
+  </view>
+
+  <view class="toolbar">
+    <picker mode="selector" range="{{cities}}" value="{{cityIndex}}" bindchange="onCityChange">
+      <view class="city-pill">📍 {{cityLabel}} ▾</view>
+    </picker>
+    <view class="search-box">
+      <input
+        class="search-input"
+        placeholder="搜自习、纳凉、WiFi、停车…"
+        value="{{search}}"
+        confirm-type="search"
+        bindinput="onSearchInput"
+        bindconfirm="applyFilters"
+      />
+      <text wx:if="{{search}}" class="search-clear" bindtap="clearSearch">×</text>
+    </view>
+  </view>
+
+  <scroll-view class="chips-scroll" scroll-x enable-flex>
+    <view class="chips-row">
+      <view
+        wx:for="{{perks}}"
+        wx:key="id"
+        class="chip chip--accent {{facilitiesMap[item.facility] ? 'is-active' : ''}}"
+        data-id="{{item.facility}}"
+        bindtap="toggleFacility"
+      >{{item.short}}</view>
+    </view>
+  </scroll-view>
+
+  <scroll-view class="chips-scroll" scroll-x enable-flex>
+    <view class="chips-row">
+      <view
+        wx:for="{{scenes}}"
+        wx:key="label"
+        class="chip {{sceneActive === index ? 'is-active' : ''}}"
+        data-index="{{index}}"
+        bindtap="applyScene"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="sort-row">
+    <view class="sort-tab {{sortMode === 'comprehensive' ? 'is-active' : ''}}" data-mode="comprehensive" bindtap="setSort">综合</view>
+    <view class="sort-tab {{sortMode === 'distance' ? 'is-active' : ''}}" data-mode="distance" bindtap="setSort">距离</view>
+    <view class="loc-btn" bindtap="onLocate">定位</view>
+  </view>
+
+  <view class="list-head">
+    <text class="list-head__label">免费便民点位</text>
+    <text class="list-head__count">{{resultCount}} 条</text>
+  </view>
+
+  <view wx:if="{{items.length === 0}}" class="empty">
+    <text>没找到合适的，试试换城市或点上方标签</text>
+    <button class="btn-secondary empty-btn" bindtap="resetFilters">清除筛选</button>
+  </view>
+
+  <view class="list">
+    <view
+      wx:for="{{items}}"
+      wx:key="id"
+      class="card"
+      data-id="{{item.id}}"
+      bindtap="openDetail"
+    >
+      <view class="card__top">
+        <text class="card__cat">{{item.catLabel}}</text>
+        <text wx:if="{{item.dist}}" class="card__dist">{{item.dist}}</text>
+      </view>
+      <text class="card__name">{{item.name}}</text>
+      <text wx:if="{{item.address}}" class="card__addr">{{item.address}}</text>
+      <view wx:if="{{item.tags.length}}" class="card__tags">
+        <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="card__tag">{{tag}}</text>
+      </view>
+      <text class="card__meta">{{item.cityMeta}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">加载更多</view>
+</view>
+
+<tab-nav current="index" />

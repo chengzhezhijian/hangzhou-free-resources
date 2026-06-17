@@ -1,0 +1,14 @@
+<view class="tab-nav safe-bottom">
+  <view class="tab-nav__item {{current === 'index' ? 'is-active' : ''}}" data-page="index" bindtap="go">
+    <text class="tab-nav__icon">✦</text>
+    <text>发现</text>
+  </view>
+  <view class="tab-nav__item {{current === 'guide' ? 'is-active' : ''}}" data-page="guide" bindtap="go">
+    <text class="tab-nav__icon">◈</text>
+    <text>场景</text>
+  </view>
+  <view class="tab-nav__item {{current === 'about' ? 'is-active' : ''}}" data-page="about" bindtap="go">
+    <text class="tab-nav__icon">○</text>
+    <text>说明</text>
+  </view>
+</view>

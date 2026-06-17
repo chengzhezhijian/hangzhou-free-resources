@@ -1,0 +1,33 @@
+.tab-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1rpx solid #e5e5ea;
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.tab-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12rpx 0 8rpx;
+  font-size: 20rpx;
+  color: #8e8e93;
+}
+
+.tab-nav__item.is-active {
+  color: #0d9488;
+  font-weight: 600;
+}
+
+.tab-nav__icon {
+  font-size: 32rpx;
+  line-height: 1.2;
+  margin-bottom: 2rpx;
+}

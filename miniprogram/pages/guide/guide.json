@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "场景指南",
+  "usingComponents": {
+    "tab-nav": "/components/tab-nav/tab-nav"
+  }
+}
