@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/design-system.css?v=54" />
-  <link rel="stylesheet" href="../css/themes/variants.css?v=54" />
+  <link rel="stylesheet" href="../css/design-system.css?v=55" />
+  <link rel="stylesheet" href="../css/themes/variants.css?v=55" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -147,7 +147,7 @@
   <div class="grid" id="grid"></div>
 
   <script>
-    const CACHE = "v=54";
+    const CACHE = "v=55";
 
     function mockPreview(id) {
       return `
@@ -224,7 +224,7 @@
             <span class="shape-dim">${shapeLabel(t.shape)}</span>
           </div>
           <div class="preview-wrap">${mockPreview(t.id)}</div>
-          <iframe loading="lazy" src="../index.html?theme=${t.id}&v=54&lab=1" title="${t.name}"></iframe>
+          <iframe loading="lazy" src="../index.html?theme=${t.id}&v=55&lab=1" title="${t.name}"></iframe>
           ${s ? `<div class="breakdown">
             <span>无障碍<b>${s.breakdown.accessibility.score}</b></span>
             <span>字体<b>${s.breakdown.typography.score}</b></span>
@@ -233,7 +233,7 @@
             <span>层级<b>${s.breakdown.hierarchy.score}</b></span>
           </div>` : ""}
           <div class="actions">
-            <a href="../index.html?theme=${t.id}&v=54" class="primary" target="_blank" rel="noopener">全屏体验</a>
+            <a href="../index.html?theme=${t.id}&v=55" class="primary" target="_blank" rel="noopener">全屏体验</a>
             <a href="../docs/ab-theme-compare.md" target="_blank" rel="noopener">说明</a>
           </div>`;
         grid.appendChild(card);

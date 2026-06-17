@@ -112,11 +112,22 @@ function boot(opts = {}) {
   window.eval(code);
 
   injectStyles(window.document, [
+    "css/style.css",
     "css/design-system.css",
     "css/design-layouts.css",
   ]);
+  injectBreakpointOverrides(window.document, !!opts.desktop);
 
   return { dom, window, doc: window.document };
+}
+
+function injectBreakpointOverrides(doc, desktop) {
+  const style = doc.createElement("style");
+  style.setAttribute("data-test-css", "breakpoint-override");
+  style.textContent = desktop
+    ? `.app-ui .site-header{display:block!important}.app-ui .glass-nav{display:none!important}.app-ui.filter-toolbar-layout #cityQuickBtn{display:none!important}.app-ui.filter-toolbar-layout .loc-pill--header{display:inline-flex!important}`
+    : `.app-ui .site-header{display:none!important}.app-ui .glass-nav{display:block!important}.app-ui.filter-toolbar-layout .loc-pill--header{display:none!important}`;
+  doc.head.appendChild(style);
 }
 
 function injectStyles(doc, files) {
@@ -143,8 +154,13 @@ function ok(name, cond) {
 
 function isVisible(el, win) {
   if (!el || el.hidden) return false;
-  const style = win.getComputedStyle(el);
-  return style.display !== "none" && style.visibility !== "hidden";
+  let node = el;
+  while (node && node !== win.document) {
+    const style = win.getComputedStyle(node);
+    if (style.display === "none" || style.visibility === "hidden") return false;
+    node = node.parentElement;
+  }
+  return true;
 }
 
 function segmentOrder(doc) {
@@ -364,25 +380,34 @@ async function run() {
   }
 
   // ───────────────────────────────────────────────
-  // 场景 8：H5 仅一个城市选择入口（discover-bar）
+  // 场景 8：全站仅一个城市选择入口（移动 glass-nav / 桌面 site-header）
   // ───────────────────────────────────────────────
   {
     const { doc, window } = boot({ geo: "error", desktop: false });
     await tick();
-    const mobileBtn = doc.getElementById("cityQuickBtnMobile");
-    const mainBtn = doc.getElementById("cityQuickBtn");
-    ok("移动:discover-bar 城市按钮可见", isVisible(mainBtn, window));
-    ok("移动:glass-nav 城市按钮不可见", !isVisible(mobileBtn, window));
-    ok("移动:仅一个可见城市入口", Number(isVisible(mainBtn, window)) + Number(isVisible(mobileBtn, window)) === 1);
+    const navBtn = doc.getElementById("cityQuickBtn");
+    const headerBtn = doc.getElementById("cityQuickBtnDesktop");
+    const brand = doc.querySelector(".glass-nav__row .nav-brand-mini");
+    ok("移动:glass-nav 城市按钮可见", isVisible(navBtn, window));
+    const rowKids = [...doc.querySelector(".glass-nav__row").children];
+    ok("移动:glass-nav 城市在品牌左侧", rowKids.indexOf(navBtn) < rowKids.indexOf(brand));
+    ok("移动:site-header 城市按钮不可见", !isVisible(headerBtn, window));
+    ok("移动:discover-bar 无城市按钮", !doc.querySelector("#discoverBar #cityQuickBtn"));
+    ok("移动:仅一个可见城市入口", Number(isVisible(navBtn, window)) + Number(isVisible(headerBtn, window)) === 1);
   }
 
   {
     const { doc, window } = boot({ geo: "error", desktop: true });
     await tick();
-    const mobileBtn = doc.getElementById("cityQuickBtnMobile");
-    const mainBtn = doc.getElementById("cityQuickBtn");
-    ok("桌面:discover-bar 城市按钮可见", isVisible(mainBtn, window));
-    ok("桌面:glass-nav 城市按钮不可见", !isVisible(mobileBtn, window));
+    const navBtn = doc.getElementById("cityQuickBtn");
+    const headerBtn = doc.getElementById("cityQuickBtnDesktop");
+    const brandLink = doc.querySelector(".header-leading .brand");
+    ok("桌面:site-header 城市按钮可见", isVisible(headerBtn, window));
+    const leadingKids = [...doc.querySelector(".header-leading").children];
+    ok("桌面:site-header 城市在品牌左侧", leadingKids.indexOf(headerBtn) < leadingKids.indexOf(brandLink));
+    ok("桌面:glass-nav 城市按钮不可见", !isVisible(navBtn, window));
+    ok("桌面:discover-bar 无城市按钮", !doc.querySelector("#discoverBar #cityQuickBtn"));
+    ok("桌面:仅一个可见城市入口", Number(isVisible(navBtn, window)) + Number(isVisible(headerBtn, window)) === 1);
   }
 
   // ───────────────────────────────────────────────

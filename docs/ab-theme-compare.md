@@ -1,11 +1,11 @@
 # 10 套主题 AB 对比说明
 
-> 生成时间：2026-06-17 11:29:51 · 对比墙：[`labs/ab-compare.html`](../labs/ab-compare.html)
+> 生成时间：2026-06-17 11:38:49 · 对比墙：[`labs/ab-compare.html`](../labs/ab-compare.html)
 
 ## 如何选择
 
 1. 打开 [对比墙](../labs/ab-compare.html) 并排浏览 10 套 iframe 预览
-2. 点击「全屏体验」进入 `index.html?theme=v0X&v=54`
+2. 点击「全屏体验」进入 `index.html?theme=v0X&v=55`
 3. 结合下方场景推荐与自动化评分（[`ab-test-report.md`](./ab-test-report.md)）做决策
 
 ## 主题清单

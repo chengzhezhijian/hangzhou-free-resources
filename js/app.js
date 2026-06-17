@@ -1358,7 +1358,7 @@
 
   function syncCityQuickLabel() {
     const label = cityQuickDisplayLabel();
-    ["cityQuickValue", "cityQuickValueMobile"].forEach((id) => {
+    ["cityQuickValue", "cityQuickValueDesktop"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.textContent = label;
     });
@@ -1729,7 +1729,7 @@
     });
 
     document.getElementById("cityQuickBtn")?.addEventListener("click", openCitySheet);
-    document.getElementById("cityQuickBtnMobile")?.addEventListener("click", openCitySheet);
+    document.getElementById("cityQuickBtnDesktop")?.addEventListener("click", openCitySheet);
     document.getElementById("citySheetClose")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetBackdrop")?.addEventListener("click", () => closeOverlay("citySheet"));
     document.getElementById("citySheetLocateBtn")?.addEventListener("click", () => runGeoLocate(true));

@@ -893,13 +893,21 @@ body.toolbar-drop-open {
   }
 }
 
-/* H5：城市入口统一为 discover-bar 内单一按钮 */
-.app-ui.filter-toolbar-layout #cityQuickBtnMobile {
-  display: none !important;
+/* 全站单一城市入口：移动 glass-nav / 桌面 site-header，discover-bar 不再放城市按钮 */
+@media (max-width: 959px) {
+  .app-ui.filter-toolbar-layout .loc-pill--header {
+    display: none !important;
+  }
 }
 
-.app-ui.filter-toolbar-layout .glass-nav__row .loc-pill[hidden] {
-  display: none !important;
+@media (min-width: 960px) {
+  .app-ui.filter-toolbar-layout #cityQuickBtn {
+    display: none !important;
+  }
+
+  .app-ui.filter-toolbar-layout .loc-pill--header {
+    display: inline-flex !important;
+  }
 }
 
 /* ─── 布局变体 ─── */

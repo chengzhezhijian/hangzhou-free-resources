@@ -1,6 +1,6 @@
 # 主题 AB 测试报告
 
-> 生成时间：2026-06-17 11:29:51 · 共 10 套 · 默认 v01
+> 生成时间：2026-06-17 11:38:49 · 共 10 套 · 默认 v01
 
 ## 结论（供验收决策）
 
@@ -162,7 +162,7 @@
 
 1. **对比墙**：[`labs/ab-compare.html`](../labs/ab-compare.html) — 10 套并排 + iframe
 2. **说明文档**：[`docs/ab-theme-compare.md`](./ab-theme-compare.md)
-3. **全站预览**：[`index.html?theme=v01&v=54`](../index.html?theme=v01&v=54)（替换 v01–v10）
+3. **全站预览**：[`index.html?theme=v01&v=55`](../index.html?theme=v01&v=55)（替换 v01–v10）
 4. **应用主题**：验收后告知 ID，写入 `site-config.js` 默认 theme
 
 ## 自动化命令

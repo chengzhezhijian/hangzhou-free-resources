@@ -16,15 +16,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/theme-switch.js?v=54"></script>
-  <script src="js/design-variants.js?v=54"></script>
-  <script src="js/copy-variants.js?v=54"></script>
-  <link rel="stylesheet" href="css/style.css?v=54" />
-  <link rel="stylesheet" href="css/design-system.css?v=54" />
-  <link rel="stylesheet" href="css/themes/variants.css?v=54" />
-  <link rel="stylesheet" href="css/copy-variants.css?v=54" />
-  <link rel="stylesheet" href="css/design-layouts.css?v=54" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=54" />
+  <script src="js/theme-switch.js?v=55"></script>
+  <script src="js/design-variants.js?v=55"></script>
+  <script src="js/copy-variants.js?v=55"></script>
+  <link rel="stylesheet" href="css/style.css?v=55" />
+  <link rel="stylesheet" href="css/design-system.css?v=55" />
+  <link rel="stylesheet" href="css/themes/variants.css?v=55" />
+  <link rel="stylesheet" href="css/copy-variants.css?v=55" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=55" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=55" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -45,13 +45,20 @@
 <body data-page="map" class="app-ui filter-toolbar-layout">
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="brand" id="brandHome">
-        <span class="brand-icon">惠</span>
-        <div class="brand-text">
-          <h1>全国惠民地图</h1>
-          <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
-        </div>
-      </a>
+      <div class="header-leading">
+        <button type="button" class="loc-pill loc-pill--header" id="cityQuickBtnDesktop" aria-haspopup="dialog" aria-label="选择城市">
+          <span class="loc-pill-icon" aria-hidden="true">📍</span>
+          <span class="loc-pill-city" id="cityQuickValueDesktop">选择城市</span>
+          <span class="loc-pill-caret" aria-hidden="true">▾</span>
+        </button>
+        <a href="index.html" class="brand" id="brandHome">
+          <span class="brand-icon">惠</span>
+          <div class="brand-text">
+            <h1>全国惠民地图</h1>
+            <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
+          </div>
+        </a>
+      </div>
       <nav class="header-nav" aria-label="桌面导航">
         <a href="index.html" data-nav-page="map">发现</a>
         <a href="guide.html" data-nav-page="guide">场景</a>
@@ -65,10 +72,10 @@
   <div class="app-viewport">
     <header class="glass-nav">
       <div class="glass-nav__row">
-        <button type="button" class="loc-pill" id="cityQuickBtnMobile" hidden aria-haspopup="dialog" aria-label="选择城市">
-          <span aria-hidden="true">📍</span>
-          <span class="loc-pill-city" id="cityQuickValueMobile">选择城市</span>
-          <span aria-hidden="true">▾</span>
+        <button type="button" class="loc-pill" id="cityQuickBtn" aria-haspopup="dialog" aria-label="选择城市">
+          <span class="loc-pill-icon" aria-hidden="true">📍</span>
+          <span class="loc-pill-city" id="cityQuickValue">选择城市</span>
+          <span class="loc-pill-caret" aria-hidden="true">▾</span>
         </button>
         <span class="nav-brand-mini">全国惠民地图</span>
       </div>
@@ -88,11 +95,6 @@
         <div class="discover-inner">
           <div class="geo-banner" id="geoBanner" hidden role="status"></div>
           <div class="loc-search-row">
-            <button type="button" class="loc-pill" id="cityQuickBtn" aria-haspopup="dialog" aria-label="选择城市">
-              <span class="loc-pill-icon" aria-hidden="true">📍</span>
-              <span class="loc-pill-city" id="cityQuickValue">选择城市</span>
-              <span class="loc-pill-caret" aria-hidden="true">▾</span>
-            </button>
             <div class="search-box search-box--inline search-box--meituan">
               <input type="search" id="searchInput" placeholder="搜自习、纳凉、WiFi、停车…" autocomplete="off" enterkeyhint="search" />
               <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
@@ -291,22 +293,22 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=54"></script>
-  <script src="js/copy-switch.js?v=54"></script>
-  <script src="js/data-china-config.js?v=54"></script>
-  <script src="js/geo.js?v=54"></script>
-  <script src="js/map-nav.js?v=54"></script>
-  <script src="js/analytics.js?v=54"></script>
-  <script src="js/data-study-spaces.js?v=54"></script>
-  <script src="js/data-extra-resources.js?v=54"></script>
-  <script src="js/data-zhejiang-cities.js?v=54"></script>
-  <script src="js/data-zhejiang-expanded.js?v=54"></script>
-  <script src="js/data-china-nationwide.js?v=54"></script>
-  <script src="js/data.js?v=54"></script>
-  <script src="js/resource-coords.js?v=54"></script>
-  <script src="js/layout.js?v=54"></script>
-  <script src="js/design-engine.js?v=54"></script>
-  <script src="js/ui-premium.js?v=54"></script>
-  <script src="js/app.js?v=54"></script>
+  <script src="js/site-config.js?v=55"></script>
+  <script src="js/copy-switch.js?v=55"></script>
+  <script src="js/data-china-config.js?v=55"></script>
+  <script src="js/geo.js?v=55"></script>
+  <script src="js/map-nav.js?v=55"></script>
+  <script src="js/analytics.js?v=55"></script>
+  <script src="js/data-study-spaces.js?v=55"></script>
+  <script src="js/data-extra-resources.js?v=55"></script>
+  <script src="js/data-zhejiang-cities.js?v=55"></script>
+  <script src="js/data-zhejiang-expanded.js?v=55"></script>
+  <script src="js/data-china-nationwide.js?v=55"></script>
+  <script src="js/data.js?v=55"></script>
+  <script src="js/resource-coords.js?v=55"></script>
+  <script src="js/layout.js?v=55"></script>
+  <script src="js/design-engine.js?v=55"></script>
+  <script src="js/ui-premium.js?v=55"></script>
+  <script src="js/app.js?v=55"></script>
 </body>
 </html>

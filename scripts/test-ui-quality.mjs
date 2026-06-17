@@ -41,8 +41,10 @@ ok(
 );
 ok("类型下拉渲染", /kind === "quick-category"/.test(appJs));
 ok("桌面端隐藏 sidebar CSS", /@media \(min-width: 960px\)[\s\S]*\.app-ui\.filter-toolbar-layout \.sidebar[\s\S]*display:\s*none/.test(designLayouts));
-ok("H5 隐藏 glass-nav 城市按钮", /#cityQuickBtnMobile[\s\S]*display:\s*none/.test(designLayouts));
-ok("H5 城市按钮 hidden 属性", /id="cityQuickBtnMobile" hidden/.test(indexHtml));
+ok("glass-nav 城市在品牌左侧", /glass-nav__row[\s\S]*?id="cityQuickBtn"[\s\S]*?nav-brand-mini/.test(indexHtml));
+ok("品牌间距黄金比例", /--nav-gap-base:\s*10px[\s\S]*--nav-brand-gap:\s*calc\(var\(--nav-gap-base\) \* var\(--phi\)\)/.test(designSystem));
+ok("discover-bar 无城市按钮", !/id="discoverBar"[\s\S]*?id="cityQuickBtn"/.test(indexHtml));
+ok("H5 无双城市入口 CSS", /#cityQuickBtn[\s\S]*display:\s*none/.test(designLayouts) && /\.loc-pill--header[\s\S]*display:\s*none/.test(designLayouts));
 ok("快捷筛选下箭头", /ft-chip--quick/.test(appJs) && /▾/.test(appJs));
 ok("分段筛选条", /filter-segment/.test(appJs) && /\.filter-segment/.test(designLayouts));
 ok("城市面板不含全国项", !/cityPillHtml\("全部"/.test(appJs) && !/cityPillHtml\("全部", china \? "全国"/.test(appJs));
@@ -70,7 +72,7 @@ ok("详情页隐藏重复导航词", /isRedundantDetailQuery/.test(appJs) && /sh
 ok("详情页叠层渐变头", /--detail-header-gradient/.test(premiumCss) && /detail-panel::before/.test(premiumCss));
 ok("移除四个快捷设施项渲染", /renderValuePerks[\s\S]*el\.innerHTML = \"\"[\s\S]*el\.hidden = true/.test(appJs));
 ok("发现页有搜索", /id="searchInput"/.test(indexHtml));
-ok("发现页有城市选择", /id="cityQuickBtn"/.test(indexHtml));
+ok("顶栏有城市选择", /id="cityQuickBtn"/.test(indexHtml) && /id="cityQuickBtnDesktop"/.test(indexHtml));
 ok("发现页有设施筛选", /id="heroPerks"/.test(indexHtml));
 ok("发现页有结果列表", /id="cardGrid"/.test(indexHtml));
 ok("详情 Sheet", /id="detailModal"/.test(indexHtml));

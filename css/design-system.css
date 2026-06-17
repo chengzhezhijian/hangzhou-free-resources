@@ -36,6 +36,10 @@
   --accent-tertiary: #a855f7;
   --on-accent: #ffffff;
   --glass-nav-bg: rgba(242, 242, 247, 0.78);
+  /* 品牌行间距：base 10px × φ(1.618) ≈ 16.18px */
+  --phi: 1.618;
+  --nav-gap-base: 10px;
+  --nav-brand-gap: calc(var(--nav-gap-base) * var(--phi));
   --search-bg: rgba(118, 118, 128, 0.1);
   --search-bg-focus: rgba(118, 118, 128, 0.14);
   --tab-bar-bg: rgba(255, 255, 255, 0.82);
@@ -91,7 +95,7 @@
 .app-ui .glass-nav__row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--nav-brand-gap);
 }
 
 .app-ui .nav-brand-mini {
@@ -184,15 +188,12 @@
 .app-ui.filter-toolbar-layout .loc-search-row {
   display: flex;
   align-items: center;
-  gap: 6px;
 }
 
-.app-ui .loc-search-row .loc-pill {
-  display: none;
-}
-
-.app-ui.filter-toolbar-layout .loc-search-row .loc-pill {
-  display: inline-flex;
+.app-ui.filter-toolbar-layout .loc-search-row .search-box--meituan {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 .app-ui .search-box--inline {
