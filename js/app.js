@@ -479,75 +479,10 @@
   function renderFilterToolbar() {
     const el = document.getElementById("filterToolbar");
     if (!el || getDesign()) return;
-
-    const perks = typeof VALUE_PERKS !== "undefined" ? VALUE_PERKS : [];
-    const scenes = typeof QUICK_SCENES !== "undefined" ? QUICK_SCENES : [];
-    const n = countActiveFilters();
-    const badge = n ? `<span class="filter-badge">${n}</span>` : "";
-
-    const chip = (cls, label, active, attrs = "") =>
-      `<button type="button" class="ft-chip ${cls}${active ? " is-active" : ""}" ${attrs}>${label}</button>`;
-    const div = `<span class="ft-divider" aria-hidden="true"></span>`;
-
-    let html = perks
-      .map((p) =>
-        chip(
-          "ft-chip--perk",
-          p.short || p.label,
-          isPerkActive(p),
-          `data-facility="${p.facility}" title="${p.desc || ""}"`
-        )
-      )
-      .join("");
-    html += div;
-    html += scenes
-      .map((s) =>
-        chip(
-          "ft-chip--scene",
-          s.label.replace(/^[^\u4e00-\u9fa5a-zA-Z0-9]+/, ""),
-          isQuickSceneActive(s),
-          `data-scene="${s.category}|${s.search || ""}"`
-        )
-      )
-      .join("");
-    html += div;
-    const geoHint = !state.userLocation && state.sortMode === "distance";
-    html +=
-      `<button type="button" class="ft-chip ft-chip--sort-trigger${geoHint ? " ft-chip--geo" : ""}${toolbarDropKind === "sort" ? " is-open" : ""}" id="sortTriggerBtn" aria-haspopup="listbox" aria-expanded="${toolbarDropKind === "sort"}">${sortModeLabel()}<span class="ft-caret" aria-hidden="true">▾</span></button>` +
-      `<button type="button" class="ft-chip ft-chip--filter${n ? " is-active" : ""}${toolbarDropKind === "filter" ? " is-open" : ""}" id="filterOpenBtn">筛选${badge}</button>`;
-
-    el.innerHTML = `<div class="filter-toolbar__scroll">${html}</div>`;
-
-    el.querySelectorAll("[data-facility].ft-chip--perk").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const perk = perks.find((p) => p.facility === btn.dataset.facility);
-        if (perk) applyValuePerk(perk);
-      });
-    });
-    el.querySelectorAll("[data-scene]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const [cat, q] = btn.dataset.scene.split("|");
-        const scene = scenes.find((s) => s.category === cat && (s.search || "") === q);
-        state.category = scene?.category || cat;
-        state.group = "all";
-        state.search = scene?.search || q || "";
-        state.page = 1;
-        state.facilities.clear();
-        document.getElementById("searchInput").value = state.search;
-        document.getElementById("searchClear").hidden = !state.search;
-        renderCategoryFilters();
-        renderCards();
-        track("filter_change", { field: "quick_scene", value: state.search || state.category });
-      });
-    });
-    el.querySelector("#sortTriggerBtn")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleSortDropdown();
-    });
-    el.querySelector("#filterOpenBtn")?.addEventListener("click", () => {
-      if (isFilterDesktop()) expandSidebar(true);
-      else toggleFilterDropdown();
-    });
+    // 默认首页：去掉设施标签行与「综合/距离/筛选」行，最大化列表展示
+    el.innerHTML = "";
+    el.hidden = true;
+    closeToolbarDrop();
   }
 
   function renderSortDropPanel() {

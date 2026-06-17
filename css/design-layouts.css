@@ -51,6 +51,100 @@
   color: var(--ios-label-tertiary);
 }
 
+/* ─── 默认首页：隐藏筛选工具栏 + 双列紧凑卡片 ─── */
+.app-ui.filter-toolbar-layout:not(.has-design-variant) #filterToolbar {
+  display: none !important;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium {
+  border-radius: 12px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-inner {
+  padding: 9px 10px 10px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-chevron {
+  display: none;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-top {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-category {
+  font-size: 0.66rem;
+  padding: 1px 6px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-badges {
+  gap: 4px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .badge-distance {
+  font-weight: 700;
+  color: var(--ios-teal);
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium h3 {
+  font-size: 0.9rem;
+  margin-top: 3px;
+  line-height: 1.25;
+  -webkit-line-clamp: 2;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-address {
+  font-size: 0.74rem;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 双列下补回营业时间，信息更密 */
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-hours {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ios-label-tertiary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .facility-tags {
+  padding-top: 6px;
+  gap: 4px;
+  max-height: 1.55rem;
+  overflow: hidden;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .facility-tag {
+  font-size: 0.64rem;
+  padding: 2px 6px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-meta {
+  padding-top: 4px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .card-district {
+  font-size: 0.68rem;
+}
+
+@media (min-width: 720px) {
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
 /* ─── 单行筛选栏（美团/淘宝） ─── */
 .filter-toolbar {
   width: 100%;
