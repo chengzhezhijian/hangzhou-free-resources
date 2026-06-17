@@ -594,7 +594,6 @@
     }
 
     if (kind === "quick-category") {
-      const counts = countByCategory();
       const cats = visibleCategories();
       panel.innerHTML = `
         <div class="quick-drop-head">类型</div>
@@ -603,7 +602,7 @@
             .map((c) => {
               const active = state.category === c.id;
               return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-category="${c.id}">
-                ${c.icon || ""} ${c.label} <span style="opacity:0.7">(${counts[c.id] || 0})</span>
+                ${c.icon || ""} ${c.label}
                 ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
               </button>`;
             })
