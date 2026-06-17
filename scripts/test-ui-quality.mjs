@@ -66,6 +66,19 @@ ok("城市激活态对比增强", /city-pill\.is-active[\s\S]*box-shadow/.test(d
 ok("桌面卡片可读性增强", /@media \(min-width: 960px\)[\s\S]*card-premium h3/.test(designLayouts));
 ok("下拉锚点变量", /--toolbar-drop-anchor-left/.test(designLayouts));
 ok("下拉锚点定位逻辑", /updateToolbarDropAnchor/.test(appJs));
+ok(
+  "下拉层移出 sticky",
+  /scroll-main[\s\S]*?<\/div>\s*\n\s*<div class="toolbar-drop-layer" id="toolbarDropLayer"/.test(indexHtml)
+);
+ok(
+  "快捷列表 H5 可滚动",
+  /\.quick-drop-list[\s\S]*?overflow-y:\s*auto/.test(designLayouts) &&
+    !/\.quick-drop-list[\s\S]*?padding:[\s\S]*@media \(min-width: 960px\)[\s\S]*?overflow-y:\s*auto/.test(
+      designLayouts.replace(/@media \(min-width: 960px\)[\s\S]*$/, "")
+    )
+);
+ok("快捷面板 flex 限高", /\.quick-drop-panel[\s\S]*display:\s*flex[\s\S]*max-height:/.test(designLayouts));
+ok("下拉 top 贴触发器底", /triggerRect\.bottom/.test(appJs) && !/Math\.max\(stickyRect\.top/.test(appJs));
 ok("详情页图标化概览", /class=\"detail-overview\"/.test(appJs) && /detail-pill--distance/.test(appJs));
 ok("详情页图标行与设施标签", /class=\"detail-lines\"/.test(appJs) && /detail-facilities/.test(appJs) && /detail-facility__icon/.test(appJs));
 ok("详情页隐藏重复导航词", /isRedundantDetailQuery/.test(appJs) && /showMapQuery/.test(appJs));

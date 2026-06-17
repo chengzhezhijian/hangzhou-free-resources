@@ -622,7 +622,10 @@
   left: var(--toolbar-drop-anchor-left, 12px);
   width: var(--toolbar-drop-anchor-width, min(220px, calc(100% - 24px)));
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: min(55vh, calc(100dvh - var(--toolbar-drop-top, 0px) - 8px));
   transform-origin: top left;
 }
 
@@ -633,6 +636,9 @@
   border-radius: 14px;
   overflow: hidden;
   transform-origin: top left;
+  display: flex;
+  flex-direction: column;
+  max-height: min(72vh, calc(100dvh - var(--toolbar-drop-top, 0px) - 8px));
 }
 
 .sort-drop-panel[hidden],
@@ -658,6 +664,7 @@
 }
 
 .quick-drop-head {
+  flex-shrink: 0;
   font-size: 0.78rem;
   color: var(--ios-label-secondary);
   font-weight: 600;
@@ -665,6 +672,11 @@
 }
 
 .quick-drop-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: min(55vh, calc(100dvh - var(--toolbar-drop-top, 0px) - 80px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0 10px 10px;
 }
 
@@ -696,6 +708,7 @@
 }
 
 .quick-drop-actions {
+  flex-shrink: 0;
   display: flex;
   gap: 8px;
   padding: 0 10px 10px;
@@ -820,8 +833,7 @@ body.toolbar-drop-open {
   }
 
   .quick-drop-list {
-    max-height: min(55vh, 420px);
-    overflow-y: auto;
+    max-height: min(55vh, calc(100dvh - var(--toolbar-drop-top, 0px) - 96px));
   }
 
   .quick-drop-item {

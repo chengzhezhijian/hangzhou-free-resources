@@ -218,6 +218,17 @@ async function run() {
     await tick();
 
     const quickPanel = doc.getElementById("quickDropPanel");
+    const sceneBtn = doc.getElementById("quickSceneBtn");
+    ok("下拉层不在 sticky 内", !doc.querySelector(".discover-sticky")?.contains(quickPanel.parentElement));
+    ok(
+      "场景下拉:top 对齐触发器底边",
+      Math.abs(
+        parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-top")) -
+          sceneBtn.getBoundingClientRect().bottom
+      ) <= 1
+    );
+    const listStyle = doc.defaultView.getComputedStyle(quickPanel.querySelector(".quick-drop-list"));
+    ok("场景下拉:列表可滚动", listStyle.overflowY === "auto" || listStyle.overflowY === "scroll");
     ok("场景下拉:快捷面板可见", quickPanel.hidden === false);
     ok(
       "场景下拉:锚点变量已写入",

@@ -678,12 +678,24 @@
   }
 
   function updateToolbarDropTop(triggerEl = null) {
-    const sticky = document.querySelector(".discover-sticky");
-    if (!sticky) return;
-    const stickyRect = sticky.getBoundingClientRect();
     const triggerRect = triggerEl?.getBoundingClientRect?.();
-    const top = triggerRect ? Math.max(stickyRect.top, triggerRect.bottom + 4) : stickyRect.bottom;
+    let top = 0;
+    if (triggerRect) {
+      top = Math.round(triggerRect.bottom);
+    } else {
+      const toolbar = document.getElementById("filterToolbar");
+      const sticky = document.querySelector(".discover-sticky");
+      const fallbackRect = toolbar?.getBoundingClientRect?.() || sticky?.getBoundingClientRect?.();
+      top = fallbackRect ? Math.round(fallbackRect.bottom) : 0;
+    }
     document.documentElement.style.setProperty("--toolbar-drop-top", `${top}px`);
+  }
+
+  function syncToolbarDropPosition() {
+    if (!toolbarDropKind) return;
+    const trigger = resolveToolbarTrigger(toolbarDropKind);
+    updateToolbarDropTop(trigger);
+    updateToolbarDropAnchor(toolbarDropKind, trigger);
   }
 
   function resolveToolbarTrigger(kind) {
@@ -1712,12 +1724,8 @@
       setSortMode("distance");
     });
 
-    window.addEventListener("resize", () => {
-      if (!toolbarDropKind) return;
-      const trigger = resolveToolbarTrigger(toolbarDropKind);
-      updateToolbarDropTop(trigger);
-      updateToolbarDropAnchor(toolbarDropKind, trigger);
-    });
+    window.addEventListener("resize", syncToolbarDropPosition);
+    window.addEventListener("scroll", syncToolbarDropPosition, { passive: true });
 
     document.getElementById("sidebarToggle")?.addEventListener("click", () => {
       const sidebar = document.getElementById("sidebar");
