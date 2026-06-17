@@ -542,10 +542,6 @@
   padding-inline: 6px;
 }
 
-.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--facility .ft-chip__label {
-  font-size: var(--chip-label-font-size, clamp(0.65rem, 2.6vw, 0.8125rem));
-}
-
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick + .ft-chip--quick::before {
   content: "";
   position: absolute;

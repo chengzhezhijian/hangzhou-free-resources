@@ -740,15 +740,25 @@
   function syncToolbarChipFonts() {
     const toolbar = document.getElementById("filterToolbar");
     if (!toolbar || toolbar.hidden) return;
-    toolbar.querySelectorAll(".ft-chip--quick").forEach((btn) => {
+    const chips = [...toolbar.querySelectorAll(".ft-chip--quick")];
+    if (!chips.length) return;
+
+    let unifiedPx = TOOLBAR_CHIP_FONT_MAX;
+    chips.forEach((btn) => {
       const label = btn.querySelector(".ft-chip__label");
       const caret = btn.querySelector(".ft-caret");
-      if (!label) return;
+      if (!label || btn.clientWidth <= 0) return;
       const caretW = caret?.offsetWidth || 12;
-      const padX = btn.classList.contains("ft-chip--facility") ? 14 : 16;
-      const avail = btn.clientWidth - caretW - padX - 4;
+      const style = window.getComputedStyle(btn);
+      const padX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+      const gap = parseFloat(style.gap) || 0;
+      const avail = btn.clientWidth - caretW - padX - gap;
       const px = fitElementFontSize(label, avail, TOOLBAR_CHIP_FONT_MIN, TOOLBAR_CHIP_FONT_MAX);
-      btn.style.setProperty("--chip-label-font-size", `${px}px`);
+      unifiedPx = Math.min(unifiedPx, px);
+    });
+
+    chips.forEach((btn) => {
+      btn.style.setProperty("--chip-label-font-size", `${unifiedPx}px`);
     });
   }
 

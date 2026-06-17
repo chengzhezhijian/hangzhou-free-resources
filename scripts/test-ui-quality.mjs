@@ -89,6 +89,8 @@ ok("设施下拉标签结构", /quick-drop-item__label/.test(quickFacilityBlock)
 ok("设施下拉无完成按钮", !/quickFacilityDone/.test(appJs));
 ok("重置按钮字号变量", /--drop-action-font-size/.test(designLayouts) && /quickFacilityReset/.test(appJs) && /DROP_ACTION_FONT_MIN/.test(appJs));
 ok("工具栏标签字号变量", /--chip-label-font-size/.test(designLayouts) && /syncToolbarChipFonts/.test(appJs));
+ok("工具栏四段 chip 统一字号", /unifiedPx/.test(appJs) && /Math\.min\(unifiedPx/.test(appJs));
+ok("设施 chip 无单独标签字号 CSS", !/\.ft-chip--facility[\s\S]*?\.ft-chip__label[\s\S]*?font-size/.test(designLayouts));
 ok("全站自适应入口", /function syncAdaptiveFonts/.test(appJs) && /scheduleAdaptiveFonts/.test(appJs));
 ok("城市 pill 字号变量", /--loc-pill-font-size/.test(designSystem + designLayouts) && /syncLocPillFonts/.test(appJs));
 ok("详情标题字号变量", /--detail-title-font-size/.test(premiumCss) && /syncDetailSheetFonts/.test(appJs));

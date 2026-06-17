@@ -167,6 +167,17 @@ function segmentOrder(doc) {
   return [...doc.querySelectorAll("#filterToolbar [data-quick]")].map((btn) => btn.dataset.quick);
 }
 
+function toolbarChipFontSizes(doc) {
+  return [...doc.querySelectorAll("#filterToolbar .ft-chip--quick")].map((btn) =>
+    btn.style.getPropertyValue("--chip-label-font-size")
+  );
+}
+
+function toolbarChipFontsUnified(doc) {
+  const sizes = toolbarChipFontSizes(doc);
+  return sizes.length === 4 && sizes.every((s) => s && s === sizes[0]);
+}
+
 function ensureLayoutMetrics(doc, win) {
   const setW = (el, w) => {
     if (!el) return;
@@ -231,6 +242,7 @@ async function run() {
     );
     ok("未定位:筛选大面板初始隐藏", doc.getElementById("filterDropPanel").hidden === true);
     ok("未定位:快捷下拉面板初始隐藏", doc.getElementById("quickDropPanel").hidden === true);
+    ok("未定位:四段 chip 字号一致", toolbarChipFontsUnified(doc));
   }
 
   // ───────────────────────────────────────────────
@@ -457,6 +469,7 @@ async function run() {
       ok("筛选联动:设施按钮高亮", !!facilityBtn?.classList.contains("is-active"));
       ok("筛选联动:设施按钮 has-count", !!facilityBtn?.classList.contains("has-count"));
       ok("筛选联动:设施标签字号变量", !!facilityBtn?.style.getPropertyValue("--chip-label-font-size"));
+      ok("筛选联动:四段 chip 字号一致", toolbarChipFontsUnified(doc));
     } else {
       ok("筛选联动:设施按钮展示计数", false);
       ok("筛选联动:设施按钮高亮", false);
@@ -589,6 +602,26 @@ async function run() {
     await tick();
 
     ok("自适应:工具栏 chip 字号", !!doc.getElementById("quickSortBtn")?.style.getPropertyValue("--chip-label-font-size"));
+    ok("自适应:四段 chip 字号一致", toolbarChipFontsUnified(doc));
+
+    doc.getElementById("quickFacilityBtn").click();
+    await tick();
+    const facilities = doc.querySelectorAll("#quickDropPanel [data-facility]");
+    if (facilities.length >= 3) {
+      facilities[0].click();
+      await tick();
+      facilities[1].click();
+      await tick();
+      facilities[2].click();
+      await tick();
+      ensureLayoutMetrics(doc, window);
+      await tick();
+      ok("自适应:设施(3) 四段 chip 字号一致", toolbarChipFontsUnified(doc));
+    } else {
+      ok("自适应:设施(3) 四段 chip 字号一致", false);
+    }
+    doc.getElementById("toolbarDropBackdrop").click();
+    await tick();
 
     doc.getElementById("cityQuickBtn").click();
     await tick();
