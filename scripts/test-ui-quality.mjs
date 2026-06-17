@@ -50,8 +50,9 @@ ok("城市激活态对比增强", /city-pill\.is-active[\s\S]*box-shadow/.test(d
 ok("桌面卡片可读性增强", /@media \(min-width: 960px\)[\s\S]*card-premium h3/.test(designLayouts));
 ok("下拉锚点变量", /--toolbar-drop-anchor-left/.test(designLayouts));
 ok("下拉锚点定位逻辑", /updateToolbarDropAnchor/.test(appJs));
-ok("详情页回退为行式信息", /class=\"modal-row\"/.test(appJs) && !/detail-overview/.test(appJs));
-ok("详情页保留渐变头（旧版）", /detail-panel \.modal-header[\s\S]*var\(--premium-gradient\)/.test(premiumCss));
+ok("详情页图标化概览", /class=\"detail-overview\"/.test(appJs) && /detail-pill--distance/.test(appJs));
+ok("详情页图标行与设施标签", /class=\"detail-lines\"/.test(appJs) && /detail-facilities/.test(appJs) && /detail-facility__icon/.test(appJs));
+ok("详情页叠层渐变头", /--detail-header-gradient/.test(premiumCss) && /detail-panel::before/.test(premiumCss));
 ok("移除四个快捷设施项渲染", /renderValuePerks[\s\S]*el\.innerHTML = \"\"[\s\S]*el\.hidden = true/.test(appJs));
 ok("发现页有搜索", /id="searchInput"/.test(indexHtml));
 ok("发现页有城市选择", /id="cityQuickBtn"/.test(indexHtml));

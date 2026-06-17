@@ -5,6 +5,7 @@
 
 :root {
   --premium-gradient: linear-gradient(135deg, #0d9488 0%, #6366f1 50%, #a855f7 100%);
+  --detail-header-gradient: linear-gradient(135deg, rgba(13, 148, 136, 0.98) 0%, rgba(99, 102, 241, 0.9) 55%, rgba(168, 85, 247, 0.84) 100%);
   --premium-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --premium-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --sticky-top: calc(env(safe-area-inset-top, 0px) + 48px);
@@ -316,22 +317,64 @@
   opacity: 0.35;
 }
 
-/* ─── 详情 Sheet 顶栏渐变 ─── */
+/* ─── 详情 Sheet 顶栏（紫渐变 + 白底叠层） ─── */
+.app-ui .detail-panel {
+  position: relative;
+  overflow: hidden;
+  background: var(--ios-bg);
+}
+
+.app-ui .detail-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 126px;
+  background: var(--detail-header-gradient);
+  opacity: 0.94;
+  pointer-events: none;
+}
+
 .app-ui .detail-panel .modal-header {
-  background: var(--premium-gradient);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
   color: #fff;
-  border-radius: var(--ios-radius-xl) var(--ios-radius-xl) 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
   padding-top: 8px;
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
 }
 
 .app-ui .detail-panel .modal-header h3 {
   color: #fff;
   font-weight: 700;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
 }
 
 .app-ui .detail-panel .modal-close {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.app-ui .detail-panel .modal-close:active {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.app-ui .detail-panel .modal-body {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(242, 242, 247, 0.9) 0%, var(--ios-bg) 88px);
+}
+
+.app-ui .detail-panel .modal-footer--sticky {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(60, 60, 67, 0.16);
+  background: rgba(242, 242, 247, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ─── 新手引导 Premium ─── */

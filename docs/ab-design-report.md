@@ -15,4 +15,4 @@
 | d09 | 高密度 | 交互 | merged | minimal | 类型+设施合并单行 + 极简列表 |
 | d10 | 办事引导 | 筛选 | guide | premium | 引导步骤内联单行 + 场景 Chip |
 
-预览：[labs/ab-design.html](../labs/ab-design.html) · `?design=d01&v=47`
+预览：[labs/ab-design.html](../labs/ab-design.html) · `?design=d01&v=48`

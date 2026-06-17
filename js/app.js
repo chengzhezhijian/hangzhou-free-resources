@@ -1197,39 +1197,50 @@
     const modal = document.getElementById("detailModal");
     document.getElementById("modalTitle").textContent = r.fullName || r.name;
 
-    const facilityRows = Object.entries(FACILITY_LABELS)
+    const facilityBadges = Object.entries(FACILITY_LABELS)
       .map(([key, label]) => {
         const val = r.facilities[key];
-        let text = "无";
-        if (val === true) text = "有";
-        if (val === "partial") text = "部分提供";
-        return `<div class="modal-row"><label>${label}</label><p>${text}</p></div>`;
+        const status = val === true ? "on" : val === "partial" ? "partial" : "off";
+        return `<span class="detail-facility detail-facility--${status}">
+          <span class="detail-facility__icon">${FACILITY_ICONS[key] || "•"}</span>
+          <span>${label}</span>
+        </span>`;
       })
       .join("");
 
-    const features = (r.features || []).map((f) => `<li>${formatFeatureLabel(f)}</li>`).join("");
+    const features = (r.features || [])
+      .map((f) => `<span class="detail-tag">${formatFeatureLabel(f)}</span>`)
+      .join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
     const distKm = resourceDistanceKm(r);
     const coord = resourceCoord(r);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
+    const locationLabel = `${resourceCity(r)}${r.district ? ` · ${r.district}` : ""}`;
+    const costLabel = r.costType ? COST_TYPE_LABELS[r.costType] || r.costType : "";
 
     document.getElementById("modalBody").innerHTML = `
-      ${distLabel ? `<div class="modal-row"><label>直线距离</label><p>${distLabel}</p></div>` : ""}
-      <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
-      ${r.district ? `<div class="modal-row"><label>区县</label><p>${r.district}</p></div>` : ""}
-      <div class="modal-row"><label>类型</label><p>${categoryLabel(r)}</p></div>
-      ${r.costType ? `<div class="modal-row"><label>费用</label><p>${COST_TYPE_LABELS[r.costType] || r.costType}</p></div>` : ""}
-      ${r.fullName && r.fullName !== r.name ? `<div class="modal-row"><label>全称</label><p>${r.fullName}</p></div>` : ""}
-      <div class="modal-row"><label>地址</label><p>${r.address}</p></div>
-      ${mapQuery ? `<div class="modal-row"><label>地图搜索</label><p class="map-query-preview">${mapQuery}</p></div>` : ""}
-      <div class="modal-row"><label>开放时间</label><p>${r.hours}</p></div>
-      ${r.phone ? `<div class="modal-row"><label>电话</label><p>${r.phone}</p></div>` : ""}
-      ${r.transport ? `<div class="modal-row"><label>交通</label><p>${r.transport}</p></div>` : ""}
-      ${r.seasonalNote ? `<div class="modal-row"><label>季节说明</label><p>${r.seasonalNote}</p></div>` : ""}
-      ${facilityRows}
-      ${features ? `<div class="modal-row"><label>特色</label><ul class="modal-features">${features}</ul></div>` : ""}
-      ${r.note ? `<div class="modal-row"><label>备注</label><p>${r.note}</p></div>` : ""}
+      <section class="detail-overview">
+        ${distLabel ? `<span class="detail-pill detail-pill--distance">📏 ${distLabel}</span>` : ""}
+        <span class="detail-pill">🏷️ ${categoryLabel(r)}</span>
+        ${costLabel ? `<span class="detail-pill">💰 ${costLabel}</span>` : ""}
+        <span class="detail-pill">🏙️ ${locationLabel}</span>
+      </section>
+      <section class="detail-lines">
+        ${r.fullName && r.fullName !== r.name ? `<div class="detail-line"><span class="detail-line__icon">🧾</span><span>${r.fullName}</span></div>` : ""}
+        <div class="detail-line"><span class="detail-line__icon">📍</span><span>${r.address || "地址待补充"}</span></div>
+        <div class="detail-line"><span class="detail-line__icon">🕒</span><span>${r.hours || "开放时间见现场公示"}</span></div>
+        ${r.phone ? `<div class="detail-line"><span class="detail-line__icon">☎️</span><span>${r.phone}</span></div>` : ""}
+        ${r.transport ? `<div class="detail-line"><span class="detail-line__icon">🚌</span><span>${r.transport}</span></div>` : ""}
+        ${r.seasonalNote ? `<div class="detail-line"><span class="detail-line__icon">🌤️</span><span>${r.seasonalNote}</span></div>` : ""}
+        ${mapQuery ? `<div class="detail-line detail-line--map"><span class="detail-line__icon">🧭</span><span class="map-query-preview">${mapQuery}</span></div>` : ""}
+      </section>
+      <section class="detail-section">
+        <h4>设施</h4>
+        <div class="detail-facilities">${facilityBadges || '<span class="detail-tag">设施信息待补充</span>'}</div>
+      </section>
+      ${features ? `<section class="detail-section"><h4>特色</h4><div class="detail-tags">${features}</div></section>` : ""}
+      ${r.note ? `<section class="detail-section"><h4>备注</h4><p class="detail-note">${r.note}</p></section>` : ""}
     `;
 
     const footer = document.getElementById("modalFooter");
