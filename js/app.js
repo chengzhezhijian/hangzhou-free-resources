@@ -1178,13 +1178,13 @@
     const coord = resourceCoord(r);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
     const locationLabel = `${resourceCity(r)}${r.district ? ` · ${r.district}` : ""}`;
-    const costLabel = r.costType ? COST_TYPE_LABELS[r.costType] || r.costType : "未注明";
+    const costLabel = r.costType ? COST_TYPE_LABELS[r.costType] || r.costType : "";
 
     document.getElementById("modalBody").innerHTML = `
       <section class="detail-overview">
         ${distLabel ? `<span class="detail-pill detail-pill--distance">📏 ${distLabel}</span>` : ""}
         <span class="detail-pill">🏷️ ${categoryLabel(r)}</span>
-        <span class="detail-pill">💰 ${costLabel}</span>
+        ${costLabel ? `<span class="detail-pill">💰 ${costLabel}</span>` : ""}
         <span class="detail-pill">🏙️ ${locationLabel}</span>
       </section>
       <section class="detail-lines">

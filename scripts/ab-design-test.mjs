@@ -72,7 +72,7 @@ ${Object.values(variants)
   )
   .join("\n")}
 
-预览：[labs/ab-design.html](../labs/ab-design.html) · \`?design=d01&v=44\`
+预览：[labs/ab-design.html](../labs/ab-design.html) · \`?design=d01&v=45\`
 `;
 fs.writeFileSync(path.join(ROOT, "docs/ab-design-report.md"), md);
 console.log("📄 docs/ab-design-report.md\n");

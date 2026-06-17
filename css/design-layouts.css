@@ -45,6 +45,10 @@
   min-height: 0;
 }
 
+.filter-toolbar-layout .sort-tabs {
+  display: none !important;
+}
+
 .filter-toolbar-layout .result-count,
 .design-content-count-only .result-count {
   font-size: 0.6875rem;
@@ -155,6 +159,13 @@
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline {
   width: 100%;
+}
+
+.app-ui .city-pill.active,
+.app-ui .city-pill.is-active {
+  background: var(--ios-teal) !important;
+  border-color: var(--ios-teal) !important;
+  color: #fff !important;
 }
 
 /* ─── 筛选面板顶部排序段（综合/距离/评分） ─── */

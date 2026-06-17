@@ -316,22 +316,22 @@
   opacity: 0.35;
 }
 
-/* ─── 详情 Sheet 顶栏渐变 ─── */
+/* ─── 详情 Sheet 顶栏（简洁单层） ─── */
 .app-ui .detail-panel .modal-header {
-  background: var(--premium-gradient);
-  color: #fff;
-  border-radius: var(--ios-radius-xl) var(--ios-radius-xl) 0 0;
-  padding-top: 8px;
+  background: var(--ios-bg-elevated);
+  color: var(--ios-label);
+  border-bottom: 1px solid var(--ios-separator);
+  padding-top: 6px;
 }
 
 .app-ui .detail-panel .modal-header h3 {
-  color: #fff;
+  color: var(--ios-label);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .app-ui .detail-panel .modal-close {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--ios-label-secondary);
 }
 
 /* ─── 新手引导 Premium ─── */
