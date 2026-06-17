@@ -9,5 +9,5 @@ alwaysApply: true
 
 1. 直接 `git add`、`git commit`、`git push origin main`，无需等待用户确认
 2. 不要 push 含密钥的文件（`.env`、凭证等）
-3. 提交前若存在 `npm run test:all`，应先跑通再推送
+3. 提交前**必须**执行 `npm run test:all` 并全部通过后再 push（详见 `.cursor/rules/auto-test-required.mdc`）
 4. 提交信息简洁说明「为什么改」，遵循仓库既有风格

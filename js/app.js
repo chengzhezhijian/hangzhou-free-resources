@@ -471,19 +471,27 @@
     });
   }
 
+  function categoryToolbarLabel() {
+    if (state.category === "all") return "类型";
+    const cat = RESOURCE_CATEGORIES.find((c) => c.id === state.category);
+    return cat?.label || "类型中";
+  }
+
   function renderFilterToolbar() {
     const el = document.getElementById("filterToolbar");
-    if (!el || getDesign()) return;
+    if (!el) return;
     const facilityCount = state.facilities.size;
     const hasScene = state.category !== "all" || !!state.search;
+    const hasCategory = state.category !== "all";
     const quickChip = (id, key, label, active) =>
       `<button type="button" id="${id}" class="ft-chip ft-chip--quick${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
 
     el.hidden = false;
     el.innerHTML = `<div class="filter-toolbar__scroll filter-segment" role="group" aria-label="筛选">
-      ${quickChip("quickSceneBtn", "scene", hasScene ? "场景中" : "场景", hasScene)}
-      ${quickChip("quickFacilityBtn", "facility", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
       ${quickChip("quickSortBtn", "sort", sortModeLabel(), state.sortMode !== "comprehensive")}
+      ${quickChip("quickSceneBtn", "scene", hasScene ? "场景中" : "场景", hasScene)}
+      ${quickChip("quickCategoryBtn", "category", categoryToolbarLabel(), hasCategory)}
+      ${quickChip("quickFacilityBtn", "facility", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
     </div>`;
 
     el.querySelectorAll("[data-quick]").forEach((btn) => {
@@ -577,6 +585,39 @@
       return;
     }
 
+    if (kind === "quick-category") {
+      const counts = countByCategory();
+      const cats = visibleCategories();
+      panel.innerHTML = `
+        <div class="quick-drop-head">类型</div>
+        <div class="quick-drop-list">
+          ${cats
+            .map((c) => {
+              const active = state.category === c.id;
+              return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-category="${c.id}">
+                ${c.icon || ""} ${c.label} <span style="opacity:0.7">(${counts[c.id] || 0})</span>
+                ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
+              </button>`;
+            })
+            .join("")}
+        </div>`;
+
+      panel.querySelectorAll("[data-category]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.category = btn.dataset.category || "all";
+          state.page = 1;
+          state.facilities.clear();
+          track("filter_change", { field: "category", value: state.category });
+          renderCategoryFilters();
+          renderFacilityFilters();
+          renderValuePerks();
+          renderCards();
+          closeToolbarDrop();
+        });
+      });
+      return;
+    }
+
     if (kind === "quick-facility") {
       panel.innerHTML = `
         <div class="quick-drop-head">设施</div>
@@ -648,6 +689,7 @@
   function resolveToolbarTrigger(kind) {
     const map = {
       "quick-scene": "quickSceneBtn",
+      "quick-category": "quickCategoryBtn",
       "quick-facility": "quickFacilityBtn",
       "quick-sort": "quickSortBtn",
       sort: "sortTriggerBtn",
@@ -664,7 +706,9 @@
         ? 220
         : kind === "quick-facility"
           ? 336
-          : 300;
+          : kind === "quick-category"
+            ? 320
+            : 300;
     const minWidth = kind === "quick-sort" || kind === "sort" ? 176 : 236;
     const desired = Math.max(preset, Math.round((triggerRect?.width || 0) + 88));
     return Math.min(Math.max(desired, minWidth), Math.max(minWidth, viewportWidth - 24));
@@ -707,12 +751,13 @@
   function openToolbarDrop(kind, focusArea = "more", triggerEl = null) {
     const areaMap = {
       "quick-scene": "scenes",
+      "quick-category": "scenes",
       "quick-facility": "facilities",
       "quick-sort": "sort",
     };
     const mappedArea = areaMap[kind] || focusArea;
     const desktop = isFilterDesktop();
-    const quickKinds = new Set(["quick-sort", "quick-scene", "quick-facility", "sort"]);
+    const quickKinds = new Set(["quick-sort", "quick-scene", "quick-category", "quick-facility", "sort"]);
     if (desktop && !quickKinds.has(kind)) {
       if (kind === "filter") expandSidebar(true);
       if (kind === "filter" || areaMap[kind]) {
@@ -736,7 +781,7 @@
 
     toolbarDropKind = kind;
     toolbarDropFocus = mappedArea || "more";
-    if (kind === "quick-sort" || kind === "quick-scene" || kind === "quick-facility") {
+    if (kind === "quick-sort" || kind === "quick-scene" || kind === "quick-category" || kind === "quick-facility") {
       renderQuickDropPanel(kind);
       quickPanel.hidden = false;
       sortPanel.hidden = true;
@@ -1155,9 +1200,8 @@
     updateDistanceHint();
     if (design) {
       if (typeof DesignEngine !== "undefined") DesignEngine.remount();
-    } else {
-      renderFilterToolbar();
     }
+    renderFilterToolbar();
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -2089,9 +2133,7 @@
     } else if (!designInit) {
       renderHeroStats();
     }
-    if (!designInit) {
-      renderFilterToolbar();
-    }
+    renderFilterToolbar();
     renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();
@@ -2129,6 +2171,7 @@
         openFilterSheet,
         toggleSortDropdown,
         sortModeLabel,
+        renderFilterToolbar,
       });
     }
     renderCards();

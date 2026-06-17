@@ -165,6 +165,10 @@ const DesignEngine = (function () {
   function mountFilterRow(design) {
     const el = document.getElementById("filterToolbar");
     if (!el || !design || !api) return;
+    if (typeof api.renderFilterToolbar === "function") {
+      api.renderFilterToolbar();
+      return;
+    }
     el.innerHTML = `<div class="filter-toolbar__scroll">${buildRow(design.filterRow)}</div>`;
     bindToolbar(el);
   }

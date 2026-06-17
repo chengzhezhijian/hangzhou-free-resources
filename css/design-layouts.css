@@ -212,7 +212,7 @@
 
 @media (min-width: 960px) {
   .app-ui.filter-toolbar-layout:not(.has-design-variant) .filter-segment {
-    max-width: 420px;
+    max-width: 480px;
   }
 
   .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
@@ -850,6 +850,28 @@ body.toolbar-drop-open {
   border-radius: 8px;
   background: var(--ios-teal);
   color: #fff;
+}
+
+/* ─── 桌面端：筛选仅走顶部分段条，隐藏左侧 sidebar ─── */
+@media (min-width: 960px) {
+  .app-ui.filter-toolbar-layout .sidebar,
+  .app-ui.filter-toolbar-layout .sidebar-inner {
+    display: none !important;
+  }
+
+  .app-ui.filter-toolbar-layout .main {
+    grid-template-columns: 1fr !important;
+    gap: 0;
+  }
+}
+
+/* H5：城市入口统一为 discover-bar 内单一按钮 */
+.app-ui.filter-toolbar-layout #cityQuickBtnMobile {
+  display: none !important;
+}
+
+.app-ui.filter-toolbar-layout .glass-nav__row .loc-pill[hidden] {
+  display: none !important;
 }
 
 /* ─── 布局变体 ─── */

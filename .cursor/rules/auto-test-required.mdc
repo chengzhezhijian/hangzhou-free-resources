@@ -1,0 +1,18 @@
+---
+description: 任何代码修改必须先跑 test:all 全绿再 push
+alwaysApply: true
+---
+
+# 自动化测试门禁
+
+在本项目中进行**任何**重构、优化、新增或 bug 修复时：
+
+1. **先改测试、再改实现**（若行为变更需新增/更新断言）
+2. 本地必须执行 `npm run test:all` 并**全部通过**
+3. 至少覆盖相关子集：
+   - 筛选/定位/UI：`npm run test:filter` + `npm run test:ui`
+   - 数据逻辑：`npm run test:data`
+4. **仅在 test:all 全绿后**才可 `git push origin main`
+5. 不得跳过 pre-commit / 不得 `--no-verify` 强推
+
+若测试失败：修复代码或测试，重新跑全量，禁止带红 push。

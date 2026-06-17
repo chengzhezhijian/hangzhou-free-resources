@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 定位 / 未定位下「独立下拉筛选」交互的真实 DOM 集成测试（jsdom）
- * 覆盖：场景/设施/排序三个独立下拉、定位成功/失败、已定位回放、计数联动。
+ * 覆盖：排序/场景/类型/设施四段独立下拉、定位成功/失败、已定位回放、计数联动。
  */
 import fs from "fs";
 import path from "path";
@@ -111,7 +111,22 @@ function boot(opts = {}) {
   const code = SCRIPTS.map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8")).join("\n;\n");
   window.eval(code);
 
+  injectStyles(window.document, [
+    "css/design-system.css",
+    "css/design-layouts.css",
+  ]);
+
   return { dom, window, doc: window.document };
+}
+
+function injectStyles(doc, files) {
+  for (const file of files) {
+    const css = fs.readFileSync(path.join(ROOT, file), "utf8");
+    const style = doc.createElement("style");
+    style.setAttribute("data-test-css", file);
+    style.textContent = css;
+    doc.head.appendChild(style);
+  }
 }
 
 // ── 断言框架 ──
@@ -126,6 +141,16 @@ function ok(name, cond) {
   }
 }
 
+function isVisible(el, win) {
+  if (!el || el.hidden) return false;
+  const style = win.getComputedStyle(el);
+  return style.display !== "none" && style.visibility !== "hidden";
+}
+
+function segmentOrder(doc) {
+  return [...doc.querySelectorAll("#filterToolbar [data-quick]")].map((btn) => btn.dataset.quick);
+}
+
 const HANGZHOU = { lat: 30.2741, lng: 120.1551 };
 
 async function run() {
@@ -136,9 +161,14 @@ async function run() {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    ok("未定位:快捷筛选-场景按钮存在", !!doc.getElementById("quickSceneBtn"));
-    ok("未定位:快捷筛选-设施按钮存在", !!doc.getElementById("quickFacilityBtn"));
     ok("未定位:快捷筛选-排序按钮存在", !!doc.getElementById("quickSortBtn"));
+    ok("未定位:快捷筛选-场景按钮存在", !!doc.getElementById("quickSceneBtn"));
+    ok("未定位:快捷筛选-类型按钮存在", !!doc.getElementById("quickCategoryBtn"));
+    ok("未定位:快捷筛选-设施按钮存在", !!doc.getElementById("quickFacilityBtn"));
+    ok(
+      "未定位:四段顺序为排序/场景/类型/设施",
+      JSON.stringify(segmentOrder(doc)) === JSON.stringify(["sort", "scene", "category", "facility"])
+    );
     ok("未定位:快捷筛选带下箭头", doc.getElementById("quickSortBtn")?.textContent.includes("▾"));
     ok("未定位:移除筛选图标按钮", !doc.getElementById("searchFilterBtn"));
     ok("未定位:四个快捷设施项已隐藏", doc.querySelectorAll("[data-value-perks] .value-perk").length === 0);
@@ -162,7 +192,7 @@ async function run() {
   }
 
   // ───────────────────────────────────────────────
-  // 场景 2：三个快捷项为独立下拉，不共用单一筛选框
+  // 场景 2：四段快捷项为独立下拉，不共用单一筛选框
   // ───────────────────────────────────────────────
   {
     const { doc } = boot({ geo: "error" });
@@ -180,6 +210,11 @@ async function run() {
     ok("场景下拉:标题正确", /场景/.test(quickPanel.textContent || ""));
     ok("场景下拉:含场景条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 2);
     ok("场景下拉:不打开大筛选框", doc.getElementById("filterDropPanel").hidden === true);
+
+    doc.getElementById("quickCategoryBtn").click();
+    await tick();
+    ok("类型下拉:标题正确", /类型/.test(quickPanel.textContent || ""));
+    ok("类型下拉:含类型条目", quickPanel.querySelectorAll("[data-category]").length >= 2);
 
     doc.getElementById("quickFacilityBtn").click();
     await tick();
@@ -308,6 +343,11 @@ async function run() {
     const { doc } = boot({ geo: "error", desktop: true });
     await tick();
 
+    ok(
+      "桌面:sidebar 筛选块隐藏",
+      doc.defaultView.getComputedStyle(doc.getElementById("sidebar")).display === "none"
+    );
+
     doc.getElementById("quickSceneBtn").click();
     await tick();
     ok("桌面:场景快捷下拉可见", doc.getElementById("quickDropPanel").hidden === false);
@@ -324,7 +364,29 @@ async function run() {
   }
 
   // ───────────────────────────────────────────────
-  // 场景 8：城市激活态在移动/桌面都清晰且可读
+  // 场景 8：H5 仅一个城市选择入口（discover-bar）
+  // ───────────────────────────────────────────────
+  {
+    const { doc, window } = boot({ geo: "error", desktop: false });
+    await tick();
+    const mobileBtn = doc.getElementById("cityQuickBtnMobile");
+    const mainBtn = doc.getElementById("cityQuickBtn");
+    ok("移动:discover-bar 城市按钮可见", isVisible(mainBtn, window));
+    ok("移动:glass-nav 城市按钮不可见", !isVisible(mobileBtn, window));
+    ok("移动:仅一个可见城市入口", Number(isVisible(mainBtn, window)) + Number(isVisible(mobileBtn, window)) === 1);
+  }
+
+  {
+    const { doc, window } = boot({ geo: "error", desktop: true });
+    await tick();
+    const mobileBtn = doc.getElementById("cityQuickBtnMobile");
+    const mainBtn = doc.getElementById("cityQuickBtn");
+    ok("桌面:discover-bar 城市按钮可见", isVisible(mainBtn, window));
+    ok("桌面:glass-nav 城市按钮不可见", !isVisible(mobileBtn, window));
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 9：城市激活态在移动/桌面都清晰且可读
   // ───────────────────────────────────────────────
   for (const [label, desktop] of [
     ["移动", false],
@@ -345,7 +407,7 @@ async function run() {
   }
 
   // ───────────────────────────────────────────────
-  // 场景 9：详情页不重复展示与标题相同的导航词
+  // 场景 10：详情页不重复展示与标题相同的导航词
   // ───────────────────────────────────────────────
   {
     const { doc, window } = boot({ geo: "error" });
@@ -367,7 +429,7 @@ async function run() {
   }
 
   // ───────────────────────────────────────────────
-  // 场景 10：城市面板无「全国/全部」浏览范围
+  // 场景 11：城市面板无「全国/全部」浏览范围
   // ───────────────────────────────────────────────
   {
     const { doc } = boot({ geo: "error" });

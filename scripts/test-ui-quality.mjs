@@ -33,7 +33,15 @@ ok("快捷下拉层", /id="quickDropPanel"/.test(indexHtml));
 ok("筛选顶栏下拉", /id="filterDropPanel"/.test(indexHtml));
 ok("筛选面板排序段", /id="filterSortSegment"/.test(indexHtml));
 ok("排序段渲染函数", /function renderFilterSortSegment/.test(appJs));
-ok("快捷筛选渲染函数", /function renderFilterToolbar/.test(appJs) && /quickSceneBtn/.test(appJs));
+ok("快捷筛选渲染函数", /function renderFilterToolbar/.test(appJs) && /quickCategoryBtn/.test(appJs));
+ok(
+  "四段顺序代码",
+  /quickSortBtn[\s\S]*quickSceneBtn[\s\S]*quickCategoryBtn[\s\S]*quickFacilityBtn/.test(appJs)
+);
+ok("类型下拉渲染", /kind === "quick-category"/.test(appJs));
+ok("桌面端隐藏 sidebar CSS", /@media \(min-width: 960px\)[\s\S]*\.app-ui\.filter-toolbar-layout \.sidebar[\s\S]*display:\s*none/.test(designLayouts));
+ok("H5 隐藏 glass-nav 城市按钮", /#cityQuickBtnMobile[\s\S]*display:\s*none/.test(designLayouts));
+ok("H5 城市按钮 hidden 属性", /id="cityQuickBtnMobile" hidden/.test(indexHtml));
 ok("快捷筛选下箭头", /ft-chip--quick/.test(appJs) && /▾/.test(appJs));
 ok("分段筛选条", /filter-segment/.test(appJs) && /\.filter-segment/.test(designLayouts));
 ok("城市面板不含全国项", !/cityPillHtml\("全部"/.test(appJs) && !/cityPillHtml\("全部", china \? "全国"/.test(appJs));
