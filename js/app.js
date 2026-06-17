@@ -480,7 +480,7 @@
       `<button type="button" id="${id}" class="ft-chip ft-chip--quick${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
 
     el.hidden = false;
-    el.innerHTML = `<div class="filter-toolbar__scroll">
+    el.innerHTML = `<div class="filter-toolbar__scroll filter-segment" role="group" aria-label="筛选">
       ${quickChip("quickSceneBtn", "scene", hasScene ? "场景中" : "场景", hasScene)}
       ${quickChip("quickFacilityBtn", "facility", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
       ${quickChip("quickSortBtn", "sort", sortModeLabel(), state.sortMode !== "comprehensive")}
@@ -1510,7 +1510,7 @@
           );
 
     if (scope) {
-      let html = cityPillHtml("全部", china ? "全国" : "浙江全省");
+      let html = cityPillHtml("全部", china ? "全部" : "浙江全省");
       if (!china) html += cityPillHtml("全省", "全省");
       scope.innerHTML = html;
       bindCityPills(scope);

@@ -164,7 +164,7 @@
 
 .app-ui .discover-inner {
   padding: 0;
-  gap: 10px;
+  gap: 6px;
 }
 
 .app-ui .loc-search-row {
@@ -487,17 +487,17 @@
 .app-ui .city-province-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .app-ui .city-pill {
-  padding: 8px 14px;
-  border-radius: var(--ios-radius-sm);
+  padding: 5px 10px;
+  border-radius: 6px;
   border: none;
   background: var(--ios-bg-elevated);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  box-shadow: var(--ios-shadow);
+  box-shadow: none;
   cursor: pointer;
 }
 

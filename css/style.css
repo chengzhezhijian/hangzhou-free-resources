@@ -520,12 +520,12 @@ img {
 
 .active-filters {
   display: flex;
-  gap: 0.4rem;
-  margin-top: 0.55rem;
+  gap: 0.35rem;
+  margin-top: 0.3rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 2px;
+  padding-bottom: 0;
 }
 
 .active-filters::-webkit-scrollbar {
@@ -1610,12 +1610,12 @@ img {
 .city-hot {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .city-hot .city-pill {
   flex: 0 0 auto;
-  min-width: calc(33.33% - 0.35rem);
+  min-width: calc(33.33% - 0.28rem);
   text-align: center;
 }
 
@@ -1643,17 +1643,17 @@ img {
 .city-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .city-pill {
-  min-height: var(--touch-min);
-  padding: 0.5rem;
+  min-height: 0;
+  padding: 0.38rem 0.45rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 6px;
   background: var(--bg-card);
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
 }

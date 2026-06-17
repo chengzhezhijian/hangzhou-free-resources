@@ -16,22 +16,23 @@
 }
 
 .filter-toolbar-layout .discover-sticky {
-  padding-bottom: 2px;
+  padding-bottom: 0;
 }
 
 .filter-toolbar-layout .discover-inner,
 .has-design-variant .discover-inner {
-  gap: 4px;
+  gap: 2px;
 }
 
 .filter-toolbar-layout .loc-search-row .loc-pill {
   min-width: 0;
-  padding: 0 10px;
-  height: 40px;
+  padding: 0 8px;
+  height: 36px;
+  font-size: 0.78rem;
 }
 
 .filter-toolbar-layout .search-box {
-  height: 40px;
+  height: 36px;
 }
 
 .filter-toolbar-layout .content-header h2,
@@ -153,15 +154,14 @@
 }
 
 @media (min-width: 960px) {
-  .app-ui.filter-toolbar-layout:not(.has-design-variant) .filter-toolbar__scroll {
-    gap: 10px;
-    padding: 8px 0 6px;
+  .app-ui.filter-toolbar-layout:not(.has-design-variant) .filter-segment {
+    max-width: 420px;
   }
 
   .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick {
-    height: 34px;
-    padding: 0 14px;
-    font-size: 0.84rem;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 0.8125rem;
   }
 
   .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-grid {
@@ -237,6 +237,30 @@
   transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .city-pill,
+.app-ui .city-province-grid .city-pill,
+.app-ui .city-hot .city-pill,
+.app-ui .city-grid .city-pill {
+  min-height: 0;
+  padding: 5px 9px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.app-ui .city-hot {
+  gap: 6px;
+}
+
+.app-ui .city-province-grid {
+  gap: 6px;
+}
+
+.app-ui .city-grid {
+  gap: 6px;
+}
+
 .app-ui .city-pill:active {
   transform: scale(0.98);
 }
@@ -301,16 +325,23 @@
 
 .filter-toolbar__scroll {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  align-items: stretch;
+  gap: 0;
   overflow-x: auto;
-  padding: 6px 4px 5px;
+  padding: 0;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   white-space: nowrap;
-  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.08));
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.filter-segment {
+  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.1));
+  border-radius: 6px;
+  background: var(--ios-bg-elevated, #fff);
+  overflow: hidden;
 }
 
 .filter-toolbar__scroll::-webkit-scrollbar {
@@ -336,16 +367,39 @@
   transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .filter-toolbar {
+  margin-top: 0;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .active-filters {
+  margin-top: 0.2rem;
+  padding-bottom: 0;
+}
+
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick {
-  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.08));
-  border-radius: 999px;
-  background: var(--ios-bg-elevated, #fff);
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   color: var(--ios-label, #1c1c1e);
   font-weight: 560;
-  height: 32px;
-  padding: 0 13px;
-  gap: 4px;
-  box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
+  height: 30px;
+  padding: 0 8px;
+  gap: 3px;
+  box-shadow: none;
+  position: relative;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick + .ft-chip--quick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 1px;
+  background: var(--ios-separator, rgba(0, 0, 0, 0.1));
+  pointer-events: none;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick .ft-caret {
@@ -355,10 +409,10 @@
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-active,
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-open {
-  border-color: rgba(13, 148, 136, 0.42);
+  border: none;
   color: var(--ios-teal);
-  background: rgba(228, 247, 245, 0.92);
-  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.12);
+  background: rgba(228, 247, 245, 0.95);
+  box-shadow: none;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-open .ft-caret {

@@ -46,7 +46,7 @@
   top: var(--sticky-top);
   z-index: 90;
   margin: 0 -16px;
-  padding: 0 16px 8px;
+  padding: 0 16px 4px;
   background: var(--discover-sticky-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
