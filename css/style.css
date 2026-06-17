@@ -1674,7 +1674,127 @@ img {
 .detail-panel .modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 0.9rem;
+}
+
+.detail-overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.detail-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 1.6rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.detail-pill--distance {
+  background: #0ea5e9;
+  color: #fff;
+}
+
+.detail-lines {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-line {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.35rem;
+  align-items: start;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  color: var(--ink-main);
+}
+
+.detail-line__icon {
+  opacity: 0.8;
+}
+
+.detail-line--map .map-query-preview {
+  margin: 0;
+}
+
+.detail-section {
+  margin-bottom: 0.72rem;
+}
+
+.detail-section h4 {
+  margin: 0 0 0.42rem;
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.detail-facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.detail-facility {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 560;
+  background: var(--bg-soft);
+  color: var(--ink-muted);
+}
+
+.detail-facility__icon {
+  font-size: 0.75rem;
+}
+
+.detail-facility--on {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.detail-facility--partial {
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+.detail-facility--off {
+  opacity: 0.78;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.detail-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 560;
+}
+
+.detail-note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.42;
+  color: var(--ink-muted);
 }
 
 .modal-row {

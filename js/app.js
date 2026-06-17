@@ -101,6 +101,14 @@
     charge: "可充电",
     open24: "24h",
   };
+  const FACILITY_ICONS = {
+    wifi: "📶",
+    water: "💧",
+    ac: "❄️",
+    study: "📚",
+    charge: "🔌",
+    open24: "🕒",
+  };
 
   const SEARCH_INTENTS = [
     {
@@ -482,20 +490,19 @@
     if (!el || getDesign()) return;
     const facilityCount = state.facilities.size;
     const hasScene = state.category !== "all" || !!state.search;
-    const activeCount = countActiveFilters();
     const quickChip = (id, key, label, active) =>
       `<button type="button" id="${id}" class="ft-chip ft-chip--quick${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
 
     el.hidden = false;
     el.innerHTML = `<div class="filter-toolbar__scroll">
-      ${quickChip("quickSceneBtn", "scenes", hasScene ? "场景中" : "场景", hasScene)}
-      ${quickChip("quickFacilityBtn", "facilities", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
+      ${quickChip("quickSceneBtn", "scene", hasScene ? "场景中" : "场景", hasScene)}
+      ${quickChip("quickFacilityBtn", "facility", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
       ${quickChip("quickSortBtn", "sort", sortModeLabel(), state.sortMode !== "comprehensive")}
-      ${quickChip("quickFilterBtn", "more", activeCount ? `筛选(${activeCount})` : "筛选", activeCount > 0)}
     </div>`;
 
     el.querySelectorAll("[data-quick]").forEach((btn) => {
-      btn.addEventListener("click", () => openFilterSheet(btn.dataset.quick || "more"));
+      const quick = btn.dataset.quick;
+      btn.addEventListener("click", () => openToolbarDrop(`quick-${quick}`));
     });
   }
 
@@ -528,6 +535,121 @@
     });
   }
 
+  function renderQuickDropPanel(kind) {
+    const panel = document.getElementById("quickDropPanel");
+    if (!panel) return;
+
+    const sceneActive = state.category !== "all" || !!state.search;
+    if (kind === "quick-scene") {
+      const scenes = typeof QUICK_SCENES !== "undefined" ? QUICK_SCENES : [];
+      panel.innerHTML = `
+        <div class="quick-drop-head">场景</div>
+        <div class="quick-drop-list">
+          <button type="button" class="quick-drop-item${sceneActive ? "" : " is-active"}" data-scene-clear="1">
+            全部场景${sceneActive ? "" : '<span class="sort-drop-check" aria-hidden="true">✓</span>'}
+          </button>
+          ${scenes
+            .map((s, idx) => {
+              const active = isQuickSceneActive(s);
+              return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-scene-index="${idx}">
+                ${s.label.replace(/^[^\u4e00-\u9fa5a-zA-Z0-9]+/, "")}
+                ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
+              </button>`;
+            })
+            .join("")}
+        </div>`;
+
+      panel.querySelector("[data-scene-clear]")?.addEventListener("click", () => {
+        state.group = "all";
+        state.category = "all";
+        state.search = "";
+        state.page = 1;
+        const input = document.getElementById("searchInput");
+        if (input) input.value = "";
+        document.getElementById("searchClear").hidden = true;
+        renderCategoryFilters();
+        renderCards();
+        closeToolbarDrop();
+      });
+      panel.querySelectorAll("[data-scene-index]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const scene = scenes[Number(btn.dataset.sceneIndex)];
+          if (!scene) return;
+          state.group = "all";
+          state.category = scene.category || "all";
+          state.search = scene.search || "";
+          state.page = 1;
+          const input = document.getElementById("searchInput");
+          if (input) input.value = state.search;
+          document.getElementById("searchClear").hidden = !state.search;
+          renderCategoryFilters();
+          renderCards();
+          track("filter_change", { field: "quick_scene", value: state.search || state.category });
+          closeToolbarDrop();
+        });
+      });
+      return;
+    }
+
+    if (kind === "quick-facility") {
+      panel.innerHTML = `
+        <div class="quick-drop-head">设施</div>
+        <div class="quick-drop-list">
+          ${FACILITY_FILTERS.map((f) => {
+            const active = state.facilities.has(f.id);
+            return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-facility="${f.id}">
+              ${f.label}
+              ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
+            </button>`;
+          }).join("")}
+        </div>
+        <div class="quick-drop-actions">
+          <button type="button" class="btn-secondary" id="quickFacilityReset">重置</button>
+          <button type="button" class="btn-primary" id="quickFacilityDone">完成</button>
+        </div>`;
+
+      panel.querySelectorAll("[data-facility]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.facility;
+          if (!id) return;
+          if (state.facilities.has(id)) state.facilities.delete(id);
+          else state.facilities.add(id);
+          state.page = 1;
+          renderFacilityFilters();
+          renderCards();
+          renderQuickDropPanel("quick-facility");
+        });
+      });
+      panel.querySelector("#quickFacilityReset")?.addEventListener("click", () => {
+        state.facilities.clear();
+        state.page = 1;
+        renderFacilityFilters();
+        renderCards();
+        closeToolbarDrop();
+      });
+      panel.querySelector("#quickFacilityDone")?.addEventListener("click", closeToolbarDrop);
+      return;
+    }
+
+    panel.innerHTML = `
+      <div class="quick-drop-head">排序</div>
+      <div class="quick-drop-list">
+        ${SORT_OPTIONS.map((o) => {
+          const active = state.sortMode === o.id;
+          return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-sort="${o.id}">
+            ${o.label}
+            ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
+          </button>`;
+        }).join("")}
+      </div>`;
+    panel.querySelectorAll("[data-sort]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSortMode(btn.dataset.sort);
+        closeToolbarDrop();
+      });
+    });
+  }
+
   function updateToolbarDropTop() {
     const sticky = document.querySelector(".discover-sticky");
     if (!sticky) return;
@@ -551,29 +673,48 @@
   }
 
   function openToolbarDrop(kind, focusArea = "more") {
+    const areaMap = {
+      "quick-scene": "scenes",
+      "quick-facility": "facilities",
+      "quick-sort": "sort",
+    };
+    const mappedArea = areaMap[kind] || focusArea;
     if (isFilterDesktop()) {
       if (kind === "filter") expandSidebar(true);
-      if (kind === "filter") {
-        window.setTimeout(() => focusFilterArea(focusArea), 40);
+      if (kind === "filter" || areaMap[kind]) {
+        if (kind !== "filter") expandSidebar(true);
+        window.setTimeout(() => focusFilterArea(mappedArea), 40);
       }
+      return;
+    }
+    if (toolbarDropKind === kind) {
+      closeToolbarDrop();
       return;
     }
     updateToolbarDropTop();
     const layer = document.getElementById("toolbarDropLayer");
     const sortPanel = document.getElementById("sortDropPanel");
+    const quickPanel = document.getElementById("quickDropPanel");
     const filterPanel = document.getElementById("filterDropPanel");
-    if (!layer || !sortPanel || !filterPanel) return;
+    if (!layer || !sortPanel || !quickPanel || !filterPanel) return;
 
     toolbarDropKind = kind;
-    toolbarDropFocus = focusArea || "more";
-    if (kind === "sort") {
+    toolbarDropFocus = mappedArea || "more";
+    if (kind === "quick-sort" || kind === "quick-scene" || kind === "quick-facility") {
+      renderQuickDropPanel(kind);
+      quickPanel.hidden = false;
+      sortPanel.hidden = true;
+      filterPanel.hidden = true;
+    } else if (kind === "sort") {
       renderSortDropPanel();
       sortPanel.hidden = false;
+      quickPanel.hidden = true;
       filterPanel.hidden = true;
     } else {
       renderFilterSortSegment();
       updateFilterConfirmCount();
       sortPanel.hidden = true;
+      quickPanel.hidden = true;
       filterPanel.hidden = false;
     }
     layer.hidden = false;
@@ -587,9 +728,11 @@
   function closeToolbarDrop() {
     const layer = document.getElementById("toolbarDropLayer");
     const sortPanel = document.getElementById("sortDropPanel");
+    const quickPanel = document.getElementById("quickDropPanel");
     const filterPanel = document.getElementById("filterDropPanel");
     if (layer) layer.hidden = true;
     if (sortPanel) sortPanel.hidden = true;
+    if (quickPanel) quickPanel.hidden = true;
     if (filterPanel) filterPanel.hidden = true;
     document.body.classList.remove("toolbar-drop-open");
     toolbarDropKind = null;
@@ -606,10 +749,9 @@
       btn.classList.toggle("is-open", toolbarDropKind === "filter");
     });
     document.querySelectorAll(".ft-chip--quick").forEach((btn) => {
-      const quick = btn.dataset.quick || "more";
-      btn.classList.toggle("is-open", toolbarDropKind === "filter" && toolbarDropFocus === quick);
+      const quick = btn.dataset.quick || "";
+      btn.classList.toggle("is-open", toolbarDropKind === `quick-${quick}`);
     });
-    document.getElementById("searchFilterBtn")?.classList.toggle("is-open", toolbarDropKind === "filter");
   }
 
   function toggleSortDropdown() {
@@ -809,9 +951,10 @@
 
     const facilities = Object.keys(FACILITY_LABELS)
       .filter((f) => hasFacility(resource, f))
+      .slice(0, 3)
       .map(
         (f) =>
-          `<span class="facility-tag ${facilityClass(resource, f)}">${FACILITY_LABELS[f]}</span>`
+          `<span class="facility-tag ${facilityClass(resource, f)}">${FACILITY_ICONS[f] || "•"} ${FACILITY_LABELS[f]}</span>`
       )
       .join("");
 
@@ -831,11 +974,11 @@
             </div>
           </div>
           <h3>${resource.name}</h3>
-          <p class="card-address">${resource.address}</p>
-          <p class="card-hours">${resource.hours}</p>
-          <div class="facility-tags">${facilities || '<span class="facility-tag">查看详情</span>'}</div>
+          <p class="card-address">📍 ${resource.address || "地址待补充"}</p>
+          <p class="card-hours">🕒 ${resource.hours || "开放时间见详情"}</p>
+          <div class="facility-tags">${facilities || '<span class="facility-tag">ℹ️ 查看详情</span>'}</div>
           <div class="card-meta">
-            <span class="card-district">${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
+            <span class="card-district">🏙️ ${resourceCity(resource)}${resource.district && resource.district !== resourceCity(resource) ? " · " + resource.district : ""}</span>
           </div>
           <span class="card-chevron" aria-hidden="true">›</span>
         </div>
@@ -1015,39 +1158,50 @@
     const modal = document.getElementById("detailModal");
     document.getElementById("modalTitle").textContent = r.fullName || r.name;
 
-    const facilityRows = Object.entries(FACILITY_LABELS)
+    const facilityBadges = Object.entries(FACILITY_LABELS)
       .map(([key, label]) => {
         const val = r.facilities[key];
-        let text = "无";
-        if (val === true) text = "有";
-        if (val === "partial") text = "部分提供";
-        return `<div class="modal-row"><label>${label}</label><p>${text}</p></div>`;
+        const status = val === true ? "on" : val === "partial" ? "partial" : "off";
+        return `<span class="detail-facility detail-facility--${status}">
+          <span class="detail-facility__icon">${FACILITY_ICONS[key] || "•"}</span>
+          <span>${label}</span>
+        </span>`;
       })
       .join("");
 
-    const features = (r.features || []).map((f) => `<li>${formatFeatureLabel(f)}</li>`).join("");
+    const features = (r.features || [])
+      .map((f) => `<span class="detail-tag">${formatFeatureLabel(f)}</span>`)
+      .join("");
     const mapQuery =
       typeof MapNav !== "undefined" ? MapNav.buildQuery(r, state.city) : null;
     const distKm = resourceDistanceKm(r);
     const coord = resourceCoord(r);
     const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
+    const locationLabel = `${resourceCity(r)}${r.district ? ` · ${r.district}` : ""}`;
+    const costLabel = r.costType ? COST_TYPE_LABELS[r.costType] || r.costType : "未注明";
 
     document.getElementById("modalBody").innerHTML = `
-      ${distLabel ? `<div class="modal-row"><label>直线距离</label><p>${distLabel}</p></div>` : ""}
-      <div class="modal-row"><label>地市</label><p>${resourceCity(r)}</p></div>
-      ${r.district ? `<div class="modal-row"><label>区县</label><p>${r.district}</p></div>` : ""}
-      <div class="modal-row"><label>类型</label><p>${categoryLabel(r)}</p></div>
-      ${r.costType ? `<div class="modal-row"><label>费用</label><p>${COST_TYPE_LABELS[r.costType] || r.costType}</p></div>` : ""}
-      ${r.fullName && r.fullName !== r.name ? `<div class="modal-row"><label>全称</label><p>${r.fullName}</p></div>` : ""}
-      <div class="modal-row"><label>地址</label><p>${r.address}</p></div>
-      ${mapQuery ? `<div class="modal-row"><label>地图搜索</label><p class="map-query-preview">${mapQuery}</p></div>` : ""}
-      <div class="modal-row"><label>开放时间</label><p>${r.hours}</p></div>
-      ${r.phone ? `<div class="modal-row"><label>电话</label><p>${r.phone}</p></div>` : ""}
-      ${r.transport ? `<div class="modal-row"><label>交通</label><p>${r.transport}</p></div>` : ""}
-      ${r.seasonalNote ? `<div class="modal-row"><label>季节说明</label><p>${r.seasonalNote}</p></div>` : ""}
-      ${facilityRows}
-      ${features ? `<div class="modal-row"><label>特色</label><ul class="modal-features">${features}</ul></div>` : ""}
-      ${r.note ? `<div class="modal-row"><label>备注</label><p>${r.note}</p></div>` : ""}
+      <section class="detail-overview">
+        ${distLabel ? `<span class="detail-pill detail-pill--distance">📏 ${distLabel}</span>` : ""}
+        <span class="detail-pill">🏷️ ${categoryLabel(r)}</span>
+        <span class="detail-pill">💰 ${costLabel}</span>
+        <span class="detail-pill">🏙️ ${locationLabel}</span>
+      </section>
+      <section class="detail-lines">
+        ${r.fullName && r.fullName !== r.name ? `<div class="detail-line"><span class="detail-line__icon">🧾</span><span>${r.fullName}</span></div>` : ""}
+        <div class="detail-line"><span class="detail-line__icon">📍</span><span>${r.address || "地址待补充"}</span></div>
+        <div class="detail-line"><span class="detail-line__icon">🕒</span><span>${r.hours || "开放时间见现场公示"}</span></div>
+        ${r.phone ? `<div class="detail-line"><span class="detail-line__icon">☎️</span><span>${r.phone}</span></div>` : ""}
+        ${r.transport ? `<div class="detail-line"><span class="detail-line__icon">🚌</span><span>${r.transport}</span></div>` : ""}
+        ${r.seasonalNote ? `<div class="detail-line"><span class="detail-line__icon">🌤️</span><span>${r.seasonalNote}</span></div>` : ""}
+        ${mapQuery ? `<div class="detail-line detail-line--map"><span class="detail-line__icon">🧭</span><span class="map-query-preview">${mapQuery}</span></div>` : ""}
+      </section>
+      <section class="detail-section">
+        <h4>设施</h4>
+        <div class="detail-facilities">${facilityBadges || '<span class="detail-tag">设施信息待补充</span>'}</div>
+      </section>
+      ${features ? `<section class="detail-section"><h4>特色</h4><div class="detail-tags">${features}</div></section>` : ""}
+      ${r.note ? `<section class="detail-section"><h4>备注</h4><p class="detail-note">${r.note}</p></section>` : ""}
     `;
 
     const footer = document.getElementById("modalFooter");
@@ -1124,7 +1278,7 @@
 
   function cityPillHtml(city, label) {
     const text = label || city;
-    return `<button type="button" class="city-pill ${state.city === city ? "active" : ""}" data-city="${city}">${text}</button>`;
+    return `<button type="button" class="city-pill ${state.city === city ? "is-active active" : ""}" data-city="${city}">${text}</button>`;
   }
 
   function bindCityPills(root) {
@@ -1155,13 +1309,7 @@
       badge.textContent = n;
       badge.hidden = n === 0;
     }
-    const searchBadge = document.getElementById("searchFilterBadge");
-    if (searchBadge) {
-      searchBadge.textContent = n;
-      searchBadge.hidden = n === 0;
-    }
     document.getElementById("filterOpenBtn")?.classList.toggle("is-active", n > 0);
-    document.getElementById("searchFilterBtn")?.classList.toggle("is-active", n > 0);
   }
 
   function updateFilterConfirmCount() {
@@ -1320,8 +1468,7 @@
 
     if (scope) {
       let html = cityPillHtml("全部", china ? "全国" : "浙江全省");
-      if (china) html += cityPillHtml("全国", "全国工具");
-      else html += cityPillHtml("全省", "全省政策");
+      if (!china) html += cityPillHtml("全省", "全省");
       scope.innerHTML = html;
       bindCityPills(scope);
     }
@@ -1370,10 +1517,6 @@
     if (isFilterDesktop()) {
       expandSidebar(true);
       window.setTimeout(() => focusFilterArea(focusArea), 40);
-      return;
-    }
-    if (toolbarDropKind === "filter" && toolbarDropFocus === (focusArea || "more")) {
-      closeToolbarDrop();
       return;
     }
     openToolbarDrop("filter", focusArea);
@@ -1444,8 +1587,6 @@
       updateFilterConfirmCount();
     });
     document.getElementById("filterConfirmBtn")?.addEventListener("click", closeFilterSheet);
-
-    document.getElementById("searchFilterBtn")?.addEventListener("click", openFilterSheet);
 
     document.getElementById("sortComprehensive")?.addEventListener("click", () => {
       setSortMode("comprehensive");

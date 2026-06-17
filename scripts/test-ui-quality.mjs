@@ -27,11 +27,15 @@ console.log("\n═══ UI / 定位检查 ═══\n");
 
 ok("单行筛选栏", /id="filterToolbar"/.test(indexHtml));
 ok("排序下拉层", /id="sortDropPanel"/.test(indexHtml));
+ok("快捷下拉层", /id="quickDropPanel"/.test(indexHtml));
 ok("筛选顶栏下拉", /id="filterDropPanel"/.test(indexHtml));
 ok("筛选面板排序段", /id="filterSortSegment"/.test(indexHtml));
 ok("排序段渲染函数", /function renderFilterSortSegment/.test(appJs));
 ok("快捷筛选渲染函数", /function renderFilterToolbar/.test(appJs) && /quickSceneBtn/.test(appJs));
 ok("快捷筛选下箭头", /ft-chip--quick/.test(appJs) && /▾/.test(appJs));
+ok("去除筛选图标按钮", !/id="searchFilterBtn"/.test(indexHtml));
+ok("城市选中态 class 修复", /is-active active/.test(appJs));
+ok("全国工具文案移除", !/全国工具/.test(appJs + indexHtml));
 ok("未定位距离回退逻辑", /if \(state\.userLocation\)[\s\S]*?else \{[\s\S]*?renderFilterSortSegment\(\)/.test(appJs));
 ok("综合排序选项", /综合排序/.test(appJs) && /距离最近/.test(appJs) && /评分最高/.test(appJs));
 ok("定位横幅默认隐藏", /geoBanner.*hidden/.test(indexHtml));

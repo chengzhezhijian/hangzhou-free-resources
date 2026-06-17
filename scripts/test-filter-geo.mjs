@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * 定位 / 未定位下「排序与筛选」交互的真实 DOM 集成测试（jsdom）
- * 覆盖：搜索框下快捷筛选（下箭头）、排序段（综合/距离/评分）、定位成功/失败/已定位回放。
+ * 定位 / 未定位下「独立下拉筛选」交互的真实 DOM 集成测试（jsdom）
+ * 覆盖：场景/设施/排序三个独立下拉、定位成功/失败、已定位回放、计数联动。
  */
 import fs from "fs";
 import path from "path";
@@ -137,8 +137,8 @@ async function run() {
     ok("未定位:快捷筛选-场景按钮存在", !!doc.getElementById("quickSceneBtn"));
     ok("未定位:快捷筛选-设施按钮存在", !!doc.getElementById("quickFacilityBtn"));
     ok("未定位:快捷筛选-排序按钮存在", !!doc.getElementById("quickSortBtn"));
-    ok("未定位:快捷筛选-筛选按钮存在", !!doc.getElementById("quickFilterBtn"));
     ok("未定位:快捷筛选带下箭头", doc.getElementById("quickSortBtn")?.textContent.includes("▾"));
+    ok("未定位:移除筛选图标按钮", !doc.getElementById("searchFilterBtn"));
     const seg = doc.getElementById("filterSortSegment");
     ok("未定位:排序段已渲染", !!seg && seg.querySelectorAll(".fss-opt").length === 3);
     ok(
@@ -153,28 +153,39 @@ async function run() {
       "未定位:距离最近显示「点此定位」提示",
       !!seg.querySelector('.fss-opt[data-sort="distance"] .fss-hint')
     );
-    ok("未定位:筛选面板初始隐藏", doc.getElementById("filterDropPanel").hidden === true);
+    ok("未定位:筛选大面板初始隐藏", doc.getElementById("filterDropPanel").hidden === true);
+    ok("未定位:快捷下拉面板初始隐藏", doc.getElementById("quickDropPanel").hidden === true);
   }
 
   // ───────────────────────────────────────────────
-  // 场景 2：点筛选入口 → 面板从上往下打开，含筛选项
+  // 场景 2：三个快捷项为独立下拉，不共用单一筛选框
   // ───────────────────────────────────────────────
   {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    doc.getElementById("quickFilterBtn").click();
+    doc.getElementById("quickSceneBtn").click();
     await tick();
 
-    ok("打开:筛选面板可见", doc.getElementById("filterDropPanel").hidden === false);
-    ok("打开:遮罩层可见", doc.getElementById("toolbarDropLayer").hidden === false);
-    ok("打开:body 标记下拉态", doc.body.classList.contains("toolbar-drop-open"));
-    const mount = doc.getElementById("filterDropMount");
-    ok("打开:筛选项已挂载到弹层", !!mount.querySelector("#sidebarInner") || !!mount.querySelector("#categoryFilters"));
+    const quickPanel = doc.getElementById("quickDropPanel");
+    ok("场景下拉:快捷面板可见", quickPanel.hidden === false);
+    ok("场景下拉:标题正确", /场景/.test(quickPanel.textContent || ""));
+    ok("场景下拉:含场景条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 2);
+    ok("场景下拉:不打开大筛选框", doc.getElementById("filterDropPanel").hidden === true);
 
-    doc.getElementById("filterDropClose").click();
+    doc.getElementById("quickFacilityBtn").click();
     await tick();
-    ok("关闭:筛选面板隐藏", doc.getElementById("filterDropPanel").hidden === true);
+    ok("设施下拉:标题正确", /设施/.test(quickPanel.textContent || ""));
+    ok("设施下拉:含设施条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 3);
+
+    doc.getElementById("quickSortBtn").click();
+    await tick();
+    ok("排序下拉:标题正确", /排序/.test(quickPanel.textContent || ""));
+    ok("排序下拉:三种排序", quickPanel.querySelectorAll("[data-sort]").length === 3);
+
+    doc.getElementById("toolbarDropBackdrop").click();
+    await tick();
+    ok("关闭:快捷面板隐藏", doc.getElementById("quickDropPanel").hidden === true);
     ok("关闭:body 取消下拉态", !doc.body.classList.contains("toolbar-drop-open"));
   }
 
@@ -187,8 +198,8 @@ async function run() {
 
     doc.getElementById("quickSortBtn").click();
     await tick();
-    const seg = doc.getElementById("filterSortSegment");
-    seg.querySelector('.fss-opt[data-sort="distance"]').click();
+    const panel = doc.getElementById("quickDropPanel");
+    panel.querySelector('[data-sort="distance"]').click();
     // 等待定位 Promise 链完成
     await tick();
     await tick();
@@ -216,8 +227,8 @@ async function run() {
 
     doc.getElementById("quickSortBtn").click();
     await tick();
-    const seg = doc.getElementById("filterSortSegment");
-    seg.querySelector('.fss-opt[data-sort="distance"]').click();
+    const panel = doc.getElementById("quickDropPanel");
+    panel.querySelector('[data-sort="distance"]').click();
     await tick();
     await tick();
     await tick();
@@ -231,7 +242,7 @@ async function run() {
       "定位失败:距离仍提示定位",
       !!segAfter.querySelector('.fss-opt[data-sort="distance"] .fss-hint')
     );
-    ok("定位失败:面板未卡死(仍可见)", doc.getElementById("filterDropPanel").hidden === false);
+    ok("定位失败:不会打开大筛选框", doc.getElementById("filterDropPanel").hidden === true);
   }
 
   // ───────────────────────────────────────────────
@@ -268,17 +279,17 @@ async function run() {
 
     doc.getElementById("quickFacilityBtn").click();
     await tick();
-    const facility = doc.querySelector("#filterDropMount #facilityFilters .chip, #filterDropMount #facilityFilters button");
+    const facility = doc.querySelector("#quickDropPanel [data-facility]");
     if (facility) {
       facility.click();
       await tick();
-      const quickFilter = doc.getElementById("quickFilterBtn");
-      ok("筛选联动:快捷筛选展示计数", quickFilter && /筛选\(\d+\)/.test(quickFilter.textContent || ""));
-      ok("筛选联动:快捷筛选高亮", !!doc.getElementById("quickFacilityBtn")?.classList.contains("is-active"));
+      const facilityBtn = doc.getElementById("quickFacilityBtn");
+      ok("筛选联动:设施按钮展示计数", facilityBtn && /设施\(\d+\)/.test(facilityBtn.textContent || ""));
+      ok("筛选联动:设施按钮高亮", !!facilityBtn?.classList.contains("is-active"));
     } else {
-      ok("筛选联动:快捷筛选展示计数", false);
-      ok("筛选联动:快捷筛选高亮", false);
-      errors.push("未找到设施筛选按钮(facilityFilters 为空)");
+      ok("筛选联动:设施按钮展示计数", false);
+      ok("筛选联动:设施按钮高亮", false);
+      errors.push("未找到设施下拉项(quickDropPanel 为空)");
     }
   }
 

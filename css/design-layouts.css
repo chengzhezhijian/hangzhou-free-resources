@@ -89,19 +89,22 @@
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .badge-distance {
+  font-size: 0.68rem;
   font-weight: 700;
-  color: var(--ios-teal);
+  color: #fff;
+  background: #0ea5e9;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium h3 {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin-top: 3px;
-  line-height: 1.25;
+  line-height: 1.22;
   -webkit-line-clamp: 2;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-address {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   margin-top: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -111,32 +114,32 @@
 /* 双列下补回营业时间，信息更密 */
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-hours {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--ios-label-tertiary);
-  margin-top: 2px;
+  margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .facility-tags {
-  padding-top: 6px;
+  padding-top: 4px;
   gap: 4px;
   max-height: 1.55rem;
   overflow: hidden;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .facility-tag {
-  font-size: 0.64rem;
-  padding: 2px 6px;
+  font-size: 0.62rem;
+  padding: 2px 5px;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-premium .card-meta {
-  padding-top: 4px;
+  padding-top: 3px;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-district {
-  font-size: 0.68rem;
+  font-size: 0.66rem;
 }
 
 @media (min-width: 720px) {
@@ -147,92 +150,11 @@
 
 /* ─── 搜索框右侧轻量筛选入口（仅默认首页移动端） ─── */
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
-  display: flex;
-  align-items: center;
-  gap: 0;
+  display: block;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline {
-  flex: 1;
-  width: auto;
-  min-width: 0;
-}
-
-.search-filter-btn {
-  display: none;
-  position: relative;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 10px;
-  background: var(--ios-bg-elevated, #fff);
-  box-shadow: var(--ios-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-}
-
-.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-filter-btn {
-  display: none !important;
-}
-
-.search-filter-btn.is-active,
-.search-filter-btn.is-open {
-  background: var(--ios-teal, #0d9488);
-}
-
-.search-filter-btn .sfb-icon {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-}
-
-.search-filter-btn .sfb-icon span {
-  display: block;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--ios-label, #1c1c1e);
-}
-
-.search-filter-btn .sfb-icon span:nth-child(1) {
-  width: 16px;
-}
-.search-filter-btn .sfb-icon span:nth-child(2) {
-  width: 11px;
-}
-.search-filter-btn .sfb-icon span:nth-child(3) {
-  width: 6px;
-}
-
-.search-filter-btn.is-active .sfb-icon span,
-.search-filter-btn.is-open .sfb-icon span {
-  background: #fff;
-}
-
-.search-filter-btn .filter-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: #ef4444;
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  line-height: 16px;
-  text-align: center;
-}
-
-@media (min-width: 960px) {
-  .search-filter-btn {
-    display: none !important;
-  }
+  width: 100%;
 }
 
 /* ─── 筛选面板顶部排序段（综合/距离/评分） ─── */
@@ -421,6 +343,7 @@
 }
 
 .sort-drop-panel,
+.quick-drop-panel,
 .filter-drop-panel {
   position: relative;
   z-index: 1;
@@ -438,7 +361,15 @@
   overflow: hidden;
 }
 
+.quick-drop-panel {
+  width: min(320px, calc(100% - 24px));
+  margin: 0 auto;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
 .sort-drop-panel[hidden],
+.quick-drop-panel[hidden],
 .filter-drop-panel[hidden] {
   display: none !important;
 }
@@ -457,6 +388,56 @@
   color: var(--ios-label);
   cursor: pointer;
   text-align: left;
+}
+
+.quick-drop-head {
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+  font-weight: 600;
+  padding: 10px 14px 6px;
+}
+
+.quick-drop-list {
+  padding: 0 10px 10px;
+}
+
+.quick-drop-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ios-label);
+  font-size: 0.85rem;
+  font-weight: 560;
+  cursor: pointer;
+  text-align: left;
+}
+
+.quick-drop-item:hover,
+.quick-drop-item:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.quick-drop-item.is-active {
+  color: var(--ios-teal);
+  background: var(--accent-light, rgba(13, 148, 136, 0.12));
+}
+
+.quick-drop-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.quick-drop-actions .btn-primary,
+.quick-drop-actions .btn-secondary {
+  flex: 1;
+  min-height: 34px;
 }
 
 .sort-drop-item:last-child {
