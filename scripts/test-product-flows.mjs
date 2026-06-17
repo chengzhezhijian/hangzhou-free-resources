@@ -72,9 +72,9 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /class="app-ui"/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=34/],
-  ["主题变体", /themes\/variants\.css/],
-  ["主题切换", /theme-switch\.js/],
+  ["Premium 样式", /premium-ui\.css\?v=35/],
+  ["文案变体样式", /copy-variants\.css/],
+  ["文案切换", /copy-variants\.js/],
   ["设施标签容器", /id="heroPerks"/],
   ["iOS 分段排序", /sort-tabs/],
   ["底部 Tab", /bottom-nav/],
@@ -142,11 +142,17 @@ console.log("\n═══ 分享态 ═══");
 const uiPremium = fs.readFileSync(path.join(ROOT, "js/ui-premium.js"), "utf8");
 assert("URL 同步能力", /syncPremiumUrl/.test(uiPremium));
 assert("结果数动效", /animateResultCount/.test(uiPremium));
-assert("AB 主题配置 10 套", (() => {
-  const p = path.join(ROOT, "css/themes/themes.json");
-  return JSON.parse(fs.readFileSync(p, "utf8")).themes.length === 10;
+assert("列表入场", /markCardsEnter/.test(uiPremium));
+assert("文案变体 10 套", (() => {
+  const c = vm.createContext({});
+  vm.runInContext(
+    fs.readFileSync(path.join(ROOT, "js/copy-variants.js"), "utf8") + "; globalThis.__CV = COPY_VARIANTS;",
+    c
+  );
+  return Object.keys(c.__CV).length === 10;
 })());
-assert("AB 测试报告存在", fs.existsSync(path.join(ROOT, "docs/ab-test-results.json")));
+assert("文案 AB 报告", fs.existsSync(path.join(ROOT, "docs/ab-copy-results.json")));
+assert("首页对比墙", fs.existsSync(path.join(ROOT, "labs/ab-homepage.html")));
 
 // ─── Report ───
 const total = runner.passed + runner.failed;

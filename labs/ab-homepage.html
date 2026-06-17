@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>首页文案 AB 对比 · 10 套</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", sans-serif;
+      background: #111116;
+      color: #ececf0;
+      padding: 20px 14px 40px;
+    }
+    .head { max-width: 1400px; margin: 0 auto 20px; }
+    .head h1 { margin: 0 0 6px; font-size: 1.45rem; }
+    .head p { margin: 0; color: #999; font-size: 0.88rem; line-height: 1.55; }
+    .top3 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .top3 span {
+      font-size: 0.78rem; font-weight: 600; padding: 6px 12px;
+      background: rgba(255,255,255,0.08); border-radius: 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 18px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .cell {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1a20;
+    }
+    .cell.is-top { border-color: #ffd60a; }
+    .meta {
+      padding: 12px 14px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .meta strong { font-size: 0.92rem; display: block; }
+    .meta small { color: #888; font-size: 0.72rem; line-height: 1.4; }
+    .score {
+      flex-shrink: 0; font-size: 0.75rem; font-weight: 700;
+      padding: 4px 9px; border-radius: 999px; background: rgba(255,255,255,0.1);
+    }
+    .score.gold { background: #ffd60a; color: #111; }
+    .frame-wrap {
+      position: relative;
+      height: 520px;
+      background: #000;
+    }
+    .frame-wrap iframe {
+      width: 100%; height: 100%; border: none;
+      transform-origin: top left;
+    }
+    .actions {
+      display: flex; gap: 8px; padding: 10px 12px;
+    }
+    .actions a {
+      flex: 1; text-align: center; padding: 9px;
+      font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; border-radius: 9px;
+      background: rgba(255,255,255,0.08); color: #fff;
+    }
+    .actions a.primary { background: #007aff; }
+    @media (max-width: 720px) {
+      .frame-wrap { height: 480px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="head">
+    <h1>10 套首页文案 AB 对比</h1>
+    <p>每套含独立品牌名、Hero、搜索占位、列表标题、空状态、底部 Tab、新手引导。配色自动联动（theme v01–v10）。点「全屏验收」打开真实首页。</p>
+    <div class="top3" id="top3">加载评分…</div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const COPIES = [
+      { id: "h01", name: "政务官方", dim: "信任感" },
+      { id: "h02", name: "效率极简", dim: "三步闭环" },
+      { id: "h03", name: "场景问答", dim: "问题导向" },
+      { id: "h04", name: "零花费", dim: "完全免费" },
+      { id: "h05", name: "遛娃家长", dim: "亲子出行" },
+      { id: "h06", name: "打工人自习", dim: "远程办公" },
+      { id: "h07", name: "夏日纳凉", dim: "防暑降温" },
+      { id: "h08", name: "新城市指南", dim: "异地落脚" },
+      { id: "h09", name: "银发关怀", dim: "适老大字" },
+      { id: "h10", name: "青年社区", dim: "公共共享" },
+    ];
+
+    async function init() {
+      let scores = {};
+      try {
+        const r = await fetch("../docs/ab-copy-results.json?v=35");
+        const data = await r.json();
+        data.ranked.forEach((t) => { scores[t.id] = t; });
+        document.getElementById("top3").innerHTML = data.ranked.slice(0, 3)
+          .map((t, i) => `<span>🥇${i + 1} ${t.id} ${t.name} · ${t.total}分 · ${t.dimension}</span>`).join("");
+      } catch {
+        document.getElementById("top3").textContent = "请先运行 npm run test:copy";
+      }
+
+      const grid = document.getElementById("grid");
+      COPIES.forEach((c) => {
+        const s = scores[c.id];
+        const rank = s?.rank || "—";
+        const cell = document.createElement("div");
+        cell.className = "cell" + (rank === 1 ? " is-top" : "");
+        cell.innerHTML = `
+          <div class="meta">
+            <div>
+              <strong>#${rank} ${c.id} · ${c.name}</strong>
+              <small>${c.dim}${s ? " · 主题 " + s.theme : ""}${s ? " · " + s.brand : ""}</small>
+            </div>
+            <span class="score ${rank === 1 ? "gold" : ""}">${s?.total ?? "—"}/100</span>
+          </div>
+          <div class="frame-wrap">
+            <iframe
+              title="${c.name}"
+              loading="lazy"
+              src="../index.html?copy=${c.id}&v=35&lab=1"
+            ></iframe>
+          </div>
+          <div class="actions">
+            <a class="primary" href="../index.html?copy=${c.id}&v=35" target="_blank">全屏验收</a>
+            <a href="../docs/ab-copy-report.md" target="_blank">报告</a>
+          </div>`;
+        grid.appendChild(cell);
+      });
+    }
+    init();
+  </script>
+</body>
+</html>

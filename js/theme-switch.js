@@ -4,14 +4,18 @@
 (function () {
   const VALID = /^v(0[1-9]|10)$/;
   const params = new URLSearchParams(location.search);
-  let theme = params.get("theme") || localStorage.getItem("themeLab") || "v01";
+  let theme = params.get("theme");
+  if (!theme && document.documentElement.dataset.theme) {
+    theme = document.documentElement.dataset.theme;
+  }
+  if (!theme) theme = localStorage.getItem("themeLab") || "v01";
   if (!VALID.test(theme)) theme = "v01";
 
   document.documentElement.dataset.theme = theme;
 
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    fetch(`css/themes/themes.json?v=34`)
+    fetch(`css/themes/themes.json?v=35`)
       .then((r) => r.json())
       .then((data) => {
         const t = data.themes.find((x) => x.id === theme);

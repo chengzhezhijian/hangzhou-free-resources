@@ -1,0 +1,92 @@
+/**
+ * 首页文案变体 — 视觉差异化（配合 data-copy="hXX"）
+ */
+
+[data-copy="h02"] .display-title {
+  font-size: clamp(2rem, 9vw, 2.65rem);
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+[data-copy="h02"] .hero-stats {
+  display: none;
+}
+
+[data-copy="h03"] .brand-icon {
+  font-weight: 800;
+  color: var(--ios-teal);
+}
+
+[data-copy="h04"] .home-head {
+  border-left: 4px solid var(--ios-teal);
+  padding-left: 14px;
+}
+
+[data-copy="h05"] .card,
+[data-copy="h05"] .value-perk,
+[data-copy="h05"] .quick-scene {
+  border-radius: calc(var(--ios-radius-md) + 4px);
+}
+
+[data-copy="h07"] .home-head {
+  padding: 16px 14px;
+  margin: 0 -16px 12px;
+  border-radius: var(--ios-radius-lg);
+  background: var(--accent-light);
+}
+[data-copy="h07"] .display-sub {
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+[data-copy="h08"] .loc-pill {
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+[data-copy="h09"] .display-title {
+  font-size: clamp(1.95rem, 8vw, 2.45rem);
+  line-height: 1.2;
+}
+[data-copy="h09"] .display-sub,
+[data-copy="h09"] .search-box input,
+[data-copy="h09"] .value-perk,
+[data-copy="h09"] .quick-scene {
+  font-size: calc(1em * 1.08);
+}
+[data-copy="h09"] .value-perk,
+[data-copy="h09"] .quick-scene {
+  padding: 11px 16px;
+}
+
+[data-copy="h10"] .home-head {
+  padding: 20px 16px;
+  margin: 0 -16px 14px;
+  border-radius: var(--ios-radius-xl);
+  background: var(--premium-gradient);
+}
+[data-copy="h10"] .home-head .display-title,
+[data-copy="h10"] .home-head .display-sub {
+  color: #fff;
+}
+[data-copy="h10"] .home-head .hero-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.hero-badge {
+  display: none;
+  margin: 0 0 8px;
+  padding: 5px 10px;
+  font-size: 0.68rem;
+  font-weight: 650;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+[data-copy] .hero-badge {
+  display: inline-block;
+}
+
+[data-copy="h02"] .hero-badge {
+  display: none;
+}

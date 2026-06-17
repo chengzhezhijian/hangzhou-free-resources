@@ -1,0 +1,217 @@
+{
+  "generatedAt": "2026-06-17 00:56:07",
+  "ranked": [
+    {
+      "id": "h01",
+      "name": "政务官方",
+      "dimension": "信任感 · 政府背书",
+      "theme": "v02",
+      "brand": "全国惠民地图",
+      "total": 92,
+      "breakdown": {
+        "clarity": 20,
+        "action": 20,
+        "audience": 20,
+        "trust": 15,
+        "seo": 11,
+        "differentiation": 6
+      },
+      "notes": [
+        "Hero 15 字"
+      ],
+      "rank": 1
+    },
+    {
+      "id": "h07",
+      "name": "夏日纳凉",
+      "dimension": "季节 · 防暑降温",
+      "theme": "v08",
+      "brand": "纳凉地图",
+      "total": 92,
+      "breakdown": {
+        "clarity": 20,
+        "action": 20,
+        "audience": 20,
+        "trust": 15,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 10 字"
+      ],
+      "rank": 2
+    },
+    {
+      "id": "h09",
+      "name": "银发关怀",
+      "dimension": "适老 · 大字清晰",
+      "theme": "v09",
+      "brand": "便民地图",
+      "total": 92,
+      "breakdown": {
+        "clarity": 20,
+        "action": 20,
+        "audience": 20,
+        "trust": 15,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 8 字"
+      ],
+      "rank": 3
+    },
+    {
+      "id": "h10",
+      "name": "青年社区",
+      "dimension": "社群 · 公共共享",
+      "theme": "v05",
+      "brand": "公共共享图",
+      "total": 85,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 17,
+        "trust": 15,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 12 字"
+      ],
+      "rank": 4
+    },
+    {
+      "id": "h04",
+      "name": "零花费",
+      "dimension": "省钱 · 完全免费",
+      "theme": "v10",
+      "brand": "零花地图",
+      "total": 83,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 17,
+        "trust": 9,
+        "seo": 11,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 13 字"
+      ],
+      "rank": 5
+    },
+    {
+      "id": "h08",
+      "name": "新城市指南",
+      "dimension": "异地 · 落脚安顿",
+      "theme": "v03",
+      "brand": "城市落脚图",
+      "total": 83,
+      "breakdown": {
+        "clarity": 20,
+        "action": 20,
+        "audience": 17,
+        "trust": 9,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 11 字"
+      ],
+      "rank": 6
+    },
+    {
+      "id": "h05",
+      "name": "遛娃家长",
+      "dimension": "亲子 · 周末出行",
+      "theme": "v08",
+      "brand": "遛娃地图",
+      "total": 82,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 20,
+        "trust": 9,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 10 字"
+      ],
+      "rank": 7
+    },
+    {
+      "id": "h06",
+      "name": "打工人自习",
+      "dimension": "自习 · 远程办公",
+      "theme": "v07",
+      "brand": "免费自习地图",
+      "total": 82,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 20,
+        "trust": 9,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 12 字"
+      ],
+      "rank": 8
+    },
+    {
+      "id": "h02",
+      "name": "效率极简",
+      "dimension": "效率 · 三步闭环",
+      "theme": "v01",
+      "brand": "免费地图",
+      "total": 79,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 17,
+        "trust": 9,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 10 字"
+      ],
+      "rank": 9
+    },
+    {
+      "id": "h03",
+      "name": "场景问答",
+      "dimension": "场景 · 问题导向",
+      "theme": "v03",
+      "brand": "这儿能去哪",
+      "total": 79,
+      "breakdown": {
+        "clarity": 20,
+        "action": 16,
+        "audience": 17,
+        "trust": 9,
+        "seo": 7,
+        "differentiation": 10
+      },
+      "notes": [
+        "Hero 9 字"
+      ],
+      "rank": 10
+    }
+  ],
+  "variants": [
+    "h01",
+    "h02",
+    "h03",
+    "h04",
+    "h05",
+    "h06",
+    "h07",
+    "h08",
+    "h09",
+    "h10"
+  ]
+}

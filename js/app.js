@@ -301,12 +301,18 @@
   function updateContentHeader() {
     const h2 = document.getElementById("contentTitle");
     if (!h2) return;
-    h2.textContent =
-      state.userLocation && state.sortMode === "distance"
-        ? "附近 · 按距离排序"
-        : isChinaScope()
-          ? "全国免费便民 · 按设施筛选"
-          : "浙江免费便民 · 按设施筛选";
+    const copyTitles = window.__COPY_CONTENT_TITLE__;
+    if (state.userLocation && state.sortMode === "distance") {
+      h2.textContent = copyTitles?.nearby || "附近 · 按距离排序";
+      return;
+    }
+    if (copyTitles?.default) {
+      h2.textContent = copyTitles.default;
+      return;
+    }
+    h2.textContent = isChinaScope()
+      ? "全国免费便民 · 按设施筛选"
+      : "浙江免费便民 · 按设施筛选";
   }
 
   function enableNearbySort() {
@@ -1372,7 +1378,10 @@
   }
 
   const ONBOARD_KEY = "zheli_onboard_v1";
-  const ONBOARD_STEPS = [
+  const ONBOARD_STEPS =
+    window.__COPY_ONBOARD__ && window.__COPY_ONBOARD__.length
+      ? window.__COPY_ONBOARD__
+      : [
     {
       icon: "📍",
       title: "先选城市",
