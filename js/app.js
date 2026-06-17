@@ -679,7 +679,9 @@
       "quick-sort": "sort",
     };
     const mappedArea = areaMap[kind] || focusArea;
-    if (isFilterDesktop()) {
+    const desktop = isFilterDesktop();
+    const quickKinds = new Set(["quick-sort", "quick-scene", "quick-facility", "sort"]);
+    if (desktop && !quickKinds.has(kind)) {
       if (kind === "filter") expandSidebar(true);
       if (kind === "filter" || areaMap[kind]) {
         if (kind !== "filter") expandSidebar(true);
@@ -1278,7 +1280,8 @@
 
   function cityPillHtml(city, label) {
     const text = label || city;
-    return `<button type="button" class="city-pill ${state.city === city ? "is-active active" : ""}" data-city="${city}">${text}</button>`;
+    const active = state.city === city;
+    return `<button type="button" class="city-pill ${active ? "is-active active" : ""}" data-city="${city}" aria-pressed="${active ? "true" : "false"}">${text}</button>`;
   }
 
   function bindCityPills(root) {

@@ -38,9 +38,10 @@ const SCRIPTS = [
 
 const tick = () => new Promise((r) => setTimeout(r, 0));
 
-function makeMatchMedia() {
+function makeMatchMedia(opts = {}) {
+  const desktop = !!opts.desktop;
   return (query) => ({
-    matches: false, // 始终按移动端布局测试
+    matches: /min-width:\s*960px/.test(String(query)) ? desktop : false,
     media: query,
     onchange: null,
     addEventListener() {},
@@ -58,6 +59,7 @@ function makeMatchMedia() {
  * @param {object} opts
  * @param {"error"|{lat:number,lng:number}} opts.geo 定位桩：error=拒绝，坐标=成功
  * @param {{lat:number,lng:number}} [opts.seedLocation] 预置已定位状态（localStorage）
+ * @param {boolean} [opts.desktop] 是否按桌面断点运行
  */
 function boot(opts = {}) {
   const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
@@ -69,7 +71,7 @@ function boot(opts = {}) {
   const { window } = dom;
 
   // ── polyfills / 桩 ──
-  window.matchMedia = makeMatchMedia();
+  window.matchMedia = makeMatchMedia({ desktop: !!opts.desktop });
   window.fetch = async () => ({ ok: true, json: async () => ({ themes: [] }) });
   window.IntersectionObserver = class {
     observe() {}
@@ -291,6 +293,49 @@ async function run() {
       ok("筛选联动:设施按钮高亮", false);
       errors.push("未找到设施下拉项(quickDropPanel 为空)");
     }
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 7：桌面端快捷筛选与移动端保持同一交互模型
+  // ───────────────────────────────────────────────
+  {
+    const { doc } = boot({ geo: "error", desktop: true });
+    await tick();
+
+    doc.getElementById("quickSceneBtn").click();
+    await tick();
+    ok("桌面:场景快捷下拉可见", doc.getElementById("quickDropPanel").hidden === false);
+    ok("桌面:下拉打开时 body 进入锁定态", doc.body.classList.contains("toolbar-drop-open"));
+
+    doc.getElementById("quickSortBtn").click();
+    await tick();
+    const quickPanel = doc.getElementById("quickDropPanel");
+    ok("桌面:排序快捷项仍为 3 个", quickPanel.querySelectorAll("[data-sort]").length === 3);
+
+    doc.getElementById("toolbarDropBackdrop").click();
+    await tick();
+    ok("桌面:点击遮罩后下拉关闭", doc.getElementById("quickDropPanel").hidden === true);
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 8：城市激活态在移动/桌面都清晰且可读
+  // ───────────────────────────────────────────────
+  for (const [label, desktop] of [
+    ["移动", false],
+    ["桌面", true],
+  ]) {
+    const { doc } = boot({ geo: "error", desktop });
+    await tick();
+    const cityBtn = doc.querySelector('#cityHotGrid .city-pill[data-city="杭州"]');
+    if (!cityBtn) {
+      ok(`${label}:杭州按钮存在`, false);
+      continue;
+    }
+    cityBtn.click();
+    await tick();
+    const active = doc.querySelector('#cityHotGrid .city-pill[data-city="杭州"]');
+    ok(`${label}:杭州激活态 class`, !!active?.classList.contains("is-active"));
+    ok(`${label}:杭州激活态 aria`, active?.getAttribute("aria-pressed") === "true");
   }
 
   // ── 汇总 ──
