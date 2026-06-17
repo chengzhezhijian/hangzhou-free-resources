@@ -26,6 +26,9 @@ function ok(name, cond) {
 console.log("\n═══ UI / 定位检查 ═══\n");
 
 ok("单行筛选栏", /id="filterToolbar"/.test(indexHtml));
+ok("排序下拉层", /id="sortDropPanel"/.test(indexHtml));
+ok("筛选顶栏下拉", /id="filterDropPanel"/.test(indexHtml));
+ok("综合排序选项", /综合排序/.test(appJs) && /距离最近/.test(appJs) && /评分最高/.test(appJs));
 ok("定位横幅默认隐藏", /geoBanner.*hidden/.test(indexHtml));
 ok("距离仅精确坐标", /coordIsPrecise/.test(appJs));
 ok("无蹭享旧品牌", !/蹭享|蹭/.test(indexHtml + siteConfig));

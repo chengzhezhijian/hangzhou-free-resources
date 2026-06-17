@@ -60,6 +60,14 @@
 
   const FILTER_DESKTOP_MQ = window.matchMedia("(min-width: 960px)");
 
+  const SORT_OPTIONS = [
+    { id: "comprehensive", label: "综合排序" },
+    { id: "distance", label: "距离最近", needsGeo: true },
+    { id: "rating", label: "评分最高" },
+  ];
+
+  let toolbarDropKind = null;
+
   const state = {
     group: "all",
     category: "all",
@@ -249,6 +257,25 @@
     });
   }
 
+  function resourceScore(r) {
+    let score = 0;
+    if (r.featured) score += 100;
+    score += (r.facilities?.length || 0) * 5;
+    if (r.hours) score += 2;
+    if (r.address) score += 1;
+    return score;
+  }
+
+  function sortByRating(list) {
+    return [...list].sort((a, b) => {
+      const sa = resourceScore(a);
+      const sb = resourceScore(b);
+      if (sb !== sa) return sb - sa;
+      if (!!a.featured !== !!b.featured) return b.featured - a.featured;
+      return (a.name || "").localeCompare(b.name || "", "zh-CN");
+    });
+  }
+
   function sortByDistance(list) {
     if (!state.userLocation) return list;
     return [...list].sort((a, b) => {
@@ -287,6 +314,9 @@
     });
     if (state.sortMode === "distance" && state.userLocation) {
       return sortByDistance(list);
+    }
+    if (state.sortMode === "rating") {
+      return sortByRating(list);
     }
     return sortComprehensive(list);
   }
@@ -356,9 +386,17 @@
     updateContentHeader();
   }
 
+  function sortModeLabel(mode = state.sortMode) {
+    return SORT_OPTIONS.find((o) => o.id === mode)?.label || "综合排序";
+  }
+
   function resultCountLabel(total) {
     const sortHint =
-      state.sortMode === "distance" && state.userLocation ? " · 近→远" : "";
+      state.sortMode === "distance" && state.userLocation
+        ? " · 近→远"
+        : state.sortMode === "rating"
+          ? " · 评分高"
+          : "";
     if (state.city === "全部") return `共 ${total} 处${sortHint}`;
     return `共 ${total} 处 · ${state.city}${sortHint}`;
   }
@@ -473,15 +511,10 @@
       )
       .join("");
     html += div;
+    const geoHint = !state.userLocation && state.sortMode === "distance";
     html +=
-      chip("ft-chip--sort", "综合", state.sortMode === "comprehensive", 'data-sort="comprehensive"') +
-      chip(
-        "ft-chip--sort" + (!state.userLocation ? " ft-chip--geo" : ""),
-        "距离",
-        state.sortMode === "distance",
-        'data-sort="distance"'
-      ) +
-      `<button type="button" class="ft-chip ft-chip--filter${n ? " is-active" : ""}" id="filterOpenBtn">筛选${badge}</button>`;
+      `<button type="button" class="ft-chip ft-chip--sort-trigger${geoHint ? " ft-chip--geo" : ""}${toolbarDropKind === "sort" ? " is-open" : ""}" id="sortTriggerBtn" aria-haspopup="listbox" aria-expanded="${toolbarDropKind === "sort"}">${sortModeLabel()}<span class="ft-caret" aria-hidden="true">▾</span></button>` +
+      `<button type="button" class="ft-chip ft-chip--filter${n ? " is-active" : ""}${toolbarDropKind === "filter" ? " is-open" : ""}" id="filterOpenBtn">筛选${badge}</button>`;
 
     el.innerHTML = `<div class="filter-toolbar__scroll">${html}</div>`;
 
@@ -507,17 +540,94 @@
         track("filter_change", { field: "quick_scene", value: state.search || state.category });
       });
     });
-    el.querySelectorAll("[data-sort]").forEach((btn) => {
-      btn.addEventListener("click", () => setSortMode(btn.dataset.sort));
+    el.querySelector("#sortTriggerBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleSortDropdown();
     });
-    const filterBtn = el.querySelector("#filterOpenBtn");
-    if (filterBtn) {
-      filterBtn.replaceWith(filterBtn.cloneNode(true));
-      el.querySelector("#filterOpenBtn")?.addEventListener("click", () => {
-        if (isFilterDesktop()) expandSidebar(true);
-        else openFilterSheet();
+    el.querySelector("#filterOpenBtn")?.addEventListener("click", () => {
+      if (isFilterDesktop()) expandSidebar(true);
+      else toggleFilterDropdown();
+    });
+  }
+
+  function renderSortDropPanel() {
+    const panel = document.getElementById("sortDropPanel");
+    if (!panel) return;
+    panel.innerHTML = SORT_OPTIONS.map((o) => {
+      const active = state.sortMode === o.id;
+      return `<button type="button" class="sort-drop-item${active ? " is-active" : ""}" role="option" aria-selected="${active}" data-sort="${o.id}">${o.label}${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}</button>`;
+    }).join("");
+    panel.querySelectorAll("[data-sort]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSortMode(btn.dataset.sort);
+        closeToolbarDrop();
       });
+    });
+  }
+
+  function updateToolbarDropTop() {
+    const sticky = document.querySelector(".discover-sticky");
+    if (!sticky) return;
+    const bottom = sticky.getBoundingClientRect().bottom;
+    document.documentElement.style.setProperty("--toolbar-drop-top", `${bottom}px`);
+  }
+
+  function openToolbarDrop(kind) {
+    if (isFilterDesktop()) {
+      if (kind === "filter") expandSidebar(true);
+      return;
     }
+    updateToolbarDropTop();
+    const layer = document.getElementById("toolbarDropLayer");
+    const sortPanel = document.getElementById("sortDropPanel");
+    const filterPanel = document.getElementById("filterDropPanel");
+    if (!layer || !sortPanel || !filterPanel) return;
+
+    toolbarDropKind = kind;
+    if (kind === "sort") {
+      renderSortDropPanel();
+      sortPanel.hidden = false;
+      filterPanel.hidden = true;
+    } else {
+      updateFilterConfirmCount();
+      sortPanel.hidden = true;
+      filterPanel.hidden = false;
+    }
+    layer.hidden = false;
+    document.body.classList.add("toolbar-drop-open");
+    syncToolbarDropUi();
+  }
+
+  function closeToolbarDrop() {
+    const layer = document.getElementById("toolbarDropLayer");
+    const sortPanel = document.getElementById("sortDropPanel");
+    const filterPanel = document.getElementById("filterDropPanel");
+    if (layer) layer.hidden = true;
+    if (sortPanel) sortPanel.hidden = true;
+    if (filterPanel) filterPanel.hidden = true;
+    document.body.classList.remove("toolbar-drop-open");
+    toolbarDropKind = null;
+    syncToolbarDropUi();
+  }
+
+  function syncToolbarDropUi() {
+    document.querySelectorAll(".ft-chip--sort-trigger").forEach((btn) => {
+      btn.classList.toggle("is-open", toolbarDropKind === "sort");
+      btn.setAttribute("aria-expanded", String(toolbarDropKind === "sort"));
+    });
+    document.querySelectorAll("#filterOpenBtn.ft-chip--filter").forEach((btn) => {
+      btn.classList.toggle("is-open", toolbarDropKind === "filter");
+    });
+  }
+
+  function toggleSortDropdown() {
+    if (toolbarDropKind === "sort") closeToolbarDrop();
+    else openToolbarDrop("sort");
+  }
+
+  function toggleFilterDropdown() {
+    if (toolbarDropKind === "filter") closeToolbarDrop();
+    else openToolbarDrop("filter");
   }
 
   function renderQuickScenes() {
@@ -1064,13 +1174,20 @@
   }
 
   function updateSortTabs() {
-    document.querySelectorAll(".sort-tab[data-sort], .ft-chip[data-sort]").forEach((tab) => {
+    document.querySelectorAll(".sort-tab[data-sort]").forEach((tab) => {
       const active = tab.dataset.sort === state.sortMode;
       tab.classList.toggle("is-active", active);
       tab.setAttribute?.("aria-selected", String(active));
     });
-    document.querySelectorAll(".ft-chip--sort.ft-chip--geo").forEach((tab) => {
-      tab.classList.toggle("ft-chip--geo", !state.userLocation);
+    document.querySelectorAll(".ft-chip--sort-trigger").forEach((btn) => {
+      const label = sortModeLabel();
+      const geoHint = !state.userLocation && state.sortMode === "distance";
+      btn.classList.toggle("ft-chip--geo", geoHint);
+      if (btn.childNodes.length >= 2) {
+        btn.childNodes[0].textContent = label;
+      } else {
+        btn.innerHTML = `${label}<span class="ft-caret" aria-hidden="true">▾</span>`;
+      }
     });
   }
 
@@ -1087,6 +1204,7 @@
     }
     state.sortMode = mode;
     updateSortTabs();
+    updateContentHeader();
     state.page = 1;
     renderCards();
   }
@@ -1228,22 +1346,25 @@
   function placeFilterPanel() {
     const inner = document.getElementById("sidebarInner");
     const sidebar = document.getElementById("sidebar");
-    const mount = document.getElementById("filterSheetMount");
-    if (!inner || !sidebar || !mount) return;
+    const dropMount = document.getElementById("filterDropMount");
+    if (!inner || !sidebar) return;
     if (isFilterDesktop()) {
       sidebar.appendChild(inner);
-    } else {
-      mount.appendChild(inner);
+    } else if (dropMount) {
+      dropMount.appendChild(inner);
     }
   }
 
   function openFilterSheet() {
-    updateFilterConfirmCount();
-    openOverlay("filterSheet");
+    if (isFilterDesktop()) {
+      expandSidebar(true);
+      return;
+    }
+    toggleFilterDropdown();
   }
 
   function closeFilterSheet() {
-    closeOverlay("filterSheet");
+    closeToolbarDrop();
   }
 
   function openOverlay(id) {
@@ -1289,16 +1410,16 @@
     placeFilterPanel();
     FILTER_DESKTOP_MQ.addEventListener("change", () => {
       placeFilterPanel();
-      closeFilterSheet();
+      closeToolbarDrop();
     });
 
-    document.getElementById("filterOpenBtn")?.addEventListener("click", () => {
-      if (isFilterDesktop()) {
-        expandSidebar(true);
-        return;
-      }
-      openFilterSheet();
+    document.getElementById("toolbarDropBackdrop")?.addEventListener("click", closeToolbarDrop);
+    document.getElementById("filterDropClose")?.addEventListener("click", closeToolbarDrop);
+    document.getElementById("filterDropResetBtn")?.addEventListener("click", () => {
+      resetFilters();
+      updateFilterConfirmCount();
     });
+    document.getElementById("filterDropConfirmBtn")?.addEventListener("click", closeToolbarDrop);
 
     document.getElementById("filterSheetClose")?.addEventListener("click", closeFilterSheet);
     document.getElementById("filterSheetBackdrop")?.addEventListener("click", closeFilterSheet);
@@ -1313,6 +1434,10 @@
     });
     document.getElementById("sortDistance")?.addEventListener("click", () => {
       setSortMode("distance");
+    });
+
+    window.addEventListener("resize", () => {
+      if (toolbarDropKind) updateToolbarDropTop();
     });
 
     document.getElementById("sidebarToggle")?.addEventListener("click", () => {
@@ -1766,10 +1891,9 @@
           const n = countActiveFilters();
           return `筛选${n ? `<span class="filter-badge">${n}</span>` : ""}`;
         },
-        openFilterSheet: () => {
-          if (isFilterDesktop()) expandSidebar(true);
-          else openFilterSheet();
-        },
+        openFilterSheet: () => openFilterSheet(),
+        toggleSortDropdown,
+        sortModeLabel,
       });
     }
     renderCards();

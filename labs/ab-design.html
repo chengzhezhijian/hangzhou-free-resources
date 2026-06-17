@@ -25,7 +25,7 @@
 </head>
 <body>
   <h1>整站 UX AB · 美团/淘宝单行筛选</h1>
-  <p class="sub">统一规范：搜索框下方<strong>仅一行</strong>横滑筛选（设施/场景/排序），无定位横幅、无多行 Chip、无 Hero 占屏，列表区域最大化。10 套差异在「这一行放什么」及列表形态。</p>
+  <p class="sub">统一规范：搜索框下方<strong>仅一行</strong>横滑筛选；排序为「综合排序 ▾」下拉（综合/距离/评分）；点「筛选」从工具栏<strong>向下</strong>展开，非底部 Sheet。</p>
   <div class="grid" id="grid"></div>
   <script>
     const DESIGNS = [
@@ -50,9 +50,9 @@
           <span class="dim">${d.dim}</span>
           <small>${d.desc}</small>
         </div>
-        <iframe loading="lazy" src="../index.html?design=${d.id}&v=39&lab=1" title="${d.name}"></iframe>
+        <iframe loading="lazy" src="../index.html?design=${d.id}&v=40&lab=1" title="${d.name}"></iframe>
         <div class="acts">
-          <a class="primary" href="../index.html?design=${d.id}&v=39" target="_blank">全屏验收</a>
+          <a class="primary" href="../index.html?design=${d.id}&v=40" target="_blank">全屏验收</a>
         </div>`;
       grid.appendChild(cell);
     });

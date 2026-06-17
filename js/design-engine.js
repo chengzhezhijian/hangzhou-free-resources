@@ -4,6 +4,16 @@
 const DesignEngine = (function () {
   let api = null;
 
+  const SORT_LABELS = {
+    comprehensive: "综合排序",
+    distance: "距离最近",
+    rating: "评分最高",
+  };
+
+  function sortLabel() {
+    return api.sortModeLabel?.() || SORT_LABELS[api.state.sortMode] || "综合排序";
+  }
+
   function chip(cls, label, active, attrs = "") {
     return `<button type="button" class="ft-chip ${cls}${active ? " is-active" : ""}" ${attrs}>${label}</button>`;
   }
@@ -13,15 +23,9 @@ const DesignEngine = (function () {
   }
 
   function sortChips() {
-    const geo = !api.state.userLocation;
+    const geo = !api.state.userLocation && api.state.sortMode === "distance";
     return (
-      chip("ft-chip--sort", "综合", api.state.sortMode === "comprehensive", 'data-sort="comprehensive"') +
-      chip(
-        "ft-chip--sort" + (geo ? " ft-chip--geo" : ""),
-        "距离",
-        api.state.sortMode === "distance",
-        'data-sort="distance"'
-      ) +
+      `<button type="button" class="ft-chip ft-chip--sort-trigger${geo ? " ft-chip--geo" : ""}" id="sortTriggerBtn" aria-haspopup="listbox" aria-expanded="false">${sortLabel()}<span class="ft-caret" aria-hidden="true">▾</span></button>` +
       `<button type="button" class="ft-chip ft-chip--filter" id="filterOpenBtn">${api.filterBadgeHtml()}</button>`
     );
   }
@@ -148,8 +152,9 @@ const DesignEngine = (function () {
     root.querySelectorAll("[data-group]").forEach((btn) => {
       btn.addEventListener("click", () => api.setGroup(btn.dataset.group));
     });
-    root.querySelectorAll("[data-sort]").forEach((btn) => {
-      btn.addEventListener("click", () => api.setSortMode(btn.dataset.sort));
+    root.querySelector("#sortTriggerBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      api.toggleSortDropdown?.();
     });
     document.getElementById("designLocateBtn")?.addEventListener("click", () => api.runGeoLocate?.(true));
     root.querySelector("#filterOpenBtn")?.addEventListener("click", () => api.openFilterSheet?.());
