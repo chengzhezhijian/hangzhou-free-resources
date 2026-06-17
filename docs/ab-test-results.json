@@ -1,0 +1,964 @@
+{
+  "generatedAt": "2026-06-17 00:26:35",
+  "defaultTheme": "v01",
+  "winner": {
+    "id": "v01",
+    "name": "苹果原生",
+    "total": 86.87
+  },
+  "recommendation": "v01、v09、v03",
+  "ranked": [
+    {
+      "id": "v01",
+      "name": "苹果原生",
+      "reference": "Apple Maps / iOS 18",
+      "total": 86.87,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 23.87,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 15.247942489892495,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 9.804187975403615,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 4.016975780478911,
+              "min": 4.5,
+              "weight": 8,
+              "score": 3.57,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.014735210873155,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 3.599857119427381,
+              "min": 3,
+              "weight": 4,
+              "score": 2.3,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 18,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 23,
+          "max": 25,
+          "notes": [
+            "蓝色系政务可信 +10",
+            "饱和度 100%",
+            "明度适中 +5",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 15,
+          "max": 15,
+          "notes": [
+            "辅色色相差 30° 和谐 +8",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 7,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.56",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "-apple-system",
+      "accent": "#007aff",
+      "bg": "#f2f2f7",
+      "rank": 1
+    },
+    {
+      "id": "v09",
+      "name": "墨韵简约",
+      "reference": "MUJI / 无印风",
+      "total": 84.61,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 26.61,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 9.609229689839896,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 9.609229689839896,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 5.473250081210842,
+              "min": 4.5,
+              "weight": 8,
+              "score": 5.56,
+              "pass": true
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 10.307355969735845,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 5.102542042276794,
+              "min": 3,
+              "weight": 4,
+              "score": 3.05,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 16,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "轻标题 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 22,
+          "max": 25,
+          "notes": [
+            "青绿便民 +9",
+            "饱和度 77%",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 15,
+          "max": 15,
+          "notes": [
+            "辅色色相差 45° 和谐 +8",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#0f766e",
+      "bg": "#f7f7f5",
+      "rank": 2
+    },
+    {
+      "id": "v03",
+      "name": "高德导航",
+      "reference": "高德地图",
+      "total": 84.11,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 25.11,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 15.82815050420637,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 15.82815050420637,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 4.785265888480113,
+              "min": 4.5,
+              "weight": 8,
+              "score": 4.46,
+              "pass": true
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.604762795071462,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 4.302353264692232,
+              "min": 3,
+              "weight": 4,
+              "score": 2.65,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 18,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 21,
+          "max": 25,
+          "notes": [
+            "蓝色系政务可信 +10",
+            "饱和度 100%",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 15,
+          "max": 15,
+          "notes": [
+            "辅色色相差 33° 和谐 +8",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#1a66ff",
+      "bg": "#f0f3f8",
+      "rank": 3
+    },
+    {
+      "id": "v05",
+      "name": "线性精密",
+      "reference": "Linear",
+      "total": 84.07,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 25.07,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 17.176123405576867,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 17.176123405576867,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 4.699901244313427,
+              "min": 4.5,
+              "weight": 8,
+              "score": 4.32,
+              "pass": true
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.9278402530276,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 4.50283372826902,
+              "min": 3,
+              "weight": 4,
+              "score": 2.75,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 20,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "Inter 西文精密 +3",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 23,
+          "max": 25,
+          "notes": [
+            "蓝色系政务可信 +10",
+            "饱和度 56%",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 11,
+          "max": 15,
+          "notes": [
+            "色相差 25° +4",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Inter",
+      "accent": "#5e6ad2",
+      "bg": "#fafafa",
+      "rank": 4
+    },
+    {
+      "id": "v07",
+      "name": "阅读书房",
+      "reference": "城市书房 / 豆瓣阅读",
+      "total": 83,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 30,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 14.199908676158994,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 14.199908676158994,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 9.248544828451578,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 15.076267075188092,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 8.574065359793286,
+              "min": 3,
+              "weight": 4,
+              "score": 4,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 12,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "衬线阅读感 +2（工具类略降）",
+            "工具类衬线 -2",
+            "标题字重适中 +4"
+          ]
+        },
+        "brandFit": {
+          "score": 21,
+          "max": 25,
+          "notes": [
+            "绿色公益 +8",
+            "饱和度 57%",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 15,
+          "max": 15,
+          "notes": [
+            "辅色色相差 53° 和谐 +8",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Serif SC",
+      "accent": "#2d5016",
+      "bg": "#f9f6f0",
+      "rank": 5
+    },
+    {
+      "id": "v02",
+      "name": "政务可信",
+      "reference": "支付宝 / 国家政务",
+      "total": 81.06,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 24.06,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 15.893692668780188,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 15.893692668780188,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 4.104091535864498,
+              "min": 4.5,
+              "weight": 8,
+              "score": 3.65,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.057478355515048,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 3.8240804529282837,
+              "min": 3,
+              "weight": 4,
+              "score": 2.41,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 18,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 23,
+          "max": 25,
+          "notes": [
+            "蓝色系政务可信 +10",
+            "饱和度 100%",
+            "明度适中 +5",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 11,
+          "max": 15,
+          "notes": [
+            "色相差 4° +4",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#1677ff",
+      "bg": "#f5f7fa",
+      "rank": 6
+    },
+    {
+      "id": "v08",
+      "name": "夏日纳凉",
+      "reference": "Apple Weather / 清凉蓝",
+      "total": 79.15,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 22.15,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 16.198978179543985,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 16.198978179543985,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 2.771412229141218,
+              "min": 4.5,
+              "weight": 8,
+              "score": 2.46,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.696074103562253,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 2.536949493071048,
+              "min": 3,
+              "weight": 4,
+              "score": 1.69,
+              "pass": false
+            }
+          ]
+        },
+        "typography": {
+          "score": 18,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 23,
+          "max": 25,
+          "notes": [
+            "蓝色系政务可信 +10",
+            "饱和度 89%",
+            "明度适中 +5",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 11,
+          "max": 15,
+          "notes": [
+            "色相差 10° +4",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#0ea5e9",
+      "bg": "#eef6fc",
+      "rank": 7
+    },
+    {
+      "id": "v06",
+      "name": "微信便民",
+      "reference": "WeChat",
+      "total": 73.48,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 21.48,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 15.017664939758903,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 15.017664939758903,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 2.3847578530651097,
+              "min": 4.5,
+              "weight": 8,
+              "score": 2.12,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.581691183046004,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 2.036976649568587,
+              "min": 3,
+              "weight": 4,
+              "score": 1.36,
+              "pass": false
+            }
+          ]
+        },
+        "typography": {
+          "score": 12,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "标题字重适中 +4"
+          ]
+        },
+        "brandFit": {
+          "score": 22,
+          "max": 25,
+          "notes": [
+            "青绿便民 +9",
+            "饱和度 93%",
+            "明度适中 +5",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 13,
+          "max": 15,
+          "notes": [
+            "辅色色相差 72° 和谐 +8",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "-apple-system",
+      "accent": "#07c160",
+      "bg": "#ededed",
+      "rank": 8
+    },
+    {
+      "id": "v10",
+      "name": "活力橙光",
+      "reference": "美团 / 大众点评",
+      "total": 72.37,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 22.37,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 16.77839937316378,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 16.77839937316378,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 2.855170256923058,
+              "min": 4.5,
+              "weight": 8,
+              "score": 2.54,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 17.40432753274219,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 2.752487090288967,
+              "min": 3,
+              "weight": 4,
+              "score": 1.83,
+              "pass": false
+            }
+          ]
+        },
+        "typography": {
+          "score": 16,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "超粗标题 +2",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 18,
+          "max": 25,
+          "notes": [
+            "橙色生活化 +5",
+            "饱和度 100%",
+            "明度适中 +5",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 11,
+          "max": 15,
+          "notes": [
+            "色相差 21° +4",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#ff6b00",
+      "bg": "#fffaf5",
+      "rank": 9
+    },
+    {
+      "id": "v04",
+      "name": "爱彼迎暖",
+      "reference": "Airbnb 2024",
+      "total": 72.3,
+      "maxTotal": 100,
+      "breakdown": {
+        "accessibility": {
+          "score": 23.3,
+          "max": 30,
+          "details": [
+            {
+              "label": "正文/背景",
+              "ratio": 15.159733857707332,
+              "min": 4.5,
+              "weight": 8,
+              "score": 8,
+              "pass": true
+            },
+            {
+              "label": "次级/背景",
+              "ratio": 15.159733857707332,
+              "min": 3,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "按钮字/主色",
+              "ratio": 3.5162858477998795,
+              "min": 4.5,
+              "weight": 8,
+              "score": 3.13,
+              "pass": false
+            },
+            {
+              "label": "正文/卡片",
+              "ratio": 15.909984431773273,
+              "min": 4.5,
+              "weight": 5,
+              "score": 5,
+              "pass": true
+            },
+            {
+              "label": "主色/背景",
+              "ratio": 3.350472016415899,
+              "min": 3,
+              "weight": 4,
+              "score": 2.18,
+              "pass": true
+            }
+          ]
+        },
+        "typography": {
+          "score": 18,
+          "max": 20,
+          "notes": [
+            "iOS 系统字体栈 +6",
+            "Noto Sans SC 中文优化 +5",
+            "标题字重适中 +4",
+            "负字距现代感 +3"
+          ]
+        },
+        "brandFit": {
+          "score": 15,
+          "max": 25,
+          "notes": [
+            "红/粉消费感 +4",
+            "饱和度 100%",
+            "浅色背景清爽 +5"
+          ]
+        },
+        "harmony": {
+          "score": 11,
+          "max": 15,
+          "notes": [
+            "色相差 0° +4",
+            "层级对比 subtle +4",
+            "accentLight 透明层 +3"
+          ]
+        },
+        "hierarchy": {
+          "score": 5,
+          "max": 10,
+          "notes": [
+            "主/次级对比 1.00",
+            "次/三级对比 1.00"
+          ]
+        }
+      },
+      "font": "Noto Sans SC",
+      "accent": "#ff385c",
+      "bg": "#fff8f6",
+      "rank": 10
+    }
+  ]
+}

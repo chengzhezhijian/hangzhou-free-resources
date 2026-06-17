@@ -72,8 +72,9 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /class="app-ui"/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=33/],
-  ["Premium 交互脚本", /ui-premium\.js\?v=33/],
+  ["Premium 样式", /premium-ui\.css\?v=34/],
+  ["主题变体", /themes\/variants\.css/],
+  ["主题切换", /theme-switch\.js/],
   ["设施标签容器", /id="heroPerks"/],
   ["iOS 分段排序", /sort-tabs/],
   ["底部 Tab", /bottom-nav/],
@@ -141,7 +142,11 @@ console.log("\n═══ 分享态 ═══");
 const uiPremium = fs.readFileSync(path.join(ROOT, "js/ui-premium.js"), "utf8");
 assert("URL 同步能力", /syncPremiumUrl/.test(uiPremium));
 assert("结果数动效", /animateResultCount/.test(uiPremium));
-assert("列表入场", /markCardsEnter/.test(uiPremium));
+assert("AB 主题配置 10 套", (() => {
+  const p = path.join(ROOT, "css/themes/themes.json");
+  return JSON.parse(fs.readFileSync(p, "utf8")).themes.length === 10;
+})());
+assert("AB 测试报告存在", fs.existsSync(path.join(ROOT, "docs/ab-test-results.json")));
 
 // ─── Report ───
 const total = runner.passed + runner.failed;

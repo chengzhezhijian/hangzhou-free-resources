@@ -8,6 +8,13 @@
   --premium-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --premium-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --sticky-top: calc(env(safe-area-inset-top, 0px) + 48px);
+  --discover-sticky-bg: linear-gradient(
+    180deg,
+    rgba(242, 242, 247, 0.97) 0%,
+    rgba(242, 242, 247, 0.92) 70%,
+    rgba(242, 242, 247, 0) 100%
+  );
+  --search-spinner-border: rgba(13, 148, 136, 0.25);
 }
 
 /* ─── 滚动紧凑模式（Maps / Airbnb 大标题收起） ─── */
@@ -39,12 +46,7 @@
   z-index: 90;
   margin: 0 -16px;
   padding: 0 16px 8px;
-  background: linear-gradient(
-    180deg,
-    rgba(242, 242, 247, 0.97) 0%,
-    rgba(242, 242, 247, 0.92) 70%,
-    rgba(242, 242, 247, 0) 100%
-  );
+  background: var(--discover-sticky-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -78,7 +80,7 @@
   right: 40px;
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(13, 148, 136, 0.25);
+  border: 2px solid var(--search-spinner-border);
   border-top-color: var(--ios-teal);
   border-radius: 50%;
   animation: premium-spin 0.65s linear infinite;

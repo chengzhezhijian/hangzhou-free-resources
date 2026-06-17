@@ -2,9 +2,22 @@
 
 全国 **政府免费便民** 资源查询：自习、纳凉、WiFi、饮水、充电，App 级体验。
 
-**在线访问**：https://chengzhezhijian.github.io/hangzhou-free-resources/?v=33
+**在线访问**：https://chengzhezhijian.github.io/hangzhou-free-resources/?v=34
 
-## 定位文案
+## 主题 AB 测试（10 套配色/字体）
+
+| 入口 | 说明 |
+|------|------|
+| [对比墙](labs/ab-compare.html) | 10 套并排预览 + 五维得分 |
+| [报告](docs/ab-test-report.md) | 自动化评分明细 |
+| `?theme=v01` … `v10` | 全站实时切换主题 |
+
+**Top 3**：v01 苹果原生 (86.9) · v09 墨韵简约 (84.6) · v03 高德导航 (84.1)
+
+```bash
+npm run themes:generate && npm run test:ab
+```
+
 
 | 层级 | 文案 |
 |------|------|
@@ -43,5 +56,5 @@ npm run test:all
 ```bash
 cd hangzhou-free-resources
 python3 -m http.server 8080
-# http://localhost:8080/?v=33
+# http://localhost:8080/?v=34&theme=v01
 ```

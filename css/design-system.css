@@ -25,11 +25,30 @@
   --accent: var(--ios-teal);
   --accent-dark: #0f766e;
   --accent-light: rgba(13, 148, 136, 0.12);
+  --accent-alt: #14b8a6;
+  --accent-secondary: var(--ios-indigo);
+  --accent-tertiary: #a855f7;
+  --on-accent: #ffffff;
+  --glass-nav-bg: rgba(242, 242, 247, 0.82);
+  --search-bg: rgba(118, 118, 128, 0.12);
+  --search-bg-focus: rgba(118, 118, 128, 0.18);
+  --tab-bar-bg: rgba(255, 255, 255, 0.88);
+  --chip-active-bg: linear-gradient(135deg, var(--ios-teal), var(--accent-alt));
+  --chip-active-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, var(--ios-teal), var(--accent-alt));
+  --btn-primary-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+  --card-stripe: linear-gradient(90deg, var(--ios-teal), var(--ios-indigo), var(--accent-tertiary));
+  --fab-bg: linear-gradient(135deg, var(--ios-indigo), #7c3aed);
+  --nav-brand-gradient: linear-gradient(135deg, var(--ios-teal), var(--ios-indigo));
+  --title-weight: 800;
+  --title-tracking: -0.04em;
+  --body-weight: 500;
+  --theme-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC",
+    "Helvetica Neue", "Noto Sans SC", sans-serif;
 }
 
 .app-ui {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC",
-    "Helvetica Neue", "Noto Sans SC", sans-serif;
+  font-family: var(--theme-font);
   background: var(--ios-bg);
   color: var(--ios-label);
   -webkit-font-smoothing: antialiased;
@@ -57,7 +76,7 @@
   top: 0;
   z-index: 100;
   padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 10px;
-  background: rgba(242, 242, 247, 0.82);
+  background: var(--glass-nav-bg);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 0.5px solid var(--ios-separator);
@@ -73,7 +92,7 @@
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--ios-teal), var(--ios-indigo));
+  background: var(--nav-brand-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -118,9 +137,9 @@
 .app-ui .display-title {
   margin: 0;
   font-size: clamp(1.75rem, 7vw, 2.25rem);
-  font-weight: 800;
+  font-weight: var(--title-weight);
   line-height: 1.12;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--title-tracking);
 }
 
 .app-ui .display-sub {
@@ -161,7 +180,7 @@
 }
 
 .app-ui .search-box {
-  background: rgba(118, 118, 128, 0.12);
+  background: var(--search-bg);
   border: none;
   border-radius: var(--ios-radius-md);
   padding: 0 12px;
@@ -172,7 +191,7 @@
 }
 
 .app-ui .search-box:focus-within {
-  background: rgba(118, 118, 128, 0.18);
+  background: var(--search-bg-focus);
 }
 
 .app-ui .search-box input {
@@ -206,9 +225,9 @@
 }
 
 .app-ui .value-perk.is-active {
-  background: linear-gradient(135deg, var(--ios-teal), #14b8a6);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+  background: var(--chip-active-bg);
+  color: var(--on-accent);
+  box-shadow: var(--chip-active-shadow);
 }
 
 .app-ui .quick-scenes {
@@ -229,14 +248,14 @@
 
 .app-ui .quick-scene.is-active {
   background: var(--ios-label);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* ─── Segmented sort control ─── */
 .app-ui .sort-tabs {
   display: flex;
   padding: 3px;
-  background: rgba(118, 118, 128, 0.12);
+  background: var(--search-bg);
   border-radius: var(--ios-radius-sm);
   margin-bottom: 12px;
   gap: 0;
@@ -327,7 +346,7 @@
   content: "";
   display: block;
   height: 4px;
-  background: linear-gradient(90deg, var(--ios-teal), var(--ios-indigo), #a855f7);
+  background: var(--card-stripe);
 }
 
 .app-ui .card-body {
@@ -405,7 +424,7 @@
   right: 0;
   height: var(--tab-bar-h);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--tab-bar-bg);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-top: 0.5px solid var(--ios-separator);
@@ -484,20 +503,20 @@
 
 .app-ui .city-pill.is-active {
   background: var(--ios-teal);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .app-ui .btn-primary {
-  background: linear-gradient(135deg, var(--ios-teal), #14b8a6);
+  background: var(--btn-primary-bg);
   border: none;
   border-radius: var(--ios-radius-md);
   font-weight: 650;
-  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+  box-shadow: var(--btn-primary-shadow);
 }
 
 .app-ui .feedback-fab {
   bottom: calc(var(--tab-bar-h) + 12px);
-  background: linear-gradient(135deg, var(--ios-indigo), #7c3aed);
+  background: var(--fab-bg);
   box-shadow: var(--ios-shadow-lg);
 }
 
@@ -582,7 +601,7 @@
 @media (min-width: 960px) {
   .app-ui.subpage .site-header {
     display: block;
-    background: rgba(255, 255, 255, 0.88);
+    background: var(--tab-bar-bg);
     backdrop-filter: blur(20px);
   }
 
@@ -594,7 +613,7 @@
 
   .app-ui .site-header {
     display: block;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--tab-bar-bg);
     backdrop-filter: blur(20px);
     border-bottom: 0.5px solid var(--ios-separator);
   }

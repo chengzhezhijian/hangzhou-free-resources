@@ -1,0 +1,434 @@
+/**
+ * 主题变体 — 由 scripts/generate-theme-variants.mjs 自动生成
+ * 默认: v01 · 共 10 套
+ * 预览: labs/ab-compare.html · 切换: ?theme=v01
+ */
+
+/* v01 · 苹果原生（Apple Maps / iOS 18） */
+[data-theme="v01"] {
+  --theme-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Noto Sans SC", sans-serif;
+  --theme-font-url: none;
+  --theme-color-meta: #007aff;
+
+  --ios-bg: #f2f2f7;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(60,60,67,0.12);
+  --ios-label: #1c1c1e;
+  --ios-label-secondary: rgba(60,60,67,0.6);
+  --ios-label-tertiary: rgba(60,60,67,0.3);
+  --ios-blue: #007aff;
+  --ios-indigo: #5856d6;
+  --ios-teal: #007aff;
+  --accent: #007aff;
+  --accent-dark: #0051a8;
+  --accent-light: rgba(0,122,255,0.12);
+  --accent-alt: #14b8a6;
+  --accent-secondary: #5856d6;
+  --accent-tertiary: #a855f7;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(242,242,247,0.82);
+  --search-bg: rgba(118,118,128,0.12);
+  --search-bg-focus: rgba(118,118,128,0.18);
+  --tab-bar-bg: rgba(255,255,255,0.88);
+  --chip-active-bg: linear-gradient(135deg, #007aff, #14b8a6);
+  --chip-active-shadow: 0 4px 16px rgba(0, 122, 255, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #007aff, #14b8a6);
+  --btn-primary-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+  --card-stripe: linear-gradient(90deg, #007aff, #5856d6, #a855f7);
+  --fab-bg: linear-gradient(135deg, #5856d6, #a855f7);
+  --premium-gradient: linear-gradient(135deg, #007aff 0%, #5856d6 50%, #a855f7 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(242, 242, 247, 0.97) 0%, rgba(242, 242, 247, 0.92) 70%, rgba(242, 242, 247, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #007aff, #5856d6);
+  --title-weight: 800;
+  --title-tracking: -0.04em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(0, 122, 255, 0.25);
+}
+
+
+/* v02 · 政务可信（支付宝 / 国家政务） */
+[data-theme="v02"] {
+  --theme-font: "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap";
+  --theme-color-meta: #1677ff;
+
+  --ios-bg: #f5f7fa;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(22,119,255,0.1);
+  --ios-label: #1a1a2e;
+  --ios-label-secondary: rgba(26,26,46,0.65);
+  --ios-label-tertiary: rgba(26,26,46,0.35);
+  --ios-blue: #1677ff;
+  --ios-indigo: #003eb3;
+  --ios-teal: #1677ff;
+  --accent: #1677ff;
+  --accent-dark: #0958d9;
+  --accent-light: rgba(22,119,255,0.1);
+  --accent-alt: #4096ff;
+  --accent-secondary: #003eb3;
+  --accent-tertiary: #69b1ff;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(245,247,250,0.9);
+  --search-bg: rgba(22,119,255,0.08);
+  --search-bg-focus: rgba(22,119,255,0.14);
+  --tab-bar-bg: rgba(255,255,255,0.92);
+  --chip-active-bg: linear-gradient(135deg, #1677ff, #4096ff);
+  --chip-active-shadow: 0 4px 16px rgba(22, 119, 255, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #1677ff, #4096ff);
+  --btn-primary-shadow: 0 4px 14px rgba(22, 119, 255, 0.35);
+  --card-stripe: linear-gradient(90deg, #1677ff, #003eb3, #69b1ff);
+  --fab-bg: linear-gradient(135deg, #003eb3, #69b1ff);
+  --premium-gradient: linear-gradient(135deg, #1677ff 0%, #003eb3 50%, #69b1ff 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(245, 247, 250, 0.97) 0%, rgba(245, 247, 250, 0.92) 70%, rgba(245, 247, 250, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #1677ff, #003eb3);
+  --title-weight: 700;
+  --title-tracking: -0.03em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(22, 119, 255, 0.25);
+}
+
+
+/* v03 · 高德导航（高德地图） */
+[data-theme="v03"] {
+  --theme-font: "Noto Sans SC", "Helvetica Neue", "PingFang SC", sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap";
+  --theme-color-meta: #1a66ff;
+
+  --ios-bg: #f0f3f8;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(26,102,255,0.12);
+  --ios-label: #0d1a26;
+  --ios-label-secondary: rgba(13,26,38,0.62);
+  --ios-label-tertiary: rgba(13,26,38,0.32);
+  --ios-blue: #1a66ff;
+  --ios-indigo: #00bcd4;
+  --ios-teal: #1a66ff;
+  --accent: #1a66ff;
+  --accent-dark: #0d47c2;
+  --accent-light: rgba(26,102,255,0.12);
+  --accent-alt: #4285f4;
+  --accent-secondary: #00bcd4;
+  --accent-tertiary: #4caf50;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(240,243,248,0.88);
+  --search-bg: rgba(26,102,255,0.08);
+  --search-bg-focus: rgba(26,102,255,0.15);
+  --tab-bar-bg: rgba(255,255,255,0.9);
+  --chip-active-bg: linear-gradient(135deg, #1a66ff, #4285f4);
+  --chip-active-shadow: 0 4px 16px rgba(26, 102, 255, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #1a66ff, #4285f4);
+  --btn-primary-shadow: 0 4px 14px rgba(26, 102, 255, 0.35);
+  --card-stripe: linear-gradient(90deg, #1a66ff, #00bcd4, #4caf50);
+  --fab-bg: linear-gradient(135deg, #00bcd4, #4caf50);
+  --premium-gradient: linear-gradient(135deg, #1a66ff 0%, #00bcd4 50%, #4caf50 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(240, 243, 248, 0.97) 0%, rgba(240, 243, 248, 0.92) 70%, rgba(240, 243, 248, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #1a66ff, #00bcd4);
+  --title-weight: 800;
+  --title-tracking: -0.035em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(26, 102, 255, 0.25);
+}
+
+
+/* v04 · 爱彼迎暖（Airbnb 2024） */
+[data-theme="v04"] {
+  --theme-font: "Noto Sans SC", "Circular", "PingFang SC", sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap";
+  --theme-color-meta: #ff385c;
+
+  --ios-bg: #fff8f6;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(255,56,92,0.1);
+  --ios-label: #222222;
+  --ios-label-secondary: rgba(34,34,34,0.65);
+  --ios-label-tertiary: rgba(34,34,34,0.35);
+  --ios-blue: #ff385c;
+  --ios-indigo: #ff7e95;
+  --ios-teal: #ff385c;
+  --accent: #ff385c;
+  --accent-dark: #d70444;
+  --accent-light: rgba(255,56,92,0.1);
+  --accent-alt: #ff5a7a;
+  --accent-secondary: #ff7e95;
+  --accent-tertiary: #ffb400;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(255,248,246,0.9);
+  --search-bg: rgba(255,56,92,0.08);
+  --search-bg-focus: rgba(255,56,92,0.14);
+  --tab-bar-bg: rgba(255,255,255,0.92);
+  --chip-active-bg: linear-gradient(135deg, #ff385c, #ff5a7a);
+  --chip-active-shadow: 0 4px 16px rgba(255, 56, 92, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #ff385c, #ff5a7a);
+  --btn-primary-shadow: 0 4px 14px rgba(255, 56, 92, 0.35);
+  --card-stripe: linear-gradient(90deg, #ff385c, #ff7e95, #ffb400);
+  --fab-bg: linear-gradient(135deg, #ff7e95, #ffb400);
+  --premium-gradient: linear-gradient(135deg, #ff385c 0%, #ff7e95 50%, #ffb400 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(255, 248, 246, 0.97) 0%, rgba(255, 248, 246, 0.92) 70%, rgba(255, 248, 246, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #ff385c, #ff7e95);
+  --title-weight: 800;
+  --title-tracking: -0.03em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(255, 56, 92, 0.25);
+}
+
+
+/* v05 · 线性精密（Linear） */
+[data-theme="v05"] {
+  --theme-font: "Inter", "Noto Sans SC", "PingFang SC", sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap";
+  --theme-color-meta: #5e6ad2;
+
+  --ios-bg: #fafafa;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(94,106,210,0.12);
+  --ios-label: #171717;
+  --ios-label-secondary: rgba(23,23,23,0.6);
+  --ios-label-tertiary: rgba(23,23,23,0.3);
+  --ios-blue: #5e6ad2;
+  --ios-indigo: #8b5cf6;
+  --ios-teal: #5e6ad2;
+  --accent: #5e6ad2;
+  --accent-dark: #444ce7;
+  --accent-light: rgba(94,106,210,0.1);
+  --accent-alt: #7c85e0;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #6366f1;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(250,250,250,0.88);
+  --search-bg: rgba(94,106,210,0.08);
+  --search-bg-focus: rgba(94,106,210,0.14);
+  --tab-bar-bg: rgba(255,255,255,0.9);
+  --chip-active-bg: linear-gradient(135deg, #5e6ad2, #7c85e0);
+  --chip-active-shadow: 0 4px 16px rgba(94, 106, 210, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #5e6ad2, #7c85e0);
+  --btn-primary-shadow: 0 4px 14px rgba(94, 106, 210, 0.35);
+  --card-stripe: linear-gradient(90deg, #5e6ad2, #8b5cf6, #6366f1);
+  --fab-bg: linear-gradient(135deg, #8b5cf6, #6366f1);
+  --premium-gradient: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #6366f1 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(250, 250, 250, 0.97) 0%, rgba(250, 250, 250, 0.92) 70%, rgba(250, 250, 250, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #5e6ad2, #8b5cf6);
+  --title-weight: 700;
+  --title-tracking: -0.045em;
+  --body-weight: 450;
+  --search-spinner-border: rgba(94, 106, 210, 0.25);
+}
+
+
+/* v06 · 微信便民（WeChat） */
+[data-theme="v06"] {
+  --theme-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  --theme-font-url: none;
+  --theme-color-meta: #07c160;
+
+  --ios-bg: #ededed;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(0,0,0,0.08);
+  --ios-label: #191919;
+  --ios-label-secondary: rgba(25,25,25,0.6);
+  --ios-label-tertiary: rgba(25,25,25,0.3);
+  --ios-blue: #07c160;
+  --ios-indigo: #576b95;
+  --ios-teal: #07c160;
+  --accent: #07c160;
+  --accent-dark: #059a4c;
+  --accent-light: rgba(7,193,96,0.12);
+  --accent-alt: #2aae67;
+  --accent-secondary: #576b95;
+  --accent-tertiary: #10aeff;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(237,237,237,0.92);
+  --search-bg: rgba(0,0,0,0.06);
+  --search-bg-focus: rgba(0,0,0,0.1);
+  --tab-bar-bg: rgba(247,247,247,0.95);
+  --chip-active-bg: linear-gradient(135deg, #07c160, #2aae67);
+  --chip-active-shadow: 0 4px 16px rgba(7, 193, 96, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #07c160, #2aae67);
+  --btn-primary-shadow: 0 4px 14px rgba(7, 193, 96, 0.35);
+  --card-stripe: linear-gradient(90deg, #07c160, #576b95, #10aeff);
+  --fab-bg: linear-gradient(135deg, #576b95, #10aeff);
+  --premium-gradient: linear-gradient(135deg, #07c160 0%, #576b95 50%, #10aeff 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(237, 237, 237, 0.97) 0%, rgba(237, 237, 237, 0.92) 70%, rgba(237, 237, 237, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #07c160, #576b95);
+  --title-weight: 700;
+  --title-tracking: -0.02em;
+  --body-weight: 400;
+  --search-spinner-border: rgba(7, 193, 96, 0.25);
+}
+
+
+/* v07 · 阅读书房（城市书房 / 豆瓣阅读） */
+[data-theme="v07"] {
+  --theme-font: "Noto Serif SC", "Songti SC", "PingFang SC", serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap";
+  --theme-color-meta: #2d5016;
+
+  --ios-bg: #f9f6f0;
+  --ios-bg-elevated: #fffdf9;
+  --ios-separator: rgba(45,80,22,0.1);
+  --ios-label: #2c2416;
+  --ios-label-secondary: rgba(44,36,22,0.65);
+  --ios-label-tertiary: rgba(44,36,22,0.35);
+  --ios-blue: #2d5016;
+  --ios-indigo: #8b6914;
+  --ios-teal: #2d5016;
+  --accent: #2d5016;
+  --accent-dark: #1a3009;
+  --accent-light: rgba(45,80,22,0.1);
+  --accent-alt: #4a7c23;
+  --accent-secondary: #8b6914;
+  --accent-tertiary: #6b8e4e;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(249,246,240,0.92);
+  --search-bg: rgba(45,80,22,0.06);
+  --search-bg-focus: rgba(45,80,22,0.12);
+  --tab-bar-bg: rgba(255,253,249,0.94);
+  --chip-active-bg: linear-gradient(135deg, #2d5016, #4a7c23);
+  --chip-active-shadow: 0 4px 16px rgba(45, 80, 22, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #2d5016, #4a7c23);
+  --btn-primary-shadow: 0 4px 14px rgba(45, 80, 22, 0.35);
+  --card-stripe: linear-gradient(90deg, #2d5016, #8b6914, #6b8e4e);
+  --fab-bg: linear-gradient(135deg, #8b6914, #6b8e4e);
+  --premium-gradient: linear-gradient(135deg, #2d5016 0%, #8b6914 50%, #6b8e4e 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(249, 246, 240, 0.97) 0%, rgba(249, 246, 240, 0.92) 70%, rgba(249, 246, 240, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #2d5016, #8b6914);
+  --title-weight: 700;
+  --title-tracking: -0.01em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(45, 80, 22, 0.25);
+}
+
+
+/* v08 · 夏日纳凉（Apple Weather / 清凉蓝） */
+[data-theme="v08"] {
+  --theme-font: "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap";
+  --theme-color-meta: #0ea5e9;
+
+  --ios-bg: #eef6fc;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(14,165,233,0.12);
+  --ios-label: #0c1929;
+  --ios-label-secondary: rgba(12,25,41,0.62);
+  --ios-label-tertiary: rgba(12,25,41,0.32);
+  --ios-blue: #0ea5e9;
+  --ios-indigo: #06b6d4;
+  --ios-teal: #0ea5e9;
+  --accent: #0ea5e9;
+  --accent-dark: #0284c7;
+  --accent-light: rgba(14,165,233,0.12);
+  --accent-alt: #38bdf8;
+  --accent-secondary: #06b6d4;
+  --accent-tertiary: #3b82f6;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(238,246,252,0.9);
+  --search-bg: rgba(14,165,233,0.08);
+  --search-bg-focus: rgba(14,165,233,0.15);
+  --tab-bar-bg: rgba(255,255,255,0.92);
+  --chip-active-bg: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  --chip-active-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  --btn-primary-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+  --card-stripe: linear-gradient(90deg, #0ea5e9, #06b6d4, #3b82f6);
+  --fab-bg: linear-gradient(135deg, #06b6d4, #3b82f6);
+  --premium-gradient: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #3b82f6 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(238, 246, 252, 0.97) 0%, rgba(238, 246, 252, 0.92) 70%, rgba(238, 246, 252, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  --title-weight: 800;
+  --title-tracking: -0.04em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(14, 165, 233, 0.25);
+}
+
+
+/* v09 · 墨韵简约（MUJI / 无印风） */
+[data-theme="v09"] {
+  --theme-font: "Noto Sans SC", "Helvetica Neue", "PingFang SC", sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap";
+  --theme-color-meta: #0f766e;
+
+  --ios-bg: #f7f7f5;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(55,65,81,0.1);
+  --ios-label: #374151;
+  --ios-label-secondary: rgba(55,65,81,0.65);
+  --ios-label-tertiary: rgba(55,65,81,0.35);
+  --ios-blue: #0f766e;
+  --ios-indigo: #6b7280;
+  --ios-teal: #0f766e;
+  --accent: #0f766e;
+  --accent-dark: #115e59;
+  --accent-light: rgba(15,118,110,0.1);
+  --accent-alt: #14b8a6;
+  --accent-secondary: #6b7280;
+  --accent-tertiary: #9ca3af;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(247,247,245,0.92);
+  --search-bg: rgba(55,65,81,0.06);
+  --search-bg-focus: rgba(55,65,81,0.12);
+  --tab-bar-bg: rgba(255,255,255,0.94);
+  --chip-active-bg: linear-gradient(135deg, #0f766e, #14b8a6);
+  --chip-active-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #0f766e, #14b8a6);
+  --btn-primary-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+  --card-stripe: linear-gradient(90deg, #0f766e, #6b7280, #9ca3af);
+  --fab-bg: linear-gradient(135deg, #6b7280, #9ca3af);
+  --premium-gradient: linear-gradient(135deg, #0f766e 0%, #6b7280 50%, #9ca3af 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(247, 247, 245, 0.97) 0%, rgba(247, 247, 245, 0.92) 70%, rgba(247, 247, 245, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #0f766e, #6b7280);
+  --title-weight: 600;
+  --title-tracking: -0.02em;
+  --body-weight: 400;
+  --search-spinner-border: rgba(15, 118, 110, 0.25);
+}
+
+
+/* v10 · 活力橙光（美团 / 大众点评） */
+[data-theme="v10"] {
+  --theme-font: "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --theme-font-url: "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap";
+  --theme-color-meta: #ff6b00;
+
+  --ios-bg: #fffaf5;
+  --ios-bg-elevated: #ffffff;
+  --ios-separator: rgba(255,107,0,0.1);
+  --ios-label: #1a1a1a;
+  --ios-label-secondary: rgba(26,26,26,0.65);
+  --ios-label-tertiary: rgba(26,26,26,0.35);
+  --ios-blue: #ff6b00;
+  --ios-indigo: #ffc300;
+  --ios-teal: #ff6b00;
+  --accent: #ff6b00;
+  --accent-dark: #e55d00;
+  --accent-light: rgba(255,107,0,0.1);
+  --accent-alt: #ff8533;
+  --accent-secondary: #ffc300;
+  --accent-tertiary: #ff9500;
+  --on-accent: #ffffff;
+
+  --glass-nav-bg: rgba(255,250,245,0.9);
+  --search-bg: rgba(255,107,0,0.08);
+  --search-bg-focus: rgba(255,107,0,0.14);
+  --tab-bar-bg: rgba(255,255,255,0.92);
+  --chip-active-bg: linear-gradient(135deg, #ff6b00, #ff8533);
+  --chip-active-shadow: 0 4px 16px rgba(255, 107, 0, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #ff6b00, #ff8533);
+  --btn-primary-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+  --card-stripe: linear-gradient(90deg, #ff6b00, #ffc300, #ff9500);
+  --fab-bg: linear-gradient(135deg, #ffc300, #ff9500);
+  --premium-gradient: linear-gradient(135deg, #ff6b00 0%, #ffc300 50%, #ff9500 100%);
+  --discover-sticky-bg: linear-gradient(180deg, rgba(255, 250, 245, 0.97) 0%, rgba(255, 250, 245, 0.92) 70%, rgba(255, 250, 245, 0) 100%);
+  --nav-brand-gradient: linear-gradient(135deg, #ff6b00, #ffc300);
+  --title-weight: 900;
+  --title-tracking: -0.03em;
+  --body-weight: 500;
+  --search-spinner-border: rgba(255, 107, 0, 0.25);
+}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>主题 AB 对比 · 全国惠民地图</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/design-system.css?v=34" />
+  <link rel="stylesheet" href="../css/themes/variants.css?v=34" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", sans-serif;
+      background: #0f0f12;
+      color: #e8e8ed;
+      padding: 24px 16px 48px;
+    }
+    .lab-head { max-width: 1200px; margin: 0 auto 24px; }
+    .lab-head h1 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 800; }
+    .lab-head p { margin: 0; color: #9898a0; font-size: 0.9rem; line-height: 1.5; }
+    .top3 {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;
+    }
+    .top3 span {
+      padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .theme-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .theme-card.is-winner { border-color: #ffd60a; box-shadow: 0 0 0 1px #ffd60a; }
+    .theme-meta {
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+    .theme-meta strong { font-size: 0.95rem; }
+    .theme-meta small { color: #9898a0; display: block; margin-top: 2px; }
+    .score-pill {
+      font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+    }
+    .score-pill.gold { background: #ffd60a; color: #1a1a1a; }
+    .preview {
+      padding: 14px;
+      min-height: 280px;
+      font-family: var(--theme-font, "Noto Sans SC", sans-serif);
+      background: var(--ios-bg);
+    }
+    .preview .mock-title {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      font-weight: var(--title-weight, 800);
+      letter-spacing: var(--title-tracking, -0.04em);
+      color: var(--ios-label);
+    }
+    .preview .mock-sub { margin: 0 0 12px; font-size: 0.78rem; color: var(--ios-label-secondary); }
+    .preview .mock-search {
+      height: 40px; border-radius: 12px; background: var(--search-bg);
+      margin-bottom: 10px; display: flex; align-items: center; padding: 0 12px;
+      font-size: 0.82rem; color: var(--ios-label-tertiary);
+    }
+    .preview .mock-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .preview .mock-chip {
+      padding: 6px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 650;
+      background: var(--ios-bg-elevated); color: var(--ios-label-secondary);
+      box-shadow: var(--ios-shadow);
+    }
+    .preview .mock-chip.on {
+      background: var(--chip-active-bg); color: var(--on-accent);
+    }
+    .preview .mock-card {
+      background: var(--ios-bg-elevated); border-radius: 14px;
+      box-shadow: var(--ios-shadow); overflow: hidden;
+    }
+    .preview .mock-stripe { height: 4px; background: var(--card-stripe); }
+    .preview .mock-card-body { padding: 12px; }
+    .preview .mock-card-body h4 { margin: 0; font-size: 0.88rem; color: var(--ios-label); }
+    .preview .mock-card-body p { margin: 4px 0 0; font-size: 0.72rem; color: var(--ios-label-secondary); }
+    .preview .mock-tab {
+      display: flex; justify-content: space-around; margin-top: 12px;
+      padding: 8px; border-radius: 12px; background: var(--tab-bar-bg);
+      font-size: 0.62rem; font-weight: 600;
+    }
+    .preview .mock-tab span { color: var(--ios-label-tertiary); }
+    .preview .mock-tab span.on { color: var(--ios-teal); }
+    .actions {
+      padding: 10px 14px 14px; display: flex; gap: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+    .actions a {
+      flex: 1; text-align: center; padding: 8px; border-radius: 10px;
+      font-size: 0.78rem; font-weight: 600; text-decoration: none;
+      background: rgba(255,255,255,0.1); color: #fff;
+    }
+    .actions a.primary { background: var(--ios-teal); color: var(--on-accent); }
+    .breakdown {
+      padding: 0 14px 12px; font-size: 0.68rem; color: #9898a0;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center;
+    }
+    .breakdown b { display: block; color: #e8e8ed; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="lab-head">
+    <h1>10 套主题 AB 对比</h1>
+    <p>自动化评分：无障碍 30 + 字体 20 + 品牌契合 25 + 色彩和谐 15 + 层级 10。点击「全站预览」在真实首页体验。</p>
+    <div class="top3" id="top3"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const THEMES = [
+      { id: "v01", name: "苹果原生", ref: "Apple Maps" },
+      { id: "v02", name: "政务可信", ref: "支付宝/政务" },
+      { id: "v03", name: "高德导航", ref: "高德地图" },
+      { id: "v04", name: "爱彼迎暖", ref: "Airbnb" },
+      { id: "v05", name: "线性精密", ref: "Linear" },
+      { id: "v06", name: "微信便民", ref: "WeChat" },
+      { id: "v07", name: "阅读书房", ref: "城市书房" },
+      { id: "v08", name: "夏日纳凉", ref: "Weather 蓝" },
+      { id: "v09", name: "墨韵简约", ref: "MUJI" },
+      { id: "v10", name: "活力橙光", ref: "美团" },
+    ];
+
+    function mockPreview(id) {
+      return `
+        <div class="preview" data-theme="${id}">
+          <h3 class="mock-title">免费自习、纳凉？</h3>
+          <p class="mock-sub">政府免费便民 · 72城</p>
+          <div class="mock-search">⌕ 搜自习、纳凉、WiFi…</div>
+          <div class="mock-chips">
+            <span class="mock-chip on">📶 WiFi</span>
+            <span class="mock-chip">❄️ 空调</span>
+            <span class="mock-chip">💧 饮水</span>
+          </div>
+          <div class="mock-card">
+            <div class="mock-stripe"></div>
+            <div class="mock-card-body">
+              <h4>杭州图书馆（市民中心馆）</h4>
+              <p>上城 · 免费WiFi · 可自习</p>
+            </div>
+          </div>
+          <div class="mock-tab">
+            <span class="on">发现</span><span>场景</span><span>工具</span><span>说明</span>
+          </div>
+        </div>`;
+    }
+
+    async function init() {
+      let scores = {};
+      try {
+        const r = await fetch("../docs/ab-test-results.json?v=34");
+        const data = await r.json();
+        data.ranked.forEach((t) => { scores[t.id] = t; });
+        document.getElementById("top3").innerHTML = data.ranked.slice(0, 3)
+          .map((t, i) => `<span>🥇${i + 1} ${t.id} ${t.name} · ${t.total}分</span>`).join("");
+      } catch {
+        document.getElementById("top3").innerHTML = "<span>加载评分数据失败，请先运行 npm run test:ab</span>";
+      }
+
+      const grid = document.getElementById("grid");
+      THEMES.forEach((t) => {
+        const s = scores[t.id];
+        const rank = s?.rank || "?";
+        const total = s?.total || "—";
+        const card = document.createElement("article");
+        card.className = "theme-card" + (rank === 1 ? " is-winner" : "");
+        card.setAttribute("data-theme", t.id);
+        card.innerHTML = `
+          <div class="theme-meta">
+            <div><strong>#${rank} ${t.id} · ${t.name}</strong><small>${t.ref}</small></div>
+            <span class="score-pill ${rank === 1 ? "gold" : ""}">${total}/100</span>
+          </div>
+          ${mockPreview(t.id)}
+          ${s ? `<div class="breakdown">
+            <span>无障碍<b>${s.breakdown.accessibility.score}</b></span>
+            <span>字体<b>${s.breakdown.typography.score}</b></span>
+            <span>品牌<b>${s.breakdown.brandFit.score}</b></span>
+            <span>和谐<b>${s.breakdown.harmony.score}</b></span>
+            <span>层级<b>${s.breakdown.hierarchy.score}</b></span>
+          </div>` : ""}
+          <div class="actions" data-theme="${t.id}">
+            <a href="../index.html?theme=${t.id}&v=34" class="primary">全站预览</a>
+            <a href="../docs/ab-test-report.md">报告</a>
+          </div>`;
+        grid.appendChild(card);
+        // apply theme to preview wrapper
+        const preview = card.querySelector(".preview");
+        preview.setAttribute("data-theme", t.id);
+        document.documentElement.dataset.theme = t.id;
+        const style = getComputedStyle(document.documentElement);
+        const fontUrl = style.getPropertyValue("--theme-font-url").trim().replace(/^["']|["']$/g, "");
+        if (fontUrl && fontUrl !== "none") {
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = fontUrl;
+          preview.appendChild(link);
+        }
+      });
+      delete document.documentElement.dataset.theme;
+    }
+    init();
+  </script>
+</body>
+</html>
