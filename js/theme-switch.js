@@ -15,7 +15,7 @@
 
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    fetch(`css/themes/themes.json?v=53`)
+    fetch(`css/themes/themes.json?v=54`)
       .then((r) => r.json())
       .then((data) => {
         const t = data.themes.find((x) => x.id === theme);

@@ -11,6 +11,65 @@ const ROOT = path.join(__dirname, "..");
 const themesPath = path.join(ROOT, "css/themes/themes.json");
 const outPath = path.join(ROOT, "css/themes/variants.css");
 
+const SHADOW_PRESETS = {
+  none: {
+    shadow: "none",
+    shadowSm: "none",
+    shadowLg: "none",
+    chipMul: 0,
+    btnMul: 0,
+  },
+  flat: {
+    shadow: "0 1px 2px rgba(0, 0, 0, 0.03)",
+    shadowSm: "0 1px 2px rgba(0, 0, 0, 0.02)",
+    shadowLg: "0 2px 8px rgba(0, 0, 0, 0.05)",
+    chipMul: 0.2,
+    btnMul: 0.22,
+  },
+  subtle: {
+    shadow: "0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.03)",
+    shadowSm: "0 1px 2px rgba(0, 0, 0, 0.025)",
+    shadowLg: "0 4px 16px rgba(0, 0, 0, 0.06)",
+    chipMul: 0.25,
+    btnMul: 0.28,
+  },
+  soft: {
+    shadow: "0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04)",
+    shadowSm: "0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.03)",
+    shadowLg: "0 4px 24px rgba(0, 0, 0, 0.08)",
+    chipMul: 0.35,
+    btnMul: 0.35,
+  },
+  crisp: {
+    shadow: "0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.04)",
+    shadowSm: "0 1px 2px rgba(0, 0, 0, 0.04)",
+    shadowLg: "0 4px 12px rgba(0, 0, 0, 0.08)",
+    chipMul: 0.3,
+    btnMul: 0.32,
+  },
+  airy: {
+    shadow: "0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 0, 0, 0.04)",
+    shadowSm: "0 1px 4px rgba(0, 0, 0, 0.025)",
+    shadowLg: "0 8px 32px rgba(0, 0, 0, 0.07)",
+    chipMul: 0.32,
+    btnMul: 0.34,
+  },
+  warm: {
+    shadow: "0 2px 8px rgba(255, 56, 92, 0.06), 0 6px 20px rgba(0, 0, 0, 0.05)",
+    shadowSm: "0 1px 4px rgba(255, 56, 92, 0.05)",
+    shadowLg: "0 8px 28px rgba(255, 56, 92, 0.1)",
+    chipMul: 0.38,
+    btnMul: 0.38,
+  },
+  bold: {
+    shadow: "0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.1)",
+    shadowSm: "0 1px 4px rgba(0, 0, 0, 0.06)",
+    shadowLg: "0 10px 32px rgba(0, 0, 0, 0.14)",
+    chipMul: 0.42,
+    btnMul: 0.42,
+  },
+};
+
 const { themes, defaultTheme } = JSON.parse(fs.readFileSync(themesPath, "utf8"));
 
 function hexToRgb(hex) {
@@ -21,9 +80,25 @@ function hexToRgb(hex) {
   return `${r}, ${g}, ${b}`;
 }
 
+function resolveShadow(preset, rgb) {
+  const p = SHADOW_PRESETS[preset] || SHADOW_PRESETS.soft;
+  const chipShadow =
+    p.chipMul > 0
+      ? `0 4px 16px rgba(${rgb}, ${p.chipMul})`
+      : "none";
+  const btnShadow =
+    p.btnMul > 0
+      ? `0 4px 14px rgba(${rgb}, ${p.btnMul})`
+      : "none";
+  return { ...p, chipShadow, btnShadow };
+}
+
 function themeBlock(t) {
   const c = t.colors;
   const ty = t.typography;
+  const sh = t.shape || { radius: { xs: 8, sm: 12, md: 16, lg: 20, xl: 24 }, shadow: "soft" };
+  const r = sh.radius;
+  const preset = resolveShadow(sh.shadow || "soft", hexToRgb(c.accent));
   const rgb = hexToRgb(c.accent);
   const bgRgb = hexToRgb(c.bg);
   return `
@@ -50,14 +125,23 @@ function themeBlock(t) {
   --accent-tertiary: ${c.tertiary};
   --on-accent: ${c.onAccent};
 
+  --ios-radius-xs: ${r.xs}px;
+  --ios-radius-sm: ${r.sm}px;
+  --ios-radius-md: ${r.md}px;
+  --ios-radius-lg: ${r.lg}px;
+  --ios-radius-xl: ${r.xl}px;
+  --ios-shadow: ${preset.shadow};
+  --ios-shadow-sm: ${preset.shadowSm};
+  --ios-shadow-lg: ${preset.shadowLg};
+
   --glass-nav-bg: ${c.glassNavBg};
   --search-bg: ${c.searchBg};
   --search-bg-focus: ${c.searchBgFocus};
   --tab-bar-bg: ${c.tabBarBg};
   --chip-active-bg: linear-gradient(135deg, ${c.accent}, ${c.accentAlt});
-  --chip-active-shadow: 0 4px 16px rgba(${rgb}, 0.35);
+  --chip-active-shadow: ${preset.chipShadow};
   --btn-primary-bg: linear-gradient(135deg, ${c.accent}, ${c.accentAlt});
-  --btn-primary-shadow: 0 4px 14px rgba(${rgb}, 0.35);
+  --btn-primary-shadow: ${preset.btnShadow};
   --card-stripe: linear-gradient(90deg, ${c.accent}, ${c.secondary}, ${c.tertiary});
   --fab-bg: linear-gradient(135deg, ${c.secondary}, ${c.tertiary});
   --premium-gradient: linear-gradient(135deg, ${c.accent} 0%, ${c.secondary} 50%, ${c.tertiary} 100%);

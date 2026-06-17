@@ -27,6 +27,15 @@
   --accent-tertiary: #a855f7;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 10px;
+  --ios-radius-sm: 14px;
+  --ios-radius-md: 18px;
+  --ios-radius-lg: 22px;
+  --ios-radius-xl: 26px;
+  --ios-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --ios-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.03);
+  --ios-shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.08);
+
   --glass-nav-bg: rgba(242,242,247,0.82);
   --search-bg: rgba(118,118,128,0.12);
   --search-bg-focus: rgba(118,118,128,0.18);
@@ -70,14 +79,23 @@
   --accent-tertiary: #69b1ff;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 6px;
+  --ios-radius-sm: 8px;
+  --ios-radius-md: 10px;
+  --ios-radius-lg: 12px;
+  --ios-radius-xl: 14px;
+  --ios-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --ios-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --ios-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.05);
+
   --glass-nav-bg: rgba(245,247,250,0.9);
   --search-bg: rgba(22,119,255,0.08);
   --search-bg-focus: rgba(22,119,255,0.14);
   --tab-bar-bg: rgba(255,255,255,0.92);
   --chip-active-bg: linear-gradient(135deg, #1677ff, #4096ff);
-  --chip-active-shadow: 0 4px 16px rgba(22, 119, 255, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(22, 119, 255, 0.2);
   --btn-primary-bg: linear-gradient(135deg, #1677ff, #4096ff);
-  --btn-primary-shadow: 0 4px 14px rgba(22, 119, 255, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(22, 119, 255, 0.22);
   --card-stripe: linear-gradient(90deg, #1677ff, #003eb3, #69b1ff);
   --fab-bg: linear-gradient(135deg, #003eb3, #69b1ff);
   --premium-gradient: linear-gradient(135deg, #1677ff 0%, #003eb3 50%, #69b1ff 100%);
@@ -113,14 +131,23 @@
   --accent-tertiary: #4caf50;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 4px;
+  --ios-radius-sm: 6px;
+  --ios-radius-md: 8px;
+  --ios-radius-lg: 10px;
+  --ios-radius-xl: 12px;
+  --ios-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.1);
+  --ios-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --ios-shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.14);
+
   --glass-nav-bg: rgba(240,243,248,0.88);
   --search-bg: rgba(26,102,255,0.08);
   --search-bg-focus: rgba(26,102,255,0.15);
   --tab-bar-bg: rgba(255,255,255,0.9);
   --chip-active-bg: linear-gradient(135deg, #1a66ff, #4285f4);
-  --chip-active-shadow: 0 4px 16px rgba(26, 102, 255, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(26, 102, 255, 0.42);
   --btn-primary-bg: linear-gradient(135deg, #1a66ff, #4285f4);
-  --btn-primary-shadow: 0 4px 14px rgba(26, 102, 255, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(26, 102, 255, 0.42);
   --card-stripe: linear-gradient(90deg, #1a66ff, #00bcd4, #4caf50);
   --fab-bg: linear-gradient(135deg, #00bcd4, #4caf50);
   --premium-gradient: linear-gradient(135deg, #1a66ff 0%, #00bcd4 50%, #4caf50 100%);
@@ -156,14 +183,23 @@
   --accent-tertiary: #ffb400;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 12px;
+  --ios-radius-sm: 16px;
+  --ios-radius-md: 20px;
+  --ios-radius-lg: 24px;
+  --ios-radius-xl: 28px;
+  --ios-shadow: 0 2px 8px rgba(255, 56, 92, 0.06), 0 6px 20px rgba(0, 0, 0, 0.05);
+  --ios-shadow-sm: 0 1px 4px rgba(255, 56, 92, 0.05);
+  --ios-shadow-lg: 0 8px 28px rgba(255, 56, 92, 0.1);
+
   --glass-nav-bg: rgba(255,248,246,0.9);
   --search-bg: rgba(255,56,92,0.08);
   --search-bg-focus: rgba(255,56,92,0.14);
   --tab-bar-bg: rgba(255,255,255,0.92);
   --chip-active-bg: linear-gradient(135deg, #ff385c, #ff5a7a);
-  --chip-active-shadow: 0 4px 16px rgba(255, 56, 92, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(255, 56, 92, 0.38);
   --btn-primary-bg: linear-gradient(135deg, #ff385c, #ff5a7a);
-  --btn-primary-shadow: 0 4px 14px rgba(255, 56, 92, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(255, 56, 92, 0.38);
   --card-stripe: linear-gradient(90deg, #ff385c, #ff7e95, #ffb400);
   --fab-bg: linear-gradient(135deg, #ff7e95, #ffb400);
   --premium-gradient: linear-gradient(135deg, #ff385c 0%, #ff7e95 50%, #ffb400 100%);
@@ -199,14 +235,23 @@
   --accent-tertiary: #6366f1;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 4px;
+  --ios-radius-sm: 6px;
+  --ios-radius-md: 8px;
+  --ios-radius-lg: 10px;
+  --ios-radius-xl: 12px;
+  --ios-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --ios-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ios-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+
   --glass-nav-bg: rgba(250,250,250,0.88);
   --search-bg: rgba(94,106,210,0.08);
   --search-bg-focus: rgba(94,106,210,0.14);
   --tab-bar-bg: rgba(255,255,255,0.9);
   --chip-active-bg: linear-gradient(135deg, #5e6ad2, #7c85e0);
-  --chip-active-shadow: 0 4px 16px rgba(94, 106, 210, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(94, 106, 210, 0.3);
   --btn-primary-bg: linear-gradient(135deg, #5e6ad2, #7c85e0);
-  --btn-primary-shadow: 0 4px 14px rgba(94, 106, 210, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(94, 106, 210, 0.32);
   --card-stripe: linear-gradient(90deg, #5e6ad2, #8b5cf6, #6366f1);
   --fab-bg: linear-gradient(135deg, #8b5cf6, #6366f1);
   --premium-gradient: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #6366f1 100%);
@@ -242,14 +287,23 @@
   --accent-tertiary: #10aeff;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 2px;
+  --ios-radius-sm: 4px;
+  --ios-radius-md: 6px;
+  --ios-radius-lg: 8px;
+  --ios-radius-xl: 10px;
+  --ios-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --ios-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --ios-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.05);
+
   --glass-nav-bg: rgba(237,237,237,0.92);
   --search-bg: rgba(0,0,0,0.06);
   --search-bg-focus: rgba(0,0,0,0.1);
   --tab-bar-bg: rgba(247,247,247,0.95);
   --chip-active-bg: linear-gradient(135deg, #07c160, #2aae67);
-  --chip-active-shadow: 0 4px 16px rgba(7, 193, 96, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(7, 193, 96, 0.2);
   --btn-primary-bg: linear-gradient(135deg, #07c160, #2aae67);
-  --btn-primary-shadow: 0 4px 14px rgba(7, 193, 96, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(7, 193, 96, 0.22);
   --card-stripe: linear-gradient(90deg, #07c160, #576b95, #10aeff);
   --fab-bg: linear-gradient(135deg, #576b95, #10aeff);
   --premium-gradient: linear-gradient(135deg, #07c160 0%, #576b95 50%, #10aeff 100%);
@@ -285,14 +339,23 @@
   --accent-tertiary: #6b8e4e;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 2px;
+  --ios-radius-sm: 4px;
+  --ios-radius-md: 6px;
+  --ios-radius-lg: 8px;
+  --ios-radius-xl: 10px;
+  --ios-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.03);
+  --ios-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.025);
+  --ios-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06);
+
   --glass-nav-bg: rgba(249,246,240,0.92);
   --search-bg: rgba(45,80,22,0.06);
   --search-bg-focus: rgba(45,80,22,0.12);
   --tab-bar-bg: rgba(255,253,249,0.94);
   --chip-active-bg: linear-gradient(135deg, #2d5016, #4a7c23);
-  --chip-active-shadow: 0 4px 16px rgba(45, 80, 22, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(45, 80, 22, 0.25);
   --btn-primary-bg: linear-gradient(135deg, #2d5016, #4a7c23);
-  --btn-primary-shadow: 0 4px 14px rgba(45, 80, 22, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(45, 80, 22, 0.28);
   --card-stripe: linear-gradient(90deg, #2d5016, #8b6914, #6b8e4e);
   --fab-bg: linear-gradient(135deg, #8b6914, #6b8e4e);
   --premium-gradient: linear-gradient(135deg, #2d5016 0%, #8b6914 50%, #6b8e4e 100%);
@@ -328,14 +391,23 @@
   --accent-tertiary: #3b82f6;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 14px;
+  --ios-radius-sm: 18px;
+  --ios-radius-md: 22px;
+  --ios-radius-lg: 26px;
+  --ios-radius-xl: 30px;
+  --ios-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 0, 0, 0.04);
+  --ios-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.025);
+  --ios-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.07);
+
   --glass-nav-bg: rgba(238,246,252,0.9);
   --search-bg: rgba(14,165,233,0.08);
   --search-bg-focus: rgba(14,165,233,0.15);
   --tab-bar-bg: rgba(255,255,255,0.92);
   --chip-active-bg: linear-gradient(135deg, #0ea5e9, #38bdf8);
-  --chip-active-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(14, 165, 233, 0.32);
   --btn-primary-bg: linear-gradient(135deg, #0ea5e9, #38bdf8);
-  --btn-primary-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(14, 165, 233, 0.34);
   --card-stripe: linear-gradient(90deg, #0ea5e9, #06b6d4, #3b82f6);
   --fab-bg: linear-gradient(135deg, #06b6d4, #3b82f6);
   --premium-gradient: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #3b82f6 100%);
@@ -371,14 +443,23 @@
   --accent-tertiary: #9ca3af;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 0px;
+  --ios-radius-sm: 2px;
+  --ios-radius-md: 4px;
+  --ios-radius-lg: 6px;
+  --ios-radius-xl: 8px;
+  --ios-shadow: none;
+  --ios-shadow-sm: none;
+  --ios-shadow-lg: none;
+
   --glass-nav-bg: rgba(247,247,245,0.92);
   --search-bg: rgba(55,65,81,0.06);
   --search-bg-focus: rgba(55,65,81,0.12);
   --tab-bar-bg: rgba(255,255,255,0.94);
   --chip-active-bg: linear-gradient(135deg, #0f766e, #14b8a6);
-  --chip-active-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+  --chip-active-shadow: none;
   --btn-primary-bg: linear-gradient(135deg, #0f766e, #14b8a6);
-  --btn-primary-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+  --btn-primary-shadow: none;
   --card-stripe: linear-gradient(90deg, #0f766e, #6b7280, #9ca3af);
   --fab-bg: linear-gradient(135deg, #6b7280, #9ca3af);
   --premium-gradient: linear-gradient(135deg, #0f766e 0%, #6b7280 50%, #9ca3af 100%);
@@ -414,14 +495,23 @@
   --accent-tertiary: #ff9500;
   --on-accent: #ffffff;
 
+  --ios-radius-xs: 8px;
+  --ios-radius-sm: 12px;
+  --ios-radius-md: 16px;
+  --ios-radius-lg: 20px;
+  --ios-radius-xl: 24px;
+  --ios-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.1);
+  --ios-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --ios-shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.14);
+
   --glass-nav-bg: rgba(255,250,245,0.9);
   --search-bg: rgba(255,107,0,0.08);
   --search-bg-focus: rgba(255,107,0,0.14);
   --tab-bar-bg: rgba(255,255,255,0.92);
   --chip-active-bg: linear-gradient(135deg, #ff6b00, #ff8533);
-  --chip-active-shadow: 0 4px 16px rgba(255, 107, 0, 0.35);
+  --chip-active-shadow: 0 4px 16px rgba(255, 107, 0, 0.42);
   --btn-primary-bg: linear-gradient(135deg, #ff6b00, #ff8533);
-  --btn-primary-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+  --btn-primary-shadow: 0 4px 14px rgba(255, 107, 0, 0.42);
   --card-stripe: linear-gradient(90deg, #ff6b00, #ffc300, #ff9500);
   --fab-bg: linear-gradient(135deg, #ffc300, #ff9500);
   --premium-gradient: linear-gradient(135deg, #ff6b00 0%, #ffc300 50%, #ff9500 100%);

@@ -3,137 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>主题 AB 对比 · 全国惠民地图</title>
+  <title>主题 AB 对比墙 · 全国惠民地图</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/design-system.css?v=50" />
-  <link rel="stylesheet" href="../css/themes/variants.css?v=50" />
+  <link rel="stylesheet" href="../css/design-system.css?v=54" />
+  <link rel="stylesheet" href="../css/themes/variants.css?v=54" />
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Noto Sans SC", sans-serif;
-      background: #0f0f12;
-      color: #e8e8ed;
-      padding: 24px 16px 48px;
+      background: #0a0a0e;
+      color: #ececf0;
+      padding: 20px 14px 56px;
     }
-    .lab-head { max-width: 1200px; margin: 0 auto 24px; }
-    .lab-head h1 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 800; }
-    .lab-head p { margin: 0; color: #9898a0; font-size: 0.9rem; line-height: 1.5; }
-    .top3 {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;
-    }
+    .lab-head { max-width: 1480px; margin: 0 auto 20px; }
+    .lab-head h1 { margin: 0 0 8px; font-size: 1.45rem; font-weight: 800; }
+    .lab-head p { margin: 0; color: #9a9aa4; font-size: 0.88rem; line-height: 1.55; max-width: 920px; }
+    .top3 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .top3 span {
-      padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
     }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+      font-size: 0.72rem; color: #888;
+    }
+    .legend span { padding: 4px 8px; border-radius: 6px; background: #1a1a22; }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+      max-width: 1480px;
       margin: 0 auto;
     }
     .theme-card {
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid #2a2a34;
+      background: #12121a;
     }
     .theme-card.is-winner { border-color: #ffd60a; box-shadow: 0 0 0 1px #ffd60a; }
     .theme-meta {
       padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      border-bottom: 1px solid #222;
     }
-    .theme-meta strong { font-size: 0.95rem; }
-    .theme-meta small { color: #9898a0; display: block; margin-top: 2px; }
+    .theme-meta-top {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+    }
+    .theme-meta strong { font-size: 0.95rem; display: block; }
+    .theme-meta small { color: #888; display: block; margin-top: 3px; font-size: 0.72rem; line-height: 1.45; }
     .score-pill {
-      font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px;
-      background: rgba(255,255,255,0.12);
+      flex-shrink: 0;
+      font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+      background: #252530;
     }
     .score-pill.gold { background: #ffd60a; color: #1a1a1a; }
+    .swatch-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .swatch {
+      width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15);
+    }
+    .swatch code { font-size: 0.68rem; color: #aaa; }
+    .kw { display: inline-block; margin: 6px 4px 0 0; padding: 2px 7px; border-radius: 6px; background: #1e1e28; font-size: 0.62rem; font-weight: 600; color: #b8b8c4; }
+    .shape-dim { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 6px; background: #1a2438; font-size: 0.62rem; font-weight: 600; color: #7eb8ff; }
+    .preview-wrap { position: relative; }
     .preview {
-      padding: 14px;
-      min-height: 280px;
+      padding: 12px;
+      min-height: 200px;
       font-family: var(--theme-font, "Noto Sans SC", sans-serif);
       background: var(--ios-bg);
     }
     .preview .mock-title {
-      margin: 0 0 6px;
-      font-size: 1.15rem;
+      margin: 0 0 4px;
+      font-size: 1.05rem;
       font-weight: var(--title-weight, 800);
       letter-spacing: var(--title-tracking, -0.04em);
       color: var(--ios-label);
     }
-    .preview .mock-sub { margin: 0 0 12px; font-size: 0.78rem; color: var(--ios-label-secondary); }
+    .preview .mock-sub { margin: 0 0 10px; font-size: 0.72rem; color: var(--ios-label-secondary); }
     .preview .mock-search {
-      height: 40px; border-radius: 12px; background: var(--search-bg);
-      margin-bottom: 10px; display: flex; align-items: center; padding: 0 12px;
-      font-size: 0.82rem; color: var(--ios-label-tertiary);
+      height: 36px; border-radius: var(--ios-radius-sm, 12px); background: var(--search-bg);
+      margin-bottom: 8px; display: flex; align-items: center; padding: 0 10px;
+      font-size: 0.76rem; color: var(--ios-label-tertiary);
+      box-shadow: var(--ios-shadow-sm);
     }
-    .preview .mock-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .preview .mock-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .preview .mock-chip {
-      padding: 6px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 650;
+      padding: 5px 9px; border-radius: var(--ios-radius-xs, 8px); font-size: 0.68rem; font-weight: 650;
       background: var(--ios-bg-elevated); color: var(--ios-label-secondary);
-      box-shadow: var(--ios-shadow);
+      box-shadow: var(--ios-shadow-sm);
     }
     .preview .mock-chip.on {
       background: var(--chip-active-bg); color: var(--on-accent);
+      box-shadow: var(--chip-active-shadow);
     }
     .preview .mock-card {
-      background: var(--ios-bg-elevated); border-radius: 14px;
+      background: var(--ios-bg-elevated); border-radius: var(--ios-radius-md, 16px);
       box-shadow: var(--ios-shadow); overflow: hidden;
     }
-    .preview .mock-stripe { height: 4px; background: var(--card-stripe); }
-    .preview .mock-card-body { padding: 12px; }
-    .preview .mock-card-body h4 { margin: 0; font-size: 0.88rem; color: var(--ios-label); }
-    .preview .mock-card-body p { margin: 4px 0 0; font-size: 0.72rem; color: var(--ios-label-secondary); }
-    .preview .mock-tab {
-      display: flex; justify-content: space-around; margin-top: 12px;
-      padding: 8px; border-radius: 12px; background: var(--tab-bar-bg);
-      font-size: 0.62rem; font-weight: 600;
+    .preview .mock-stripe { height: 3px; background: var(--card-stripe); }
+    .preview .mock-card-body { padding: 10px; }
+    .preview .mock-card-body h4 { margin: 0; font-size: 0.82rem; color: var(--ios-label); font-weight: var(--title-weight, 700); }
+    .preview .mock-card-body p { margin: 3px 0 0; font-size: 0.68rem; color: var(--ios-label-secondary); }
+    iframe {
+      width: 100%; height: 420px; border: none; border-top: 1px solid #222;
+      background: #fff;
     }
-    .preview .mock-tab span { color: var(--ios-label-tertiary); }
-    .preview .mock-tab span.on { color: var(--ios-teal); }
+    .breakdown {
+      padding: 8px 14px; font-size: 0.64rem; color: #888;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center;
+      border-top: 1px solid #1e1e26;
+    }
+    .breakdown b { display: block; color: #ddd; font-size: 0.72rem; }
     .actions {
-      padding: 10px 14px 14px; display: flex; gap: 8px;
-      background: rgba(0,0,0,0.2);
+      padding: 10px 12px; display: flex; gap: 8px;
+      border-top: 1px solid #222;
     }
     .actions a {
-      flex: 1; text-align: center; padding: 8px; border-radius: 10px;
-      font-size: 0.78rem; font-weight: 600; text-decoration: none;
-      background: rgba(255,255,255,0.1); color: #fff;
+      flex: 1; text-align: center; padding: 9px; border-radius: 8px;
+      font-size: 0.76rem; font-weight: 600; text-decoration: none;
+      background: #252530; color: #fff;
     }
-    .actions a.primary { background: var(--ios-teal); color: var(--on-accent); }
-    .breakdown {
-      padding: 0 14px 12px; font-size: 0.68rem; color: #9898a0;
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center;
+    .actions a.primary { background: #007aff; }
+    @media (max-width: 420px) {
+      .grid { grid-template-columns: 1fr; }
+      iframe { height: 360px; }
     }
-    .breakdown b { display: block; color: #e8e8ed; font-size: 0.75rem; }
   </style>
 </head>
 <body>
   <div class="lab-head">
-    <h1>10 套主题 AB 对比</h1>
-    <p>自动化评分：无障碍 30 + 字体 20 + 品牌契合 25 + 色彩和谐 15 + 层级 10。点击「全站预览」在真实首页体验。</p>
+    <h1>10 套主题 AB 对比墙</h1>
+    <p>每套主题在<strong>色板、圆角、字重、阴影、accent</strong>上均有明显差异，参考 Apple / 政务 / 高德 / 美团等业界风格，保持项目统一结构。下方为组件预览 + 真实首页 iframe，点击「全屏体验」进入完整站点。</p>
     <div class="top3" id="top3"></div>
+    <div class="legend">
+      <span>色板 accent / bg</span>
+      <span>圆角 xs→xl</span>
+      <span>阴影 soft / flat / bold …</span>
+      <span>字重 title / body</span>
+    </div>
   </div>
   <div class="grid" id="grid"></div>
 
   <script>
-    const THEMES = [
-      { id: "v01", name: "苹果原生", ref: "Apple Maps" },
-      { id: "v02", name: "政务可信", ref: "支付宝/政务" },
-      { id: "v03", name: "高德导航", ref: "高德地图" },
-      { id: "v04", name: "爱彼迎暖", ref: "Airbnb" },
-      { id: "v05", name: "线性精密", ref: "Linear" },
-      { id: "v06", name: "微信便民", ref: "WeChat" },
-      { id: "v07", name: "阅读书房", ref: "城市书房" },
-      { id: "v08", name: "夏日纳凉", ref: "Weather 蓝" },
-      { id: "v09", name: "墨韵简约", ref: "MUJI" },
-      { id: "v10", name: "活力橙光", ref: "美团" },
-    ];
+    const CACHE = "v=54";
 
     function mockPreview(id) {
       return `
@@ -153,38 +167,64 @@
               <p>上城 · 免费WiFi · 可自习</p>
             </div>
           </div>
-          <div class="mock-tab">
-            <span class="on">发现</span><span>场景</span><span>工具</span><span>说明</span>
-          </div>
         </div>`;
+    }
+
+    function shapeLabel(shape) {
+      if (!shape) return "默认";
+      const r = shape.radius;
+      return `圆角 ${r.xs}/${r.sm}/${r.md}px · 阴影 ${shape.shadow}`;
     }
 
     async function init() {
       let scores = {};
+      let themes = [];
       try {
-        const r = await fetch("../docs/ab-test-results.json?v=50");
-        const data = await r.json();
-        data.ranked.forEach((t) => { scores[t.id] = t; });
-        document.getElementById("top3").innerHTML = data.ranked.slice(0, 3)
+        const [scoreRes, themeRes] = await Promise.all([
+          fetch(`../docs/ab-test-results.json?${CACHE}`),
+          fetch(`../css/themes/themes.json?${CACHE}`),
+        ]);
+        const scoreData = await scoreRes.json();
+        const themeData = await themeRes.json();
+        themes = themeData.themes;
+        scoreData.ranked.forEach((t) => { scores[t.id] = t; });
+        document.getElementById("top3").innerHTML = scoreData.ranked.slice(0, 3)
           .map((t, i) => `<span>🥇${i + 1} ${t.id} ${t.name} · ${t.total}分</span>`).join("");
       } catch {
-        document.getElementById("top3").innerHTML = "<span>加载评分数据失败，请先运行 npm run test:ab</span>";
+        document.getElementById("top3").innerHTML = "<span>加载数据失败，请先运行 npm run test:ab</span>";
       }
 
       const grid = document.getElementById("grid");
-      THEMES.forEach((t) => {
+      themes.forEach((t) => {
         const s = scores[t.id];
         const rank = s?.rank || "?";
         const total = s?.total || "—";
+        const accent = t.colors.accent;
+        const bg = t.colors.bg;
+        const kws = (t.keywords || []).map((k) => `<span class="kw">${k}</span>`).join("");
         const card = document.createElement("article");
         card.className = "theme-card" + (rank === 1 ? " is-winner" : "");
         card.setAttribute("data-theme", t.id);
         card.innerHTML = `
           <div class="theme-meta">
-            <div><strong>#${rank} ${t.id} · ${t.name}</strong><small>${t.ref}</small></div>
-            <span class="score-pill ${rank === 1 ? "gold" : ""}">${total}/100</span>
+            <div class="theme-meta-top">
+              <div>
+                <strong>#${rank} ${t.id} · ${t.name}</strong>
+                <small>${t.tagline || t.reference}</small>
+                <small>📍 ${t.scenario || "通用"}</small>
+              </div>
+              <span class="score-pill ${rank === 1 ? "gold" : ""}">${total}/100</span>
+            </div>
+            <div class="swatch-row">
+              <span class="swatch" style="background:${accent}" title="accent"></span>
+              <span class="swatch" style="background:${bg}" title="bg"></span>
+              <code>${accent}</code>
+            </div>
+            ${kws}
+            <span class="shape-dim">${shapeLabel(t.shape)}</span>
           </div>
-          ${mockPreview(t.id)}
+          <div class="preview-wrap">${mockPreview(t.id)}</div>
+          <iframe loading="lazy" src="../index.html?theme=${t.id}&v=54&lab=1" title="${t.name}"></iframe>
           ${s ? `<div class="breakdown">
             <span>无障碍<b>${s.breakdown.accessibility.score}</b></span>
             <span>字体<b>${s.breakdown.typography.score}</b></span>
@@ -192,25 +232,12 @@
             <span>和谐<b>${s.breakdown.harmony.score}</b></span>
             <span>层级<b>${s.breakdown.hierarchy.score}</b></span>
           </div>` : ""}
-          <div class="actions" data-theme="${t.id}">
-            <a href="../index.html?theme=${t.id}&v=49" class="primary">全站预览</a>
-            <a href="../docs/ab-test-report.md">报告</a>
+          <div class="actions">
+            <a href="../index.html?theme=${t.id}&v=54" class="primary" target="_blank" rel="noopener">全屏体验</a>
+            <a href="../docs/ab-theme-compare.md" target="_blank" rel="noopener">说明</a>
           </div>`;
         grid.appendChild(card);
-        // apply theme to preview wrapper
-        const preview = card.querySelector(".preview");
-        preview.setAttribute("data-theme", t.id);
-        document.documentElement.dataset.theme = t.id;
-        const style = getComputedStyle(document.documentElement);
-        const fontUrl = style.getPropertyValue("--theme-font-url").trim().replace(/^["']|["']$/g, "");
-        if (fontUrl && fontUrl !== "none") {
-          const link = document.createElement("link");
-          link.rel = "stylesheet";
-          link.href = fontUrl;
-          preview.appendChild(link);
-        }
       });
-      delete document.documentElement.dataset.theme;
     }
     init();
   </script>

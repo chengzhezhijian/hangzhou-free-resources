@@ -1,6 +1,7 @@
 {
-  "generatedAt": "2026-06-17 11:25:01",
+  "generatedAt": "2026-06-17 11:29:51",
   "defaultTheme": "v01",
+  "themeCount": 10,
   "winner": {
     "id": "v01",
     "name": "苹果原生",
@@ -959,6 +960,238 @@
       "accent": "#ff385c",
       "bg": "#fff8f6",
       "rank": 10
+    }
+  ],
+  "themes": [
+    {
+      "id": "v01",
+      "name": "苹果原生",
+      "accent": "#007aff",
+      "tagline": "系统蓝 + 大圆角毛玻璃，原生 App 质感",
+      "scenario": "通用首屏、追求 iOS 原生体验",
+      "keywords": [
+        "系统蓝",
+        "大圆角",
+        "毛玻璃",
+        "SF 字重"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 10,
+          "sm": 14,
+          "md": 18,
+          "lg": 22,
+          "xl": 26
+        },
+        "shadow": "soft"
+      }
+    },
+    {
+      "id": "v02",
+      "name": "政务可信",
+      "accent": "#1677ff",
+      "tagline": "政务蓝 + 规整圆角，庄重可信",
+      "scenario": "政府惠民、办事指引、权威信息",
+      "keywords": [
+        "政务蓝",
+        "规整",
+        "可信",
+        "Ant Design"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 6,
+          "sm": 8,
+          "md": 10,
+          "lg": 12,
+          "xl": 14
+        },
+        "shadow": "flat"
+      }
+    },
+    {
+      "id": "v03",
+      "name": "高德导航",
+      "accent": "#1a66ff",
+      "tagline": "导航蓝 + 锐角卡片，路线导向感",
+      "scenario": "地图导航、出行路线、附近发现",
+      "keywords": [
+        "导航蓝",
+        "锐角",
+        "强阴影",
+        "出行"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 4,
+          "sm": 6,
+          "md": 8,
+          "lg": 10,
+          "xl": 12
+        },
+        "shadow": "bold"
+      }
+    },
+    {
+      "id": "v04",
+      "name": "爱彼迎暖",
+      "accent": "#ff385c",
+      "tagline": "珊瑚粉 + 超大圆角，温馨出游感",
+      "scenario": "文化休闲、周末出游、民宿体验",
+      "keywords": [
+        "珊瑚粉",
+        "超大圆角",
+        "温馨",
+        "出游"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 12,
+          "sm": 16,
+          "md": 20,
+          "lg": 24,
+          "xl": 28
+        },
+        "shadow": "warm"
+      }
+    },
+    {
+      "id": "v05",
+      "name": "线性精密",
+      "accent": "#5e6ad2",
+      "tagline": "紫蓝 + 小圆角，高密度工具感",
+      "scenario": "效率工具、信息密集、专业用户",
+      "keywords": [
+        "紫蓝",
+        "小圆角",
+        "精密",
+        "Inter"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 4,
+          "sm": 6,
+          "md": 8,
+          "lg": 10,
+          "xl": 12
+        },
+        "shadow": "crisp"
+      }
+    },
+    {
+      "id": "v06",
+      "name": "微信便民",
+      "accent": "#07c160",
+      "tagline": "微信绿 + 直角扁平，日常熟悉感",
+      "scenario": "日常便民、轻量使用、中老年友好",
+      "keywords": [
+        "微信绿",
+        "直角",
+        "扁平",
+        "熟悉"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 2,
+          "sm": 4,
+          "md": 6,
+          "lg": 8,
+          "xl": 10
+        },
+        "shadow": "flat"
+      }
+    },
+    {
+      "id": "v07",
+      "name": "阅读书房",
+      "accent": "#2d5016",
+      "tagline": "墨绿衬线 + 柔和边距，书香静谧",
+      "scenario": "图书馆自习、阅读场景、文化场馆",
+      "keywords": [
+        "墨绿",
+        "衬线",
+        "书香",
+        "静谧"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 2,
+          "sm": 4,
+          "md": 6,
+          "lg": 8,
+          "xl": 10
+        },
+        "shadow": "subtle"
+      }
+    },
+    {
+      "id": "v08",
+      "name": "夏日纳凉",
+      "accent": "#0ea5e9",
+      "tagline": "天空蓝 + 通透大圆角，清凉夏日感",
+      "scenario": "纳凉避暑、夏季专题、清爽首屏",
+      "keywords": [
+        "天空蓝",
+        "通透",
+        "大圆角",
+        "纳凉"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 14,
+          "sm": 18,
+          "md": 22,
+          "lg": 26,
+          "xl": 30
+        },
+        "shadow": "airy"
+      }
+    },
+    {
+      "id": "v09",
+      "name": "墨韵简约",
+      "accent": "#0f766e",
+      "tagline": "灰绿 + 极简直角，克制留白",
+      "scenario": "低调克制、长期阅读、极简偏好",
+      "keywords": [
+        "灰绿",
+        "极简",
+        "直角",
+        "无印"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 0,
+          "sm": 2,
+          "md": 4,
+          "lg": 6,
+          "xl": 8
+        },
+        "shadow": "none"
+      }
+    },
+    {
+      "id": "v10",
+      "name": "活力橙光",
+      "accent": "#ff6b00",
+      "tagline": "美团橙 + 饱满圆角，生活消费活力",
+      "scenario": "生活消费、促销氛围、本地服务",
+      "keywords": [
+        "美团橙",
+        "饱满",
+        "活力",
+        "消费"
+      ],
+      "shape": {
+        "radius": {
+          "xs": 8,
+          "sm": 12,
+          "md": 16,
+          "lg": 20,
+          "xl": 24
+        },
+        "shadow": "bold"
+      }
     }
   ]
 }
