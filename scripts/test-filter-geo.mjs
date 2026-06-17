@@ -291,6 +291,7 @@ async function run() {
     ok("设施下拉:选项含标签结构", !!facilityItem?.querySelector(".quick-drop-item__label"));
     const facPanelFontVar = quickPanel.style.getPropertyValue("--drop-item-font-size");
     ok("设施下拉:字号变量已设", !!facPanelFontVar);
+    ok("设施下拉:与类型字号一致", catPanelFontVar === facPanelFontVar);
     ok("设施下拉:项字号变量在范围内", parseFloat(facPanelFontVar) >= 11 && parseFloat(facPanelFontVar) <= 13.6);
     ok("设施下拉:与类型共用字号变量机制", !!catPanelFontVar && parseFloat(catPanelFontVar) >= 11);
     const resetBtn = doc.getElementById("quickFacilityReset");
@@ -333,6 +334,28 @@ async function run() {
     await tick();
     const sortWidth = parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-width"));
     ok("窄触发器:排序下拉同样收窄", sortWidth >= 72 && sortWidth <= 96);
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 2c：设施触发器更宽时，类型/设施字号仍一致
+  // ───────────────────────────────────────────────
+  {
+    const { doc } = boot({ geo: "error" });
+    await tick();
+
+    const narrowRect = { left: 48, right: 120, width: 72, top: 168, bottom: 200, height: 32 };
+    const wideRect = { left: 80, right: 280, width: 200, top: 168, bottom: 200, height: 32 };
+    doc.getElementById("quickCategoryBtn").getBoundingClientRect = () => narrowRect;
+    doc.getElementById("quickFacilityBtn").getBoundingClientRect = () => wideRect;
+
+    doc.getElementById("quickCategoryBtn").click();
+    await tick();
+    const catFont = doc.getElementById("quickDropPanel").style.getPropertyValue("--drop-item-font-size");
+
+    doc.getElementById("quickFacilityBtn").click();
+    await tick();
+    const facFont = doc.getElementById("quickDropPanel").style.getPropertyValue("--drop-item-font-size");
+    ok("宽设施触发器:与类型字号一致", !!catFont && catFont === facFont);
   }
 
   // ───────────────────────────────────────────────

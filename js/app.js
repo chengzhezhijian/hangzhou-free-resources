@@ -63,6 +63,7 @@
   const TOOLBAR_CHIP_FONT_MAX = 13;
   const DROP_ITEM_FONT_MIN = 11;
   const DROP_ITEM_FONT_MAX = 13.6;
+  const QUICK_FILTER_DROP_CEILING = 260;
   const DROP_ACTION_FONT_MIN = 10;
   const DROP_ACTION_FONT_MAX = 13;
   const LOC_PILL_FONT_MIN = 10;
@@ -647,7 +648,7 @@
         <div class="quick-drop-list">
           ${FACILITY_FILTERS.map((f) => {
             const active = state.facilities.has(f.id);
-            return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-facility="${f.id}">
+            return `<button type="button" class="quick-drop-item quick-drop-item--facility${active ? " is-active" : ""}" data-facility="${f.id}">
               <span class="quick-drop-item__label">${f.label}</span>
               ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
             </button>`;
@@ -751,21 +752,39 @@
     });
   }
 
-  function syncDropPanelFonts() {
-    const panel = document.getElementById("quickDropPanel");
-    if (!panel || panel.hidden) return;
-    const anchorWidth = parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue("--toolbar-drop-anchor-width")
-    );
-    const width = toolbarDropAnchor?.width || anchorWidth || panel.clientWidth;
-    const inner = Math.max(48, width - 36);
-    let maxChars = 0;
+  function quickFilterDropItemLabels() {
+    const labels = [];
+    visibleCategories().forEach((c) => labels.push(c.label));
+    FACILITY_FILTERS.forEach((f) => labels.push(f.label));
+    return labels;
+  }
+
+  function quickFilterDropAnchorWidth() {
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+    const catRect = resolveToolbarTrigger("quick-category")?.getBoundingClientRect?.();
+    const facRect = resolveToolbarTrigger("quick-facility")?.getBoundingClientRect?.();
+    const catW = calcToolbarDropWidth("quick-category", catRect, viewportWidth);
+    const facW = calcToolbarDropWidth("quick-facility", facRect, viewportWidth);
+    return Math.max(catW, facW);
+  }
+
+  function collectQuickDropItemLabels(panel) {
+    const labels = [];
     panel.querySelectorAll(".quick-drop-item").forEach((item) => {
       const labelEl = item.querySelector(".quick-drop-item__label");
       const text = (labelEl?.textContent || item.textContent || "").replace(/✓/g, "").trim();
-      maxChars = Math.max(maxChars, text.length);
+      if (text) labels.push(text);
     });
-    if (!maxChars) return;
+    return labels;
+  }
+
+  function calcDropItemFontPx(width, labels) {
+    const inner = Math.max(48, width - 36);
+    let maxChars = 0;
+    labels.forEach((text) => {
+      maxChars = Math.max(maxChars, String(text || "").trim().length);
+    });
+    if (!maxChars) return DROP_ITEM_FONT_MAX;
     const charWidth = DROP_ITEM_FONT_MAX * 0.88;
     const charsPerLine = Math.max(4, Math.floor(inner / charWidth));
     const estLines = Math.ceil(maxChars / charsPerLine);
@@ -775,6 +794,25 @@
     }
     if (maxChars * charWidth > inner * 2) {
       fontPx = Math.min(fontPx, Math.max(DROP_ITEM_FONT_MIN, (inner * 2) / (maxChars * 0.92)));
+    }
+    return fontPx;
+  }
+
+  function syncDropPanelFonts() {
+    const panel = document.getElementById("quickDropPanel");
+    if (!panel || panel.hidden) return;
+    const isQuickFilter = toolbarDropKind === "quick-category" || toolbarDropKind === "quick-facility";
+    let fontPx;
+    if (isQuickFilter) {
+      fontPx = calcDropItemFontPx(quickFilterDropAnchorWidth(), quickFilterDropItemLabels());
+    } else {
+      const anchorWidth = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--toolbar-drop-anchor-width")
+      );
+      const width = toolbarDropAnchor?.width || anchorWidth || panel.clientWidth;
+      const labels = collectQuickDropItemLabels(panel);
+      if (!labels.length) return;
+      fontPx = calcDropItemFontPx(width, labels);
     }
     panel.style.setProperty("--drop-item-font-size", `${fontPx}px`);
     const resetBtn = panel.querySelector("#quickFacilityReset");
@@ -936,13 +974,11 @@
     const triggerW = Math.round(triggerRect?.width || 0);
     const absoluteMin = 72;
     const contentCeiling =
-      kind === "quick-facility"
-        ? 280
-        : kind === "quick-category"
+      kind === "quick-facility" || kind === "quick-category"
+        ? QUICK_FILTER_DROP_CEILING
+        : kind === "quick-scene"
           ? 260
-          : kind === "quick-scene"
-            ? 260
-            : 200;
+          : 200;
     const viewportMax = Math.max(absoluteMin, viewportWidth - gutter * 2);
     const maxW = Math.min(contentCeiling, viewportMax);
     if (triggerW > 0) {

@@ -82,6 +82,8 @@ ok("下拉宽度 CSS 回退收窄", !/min\(420px/.test(designLayouts) && !/min\(
 ok("下拉项长文案处理", /\.quick-drop-item[\s\S]*word-break/.test(designLayouts) && /\.sort-drop-item[\s\S]*text-overflow/.test(designLayouts));
 ok("下拉项换行非 ellipsis", /\.quick-drop-item\s*\{[^}]*white-space:\s*normal/.test(designLayouts) && !/\.quick-drop-item\s*\{[^}]*text-overflow:\s*ellipsis/.test(designLayouts));
 ok("下拉项字号变量", /--drop-item-font-size/.test(designLayouts) && /syncDropPanelFonts/.test(appJs));
+ok("类型设施共用字号计算", /quickFilterDropItemLabels/.test(appJs) && /quickFilterDropAnchorWidth/.test(appJs) && /calcDropItemFontPx/.test(appJs));
+ok("类型设施统一宽度上限", /QUICK_FILTER_DROP_CEILING/.test(appJs));
 ok("设施按钮自适应 class", /ft-chip--facility/.test(appJs) && /has-count/.test(appJs) && /\.ft-chip--facility/.test(designLayouts));
 ok("设施下拉标签结构", /quick-drop-item__label/.test(quickFacilityBlock));
 ok("设施下拉无完成按钮", !/quickFacilityDone/.test(appJs));
