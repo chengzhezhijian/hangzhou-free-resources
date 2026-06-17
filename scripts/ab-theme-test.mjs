@@ -71,7 +71,7 @@ const compareDoc = `# 10 套主题 AB 对比说明
 ## 如何选择
 
 1. 打开 [对比墙](../labs/ab-compare.html) 并排浏览 10 套 iframe 预览
-2. 点击「全屏体验」进入 \`index.html?theme=v0X&v=55\`
+2. 点击「全屏体验」进入 \`index.html?theme=v0X&v=56\`
 3. 结合下方场景推荐与自动化评分（[\`ab-test-report.md\`](./ab-test-report.md)）做决策
 
 ## 主题清单
@@ -177,7 +177,7 @@ ${ranked
 
 1. **对比墙**：[\`labs/ab-compare.html\`](../labs/ab-compare.html) — 10 套并排 + iframe
 2. **说明文档**：[\`docs/ab-theme-compare.md\`](./ab-theme-compare.md)
-3. **全站预览**：[\`index.html?theme=v01&v=55\`](../index.html?theme=v01&v=55)（替换 v01–v10）
+3. **全站预览**：[\`index.html?theme=v01&v=56\`](../index.html?theme=v01&v=56)（替换 v01–v10）
 4. **应用主题**：验收后告知 ID，写入 \`site-config.js\` 默认 theme
 
 ## 自动化命令

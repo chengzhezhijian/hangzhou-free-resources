@@ -145,10 +145,12 @@ function cacheLookup(cache, query, resource) {
 
 function fallbackCoord(resource, cityCenters) {
   const city = resource.city || "杭州";
-  if (city === "杭州" || !city || city === "全省" || city === "全国") {
+  if (city === "全国") return { lat: 35.8617, lng: 104.1954, precision: "city" };
+  if (city === "全省") return { lat: 29.5, lng: 120.5, precision: "city" };
+  if (city === "杭州" || !city) {
     const d = resource.district;
     if (d && DISTRICT_CENTROIDS[d]) return { ...DISTRICT_CENTROIDS[d], precision: "district" };
-    if (city === "杭州") return { ...DISTRICT_CENTROIDS.杭州, precision: "city" };
+    return { ...DISTRICT_CENTROIDS.杭州, precision: "city" };
   }
   if (cityCenters[city]) return jitterCoord(resource.id, cityCenters[city]);
   if (CITY_CENTROIDS[city]) return { ...CITY_CENTROIDS[city], precision: "city" };

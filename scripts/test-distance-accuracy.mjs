@@ -4,7 +4,9 @@
  */
 import { loadSiteData } from "./lib/load-site-data.mjs";
 
-const { RESOURCES, RESOURCE_COORDS, GeoCity } = loadSiteData();
+const site = loadSiteData();
+const { RESOURCES, RESOURCE_COORDS, GeoCity } = site;
+const IS_CHINA = site.SITE_SCOPE === "china";
 
 const runner = { passed: 0, failed: 0, failures: [] };
 
@@ -95,7 +97,15 @@ const byP = {};
 Object.values(RESOURCE_COORDS).forEach((v) => {
   byP[v.p] = (byP[v.p] || 0) + 1;
 });
-assert("地理编码占比 ≥ 90%", (byP.g || 0) / RESOURCES.length >= 0.9, JSON.stringify(byP));
+const geocodeRate = ((byP.g || 0) + (byP.e || 0)) / RESOURCES.length;
+const locatedRate =
+  ((byP.g || 0) + (byP.e || 0) + (byP.c || 0) + (byP.d || 0)) / RESOURCES.length;
+if (IS_CHINA) {
+  assert("地理编码占比 ≥ 40%", geocodeRate >= 0.4, JSON.stringify(byP));
+  assert("坐标可定位率 ≥ 99%", locatedRate >= 0.99, JSON.stringify(byP));
+} else {
+  assert("地理编码占比 ≥ 90%", geocodeRate >= 0.9, JSON.stringify(byP));
+}
 assert("区县粗精度 ≤ 15 条", (byP.d || 0) <= 15, `区县 ${byP.d} 条`);
 
 const jinshahu = RESOURCE_COORDS["study-jinshahu"];

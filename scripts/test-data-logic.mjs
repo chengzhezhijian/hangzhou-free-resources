@@ -118,8 +118,8 @@ function filter(state) {
 // ─── 1. 常量与配置 ───
 section("常量与配置");
 
-assertGte("资源总数 ≥ 2900", RESOURCES.length, 2900);
-assertGte("PREFECTURE_CITIES ≥ 70", PREFECTURE_CITIES.length, 70);
+assertGte("资源总数 ≥ 5500", RESOURCES.length, 5500);
+assertGte("PREFECTURE_CITIES ≥ 100", PREFECTURE_CITIES.length, 100);
 assert("CITY_PICKER 不含「全国」", !CITY_PICKER.includes("全国"));
 assert("CITY_PICKER 含「全部」", CITY_PICKER.includes("全部"));
 assertGte("EXTERNAL_TOOLS ≥ 3", EXTERNAL_TOOLS.length, 3);
@@ -178,7 +178,7 @@ assertGte("全省政策/工具资源 ≥ 5", provinceResources.length, 5);
 assertLte("全省政策/工具资源 ≤ 10", provinceResources.length, 10);
 
 const readingAll = RESOURCES.filter((r) => r.category === "reading");
-assertGte("城市书房总量 ≥ 500", readingAll.length, 500);
+assertGte("城市书房总量 ≥ 2000", readingAll.length, 2000);
 
 const hzReading = readingAll.filter((r) => engine.resourceCity(r) === "杭州");
 assertGte("杭州书房 ≥ 200", hzReading.length, 200);
@@ -279,16 +279,16 @@ function poolHasCity(filterCity, expectCity) {
 section("搜索逻辑");
 
 const searchCases = [
-  { q: "自习", city: "全部", min: 250, label: "全省搜自习" },
+  { q: "自习", city: "全部", min: 1200, label: "全省搜自习" },
   { q: "自习", city: "杭州", min: 200, label: "杭州搜自习" },
   { q: "自习", city: "宁波", min: 3, label: "宁波搜自习" },
-  { q: "书房", city: "全部", min: 200, label: "全省搜书房" },
-  { q: "图书馆", city: "全部", min: 30, label: "全省搜图书馆" },
-  { q: "停车", city: "全部", min: 5, label: "全省搜停车" },
+  { q: "书房", city: "全部", min: 1500, label: "全省搜书房" },
+  { q: "图书馆", city: "全部", min: 80, label: "全省搜图书馆" },
+  { q: "停车", city: "全部", min: 50, label: "全省搜停车" },
   { q: "纳凉", city: "杭州", min: 3, label: "杭州搜纳凉" },
-  { q: "公厕", city: "全部", min: 5, label: "全省搜公厕" },
-  { q: "公园", city: "全部", min: 10, label: "全省搜公园" },
-  { q: "充电", city: "全部", min: 2, label: "全省搜充电" },
+  { q: "公厕", city: "全部", min: 50, label: "全省搜公厕" },
+  { q: "公园", city: "全部", min: 400, label: "全省搜公园" },
+  { q: "充电", city: "全部", min: 50, label: "全省搜充电" },
 ];
 
 for (const { q, city, min, label } of searchCases) {
@@ -447,14 +447,14 @@ for (const t of EXTERNAL_TOOLS) {
 section("黄金场景计数");
 
 const golden = [
-  { state: { city: "全部" }, min: 2900, max: 3100, label: "默认全量" },
+  { state: { city: "全部" }, min: 5500, max: 6500, label: "默认全量" },
   { state: { city: "杭州" }, min: 400, max: 430, label: "杭州筛选池" },
-  { state: { city: "北京" }, min: 35, max: 60, label: "北京筛选池" },
-  { state: { city: "上海" }, min: 35, max: 60, label: "上海筛选池" },
-  { state: { search: "自习", city: "全部" }, min: 500, max: 1400, label: "全国自习" },
+  { state: { city: "北京" }, min: 50, max: 80, label: "北京筛选池" },
+  { state: { city: "上海" }, min: 50, max: 80, label: "上海筛选池" },
+  { state: { search: "自习", city: "全部" }, min: 1200, max: 2800, label: "全国自习" },
   { state: { category: "reading", city: "杭州" }, min: 220, max: 240, label: "杭州书房分类" },
-  { state: { category: "parking", city: "全部" }, min: 50, max: 120, label: "停车分类" },
-  { state: { category: "policy", city: "全部" }, min: 20, max: 100, label: "政策分类" },
+  { state: { category: "parking", city: "全部" }, min: 80, max: 150, label: "停车分类" },
+  { state: { category: "policy", city: "全部" }, min: 40, max: 140, label: "政策分类" },
 ];
 
 for (const { state, min, max, label } of golden) {

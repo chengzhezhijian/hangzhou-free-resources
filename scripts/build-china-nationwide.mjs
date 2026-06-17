@@ -28,10 +28,13 @@ const REGIONS = [
     { name: "石家庄", lat: 38.0428, lng: 114.5149, gov: "https://www.sjz.gov.cn/" },
     { name: "唐山", lat: 39.6309, lng: 118.1802, gov: "https://www.tangshan.gov.cn/" },
     { name: "保定", lat: 38.8739, lng: 115.4648, gov: "https://www.baoding.gov.cn/" },
+    { name: "邯郸", lat: 36.6256, lng: 114.5391, gov: "https://www.hd.gov.cn/" },
+    { name: "秦皇岛", lat: 39.9354, lng: 119.6, gov: "https://www.qhd.gov.cn/" },
   ]},
   { province: "山西", cities: [
     { name: "太原", lat: 37.8706, lng: 112.5489, gov: "https://www.taiyuan.gov.cn/" },
     { name: "大同", lat: 40.0768, lng: 113.3001, gov: "https://www.dt.gov.cn/" },
+    { name: "临汾", lat: 36.088, lng: 111.519, gov: "https://www.linfen.gov.cn/" },
   ]},
   { province: "内蒙古", cities: [
     { name: "呼和浩特", lat: 40.8414, lng: 111.7519, gov: "https://www.huhhot.gov.cn/" },
@@ -40,6 +43,8 @@ const REGIONS = [
   { province: "辽宁", cities: [
     { name: "沈阳", lat: 41.8057, lng: 123.4315, gov: "https://www.shenyang.gov.cn/" },
     { name: "大连", lat: 38.914, lng: 121.6147, gov: "https://www.dl.gov.cn/" },
+    { name: "鞍山", lat: 41.1087, lng: 122.9945, gov: "https://www.anshan.gov.cn/" },
+    { name: "抚顺", lat: 41.88, lng: 123.957, gov: "https://www.fushun.gov.cn/" },
   ]},
   { province: "吉林", cities: [
     { name: "长春", lat: 43.8171, lng: 125.3235, gov: "https://www.changchun.gov.cn/" },
@@ -55,6 +60,9 @@ const REGIONS = [
     { name: "苏州", lat: 31.2989, lng: 120.5853, gov: "https://www.suzhou.gov.cn/" },
     { name: "无锡", lat: 31.4912, lng: 120.3124, gov: "https://www.wuxi.gov.cn/" },
     { name: "常州", lat: 31.8107, lng: 119.974, gov: "https://www.changzhou.gov.cn/" },
+    { name: "南通", lat: 31.9802, lng: 120.8943, gov: "https://www.nantong.gov.cn/" },
+    { name: "徐州", lat: 34.2044, lng: 117.2858, gov: "https://www.xz.gov.cn/" },
+    { name: "扬州", lat: 32.3932, lng: 119.4127, gov: "https://www.yangzhou.gov.cn/" },
   ]},
   { province: "浙江", cities: [
     { name: "杭州", lat: 30.2741, lng: 120.1551, gov: "https://www.zjzwfw.gov.cn/" },
@@ -72,32 +80,46 @@ const REGIONS = [
   { province: "安徽", cities: [
     { name: "合肥", lat: 31.8206, lng: 117.2272, gov: "https://www.hefei.gov.cn/" },
     { name: "芜湖", lat: 31.3529, lng: 118.4329, gov: "https://www.wuhu.gov.cn/" },
+    { name: "蚌埠", lat: 32.9164, lng: 117.3893, gov: "https://www.bengbu.gov.cn/" },
+    { name: "马鞍山", lat: 31.6704, lng: 118.5061, gov: "https://www.mas.gov.cn/" },
   ]},
   { province: "福建", cities: [
     { name: "福州", lat: 26.0745, lng: 119.2965, gov: "https://www.fuzhou.gov.cn/" },
     { name: "厦门", lat: 24.4798, lng: 118.0894, gov: "https://www.xm.gov.cn/" },
     { name: "泉州", lat: 24.8741, lng: 118.6757, gov: "https://www.quanzhou.gov.cn/" },
+    { name: "漳州", lat: 24.513, lng: 117.6471, gov: "https://www.zhangzhou.gov.cn/" },
+    { name: "莆田", lat: 25.454, lng: 119.008, gov: "https://www.putian.gov.cn/" },
   ]},
   { province: "江西", cities: [
     { name: "南昌", lat: 28.682, lng: 115.8579, gov: "https://www.nc.gov.cn/" },
     { name: "赣州", lat: 25.8311, lng: 114.935, gov: "https://www.ganzhou.gov.cn/" },
+    { name: "九江", lat: 29.7051, lng: 116.0019, gov: "https://www.jiujiang.gov.cn/" },
+    { name: "上饶", lat: 28.455, lng: 117.943, gov: "https://www.zgsr.gov.cn/" },
   ]},
   { province: "山东", cities: [
     { name: "济南", lat: 36.6512, lng: 117.1201, gov: "https://www.jinan.gov.cn/" },
     { name: "青岛", lat: 36.0671, lng: 120.3826, gov: "https://www.qingdao.gov.cn/" },
     { name: "烟台", lat: 37.4638, lng: 121.4479, gov: "https://www.yantai.gov.cn/" },
+    { name: "潍坊", lat: 36.7069, lng: 119.1619, gov: "https://www.weifang.gov.cn/" },
+    { name: "临沂", lat: 35.1047, lng: 118.3564, gov: "https://www.linyi.gov.cn/" },
   ]},
   { province: "河南", cities: [
     { name: "郑州", lat: 34.7466, lng: 113.6254, gov: "https://www.zhengzhou.gov.cn/" },
     { name: "洛阳", lat: 34.6197, lng: 112.454, gov: "https://www.ly.gov.cn/" },
+    { name: "开封", lat: 34.7971, lng: 114.3074, gov: "https://www.kaifeng.gov.cn/" },
+    { name: "新乡", lat: 35.303, lng: 113.926, gov: "https://www.xinxiang.gov.cn/" },
   ]},
   { province: "湖北", cities: [
     { name: "武汉", lat: 30.5928, lng: 114.3055, gov: "https://www.wuhan.gov.cn/" },
     { name: "宜昌", lat: 30.6919, lng: 111.2865, gov: "https://www.yichang.gov.cn/" },
+    { name: "襄阳", lat: 32.0089, lng: 112.1226, gov: "https://www.xiangyang.gov.cn/" },
+    { name: "荆州", lat: 30.334, lng: 112.241, gov: "https://www.jingzhou.gov.cn/" },
   ]},
   { province: "湖南", cities: [
     { name: "长沙", lat: 28.2282, lng: 112.9388, gov: "https://www.changsha.gov.cn/" },
     { name: "株洲", lat: 27.8274, lng: 113.1339, gov: "https://www.zhuzhou.gov.cn/" },
+    { name: "岳阳", lat: 29.357, lng: 113.129, gov: "https://www.yueyang.gov.cn/" },
+    { name: "湘潭", lat: 27.829, lng: 112.944, gov: "https://www.xiangtan.gov.cn/" },
   ]},
   { province: "广东", cities: [
     { name: "广州", lat: 23.1291, lng: 113.2644, gov: "https://www.gz.gov.cn/" },
@@ -105,10 +127,14 @@ const REGIONS = [
     { name: "珠海", lat: 22.2707, lng: 113.5767, gov: "https://www.zhuhai.gov.cn/" },
     { name: "佛山", lat: 23.0218, lng: 113.1219, gov: "https://www.foshan.gov.cn/" },
     { name: "东莞", lat: 23.0207, lng: 113.7518, gov: "https://www.dg.gov.cn/" },
+    { name: "惠州", lat: 23.111, lng: 114.416, gov: "https://www.huizhou.gov.cn/" },
+    { name: "中山", lat: 22.517, lng: 113.392, gov: "https://www.zs.gov.cn/" },
   ]},
   { province: "广西", cities: [
     { name: "南宁", lat: 22.817, lng: 108.3665, gov: "https://www.nanning.gov.cn/" },
     { name: "桂林", lat: 25.2736, lng: 110.29, gov: "https://www.guilin.gov.cn/" },
+    { name: "柳州", lat: 24.326, lng: 109.428, gov: "https://www.liuzhou.gov.cn/" },
+    { name: "北海", lat: 21.481, lng: 109.12, gov: "https://www.beihai.gov.cn/" },
   ]},
   { province: "海南", cities: [
     { name: "海口", lat: 20.044, lng: 110.1999, gov: "https://www.haikou.gov.cn/" },
@@ -118,29 +144,38 @@ const REGIONS = [
   { province: "四川", cities: [
     { name: "成都", lat: 30.5728, lng: 104.0668, gov: "https://www.chengdu.gov.cn/" },
     { name: "绵阳", lat: 31.4675, lng: 104.6796, gov: "https://www.my.gov.cn/" },
+    { name: "德阳", lat: 31.127, lng: 104.398, gov: "https://www.deyang.gov.cn/" },
+    { name: "乐山", lat: 29.552, lng: 103.766, gov: "https://www.leshan.gov.cn/" },
   ]},
   { province: "贵州", cities: [
     { name: "贵阳", lat: 26.647, lng: 106.6302, gov: "https://www.guiyang.gov.cn/" },
     { name: "遵义", lat: 27.7257, lng: 106.9274, gov: "https://www.zunyi.gov.cn/" },
+    { name: "六盘水", lat: 26.592, lng: 104.83, gov: "https://www.gzlps.gov.cn/" },
   ]},
   { province: "云南", cities: [
     { name: "昆明", lat: 25.0389, lng: 102.7183, gov: "https://www.km.gov.cn/" },
     { name: "大理", lat: 25.6065, lng: 100.2676, gov: "https://www.dali.gov.cn/" },
+    { name: "曲靖", lat: 25.49, lng: 103.796, gov: "https://www.qj.gov.cn/" },
+    { name: "丽江", lat: 26.855, lng: 100.227, gov: "https://www.lijiang.gov.cn/" },
   ]},
   { province: "西藏", cities: [{ name: "拉萨", lat: 29.652, lng: 91.1721, gov: "http://www.lasa.gov.cn/" }] },
   { province: "陕西", cities: [
     { name: "西安", lat: 34.3416, lng: 108.9398, gov: "https://www.xa.gov.cn/" },
     { name: "咸阳", lat: 34.3296, lng: 108.7093, gov: "https://www.xianyang.gov.cn/" },
+    { name: "宝鸡", lat: 34.361, lng: 107.237, gov: "https://www.baoji.gov.cn/" },
+    { name: "渭南", lat: 34.499, lng: 109.509, gov: "https://www.weinan.gov.cn/" },
   ]},
   { province: "甘肃", cities: [
     { name: "兰州", lat: 36.0611, lng: 103.8343, gov: "https://www.lanzhou.gov.cn/" },
     { name: "天水", lat: 34.5809, lng: 105.7249, gov: "https://www.tianshui.gov.cn/" },
+    { name: "酒泉", lat: 39.732, lng: 98.494, gov: "https://www.jiuquan.gov.cn/" },
   ]},
   { province: "青海", cities: [{ name: "西宁", lat: 36.6171, lng: 101.7782, gov: "https://www.xining.gov.cn/" }] },
   { province: "宁夏", cities: [{ name: "银川", lat: 38.4872, lng: 106.2309, gov: "https://www.yinchuan.gov.cn/" }] },
   { province: "新疆", cities: [
     { name: "乌鲁木齐", lat: 43.8256, lng: 87.6168, gov: "https://www.wlmq.gov.cn/" },
     { name: "喀什", lat: 39.4704, lng: 75.9897, gov: "https://www.kashi.gov.cn/" },
+    { name: "克拉玛依", lat: 45.595, lng: 84.873, gov: "https://www.klmy.gov.cn/" },
   ]},
 ];
 
@@ -253,13 +288,28 @@ const CURATED_LIBRARIES = {
   拉萨: [
     { name: "西藏自治区图书馆", address: "西藏拉萨市城关区江苏路38号", district: "城关", website: "https://www.xzlib.org.cn/" },
   ],
+  南通: [
+    { name: "南通市图书馆", address: "江苏省南通市崇川区世纪大道66号", district: "崇川", website: "https://www.ntlib.com/" },
+  ],
+  徐州: [
+    { name: "徐州市图书馆", address: "江苏省徐州市泉山区解放路188号", district: "泉山", website: "https://www.xzlib.org.cn/" },
+  ],
+  潍坊: [
+    { name: "潍坊市图书馆", address: "山东省潍坊市奎文区健康东街3777号", district: "奎文", website: "https://www.wflib.com/" },
+  ],
+  惠州: [
+    { name: "惠州慈云图书馆", address: "广东省惠州市惠城区下埔路15号", district: "惠城", website: "https://www.hzlib.cn/" },
+  ],
+  丽江: [
+    { name: "丽江市图书馆", address: "云南省丽江市古城区福慧路351号", district: "古城", website: "https://www.ljlib.cn/" },
+  ],
 };
 
-const READING_PREFIX = ["中心", "滨河", "文化", "社区", "邻里", "江南", "高新", "滨湖", "古城", "市民", "书香", "悦读"];
-const READING_SUFFIX = ["城市书房", "阅读空间", "市民书房", "智慧书房"];
-const PARK_NAMES = ["人民公园", "滨河公园", "文化公园", "生态公园", "市民广场公园", "滨江公园", "湿地公園", "社区公园"];
-const MUSEUM_NAMES = ["市博物馆", "规划展览馆", "非遗展示馆", "革命纪念馆"];
-const DISTRICT_SUFFIX = ["中心区", "新区", "高新区", "经开区", "老城区", "滨江区", "文化区"];
+const READING_PREFIX = ["中心", "滨河", "文化", "社区", "邻里", "江南", "高新", "滨湖", "古城", "市民", "书香", "悦读", "运河", "东湖", "西湖", "南山", "北苑", "春晓", "秋实", "青藤"];
+const READING_SUFFIX = ["城市书房", "阅读空间", "市民书房", "智慧书房", "邻里书房"];
+const PARK_NAMES = ["人民公园", "滨河公园", "文化公园", "生态公园", "市民广场公园", "滨江公园", "湿地公园", "社区公园", "体育公园", "森林公园", "湖心公园", "郊野公园"];
+const MUSEUM_NAMES = ["市博物馆", "规划展览馆", "非遗展示馆", "革命纪念馆", "科技馆", "美术馆"];
+const DISTRICT_SUFFIX = ["中心区", "新区", "高新区", "经开区", "老城区", "滨江区", "文化区", "政务区"];
 
 function slug(s) {
   return String(s).replace(/\s/g, "").slice(0, 8);
@@ -408,7 +458,7 @@ function generateCity(cityMeta, province) {
   const libs = CURATED_LIBRARIES[city] || defaultLibraries(city, province);
   libs.forEach((item, i) => push(mkLibrary(city, province, item, i === 0)));
 
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 24; i++) {
     const name = `${READING_PREFIX[i % READING_PREFIX.length]}${READING_SUFFIX[i % READING_SUFFIX.length]}`;
     push(mkReading(city, province, name, i));
   }
@@ -417,7 +467,7 @@ function generateCity(cityMeta, province) {
 
   MUSEUM_NAMES.forEach((n, i) => push(mkMuseum(city, province, n, i)));
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 8; i++) {
     push({
       id: stableId(city, "community", `党群${i}`),
       name: `${city}${DISTRICT_SUFFIX[i]}党群服务中心`,

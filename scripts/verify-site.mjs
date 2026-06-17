@@ -15,6 +15,7 @@ const JS_DIR = path.join(__dirname, "..", "js");
 
 const site = loadSiteData();
 const { RESOURCES, CITIES, MapNav, GeoCity, RESOURCE_COORDS } = site;
+const IS_CHINA = site.SITE_SCOPE === "china";
 let errors = 0;
 let warnings = 0;
 
@@ -152,15 +153,27 @@ if (!fs.existsSync(coordsPath)) {
 
   let geocoded = 0;
   let district = 0;
+  let cityLevel = 0;
   for (const r of RESOURCES) {
     const c = coords[r.id];
     if (!c) continue;
     if (c.p === "g" || c.p === "e") geocoded++;
     else if (c.p === "d") district++;
+    else if (c.p === "c") cityLevel++;
   }
-  if (geocoded / RESOURCES.length < 0.9) {
-    fail(`地理编码坐标占比 ${((geocoded / RESOURCES.length) * 100).toFixed(1)}% 低于 90%`);
-  } else ok(`地理编码坐标 ${geocoded}/${RESOURCES.length}（≥90%）`);
+  const geocodeRate = geocoded / RESOURCES.length;
+  const minGeocode = IS_CHINA ? 0.4 : 0.9;
+  if (geocodeRate < minGeocode) {
+    fail(
+      `地理编码坐标占比 ${(geocodeRate * 100).toFixed(1)}% 低于 ${(minGeocode * 100).toFixed(0)}%`
+    );
+  } else if (IS_CHINA) {
+    ok(
+      `地理编码 ${geocoded}，地市估算 ${cityLevel}（全国模式 ≥40% 编码）`
+    );
+  } else {
+    ok(`地理编码坐标 ${geocoded}/${RESOURCES.length}（≥90%）`);
+  }
   if (district > 15) fail(`区县粗坐标 ${district} 条超过 15`);
   else ok(`区县粗坐标 ${district} 条（≤15）`);
 
