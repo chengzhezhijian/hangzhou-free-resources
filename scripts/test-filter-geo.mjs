@@ -232,8 +232,12 @@ async function run() {
     ok("场景下拉:快捷面板可见", quickPanel.hidden === false);
     ok(
       "场景下拉:锚点变量已写入",
-      !!doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-left").trim()
+      !!doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-left").trim() &&
+        !!doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-width").trim()
     );
+    const viewportW = doc.defaultView.innerWidth || 1024;
+    const anchorWidth = parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-width"));
+    ok("场景下拉:宽度未铺满视口", Number.isFinite(anchorWidth) && anchorWidth <= viewportW - 24);
     ok("场景下拉:标题正确", /场景/.test(quickPanel.textContent || ""));
     ok("场景下拉:含场景条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 2);
     ok("场景下拉:不打开大筛选框", doc.getElementById("filterDropPanel").hidden === true);
@@ -257,6 +261,33 @@ async function run() {
     await tick();
     ok("关闭:快捷面板隐藏", doc.getElementById("quickDropPanel").hidden === true);
     ok("关闭:body 取消下拉态", !doc.body.classList.contains("toolbar-drop-open"));
+  }
+
+  // ───────────────────────────────────────────────
+  // 场景 2b：窄触发器 → 窄下拉，左缘对齐
+  // ───────────────────────────────────────────────
+  {
+    const { doc } = boot({ geo: "error" });
+    await tick();
+
+    const narrowRect = { left: 48, right: 120, width: 72, top: 168, bottom: 200, height: 32 };
+    for (const id of ["quickSceneBtn", "quickCategoryBtn", "quickFacilityBtn", "quickSortBtn"]) {
+      const btn = doc.getElementById(id);
+      btn.getBoundingClientRect = () => narrowRect;
+    }
+
+    doc.getElementById("quickSceneBtn").click();
+    await tick();
+
+    const anchorWidth = parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-width"));
+    const anchorLeft = parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-left"));
+    ok("窄触发器:下拉宽度贴合", anchorWidth >= 72 && anchorWidth <= 96);
+    ok("窄触发器:左缘对齐", Math.abs(anchorLeft - 48) <= 1);
+
+    doc.getElementById("quickSortBtn").click();
+    await tick();
+    const sortWidth = parseFloat(doc.documentElement.style.getPropertyValue("--toolbar-drop-anchor-width"));
+    ok("窄触发器:排序下拉同样收窄", sortWidth >= 72 && sortWidth <= 96);
   }
 
   // ───────────────────────────────────────────────

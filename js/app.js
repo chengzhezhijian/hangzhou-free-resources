@@ -713,17 +713,23 @@
   }
 
   function calcToolbarDropWidth(kind, triggerRect, viewportWidth) {
-    const preset =
-      kind === "quick-sort" || kind === "sort"
-        ? 220
-        : kind === "quick-facility"
-          ? 336
-          : kind === "quick-category"
-            ? 320
-            : 300;
-    const minWidth = kind === "quick-sort" || kind === "sort" ? 176 : 236;
-    const desired = Math.max(preset, Math.round((triggerRect?.width || 0) + 88));
-    return Math.min(Math.max(desired, minWidth), Math.max(minWidth, viewportWidth - 24));
+    const gutter = 12;
+    const triggerW = Math.round(triggerRect?.width || 0);
+    const absoluteMin = 72;
+    const contentCeiling =
+      kind === "quick-facility"
+        ? 280
+        : kind === "quick-category"
+          ? 260
+          : kind === "quick-scene"
+            ? 260
+            : 200;
+    const viewportMax = Math.max(absoluteMin, viewportWidth - gutter * 2);
+    const maxW = Math.min(contentCeiling, viewportMax);
+    if (triggerW > 0) {
+      return Math.min(Math.max(triggerW, absoluteMin), maxW);
+    }
+    return Math.min(contentCeiling, maxW);
   }
 
   function updateToolbarDropAnchor(kind, triggerEl = null) {
@@ -738,8 +744,11 @@
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
     const width = calcToolbarDropWidth(kind, rect, viewportWidth);
     const gutter = 12;
-    const maxLeft = Math.max(gutter, viewportWidth - width - gutter);
-    const left = Math.min(Math.max(rect.left, gutter), maxLeft);
+    let left = rect.left;
+    if (left + width > viewportWidth - gutter) {
+      left = Math.max(gutter, viewportWidth - gutter - width);
+    }
+    left = Math.max(gutter, left);
     toolbarDropAnchor = { left, width };
     document.documentElement.style.setProperty("--toolbar-drop-anchor-left", `${left}px`);
     document.documentElement.style.setProperty("--toolbar-drop-anchor-width", `${width}px`);

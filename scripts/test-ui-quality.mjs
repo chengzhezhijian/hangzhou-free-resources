@@ -64,8 +64,11 @@ ok("全国惠民地图品牌", /全国惠民地图/.test(siteConfig));
 ok("桌面端快捷下拉未被禁用", !/toolbar-drop-layer\s*\{\s*display:\s*none !important/.test(designLayouts));
 ok("城市激活态对比增强", /city-pill\.is-active[\s\S]*box-shadow/.test(designLayouts));
 ok("桌面卡片可读性增强", /@media \(min-width: 960px\)[\s\S]*card-premium h3/.test(designLayouts));
-ok("下拉锚点变量", /--toolbar-drop-anchor-left/.test(designLayouts));
+ok("下拉锚点变量", /--toolbar-drop-anchor-left/.test(designLayouts) && /--toolbar-drop-anchor-width/.test(designLayouts));
 ok("下拉锚点定位逻辑", /updateToolbarDropAnchor/.test(appJs));
+ok("下拉宽度贴合触发器", /triggerRect\?\.width|triggerW/.test(appJs) && !/\+ 88/.test(appJs));
+ok("下拉宽度 CSS 回退收窄", !/min\(420px/.test(designLayouts) && !/min\(320px, calc\(100% - 24px\)\)/.test(designLayouts));
+ok("下拉项长文案处理", /\.quick-drop-item[\s\S]*word-break/.test(designLayouts) && /\.sort-drop-item[\s\S]*text-overflow/.test(designLayouts));
 ok(
   "下拉层移出 sticky",
   /scroll-main[\s\S]*?<\/div>\s*\n\s*<div class="toolbar-drop-layer" id="toolbarDropLayer"/.test(indexHtml)

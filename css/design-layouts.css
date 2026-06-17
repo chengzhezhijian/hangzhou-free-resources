@@ -620,7 +620,9 @@
 .sort-drop-panel {
   top: 0;
   left: var(--toolbar-drop-anchor-left, 12px);
-  width: var(--toolbar-drop-anchor-width, min(220px, calc(100% - 24px)));
+  width: var(--toolbar-drop-anchor-width, min(200px, calc(100% - 24px)));
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
   border-radius: 12px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -632,7 +634,9 @@
 .quick-drop-panel {
   top: 0;
   left: var(--toolbar-drop-anchor-left, 12px);
-  width: var(--toolbar-drop-anchor-width, min(320px, calc(100% - 24px)));
+  width: var(--toolbar-drop-anchor-width, min(240px, calc(100% - 24px)));
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
   border-radius: 14px;
   overflow: hidden;
   transform-origin: top left;
@@ -651,7 +655,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   width: 100%;
+  min-width: 0;
   padding: 14px 16px;
   border: none;
   border-bottom: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.06));
@@ -661,6 +667,9 @@
   color: var(--ios-label);
   cursor: pointer;
   text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .quick-drop-head {
@@ -682,6 +691,7 @@
 
 .quick-drop-item {
   width: 100%;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -695,6 +705,10 @@
   font-weight: 560;
   cursor: pointer;
   text-align: left;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 .quick-drop-item:hover,
@@ -730,6 +744,7 @@
 }
 
 .sort-drop-check {
+  flex-shrink: 0;
   font-size: 0.875rem;
   color: var(--ios-teal);
 }
@@ -817,13 +832,15 @@ body.toolbar-drop-open {
 
   .sort-drop-panel {
     top: 0;
-    width: var(--toolbar-drop-anchor-width, min(260px, calc(100% - 56px)));
+    width: var(--toolbar-drop-anchor-width, min(220px, calc(100% - 56px)));
+    max-width: calc(100% - 56px);
     border-radius: 14px;
   }
 
   .quick-drop-panel {
     top: 0;
-    width: var(--toolbar-drop-anchor-width, min(420px, calc(100% - 56px)));
+    width: var(--toolbar-drop-anchor-width, min(260px, calc(100% - 56px)));
+    max-width: calc(100% - 56px);
     border-radius: 14px;
   }
 
