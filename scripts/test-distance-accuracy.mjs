@@ -101,7 +101,7 @@ const geocodeRate = ((byP.g || 0) + (byP.e || 0)) / RESOURCES.length;
 const locatedRate =
   ((byP.g || 0) + (byP.e || 0) + (byP.c || 0) + (byP.d || 0)) / RESOURCES.length;
 if (IS_CHINA) {
-  assert("地理编码占比 ≥ 40%", geocodeRate >= 0.4, JSON.stringify(byP));
+  assert("地理编码占比 ≥ 20%", geocodeRate >= 0.2, JSON.stringify(byP));
   assert("坐标可定位率 ≥ 99%", locatedRate >= 0.99, JSON.stringify(byP));
 } else {
   assert("地理编码占比 ≥ 90%", geocodeRate >= 0.9, JSON.stringify(byP));

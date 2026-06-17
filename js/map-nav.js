@@ -14,9 +14,13 @@ const MapNav = (function () {
     parking: "停车场",
     park: "公园",
     sports: "体育场馆",
+    camping: "露营基地",
     toilet: "公共厕所",
     charging: "充电桩",
     wifi_pub: "公共WiFi",
+    policy: "政务服务中心",
+    legal: "法律援助",
+    training: "职业培训",
   };
 
   const TOOL_SEARCH = {
@@ -29,6 +33,10 @@ const MapNav = (function () {
     park: "公园",
     library: "图书馆",
     wifi_pub: "免费WiFi",
+    camping: "露营基地",
+    legal: "法律援助",
+    training: "职业培训",
+    policy: "政务服务中心",
   };
 
   const WEBSITE_ONLY_TOOLS = [

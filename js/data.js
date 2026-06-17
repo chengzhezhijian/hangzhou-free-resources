@@ -14,10 +14,13 @@ const RESOURCE_CATEGORIES = [
   { id: "parking", label: "停车", icon: "🅿", group: "travel" },
   { id: "park", label: "公园", icon: "🌳", group: "outdoor" },
   { id: "sports", label: "体育场馆", icon: "⚽", group: "outdoor" },
+  { id: "camping", label: "露营点", icon: "⛺", group: "outdoor" },
   { id: "toilet", label: "公厕", icon: "🚻", group: "amenity" },
   { id: "charging", label: "充电", icon: "🔌", group: "amenity" },
   { id: "wifi_pub", label: "公共WiFi", icon: "📶", group: "amenity" },
   { id: "policy", label: "免费政策", icon: "📋", group: "policy" },
+  { id: "legal", label: "法律咨询", icon: "⚖", group: "policy" },
+  { id: "training", label: "职业培训", icon: "🎓", group: "policy" },
 ];
 
 /** 核心卖点：高频设施（对应设施筛选 id） */
@@ -43,8 +46,11 @@ const CATEGORY_DISPLAY_ORDER = [
   "community",
   "museum",
   "sports",
+  "camping",
   "wifi_pub",
   "policy",
+  "legal",
+  "training",
 ];
 
 /** 顶部快捷场景（按用户需求频次排序） */

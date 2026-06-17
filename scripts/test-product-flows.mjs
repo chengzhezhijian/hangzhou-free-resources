@@ -56,7 +56,7 @@ const QS = dataCtx.QS;
 // ─── 1. 产品定位 ───
 console.log("\n═══ 产品需求 ═══");
 assert("全国版 SITE_SCOPE", SITE_SCOPE === "china");
-assert("资源规模 ≥ 5500", RESOURCES.length >= 5500);
+assert("资源规模 ≥ 11000", RESOURCES.length >= 11000);
 assert("设施卖点 4 项", VP?.length === 4);
 assert("设施顺序：WiFi 优先", VP?.[0]?.id === "wifi");
 assert("场景标签 6 项", QS?.length === 6);
@@ -72,7 +72,7 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /\bapp-ui\b/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=56/],
+  ["Premium 样式", /premium-ui\.css\?v=57/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
   ["设计挂载点", /id="filterToolbar"/],

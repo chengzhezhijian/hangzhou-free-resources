@@ -118,7 +118,7 @@ function filter(state) {
 // ─── 1. 常量与配置 ───
 section("常量与配置");
 
-assertGte("资源总数 ≥ 5500", RESOURCES.length, 5500);
+assertGte("资源总数 ≥ 11000", RESOURCES.length, 11000);
 assertGte("PREFECTURE_CITIES ≥ 100", PREFECTURE_CITIES.length, 100);
 assert("CITY_PICKER 不含「全国」", !CITY_PICKER.includes("全国"));
 assert("CITY_PICKER 含「全部」", CITY_PICKER.includes("全部"));
@@ -254,7 +254,7 @@ for (const city of PREFECTURE_CITIES) {
       engine.resourceCity(r) !== "全国"
   );
   assert(`${city} 筛选池无他市泄漏`, leaked.length === 0);
-  const minPool = city === "杭州" ? 400 : 30;
+  const minPool = city === "杭州" ? 400 : 80;
   assertGte(`${city} 筛选池 ≥ 本地`, pool.length, minPool);
 }
 
@@ -284,11 +284,14 @@ const searchCases = [
   { q: "自习", city: "宁波", min: 3, label: "宁波搜自习" },
   { q: "书房", city: "全部", min: 1500, label: "全省搜书房" },
   { q: "图书馆", city: "全部", min: 80, label: "全省搜图书馆" },
-  { q: "停车", city: "全部", min: 50, label: "全省搜停车" },
+  { q: "停车", city: "全部", min: 700, label: "全省搜停车" },
   { q: "纳凉", city: "杭州", min: 3, label: "杭州搜纳凉" },
-  { q: "公厕", city: "全部", min: 50, label: "全省搜公厕" },
+  { q: "公厕", city: "全部", min: 700, label: "全省搜公厕" },
   { q: "公园", city: "全部", min: 400, label: "全省搜公园" },
-  { q: "充电", city: "全部", min: 50, label: "全省搜充电" },
+  { q: "充电", city: "全部", min: 700, label: "全省搜充电" },
+  { q: "露营", city: "全部", min: 600, label: "全省搜露营" },
+  { q: "法律", city: "全部", min: 600, label: "全省搜法律" },
+  { q: "培训", city: "全部", min: 600, label: "全省搜培训" },
 ];
 
 for (const { q, city, min, label } of searchCases) {
@@ -447,14 +450,20 @@ for (const t of EXTERNAL_TOOLS) {
 section("黄金场景计数");
 
 const golden = [
-  { state: { city: "全部" }, min: 5500, max: 6500, label: "默认全量" },
-  { state: { city: "杭州" }, min: 400, max: 430, label: "杭州筛选池" },
-  { state: { city: "北京" }, min: 50, max: 80, label: "北京筛选池" },
-  { state: { city: "上海" }, min: 50, max: 80, label: "上海筛选池" },
+  { state: { city: "全部" }, min: 11000, max: 11500, label: "默认全量" },
+  { state: { city: "杭州" }, min: 400, max: 480, label: "杭州筛选池" },
+  { state: { city: "北京" }, min: 90, max: 130, label: "北京筛选池" },
+  { state: { city: "上海" }, min: 90, max: 130, label: "上海筛选池" },
   { state: { search: "自习", city: "全部" }, min: 1200, max: 2800, label: "全国自习" },
   { state: { category: "reading", city: "杭州" }, min: 220, max: 240, label: "杭州书房分类" },
-  { state: { category: "parking", city: "全部" }, min: 80, max: 150, label: "停车分类" },
-  { state: { category: "policy", city: "全部" }, min: 40, max: 140, label: "政策分类" },
+  { state: { category: "parking", city: "全部" }, min: 700, max: 800, label: "停车分类" },
+  { state: { category: "toilet", city: "全部" }, min: 700, max: 800, label: "公厕分类" },
+  { state: { category: "camping", city: "全部" }, min: 600, max: 680, label: "露营分类" },
+  { state: { category: "sports", city: "全部" }, min: 700, max: 800, label: "体育分类" },
+  { state: { category: "charging", city: "全部" }, min: 700, max: 800, label: "充电分类" },
+  { state: { category: "policy", city: "全部" }, min: 700, max: 850, label: "政策分类" },
+  { state: { category: "legal", city: "全部" }, min: 600, max: 680, label: "法律分类" },
+  { state: { category: "training", city: "全部" }, min: 600, max: 680, label: "培训分类" },
 ];
 
 for (const { state, min, max, label } of golden) {
