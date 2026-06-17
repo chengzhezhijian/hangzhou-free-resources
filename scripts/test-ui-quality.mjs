@@ -12,6 +12,7 @@ const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf8");
 const designLayouts = fs.readFileSync(path.join(ROOT, "css", "design-layouts.css"), "utf8");
 const premiumCss = fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8");
+const designSystem = fs.readFileSync(path.join(ROOT, "css", "design-system.css"), "utf8");
 
 let pass = 0;
 let fail = 0;
@@ -75,6 +76,11 @@ ok("发现页有结果列表", /id="cardGrid"/.test(indexHtml));
 ok("详情 Sheet", /id="detailModal"/.test(indexHtml));
 ok("距离排序 Tab", /data-sort="distance"/.test(indexHtml));
 ok("坐标数据文件存在", fs.existsSync(path.join(ROOT, "js", "resource-coords.js")));
+ok("结果计数层叠可读", /\.filter-toolbar-layout \.content-header[\s\S]*isolation:\s*isolate/.test(designLayouts) && /\.result-count[\s\S]*white-space:\s*nowrap/.test(designLayouts + designSystem));
+ok("结果计数不被 sticky 渐变吞没", /--discover-sticky-bg:[\s\S]*100%\)/.test(premiumCss) && !/rgba\(242, 242, 247, 0\) 100%/.test(premiumCss));
+ok("Apple 柔化 surface token", /--ios-surface-soft/.test(designSystem) && /--ios-separator-soft/.test(designSystem));
+ok("筛选条圆角柔化", /\.filter-segment[\s\S]*--ios-radius-sm/.test(designLayouts));
+ok("结果计数文案函数", /function resultCountLabel/.test(appJs) && /近→远/.test(appJs));
 
 const total = pass + fail;
 console.log(`UI/定位: ${pass}/${total} 通过`);
