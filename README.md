@@ -2,7 +2,32 @@
 
 全国 **政府免费便民** 资源查询：自习、纳凉、WiFi、饮水、充电。
 
-**在线访问**：https://chengzhezhijian.github.io/hangzhou-free-resources/?v=35
+**在线访问**：https://chengzhezhijian.github.io/hangzhou-free-resources/?v=36
+
+## 整站 UX AB（10 套 · 结构 / 交互 / 筛选）
+
+不仅是换色换字，每套包含不同的 **信息架构、主筛选控件、列表形态、分页与排序**。
+
+| 入口 | 说明 |
+|------|------|
+| **[整站设计对比墙](labs/ab-design.html)** | 10 套 iframe 并排，点「全屏验收」 |
+| `?design=d01` … `d10` | 整站结构 / 交互 / 筛选切换 |
+| [设计报告](docs/ab-design-report.md) | 10 套方案说明 |
+
+| ID | 名称 | 维度 | 核心差异 |
+|----|------|------|----------|
+| d01 | 经典信息流 | 结构 | Hero + 设施 + 场景 + Premium 卡片 |
+| d02 | 搜索首屏 | 交互 | 巨型搜索 + 单行列表 |
+| d03 | 大类宫格 | 结构 | 6 大类宫格 + 双列 Tile |
+| d04 | 场景磁贴 | 筛选 | 2 列场景磁贴为主筛选 |
+| d05 | 设施矩阵 | 筛选 | 2×2 设施多选矩阵 |
+| d06 | 附近优先 | 交互 | 定位条 + 默认距离排序 |
+| d07 | 探索双列 | 结构 | 分类 Tab + 双列网格 |
+| d08 | 分区目录 | 结构 | 按类型分区、无分页 |
+| d09 | 极简条目 | 交互 | 合并 Chip + 系统设置式列表 |
+| d10 | 办事向导 | 筛选 | 三步向导：城市→场景→结果 |
+
+可与 `?copy=`、`?theme=` 组合预览，例如 `?design=d04&copy=h07&theme=v08`。
 
 ## 首页文案 AB（10 套 · 验收入口）
 
@@ -33,13 +58,13 @@
 | `?theme=v01` … `v10` | 全站配色切换 |
 
 ```bash
-npm run test:all   # 含文案 + 配色 AB
+npm run test:all   # 含整站 UX + 文案 + 配色 AB
 ```
 
 ## 本地预览
 
 ```bash
 python3 -m http.server 8080
-# 对比墙 http://localhost:8080/labs/ab-homepage.html
-# 单版   http://localhost:8080/?copy=h01&v=35
+# 对比墙 http://localhost:8080/labs/ab-design.html
+# 单版   http://localhost:8080/?design=d04&v=36
 ```

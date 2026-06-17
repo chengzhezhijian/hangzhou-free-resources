@@ -1,5 +1,14 @@
 (function () {
-  const PAGE_SIZE = 48;
+  const PAGE_SIZE_DEFAULT = 48;
+
+  function getDesign() {
+    return typeof getDesignVariant === "function" ? getDesignVariant() : null;
+  }
+
+  function getPageSize() {
+    const d = getDesign();
+    return d?.pageSize || PAGE_SIZE_DEFAULT;
+  }
 
   function track(name, props) {
     if (typeof window.trackEvent === "function") window.trackEvent(name, props);
@@ -596,6 +605,15 @@
   }
 
   function renderCard(resource) {
+    const mode = getDesign()?.cardMode || "premium";
+    if (mode === "row") return renderRowCard(resource);
+    if (mode === "tile") return renderTileCard(resource);
+    if (mode === "compact") return renderCompactCard(resource);
+    if (mode === "minimal") return renderMinimalCard(resource);
+    return renderPremiumCard(resource);
+  }
+
+  function renderPremiumCard(resource) {
     const distKm = resourceDistanceKm(resource);
     const coord = resourceCoord(resource);
     const approx = coord && (coord.p === "d" || coord.p === "c");
@@ -637,6 +655,84 @@
     `;
   }
 
+  function renderRowCard(resource) {
+    const distKm = resourceDistanceKm(resource);
+    const coord = resourceCoord(resource);
+    const distLabel = formatDistance(distKm, coord && (coord.p === "d" || coord.p === "c"));
+    return `
+      <article class="card card-row" data-id="${resource.id}" tabindex="0" role="button">
+        ${distLabel ? `<span class="card-row__dist">${distLabel}</span>` : ""}
+        <div class="card-row__body">
+          <h3>${resource.name}</h3>
+          <p>${categoryLabel(resource)} · ${resourceCity(resource)}</p>
+        </div>
+        <span class="card-row__go">›</span>
+      </article>`;
+  }
+
+  function renderTileCard(resource) {
+    const cat = resource.category || "all";
+    return `
+      <article class="card card-tile" data-id="${resource.id}" tabindex="0" role="button">
+        <div class="card-tile__icon">${RESOURCE_CATEGORIES.find((c) => c.id === cat)?.icon || "◎"}</div>
+        <h3>${resource.name}</h3>
+        <p>${resourceCity(resource)}</p>
+      </article>`;
+  }
+
+  function renderCompactCard(resource) {
+    return `
+      <article class="card card-compact" data-id="${resource.id}" tabindex="0" role="button">
+        <h3>${resource.name}</h3>
+        <p>${categoryLabel(resource)} · ${resource.address}</p>
+      </article>`;
+  }
+
+  function renderMinimalCard(resource) {
+    const distKm = resourceDistanceKm(resource);
+    const distLabel = formatDistance(distKm, false);
+    return `
+      <article class="card card-minimal" data-id="${resource.id}" tabindex="0" role="button">
+        <span class="card-minimal__title">${resource.name}</span>
+        <span class="card-minimal__meta">${distLabel || categoryLabel(resource)}</span>
+      </article>`;
+  }
+
+  function bindCardClicks(grid) {
+    grid.querySelectorAll(".card").forEach((card) => {
+      const open = () => openModal(card.dataset.id);
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          open();
+        }
+      });
+    });
+  }
+
+  function renderGroupedCards(filtered, grid) {
+    const buckets = new Map();
+    filtered.forEach((r) => {
+      const k = r.category || "other";
+      if (!buckets.has(k)) buckets.set(k, []);
+      buckets.get(k).push(r);
+    });
+    const order = RESOURCE_CATEGORIES.map((c) => c.id).filter((id) => buckets.has(id));
+    grid.innerHTML = order
+      .map((cat) => {
+        const items = buckets.get(cat) || [];
+        const label = CATEGORY_LABELS[cat] || cat;
+        return `<section class="design-group-section">
+          <h3 class="design-group-heading">${label}<span>${items.length}</span></h3>
+          <div class="design-group-items">${items.slice(0, 24).map(renderCompactCard).join("")}</div>
+        </section>`;
+      })
+      .join("");
+    bindCardClicks(grid);
+    if (typeof window.markCardsEnter === "function") window.markCardsEnter();
+  }
+
   function renderPagination(total, totalPages) {
     const el = document.getElementById("pagination");
     if (totalPages <= 1) {
@@ -664,12 +760,14 @@
     const grid = document.getElementById("cardGrid");
     const empty = document.getElementById("emptyState");
     const countEl = document.getElementById("resultCount");
+    const pageSize = getPageSize();
+    const design = getDesign();
 
-    const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+    const totalPages = Math.ceil(filtered.length / pageSize) || 1;
     if (state.page > totalPages) state.page = totalPages;
 
-    const start = (state.page - 1) * PAGE_SIZE;
-    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+    const start = (state.page - 1) * pageSize;
+    const pageItems = filtered.slice(start, start + pageSize);
 
     countEl.textContent = resultCountLabel(filtered.length);
     if (typeof window.animateResultCount === "function") window.animateResultCount();
@@ -678,8 +776,9 @@
     updateMobileChrome();
     updateContentHeader();
     if (!state.userLocation) updateDistanceHint();
-    renderQuickScenes();
-    renderValuePerks();
+    if (design?.layout?.quickScenes !== false) renderQuickScenes();
+    if (design?.layout?.perks !== false) renderValuePerks();
+    if (typeof DesignEngine !== "undefined") DesignEngine.remount();
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -688,18 +787,14 @@
     }
 
     empty.hidden = true;
-    grid.innerHTML = pageItems.map(renderCard).join("");
 
-    grid.querySelectorAll(".card").forEach((card) => {
-      const open = () => openModal(card.dataset.id);
-      card.addEventListener("click", open);
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          open();
-        }
-      });
-    });
+    if (design?.groupList) {
+      renderGroupedCards(filtered, grid);
+      return;
+    }
+
+    grid.innerHTML = pageItems.map(renderCard).join("");
+    bindCardClicks(grid);
     if (typeof window.markCardsEnter === "function") window.markCardsEnter();
   }
 
@@ -1467,16 +1562,87 @@
     window.setTimeout(open, 600);
   }
 
+  function applyQuickScene(scene) {
+    state.category = scene?.category || "all";
+    state.group = "all";
+    state.search = scene?.search || "";
+    state.page = 1;
+    state.facilities.clear();
+    const input = document.getElementById("searchInput");
+    if (input) input.value = state.search;
+    const clear = document.getElementById("searchClear");
+    if (clear) clear.hidden = !state.search;
+    renderCategoryFilters();
+    renderValuePerks();
+    updateMobileChrome();
+    renderCards();
+    track("filter_change", {
+      field: "quick_scene",
+      value: state.search || state.category,
+    });
+  }
+
+  function setGroup(groupId) {
+    state.group = groupId;
+    state.category = "all";
+    state.page = 1;
+    state.facilities.clear();
+    track("filter_change", { field: "group", value: groupId });
+    renderCategoryFilters();
+    renderValuePerks();
+    renderCards();
+  }
+
+  function setCategory(catId) {
+    state.category = catId;
+    state.page = 1;
+    state.facilities.clear();
+    track("filter_change", { field: "category", value: catId });
+    renderCategoryFilters();
+    renderValuePerks();
+    renderCards();
+  }
+
+  function toggleFacility(id) {
+    if (state.facilities.has(id)) state.facilities.delete(id);
+    else state.facilities.add(id);
+    state.page = 1;
+    renderFacilityFilters();
+    renderValuePerks();
+    renderCards();
+  }
+
+  function countGroup(groupId) {
+    const pool = scopedResources();
+    return pool.filter((r) => CATEGORY_TO_GROUP[r.category] === groupId).length;
+  }
+
+  function wizardStep() {
+    if (state.city === "全部") return 1;
+    if (state.category === "all" && !state.search && state.facilities.size === 0) return 2;
+    return 3;
+  }
+
+  function wizardTip() {
+    const s = wizardStep();
+    if (s === 1) return "第一步：点左上角 📍 选择城市，或允许定位";
+    if (s === 2) return "第二步：点选一个办事场景（遛娃 / 自习 / 纳凉…）";
+    return "第三步：浏览匹配结果，点卡片导航";
+  }
+
   function init() {
     if (!document.getElementById("cardGrid")) return;
 
+    const designInit = getDesign();
     applyUrlParams();
     if (restoreUserLocation()) {
       state.sortMode = "distance";
+    } else if (designInit?.defaultSort === "distance") {
+      state.sortMode = "distance";
     }
-    renderHeroStats();
-    renderQuickScenes();
-    renderValuePerks();
+    if (!designInit?.layout || designInit.layout.stats !== false) renderHeroStats();
+    if (!designInit?.layout || designInit.layout.quickScenes !== false) renderQuickScenes();
+    if (!designInit?.layout || designInit.layout.perks !== false) renderValuePerks();
     renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();
@@ -1510,6 +1676,26 @@
       state.page = 1;
       renderCards();
     });
+
+    if (typeof DesignEngine !== "undefined") {
+      DesignEngine.afterInit({
+        state,
+        CATEGORY_GROUPS,
+        QUICK_SCENES,
+        VALUE_PERKS,
+        FACILITY_FILTERS,
+        visibleCategories,
+        isSceneActive: isQuickSceneActive,
+        countGroup,
+        setGroup,
+        setCategory,
+        toggleFacility,
+        applyQuickScene,
+        wizardStep,
+        wizardTip,
+        runGeoLocate,
+      });
+    }
   }
 
   if (document.readyState === "loading") {

@@ -72,9 +72,10 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /class="app-ui"/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=35/],
-  ["文案变体样式", /copy-variants\.css/],
-  ["文案切换", /copy-variants\.js/],
+  ["Premium 样式", /premium-ui\.css\?v=36/],
+  ["整站 UX 设计", /design-variants\.js/],
+  ["设计布局 CSS", /design-layouts\.css/],
+  ["设计挂载点", /id="designPrimaryMount"/],
   ["设施标签容器", /id="heroPerks"/],
   ["iOS 分段排序", /sort-tabs/],
   ["底部 Tab", /bottom-nav/],
@@ -153,6 +154,7 @@ assert("文案变体 10 套", (() => {
 })());
 assert("文案 AB 报告", fs.existsSync(path.join(ROOT, "docs/ab-copy-results.json")));
 assert("首页对比墙", fs.existsSync(path.join(ROOT, "labs/ab-homepage.html")));
+assert("整站设计对比墙", fs.existsSync(path.join(ROOT, "labs/ab-design.html")));
 
 // ─── Report ───
 const total = runner.passed + runner.failed;
