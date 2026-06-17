@@ -438,6 +438,88 @@
     }
   }
 
+  function renderFilterToolbar() {
+    const el = document.getElementById("filterToolbar");
+    if (!el || getDesign()) return;
+
+    const perks = typeof VALUE_PERKS !== "undefined" ? VALUE_PERKS : [];
+    const scenes = typeof QUICK_SCENES !== "undefined" ? QUICK_SCENES : [];
+    const n = countActiveFilters();
+    const badge = n ? `<span class="filter-badge">${n}</span>` : "";
+
+    const chip = (cls, label, active, attrs = "") =>
+      `<button type="button" class="ft-chip ${cls}${active ? " is-active" : ""}" ${attrs}>${label}</button>`;
+    const div = `<span class="ft-divider" aria-hidden="true"></span>`;
+
+    let html = perks
+      .map((p) =>
+        chip(
+          "ft-chip--perk",
+          p.short || p.label,
+          isPerkActive(p),
+          `data-facility="${p.facility}" title="${p.desc || ""}"`
+        )
+      )
+      .join("");
+    html += div;
+    html += scenes
+      .map((s) =>
+        chip(
+          "ft-chip--scene",
+          s.label.replace(/^[^\u4e00-\u9fa5a-zA-Z0-9]+/, ""),
+          isQuickSceneActive(s),
+          `data-scene="${s.category}|${s.search || ""}"`
+        )
+      )
+      .join("");
+    html += div;
+    html +=
+      chip("ft-chip--sort", "综合", state.sortMode === "comprehensive", 'data-sort="comprehensive"') +
+      chip(
+        "ft-chip--sort" + (!state.userLocation ? " ft-chip--geo" : ""),
+        "距离",
+        state.sortMode === "distance",
+        'data-sort="distance"'
+      ) +
+      `<button type="button" class="ft-chip ft-chip--filter${n ? " is-active" : ""}" id="filterOpenBtn">筛选${badge}</button>`;
+
+    el.innerHTML = `<div class="filter-toolbar__scroll">${html}</div>`;
+
+    el.querySelectorAll("[data-facility].ft-chip--perk").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const perk = perks.find((p) => p.facility === btn.dataset.facility);
+        if (perk) applyValuePerk(perk);
+      });
+    });
+    el.querySelectorAll("[data-scene]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const [cat, q] = btn.dataset.scene.split("|");
+        const scene = scenes.find((s) => s.category === cat && (s.search || "") === q);
+        state.category = scene?.category || cat;
+        state.group = "all";
+        state.search = scene?.search || q || "";
+        state.page = 1;
+        state.facilities.clear();
+        document.getElementById("searchInput").value = state.search;
+        document.getElementById("searchClear").hidden = !state.search;
+        renderCategoryFilters();
+        renderCards();
+        track("filter_change", { field: "quick_scene", value: state.search || state.category });
+      });
+    });
+    el.querySelectorAll("[data-sort]").forEach((btn) => {
+      btn.addEventListener("click", () => setSortMode(btn.dataset.sort));
+    });
+    const filterBtn = el.querySelector("#filterOpenBtn");
+    if (filterBtn) {
+      filterBtn.replaceWith(filterBtn.cloneNode(true));
+      el.querySelector("#filterOpenBtn")?.addEventListener("click", () => {
+        if (isFilterDesktop()) expandSidebar(true);
+        else openFilterSheet();
+      });
+    }
+  }
+
   function renderQuickScenes() {
     const el = document.getElementById("quickScenes");
     if (!el || typeof QUICK_SCENES === "undefined") return;
@@ -786,10 +868,12 @@
     renderPagination(filtered.length, totalPages);
     updateMobileChrome();
     updateContentHeader();
-    if (!state.userLocation) updateDistanceHint();
-    if (design?.layout?.quickScenes !== false) renderQuickScenes();
-    if (design?.layout?.perks !== false) renderValuePerks();
-    if (typeof DesignEngine !== "undefined") DesignEngine.remount();
+    updateDistanceHint();
+    if (design) {
+      if (typeof DesignEngine !== "undefined") DesignEngine.remount();
+    } else {
+      renderFilterToolbar();
+    }
 
     if (filtered.length === 0) {
       grid.innerHTML = "";
@@ -980,15 +1064,14 @@
   }
 
   function updateSortTabs() {
-    document.querySelectorAll(".sort-tab[data-sort]").forEach((tab) => {
+    document.querySelectorAll(".sort-tab[data-sort], .ft-chip[data-sort]").forEach((tab) => {
       const active = tab.dataset.sort === state.sortMode;
       tab.classList.toggle("is-active", active);
-      tab.setAttribute("aria-selected", String(active));
+      tab.setAttribute?.("aria-selected", String(active));
     });
-    const distanceTab = document.getElementById("sortDistance");
-    if (distanceTab) {
-      distanceTab.classList.toggle("sort-tab--needs-geo", !state.userLocation);
-    }
+    document.querySelectorAll(".ft-chip--sort.ft-chip--geo").forEach((tab) => {
+      tab.classList.toggle("ft-chip--geo", !state.userLocation);
+    });
   }
 
   function setSortMode(mode) {
@@ -1304,12 +1387,9 @@
     renderCards();
   }
 
-  function showGeoBanner(message, tone) {
+  function showGeoBanner(_message, _tone) {
     const el = document.getElementById("geoBanner");
-    if (!el) return;
-    el.textContent = message;
-    el.className = `geo-banner geo-banner--${tone || "info"}`;
-    el.hidden = false;
+    if (el) el.hidden = true;
   }
 
   async function runGeoLocate(manual) {
@@ -1323,7 +1403,9 @@
       if (btn.id === "geoLocateBtnDesktop") btn.textContent = "定位中…";
       else if (btn.id === "citySheetLocateBtn") btn.textContent = "定位中…";
     });
-    if (manual) showGeoBanner("正在获取您的位置…", "info");
+    if (manual) {
+      /* 定位过程不展示横幅，节省首屏空间 */
+    }
 
     try {
       const pos = await GeoCity.requestLocation();
@@ -1347,10 +1429,6 @@
         showGeoBanner(`已定位「${result.city}」，按距离由近到远展示`, "success");
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
       } else if (result.ok) {
-        showGeoBanner(
-          `已定位附近，按距离展示（当前：${state.city === "全部" ? scopeLabelAll() : state.city}）`,
-          "success"
-        );
         track("geo_locate", { ok: true, city: result.city, manual: !!manual, km: result.distanceKm });
         renderCards();
       } else {
@@ -1418,11 +1496,8 @@
   }
 
   function updateDistanceHint() {
-    if (state.userLocation) return;
     const el = document.getElementById("geoBanner");
-    if (!el || el.hidden) {
-      showGeoBanner("允许定位后，将自动按您附近由近到远展示", "info");
-    }
+    if (el) el.hidden = true;
   }
 
   function initGeo() {
@@ -1444,8 +1519,6 @@
         }
       }
       applyLocationPriority();
-      const cityLabel = state.city === "全部" ? scopeLabelAll() : state.city;
-      showGeoBanner(`已定位附近，按距离由近到远（${cityLabel}）`, "success");
       renderCards();
       return;
     }
@@ -1656,8 +1729,9 @@
     } else if (!designInit) {
       renderHeroStats();
     }
-    if (!designInit?.layout || designInit.layout.quickScenes !== false) renderQuickScenes();
-    if (!designInit?.layout || designInit.layout.perks !== false) renderValuePerks();
+    if (!designInit) {
+      renderFilterToolbar();
+    }
     renderCityFilter();
     renderCategoryFilters();
     renderFacilityFilters();
@@ -1670,6 +1744,34 @@
     if (state.category !== "all") renderCategoryFilters();
     initMobileChrome();
     initGeo();
+    if (typeof DesignEngine !== "undefined") {
+      DesignEngine.afterInit({
+        state,
+        CATEGORY_GROUPS,
+        QUICK_SCENES,
+        VALUE_PERKS,
+        FACILITY_FILTERS,
+        visibleCategories,
+        isSceneActive: isQuickSceneActive,
+        countGroup,
+        setGroup,
+        setCategory,
+        toggleFacility,
+        applyQuickScene,
+        wizardStep,
+        wizardTip,
+        runGeoLocate,
+        setSortMode,
+        filterBadgeHtml: () => {
+          const n = countActiveFilters();
+          return `筛选${n ? `<span class="filter-badge">${n}</span>` : ""}`;
+        },
+        openFilterSheet: () => {
+          if (isFilterDesktop()) expandSidebar(true);
+          else openFilterSheet();
+        },
+      });
+    }
     renderCards();
     initSearch();
     initOnboarding();
@@ -1691,26 +1793,6 @@
       state.page = 1;
       renderCards();
     });
-
-    if (typeof DesignEngine !== "undefined") {
-      DesignEngine.afterInit({
-        state,
-        CATEGORY_GROUPS,
-        QUICK_SCENES,
-        VALUE_PERKS,
-        FACILITY_FILTERS,
-        visibleCategories,
-        isSceneActive: isQuickSceneActive,
-        countGroup,
-        setGroup,
-        setCategory,
-        toggleFacility,
-        applyQuickScene,
-        wizardStep,
-        wizardTip,
-        runGeoLocate,
-      });
-    }
   }
 
   if (document.readyState === "loading") {

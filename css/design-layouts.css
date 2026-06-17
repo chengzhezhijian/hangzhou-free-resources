@@ -1,85 +1,146 @@
 /**
- * 整站 UX 布局 — UED：简洁、高信息密度、主次字号分明
+ * 淘宝/美团单行筛选栏 + 整站 UX 变体
  */
 
-/* ─── 全局：设计变体下隐藏数字统计、压缩间距 ─── */
+/* ─── 全局：单行筛选、最大化列表区 ─── */
+.filter-toolbar-layout .home-head,
+.filter-toolbar-layout .hero-stats,
+.has-design-variant .home-head,
 .has-design-variant .hero-stats {
   display: none !important;
 }
 
-.has-design-variant .discover-sticky {
-  padding-bottom: 4px;
+.filter-toolbar-layout .geo-banner,
+.has-design-variant .geo-banner {
+  display: none !important;
 }
 
+.filter-toolbar-layout .discover-sticky {
+  padding-bottom: 2px;
+}
+
+.filter-toolbar-layout .discover-inner,
 .has-design-variant .discover-inner {
-  gap: 6px;
+  gap: 4px;
 }
 
-.has-design-variant .content-header {
-  margin-bottom: 8px;
+.filter-toolbar-layout .loc-search-row .loc-pill {
+  min-width: 0;
+  padding: 0 10px;
+  height: 40px;
 }
 
-.has-design-variant .content-header h2 {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--ios-label-secondary);
-  letter-spacing: 0;
+.filter-toolbar-layout .search-box {
+  height: 40px;
 }
 
-.has-design-variant .result-count {
+.filter-toolbar-layout .content-header h2,
+.design-content-count-only .content-header h2 {
+  display: none !important;
+}
+
+.filter-toolbar-layout .content-header,
+.design-content-count-only .content-header {
+  margin-bottom: 4px;
+  min-height: 0;
+}
+
+.filter-toolbar-layout .result-count,
+.design-content-count-only .result-count {
   font-size: 0.6875rem;
   color: var(--ios-label-tertiary);
 }
 
-.has-design-variant .card-grid {
-  gap: 6px;
+/* ─── 单行筛选栏（美团/淘宝） ─── */
+.filter-toolbar {
+  width: 100%;
+  overflow: hidden;
 }
 
-/* ─── 紧凑 Hero（主信息 17px，副信息 11px） ─── */
-.design-hero-compact .home-head {
-  padding: 2px 0 6px;
+.filter-toolbar__scroll {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 2px 0 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
 }
 
-.design-hero-compact .display-title {
-  font-size: 1.0625rem;
-  font-weight: 650;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.design-hero-compact .display-title br {
+.filter-toolbar__scroll::-webkit-scrollbar {
   display: none;
 }
 
-.design-hero-compact .display-sub {
-  margin: 2px 0 0;
-  font-size: 0.6875rem;
-  font-weight: 400;
-  color: var(--ios-label-tertiary);
+.ft-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 12px;
+  margin-right: 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ios-label-secondary);
+  cursor: pointer;
+  line-height: 1;
 }
 
-.design-hide-hero .home-head {
-  display: none !important;
+.ft-chip.is-active {
+  color: var(--ios-label);
+  font-weight: 650;
+  background: var(--ios-bg-elevated);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-/* ─── 布局显隐 ─── */
-.design-hide-perks .hero-perks,
-.design-hide-perks .value-perks {
-  display: none !important;
+.ft-chip--sort.is-active,
+.ft-chip--filter.is-active {
+  color: var(--ios-teal);
+  font-weight: 650;
 }
 
-.design-hide-scenes .quick-scenes {
-  display: none !important;
+.ft-chip--perk.is-active,
+.ft-chip--fac.is-active {
+  color: var(--on-accent);
+  background: var(--chip-active-bg);
 }
 
-.design-hide-sort .sort-tabs {
-  display: none !important;
+.ft-chip--geo::after {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 3px;
+  border-radius: 50%;
+  background: var(--ios-teal);
+  vertical-align: super;
 }
 
-.design-hide-content-head .content-header h2 {
-  display: none !important;
+.ft-divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 14px;
+  margin: 0 4px 0 0;
+  background: var(--ios-separator);
 }
 
+.ft-chip .filter-badge {
+  margin-left: 4px;
+  padding: 0 5px;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 0.625rem;
+  border-radius: 8px;
+  background: var(--ios-teal);
+  color: #fff;
+}
+
+/* ─── 布局变体 ─── */
 .design-sidebar-hidden .sidebar {
   display: none !important;
 }
@@ -95,215 +156,11 @@
   }
 }
 
-/* ─── 筛选挂载区 ─── */
-.design-mount {
-  margin-bottom: 4px;
-}
-
-.design-mount--secondary {
-  margin-top: -2px;
-  margin-bottom: 4px;
-}
-
-.design-filter-label {
-  margin: 0 0 4px;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--ios-label-tertiary);
-}
-
-/* ─── 通用 Chip 栏（替代大磁贴/矩阵） ─── */
-.design-chip-bar {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 2px 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.design-chip-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.design-chip-bar--wrap {
-  flex-wrap: wrap;
-  overflow-x: visible;
-}
-
-.design-chip {
-  flex-shrink: 0;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 999px;
-  background: var(--ios-bg-elevated);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--ios-label-secondary);
-  white-space: nowrap;
-  cursor: pointer;
-  box-shadow: none;
-  border: 0.5px solid var(--ios-separator);
-  transition: background 0.15s, color 0.15s;
-}
-
-.design-chip.is-active {
-  background: var(--ios-label);
-  color: var(--on-accent);
-  border-color: transparent;
-}
-
-.design-chip--fac.is-active {
-  background: var(--chip-active-bg);
-  color: var(--on-accent);
-}
-
-.design-chip--locate {
-  background: var(--chip-active-bg);
-  color: var(--on-accent);
-  border-color: transparent;
-  font-weight: 650;
-}
-
-/* ─── d02 搜索直达 ─── */
-.design--d02 .search-box {
-  height: 40px;
-}
-
-.design--d02 .search-box input {
-  font-size: 0.9375rem;
-}
-
-.design--d02 .loc-search-row .loc-pill {
-  display: inline-flex;
-}
-
-/* ─── d06 定位行 ─── */
-.design-locate-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.design-locate-hint {
-  font-size: 0.6875rem;
-  color: var(--ios-label-tertiary);
-}
-
-/* ─── d10 办事引导 ─── */
-.design-wizard-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.design-wizard-step {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--ios-label-tertiary);
-  background: var(--search-bg);
-}
-
-.design-wizard-step.is-done {
-  color: var(--accent-dark);
-  background: var(--accent-light);
-}
-
-.design-wizard-step.is-current {
-  color: var(--on-accent);
-  background: var(--chip-active-bg);
-}
-
-.design-wizard-sep {
-  font-size: 0.625rem;
-  color: var(--ios-label-tertiary);
-}
-
-.design-wizard-tip {
-  margin: 4px 0 0;
-  font-size: 0.6875rem;
-  color: var(--ios-label-tertiary);
-}
-
-/* ─── 分区索引 d08 ─── */
-.design-group-section {
-  margin-bottom: 14px;
-}
-
-.design-group-heading {
-  margin: 0 0 6px;
-  padding: 0 2px;
-  font-size: 0.8125rem;
-  font-weight: 650;
-  color: var(--ios-label);
-  letter-spacing: 0;
-}
-
-.design-group-items {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .design-group-list .pagination-wrap {
   display: none;
 }
 
-/* ─── 卡片：信息密度提升、次要字号缩小 ─── */
-.has-design-variant .card-premium .card-inner {
-  padding: 10px 28px 10px 12px;
-}
-
-.has-design-variant .card-premium h3 {
-  font-size: 0.9375rem;
-  font-weight: 650;
-  margin: 3px 0 0;
-  -webkit-line-clamp: 2;
-}
-
-.has-design-variant .card-premium .card-category {
-  font-size: 0.625rem;
-  padding: 1px 5px;
-}
-
-.has-design-variant .card-premium .badge-distance,
-.has-design-variant .card-premium .badge-cost,
-.has-design-variant .card-premium .badge-seasonal {
-  font-size: 0.625rem;
-}
-
-.has-design-variant .card-premium .card-address {
-  font-size: 0.6875rem;
-  margin-top: 2px;
-}
-
-.has-design-variant .card-premium .card-hours {
-  display: block;
-  font-size: 0.6875rem;
-  color: var(--ios-label-tertiary);
-  margin: 1px 0 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.has-design-variant .card-premium .facility-tag {
-  font-size: 0.625rem;
-  padding: 2px 6px;
-}
-
-.has-design-variant .card-premium .card-district {
-  font-size: 0.6875rem;
-}
-
-.has-design-variant .card-premium .card-chevron {
-  font-size: 1rem;
-  right: 10px;
-}
-
-/* ─── 双列 Tile ─── */
+/* ─── 卡片形态（保留） ─── */
 .design-card-tile .card-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -315,13 +172,6 @@
   border-radius: var(--ios-radius-md);
   background: var(--ios-bg-elevated);
   box-shadow: var(--ios-shadow);
-  min-height: 0;
-}
-
-.design-card-tile .card-tile__icon {
-  font-size: 1.125rem;
-  margin-bottom: 4px;
-  line-height: 1;
 }
 
 .design-card-tile .card-tile h3 {
@@ -329,10 +179,6 @@
   font-size: 0.8125rem;
   font-weight: 650;
   line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .design-card-tile .card-tile__addr {
@@ -350,7 +196,6 @@
   color: var(--ios-label-tertiary);
 }
 
-/* ─── 行列表 ─── */
 .design-card-row .card-grid {
   gap: 4px;
 }
@@ -365,37 +210,19 @@
   box-shadow: var(--ios-shadow);
 }
 
-.card-row__dist,
-.card-row__cat {
+.card-row__dist {
   flex-shrink: 0;
   width: 36px;
-  padding-top: 2px;
   font-size: 0.6875rem;
   font-weight: 650;
   color: var(--ios-teal);
   text-align: center;
-  line-height: 1.2;
-}
-
-.card-row__cat {
-  color: var(--ios-label-tertiary);
-  font-weight: 600;
-}
-
-.card-row__body {
-  flex: 1;
-  min-width: 0;
 }
 
 .card-row__body h3 {
   margin: 0;
   font-size: 0.875rem;
   font-weight: 650;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .card-row__addr {
@@ -413,103 +240,70 @@
   color: var(--ios-label-tertiary);
 }
 
-.card-row__go {
-  flex-shrink: 0;
-  padding-top: 4px;
-  color: var(--ios-label-tertiary);
-  font-size: 0.875rem;
-}
-
-/* ─── 紧凑卡片 ─── */
 .card-compact {
   padding: 10px 12px !important;
   border-radius: var(--ios-radius-md) !important;
   background: var(--ios-bg-elevated);
-  box-shadow: var(--ios-shadow);
 }
 
 .card-compact h3 {
   margin: 0;
   font-size: 0.875rem;
   font-weight: 650;
-  line-height: 1.3;
 }
 
 .card-compact__addr {
   margin: 2px 0 0;
   font-size: 0.6875rem;
   color: var(--ios-label-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-compact__meta {
-  margin: 1px 0 0;
-  font-size: 0.625rem;
-  color: var(--ios-label-tertiary);
-}
-
-/* ─── 极简单行 ─── */
-.design--d09 .card-grid {
-  gap: 0;
 }
 
 .card-minimal {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
   padding: 11px 2px !important;
   border-bottom: 0.5px solid var(--ios-separator);
-  border-radius: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
 }
 
-.card-minimal__main {
-  flex: 1;
-  min-width: 0;
-}
-
 .card-minimal__title {
-  display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .card-minimal__sub {
-  display: block;
-  margin-top: 1px;
   font-size: 0.6875rem;
   color: var(--ios-label-tertiary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.card-minimal__meta {
-  flex-shrink: 0;
-  font-size: 0.625rem;
-  color: var(--ios-label-tertiary);
-  text-align: right;
-  max-width: 28%;
+.design-group-section {
+  margin-bottom: 14px;
 }
 
-/* ─── 原生 Chip 在设计变体下也缩小 ─── */
-.has-design-variant .value-perk,
-.has-design-variant .quick-scene {
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  font-weight: 600;
+.design-group-heading {
+  margin: 0 0 6px;
+  font-size: 0.8125rem;
+  font-weight: 650;
 }
 
-.has-design-variant .sort-tab {
-  font-size: 0.75rem;
-  padding: 6px 12px;
+.design-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.has-design-variant .card-premium .card-inner {
+  padding: 10px 28px 10px 12px;
+}
+
+.has-design-variant .card-premium h3 {
+  font-size: 0.9375rem;
+}
+
+.has-design-variant .card-premium .card-address {
+  font-size: 0.6875rem;
 }
 
 @media (min-width: 960px) {

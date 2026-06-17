@@ -16,15 +16,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/theme-switch.js?v=38"></script>
-  <script src="js/design-variants.js?v=38"></script>
-  <script src="js/copy-variants.js?v=38"></script>
-  <link rel="stylesheet" href="css/style.css?v=38" />
-  <link rel="stylesheet" href="css/design-system.css?v=38" />
-  <link rel="stylesheet" href="css/themes/variants.css?v=38" />
-  <link rel="stylesheet" href="css/copy-variants.css?v=38" />
-  <link rel="stylesheet" href="css/design-layouts.css?v=38" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=38" />
+  <script src="js/theme-switch.js?v=39"></script>
+  <script src="js/design-variants.js?v=39"></script>
+  <script src="js/copy-variants.js?v=39"></script>
+  <link rel="stylesheet" href="css/style.css?v=39" />
+  <link rel="stylesheet" href="css/design-system.css?v=39" />
+  <link rel="stylesheet" href="css/themes/variants.css?v=39" />
+  <link rel="stylesheet" href="css/copy-variants.css?v=39" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=39" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=39" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -42,7 +42,7 @@
     })(window, document, "clarity", "script", "x7dvhuedcl");
   </script>
 </head>
-<body data-page="map" class="app-ui">
+<body data-page="map" class="app-ui filter-toolbar-layout">
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="brand" id="brandHome">
@@ -86,8 +86,6 @@
       <div class="discover-sticky">
       <div class="discover-bar" id="discoverBar">
         <div class="discover-inner">
-          <div id="designPrimaryMount" class="design-mount" hidden></div>
-          <div id="designSecondaryMount" class="design-mount design-mount--secondary" hidden></div>
           <div class="geo-banner" id="geoBanner" hidden role="status"></div>
           <div class="loc-search-row">
             <button type="button" class="loc-pill" id="cityQuickBtn" aria-haspopup="dialog" aria-label="选择城市">
@@ -100,8 +98,9 @@
               <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
             </div>
           </div>
-          <div class="hero-perks" id="heroPerks" data-value-perks aria-label="设施快捷筛选"></div>
-          <div class="sort-tabs" role="tablist" aria-label="排序与筛选">
+          <div class="filter-toolbar" id="filterToolbar" role="toolbar" aria-label="筛选"></div>
+          <div class="hero-perks" id="heroPerks" data-value-perks hidden aria-hidden="true"></div>
+          <div class="sort-tabs" role="tablist" hidden aria-hidden="true">
             <button type="button" class="sort-tab is-active" data-sort="comprehensive" id="sortComprehensive" role="tab" aria-selected="true">综合</button>
             <button type="button" class="sort-tab" data-sort="distance" id="sortDistance" role="tab" aria-selected="false">距离</button>
             <button type="button" class="sort-tab sort-tab--filter" id="filterOpenBtn" aria-haspopup="dialog">
@@ -109,7 +108,7 @@
               <span class="filter-badge" id="filterBadge" hidden>0</span>
             </button>
           </div>
-          <div class="quick-scenes" id="quickScenes" aria-label="常见需求"></div>
+          <div class="quick-scenes" id="quickScenes" hidden aria-hidden="true"></div>
           <div class="active-filters" id="activeFilters" hidden></div>
         </div>
       </div>
@@ -273,22 +272,22 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=38"></script>
-  <script src="js/copy-switch.js?v=38"></script>
-  <script src="js/data-china-config.js?v=38"></script>
-  <script src="js/geo.js?v=38"></script>
-  <script src="js/map-nav.js?v=38"></script>
-  <script src="js/analytics.js?v=38"></script>
-  <script src="js/data-study-spaces.js?v=38"></script>
-  <script src="js/data-extra-resources.js?v=38"></script>
-  <script src="js/data-zhejiang-cities.js?v=38"></script>
-  <script src="js/data-zhejiang-expanded.js?v=38"></script>
-  <script src="js/data-china-nationwide.js?v=38"></script>
-  <script src="js/data.js?v=38"></script>
-  <script src="js/resource-coords.js?v=38"></script>
-  <script src="js/layout.js?v=38"></script>
-  <script src="js/design-engine.js?v=38"></script>
-  <script src="js/ui-premium.js?v=38"></script>
-  <script src="js/app.js?v=38"></script>
+  <script src="js/site-config.js?v=39"></script>
+  <script src="js/copy-switch.js?v=39"></script>
+  <script src="js/data-china-config.js?v=39"></script>
+  <script src="js/geo.js?v=39"></script>
+  <script src="js/map-nav.js?v=39"></script>
+  <script src="js/analytics.js?v=39"></script>
+  <script src="js/data-study-spaces.js?v=39"></script>
+  <script src="js/data-extra-resources.js?v=39"></script>
+  <script src="js/data-zhejiang-cities.js?v=39"></script>
+  <script src="js/data-zhejiang-expanded.js?v=39"></script>
+  <script src="js/data-china-nationwide.js?v=39"></script>
+  <script src="js/data.js?v=39"></script>
+  <script src="js/resource-coords.js?v=39"></script>
+  <script src="js/layout.js?v=39"></script>
+  <script src="js/design-engine.js?v=39"></script>
+  <script src="js/ui-premium.js?v=39"></script>
+  <script src="js/app.js?v=39"></script>
 </body>
 </html>

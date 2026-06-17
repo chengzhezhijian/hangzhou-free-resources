@@ -1,0 +1,13 @@
+---
+description: 修改完成后自动 git commit 并 push 到 GitHub Pages
+alwaysApply: true
+---
+
+# 自动提交与部署
+
+在本项目中完成代码修改并通过相关测试后：
+
+1. 直接 `git add`、`git commit`、`git push origin main`，无需等待用户确认
+2. 不要 push 含密钥的文件（`.env`、凭证等）
+3. 提交前若存在 `npm run test:all`，应先跑通再推送
+4. 提交信息简洁说明「为什么改」，遵循仓库既有风格

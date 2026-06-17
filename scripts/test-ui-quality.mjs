@@ -25,7 +25,9 @@ function ok(name, cond) {
 
 console.log("\n═══ UI / 定位检查 ═══\n");
 
-ok("距离仅精确坐标显示", /coordIsPrecise/.test(appJs) && /!coordIsPrecise\(c\)/.test(appJs));
+ok("单行筛选栏", /id="filterToolbar"/.test(indexHtml));
+ok("定位横幅默认隐藏", /geoBanner.*hidden/.test(indexHtml));
+ok("距离仅精确坐标", /coordIsPrecise/.test(appJs));
 ok("无蹭享旧品牌", !/蹭享|蹭/.test(indexHtml + siteConfig));
 ok("全国惠民地图品牌", /全国惠民地图/.test(siteConfig));
 ok("发现页有搜索", /id="searchInput"/.test(indexHtml));

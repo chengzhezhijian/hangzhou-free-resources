@@ -69,13 +69,13 @@ const premiumCss = fs.readFileSync(path.join(ROOT, "css/premium-ui.css"), "utf8"
 const designCss = fs.readFileSync(path.join(ROOT, "css/design-system.css"), "utf8");
 
 const UI_REQUIREMENTS = [
-  ["app-ui 壳层", /class="app-ui"/],
+  ["app-ui 壳层", /\bapp-ui\b/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=38/],
+  ["Premium 样式", /premium-ui\.css\?v=39/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
-  ["设计挂载点", /id="designPrimaryMount"/],
+  ["设计挂载点", /id="filterToolbar"/],
   ["设施标签容器", /id="heroPerks"/],
   ["iOS 分段排序", /sort-tabs/],
   ["底部 Tab", /bottom-nav/],
