@@ -51,9 +51,9 @@
   color: var(--ios-label-tertiary);
 }
 
-/* ─── 默认首页：隐藏筛选工具栏 + 双列紧凑卡片 ─── */
+/* ─── 默认首页：双列紧凑卡片 + 快捷下拉筛选 ─── */
 .app-ui.filter-toolbar-layout:not(.has-design-variant) #filterToolbar {
-  display: none !important;
+  display: block;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .card-grid {
@@ -149,7 +149,7 @@
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline {
@@ -174,7 +174,7 @@
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .search-filter-btn {
-  display: inline-flex;
+  display: none !important;
 }
 
 .search-filter-btn.is-active,
@@ -274,6 +274,19 @@
   color: var(--ios-label-tertiary, #8e8e93);
 }
 
+.filter-focus-flash {
+  animation: filter-focus-flash 0.45s ease;
+}
+
+@keyframes filter-focus-flash {
+  from {
+    background: rgba(13, 148, 136, 0.14);
+  }
+  to {
+    background: transparent;
+  }
+}
+
 /* ─── 单行筛选栏（美团/淘宝） ─── */
 .filter-toolbar {
   width: 100%;
@@ -283,9 +296,9 @@
 .filter-toolbar__scroll {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 8px;
   overflow-x: auto;
-  padding: 2px 0 4px;
+  padding: 6px 0 4px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   white-space: nowrap;
@@ -302,7 +315,7 @@
   justify-content: center;
   height: 30px;
   padding: 0 12px;
-  margin-right: 6px;
+  margin-right: 0;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -311,6 +324,35 @@
   color: var(--ios-label-secondary);
   cursor: pointer;
   line-height: 1;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick {
+  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.08));
+  border-radius: 999px;
+  background: var(--ios-bg-elevated, #fff);
+  color: var(--ios-label, #1c1c1e);
+  font-weight: 560;
+  height: 32px;
+  padding: 0 12px;
+  gap: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick .ft-caret {
+  opacity: 0.7;
+  margin-left: 1px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-active,
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-open {
+  border-color: rgba(13, 148, 136, 0.35);
+  color: var(--ios-teal);
+  background: var(--accent-light, rgba(13, 148, 136, 0.12));
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick.is-open .ft-caret {
+  transform: rotate(180deg) translateY(1px);
+  opacity: 0.9;
 }
 
 .ft-chip.is-active {

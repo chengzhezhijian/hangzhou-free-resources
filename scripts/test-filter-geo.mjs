@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 定位 / 未定位下「排序与筛选」交互的真实 DOM 集成测试（jsdom）
- * 覆盖：搜索框右侧筛选入口、排序段（综合/距离/评分）、定位成功/失败/已定位回放。
+ * 覆盖：搜索框下快捷筛选（下箭头）、排序段（综合/距离/评分）、定位成功/失败/已定位回放。
  */
 import fs from "fs";
 import path from "path";
@@ -134,7 +134,11 @@ async function run() {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    ok("未定位:搜索框右侧筛选入口存在", !!doc.getElementById("searchFilterBtn"));
+    ok("未定位:快捷筛选-场景按钮存在", !!doc.getElementById("quickSceneBtn"));
+    ok("未定位:快捷筛选-设施按钮存在", !!doc.getElementById("quickFacilityBtn"));
+    ok("未定位:快捷筛选-排序按钮存在", !!doc.getElementById("quickSortBtn"));
+    ok("未定位:快捷筛选-筛选按钮存在", !!doc.getElementById("quickFilterBtn"));
+    ok("未定位:快捷筛选带下箭头", doc.getElementById("quickSortBtn")?.textContent.includes("▾"));
     const seg = doc.getElementById("filterSortSegment");
     ok("未定位:排序段已渲染", !!seg && seg.querySelectorAll(".fss-opt").length === 3);
     ok(
@@ -159,7 +163,7 @@ async function run() {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    doc.getElementById("searchFilterBtn").click();
+    doc.getElementById("quickFilterBtn").click();
     await tick();
 
     ok("打开:筛选面板可见", doc.getElementById("filterDropPanel").hidden === false);
@@ -181,7 +185,7 @@ async function run() {
     const { doc, window } = boot({ geo: HANGZHOU });
     await tick();
 
-    doc.getElementById("searchFilterBtn").click();
+    doc.getElementById("quickSortBtn").click();
     await tick();
     const seg = doc.getElementById("filterSortSegment");
     seg.querySelector('.fss-opt[data-sort="distance"]').click();
@@ -210,7 +214,7 @@ async function run() {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    doc.getElementById("searchFilterBtn").click();
+    doc.getElementById("quickSortBtn").click();
     await tick();
     const seg = doc.getElementById("filterSortSegment");
     seg.querySelector('.fss-opt[data-sort="distance"]').click();
@@ -262,18 +266,18 @@ async function run() {
     const { doc } = boot({ geo: "error" });
     await tick();
 
-    doc.getElementById("searchFilterBtn").click();
+    doc.getElementById("quickFacilityBtn").click();
     await tick();
     const facility = doc.querySelector("#filterDropMount #facilityFilters .chip, #filterDropMount #facilityFilters button");
     if (facility) {
       facility.click();
       await tick();
-      const badge = doc.getElementById("searchFilterBadge");
-      ok("筛选联动:入口角标显示计数", badge && badge.hidden === false && Number(badge.textContent) >= 1);
-      ok("筛选联动:入口高亮", doc.getElementById("searchFilterBtn").classList.contains("is-active"));
+      const quickFilter = doc.getElementById("quickFilterBtn");
+      ok("筛选联动:快捷筛选展示计数", quickFilter && /筛选\(\d+\)/.test(quickFilter.textContent || ""));
+      ok("筛选联动:快捷筛选高亮", !!doc.getElementById("quickFacilityBtn")?.classList.contains("is-active"));
     } else {
-      ok("筛选联动:入口角标显示计数", false);
-      ok("筛选联动:入口高亮", false);
+      ok("筛选联动:快捷筛选展示计数", false);
+      ok("筛选联动:快捷筛选高亮", false);
       errors.push("未找到设施筛选按钮(facilityFilters 为空)");
     }
   }

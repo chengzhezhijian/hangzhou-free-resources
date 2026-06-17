@@ -67,6 +67,7 @@
   ];
 
   let toolbarDropKind = null;
+  let toolbarDropFocus = "more";
 
   const state = {
     group: "all",
@@ -479,10 +480,23 @@
   function renderFilterToolbar() {
     const el = document.getElementById("filterToolbar");
     if (!el || getDesign()) return;
-    // 默认首页：去掉设施标签行与「综合/距离/筛选」行，最大化列表展示
-    el.innerHTML = "";
-    el.hidden = true;
-    closeToolbarDrop();
+    const facilityCount = state.facilities.size;
+    const hasScene = state.category !== "all" || !!state.search;
+    const activeCount = countActiveFilters();
+    const quickChip = (id, key, label, active) =>
+      `<button type="button" id="${id}" class="ft-chip ft-chip--quick${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
+
+    el.hidden = false;
+    el.innerHTML = `<div class="filter-toolbar__scroll">
+      ${quickChip("quickSceneBtn", "scenes", hasScene ? "场景中" : "场景", hasScene)}
+      ${quickChip("quickFacilityBtn", "facilities", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
+      ${quickChip("quickSortBtn", "sort", sortModeLabel(), state.sortMode !== "comprehensive")}
+      ${quickChip("quickFilterBtn", "more", activeCount ? `筛选(${activeCount})` : "筛选", activeCount > 0)}
+    </div>`;
+
+    el.querySelectorAll("[data-quick]").forEach((btn) => {
+      btn.addEventListener("click", () => openFilterSheet(btn.dataset.quick || "more"));
+    });
   }
 
   function renderSortDropPanel() {
@@ -521,9 +535,27 @@
     document.documentElement.style.setProperty("--toolbar-drop-top", `${bottom}px`);
   }
 
-  function openToolbarDrop(kind) {
+  function focusFilterArea(area = "more") {
+    const idMap = {
+      sort: "filterSortSegment",
+      scenes: "categoryFilters",
+      facilities: "facilityFilters",
+      more: "sidebarInner",
+    };
+    const id = idMap[area] || idMap.more;
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.classList.add("filter-focus-flash");
+    window.setTimeout(() => target.classList.remove("filter-focus-flash"), 500);
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function openToolbarDrop(kind, focusArea = "more") {
     if (isFilterDesktop()) {
       if (kind === "filter") expandSidebar(true);
+      if (kind === "filter") {
+        window.setTimeout(() => focusFilterArea(focusArea), 40);
+      }
       return;
     }
     updateToolbarDropTop();
@@ -533,6 +565,7 @@
     if (!layer || !sortPanel || !filterPanel) return;
 
     toolbarDropKind = kind;
+    toolbarDropFocus = focusArea || "more";
     if (kind === "sort") {
       renderSortDropPanel();
       sortPanel.hidden = false;
@@ -546,6 +579,9 @@
     layer.hidden = false;
     document.body.classList.add("toolbar-drop-open");
     syncToolbarDropUi();
+    if (kind === "filter") {
+      window.setTimeout(() => focusFilterArea(toolbarDropFocus), 40);
+    }
   }
 
   function closeToolbarDrop() {
@@ -557,6 +593,7 @@
     if (filterPanel) filterPanel.hidden = true;
     document.body.classList.remove("toolbar-drop-open");
     toolbarDropKind = null;
+    toolbarDropFocus = "more";
     syncToolbarDropUi();
   }
 
@@ -567,6 +604,10 @@
     });
     document.querySelectorAll("#filterOpenBtn.ft-chip--filter").forEach((btn) => {
       btn.classList.toggle("is-open", toolbarDropKind === "filter");
+    });
+    document.querySelectorAll(".ft-chip--quick").forEach((btn) => {
+      const quick = btn.dataset.quick || "more";
+      btn.classList.toggle("is-open", toolbarDropKind === "filter" && toolbarDropFocus === quick);
     });
     document.getElementById("searchFilterBtn")?.classList.toggle("is-open", toolbarDropKind === "filter");
   }
@@ -1146,6 +1187,12 @@
         btn.innerHTML = `${label}<span class="ft-caret" aria-hidden="true">▾</span>`;
       }
     });
+    const quickSort = document.getElementById("quickSortBtn");
+    if (quickSort) {
+      quickSort.classList.toggle("is-active", state.sortMode !== "comprehensive");
+      const label = quickSort.querySelector(".ft-chip__label");
+      if (label) label.textContent = sortModeLabel();
+    }
   }
 
   function setSortMode(mode) {
@@ -1319,12 +1366,17 @@
     }
   }
 
-  function openFilterSheet() {
+  function openFilterSheet(focusArea = "more") {
     if (isFilterDesktop()) {
       expandSidebar(true);
+      window.setTimeout(() => focusFilterArea(focusArea), 40);
       return;
     }
-    toggleFilterDropdown();
+    if (toolbarDropKind === "filter" && toolbarDropFocus === (focusArea || "more")) {
+      closeToolbarDrop();
+      return;
+    }
+    openToolbarDrop("filter", focusArea);
   }
 
   function closeFilterSheet() {
