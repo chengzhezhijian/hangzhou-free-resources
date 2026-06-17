@@ -13,6 +13,7 @@ const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf
 const designLayouts = fs.readFileSync(path.join(ROOT, "css", "design-layouts.css"), "utf8");
 const premiumCss = fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8");
 const designSystem = fs.readFileSync(path.join(ROOT, "css", "design-system.css"), "utf8");
+const quickCategoryBlock = appJs.split('if (kind === "quick-category")')[1]?.split('if (kind === "quick-facility")')[0] || "";
 
 let pass = 0;
 let fail = 0;
@@ -40,6 +41,14 @@ ok(
   /quickSortBtn[\s\S]*quickSceneBtn[\s\S]*quickCategoryBtn[\s\S]*quickFacilityBtn/.test(appJs)
 );
 ok("类型下拉渲染", /kind === "quick-category"/.test(appJs));
+ok(
+  "类型下拉无图标",
+  /quick-drop-item__label/.test(quickCategoryBlock) && !/c\.icon/.test(quickCategoryBlock)
+);
+ok(
+  "类型下拉标签自适应",
+  /quick-drop-item__label/.test(designLayouts) && /labelEl\?\.textContent/.test(appJs)
+);
 ok("桌面端隐藏 sidebar CSS", /@media \(min-width: 960px\)[\s\S]*\.app-ui\.filter-toolbar-layout \.sidebar[\s\S]*display:\s*none/.test(designLayouts));
 ok("glass-nav 城市在品牌左侧", /glass-nav__row[\s\S]*?id="cityQuickBtn"[\s\S]*?nav-brand-mini/.test(indexHtml));
 ok("品牌间距黄金比例", /--nav-gap-base:\s*10px[\s\S]*--nav-brand-gap:\s*calc\(var\(--nav-gap-base\) \* var\(--phi\)\)/.test(designSystem));

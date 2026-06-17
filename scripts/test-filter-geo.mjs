@@ -246,6 +246,13 @@ async function run() {
     await tick();
     ok("类型下拉:标题正确", /类型/.test(quickPanel.textContent || ""));
     ok("类型下拉:含类型条目", quickPanel.querySelectorAll("[data-category]").length >= 2);
+    const catItem = quickPanel.querySelector("[data-category]:not([data-category='all'])");
+    ok(
+      "类型下拉:选项仅文字",
+      !!catItem?.querySelector(".quick-drop-item__label") &&
+        !/^[^\u4e00-\u9fa5a-zA-Z0-9]/.test(catItem.querySelector(".quick-drop-item__label").textContent.trim())
+    );
+    ok("类型下拉:字号变量已设", !!quickPanel.style.getPropertyValue("--drop-item-font-size"));
 
     doc.getElementById("quickFacilityBtn").click();
     await tick();

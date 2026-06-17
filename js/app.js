@@ -601,8 +601,8 @@
           ${cats
             .map((c) => {
               const active = state.category === c.id;
-              return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-category="${c.id}">
-                ${c.icon || ""} ${c.label}
+              return `<button type="button" class="quick-drop-item quick-drop-item--category${active ? " is-active" : ""}" data-category="${c.id}">
+                <span class="quick-drop-item__label">${c.label}</span>
                 ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
               </button>`;
             })
@@ -746,7 +746,8 @@
     const inner = Math.max(48, width - 36);
     let maxChars = 0;
     panel.querySelectorAll(".quick-drop-item").forEach((item) => {
-      const text = (item.textContent || "").replace(/✓/g, "").trim();
+      const labelEl = item.querySelector(".quick-drop-item__label");
+      const text = (labelEl?.textContent || item.textContent || "").replace(/✓/g, "").trim();
       maxChars = Math.max(maxChars, text.length);
     });
     if (!maxChars) return;

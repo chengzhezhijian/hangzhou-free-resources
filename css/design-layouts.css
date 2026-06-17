@@ -714,6 +714,11 @@
   padding: 0 10px 10px;
 }
 
+.quick-drop-item__label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .quick-drop-item {
   width: 100%;
   min-width: 0;
