@@ -506,11 +506,35 @@
   background: transparent;
   color: var(--ios-label, #1c1c1e);
   font-weight: 560;
-  height: 32px;
-  padding: 0 8px;
+  height: auto;
+  min-height: 32px;
+  padding: 5px 8px;
   gap: 2px;
   box-shadow: none;
   position: relative;
+  align-items: center;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick .ft-chip__label {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  font-size: var(--chip-label-font-size, clamp(0.6875rem, 2.8vw, 0.8125rem));
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--facility {
+  flex: 1 1 0;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--facility.has-count {
+  padding-inline: 6px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--facility .ft-chip__label {
+  font-size: var(--chip-label-font-size, clamp(0.65rem, 2.6vw, 0.8125rem));
 }
 
 .app-ui.filter-toolbar-layout:not(.has-design-variant) .ft-chip--quick + .ft-chip--quick::before {
@@ -643,6 +667,7 @@
   display: flex;
   flex-direction: column;
   max-height: min(72vh, calc(100dvh - var(--toolbar-drop-top, 0px) - 8px));
+  --drop-item-font-size: clamp(0.6875rem, calc(var(--toolbar-drop-anchor-width, 200px) / 16), 0.85rem);
 }
 
 .sort-drop-panel[hidden],
@@ -701,14 +726,15 @@
   border-radius: 8px;
   background: transparent;
   color: var(--ios-label);
-  font-size: 0.85rem;
+  font-size: var(--drop-item-font-size, clamp(0.6875rem, 2.8vw, 0.85rem));
   font-weight: 560;
   cursor: pointer;
   text-align: left;
-  overflow: hidden;
+  overflow: visible;
   white-space: normal;
   word-break: break-word;
   line-height: 1.35;
+  hyphens: auto;
 }
 
 .quick-drop-item:hover,
@@ -854,7 +880,7 @@ body.toolbar-drop-open {
   }
 
   .quick-drop-item {
-    font-size: 0.88rem;
+    font-size: var(--drop-item-font-size, clamp(0.72rem, calc(var(--toolbar-drop-anchor-width, 220px) / 15), 0.88rem));
     padding: 12px 12px;
   }
 

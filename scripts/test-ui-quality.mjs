@@ -69,6 +69,10 @@ ok("下拉锚点定位逻辑", /updateToolbarDropAnchor/.test(appJs));
 ok("下拉宽度贴合触发器", /triggerRect\?\.width|triggerW/.test(appJs) && !/\+ 88/.test(appJs));
 ok("下拉宽度 CSS 回退收窄", !/min\(420px/.test(designLayouts) && !/min\(320px, calc\(100% - 24px\)\)/.test(designLayouts));
 ok("下拉项长文案处理", /\.quick-drop-item[\s\S]*word-break/.test(designLayouts) && /\.sort-drop-item[\s\S]*text-overflow/.test(designLayouts));
+ok("下拉项换行非 ellipsis", /\.quick-drop-item\s*\{[^}]*white-space:\s*normal/.test(designLayouts) && !/\.quick-drop-item\s*\{[^}]*text-overflow:\s*ellipsis/.test(designLayouts));
+ok("下拉项字号变量", /--drop-item-font-size/.test(designLayouts) && /syncDropPanelFonts/.test(appJs));
+ok("设施按钮自适应 class", /ft-chip--facility/.test(appJs) && /has-count/.test(appJs) && /\.ft-chip--facility/.test(designLayouts));
+ok("工具栏标签字号变量", /--chip-label-font-size/.test(designLayouts) && /syncToolbarChipFonts/.test(appJs));
 ok(
   "下拉层移出 sticky",
   /scroll-main[\s\S]*?<\/div>\s*\n\s*<div class="toolbar-drop-layer" id="toolbarDropLayer"/.test(indexHtml)

@@ -251,6 +251,8 @@ async function run() {
     await tick();
     ok("设施下拉:标题正确", /设施/.test(quickPanel.textContent || ""));
     ok("设施下拉:含设施条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 3);
+    ok("设施按钮:含 ft-chip--facility", doc.getElementById("quickFacilityBtn")?.classList.contains("ft-chip--facility"));
+    ok("设施下拉:字号变量已设", !!quickPanel.style.getPropertyValue("--drop-item-font-size"));
 
     doc.getElementById("quickSortBtn").click();
     await tick();
@@ -387,6 +389,8 @@ async function run() {
       const facilityBtn = doc.getElementById("quickFacilityBtn");
       ok("筛选联动:设施按钮展示计数", facilityBtn && /设施\(\d+\)/.test(facilityBtn.textContent || ""));
       ok("筛选联动:设施按钮高亮", !!facilityBtn?.classList.contains("is-active"));
+      ok("筛选联动:设施按钮 has-count", !!facilityBtn?.classList.contains("has-count"));
+      ok("筛选联动:设施标签字号变量", !!facilityBtn?.style.getPropertyValue("--chip-label-font-size"));
     } else {
       ok("筛选联动:设施按钮展示计数", false);
       ok("筛选联动:设施按钮高亮", false);

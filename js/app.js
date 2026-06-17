@@ -59,6 +59,10 @@
   }
 
   const FILTER_DESKTOP_MQ = window.matchMedia("(min-width: 960px)");
+  const TOOLBAR_CHIP_FONT_MIN = 10.5;
+  const TOOLBAR_CHIP_FONT_MAX = 13;
+  const DROP_ITEM_FONT_MIN = 11;
+  const DROP_ITEM_FONT_MAX = 13.6;
 
   const SORT_OPTIONS = [
     { id: "comprehensive", label: "综合排序" },
@@ -483,21 +487,25 @@
     const facilityCount = state.facilities.size;
     const hasScene = state.category !== "all" || !!state.search;
     const hasCategory = state.category !== "all";
-    const quickChip = (id, key, label, active) =>
-      `<button type="button" id="${id}" class="ft-chip ft-chip--quick${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
+    const quickChip = (id, key, label, active, extraClass = "") =>
+      `<button type="button" id="${id}" class="ft-chip ft-chip--quick${extraClass}${active ? " is-active" : ""}" data-quick="${key}"><span class="ft-chip__label">${label}</span><span class="ft-caret" aria-hidden="true">▾</span></button>`;
+    const facilityLabel = facilityCount ? `设施(${facilityCount})` : "设施";
+    const facilityExtra = ` ft-chip--facility${facilityCount ? " has-count" : ""}`;
 
     el.hidden = false;
     el.innerHTML = `<div class="filter-toolbar__scroll filter-segment" role="group" aria-label="筛选">
       ${quickChip("quickSortBtn", "sort", sortModeLabel(), state.sortMode !== "comprehensive")}
       ${quickChip("quickSceneBtn", "scene", hasScene ? "场景中" : "场景", hasScene)}
       ${quickChip("quickCategoryBtn", "category", categoryToolbarLabel(), hasCategory)}
-      ${quickChip("quickFacilityBtn", "facility", facilityCount ? `设施(${facilityCount})` : "设施", facilityCount > 0)}
+      ${quickChip("quickFacilityBtn", "facility", facilityLabel, facilityCount > 0, facilityExtra)}
     </div>`;
 
     el.querySelectorAll("[data-quick]").forEach((btn) => {
       const quick = btn.dataset.quick;
       btn.addEventListener("click", () => openToolbarDrop(`quick-${quick}`, "more", btn));
     });
+    syncToolbarChipFonts();
+    window.requestAnimationFrame(() => syncToolbarChipFonts());
   }
 
   function renderSortDropPanel() {
@@ -691,11 +699,78 @@
     document.documentElement.style.setProperty("--toolbar-drop-top", `${top}px`);
   }
 
+  function fitElementFontSize(el, maxWidth, minPx, maxPx) {
+    if (!el || maxWidth <= 0) return maxPx;
+    let lo = minPx;
+    let hi = maxPx;
+    let best = minPx;
+    const prevSize = el.style.fontSize;
+    const prevWhiteSpace = el.style.whiteSpace;
+    el.style.whiteSpace = "nowrap";
+    while (hi - lo > 0.25) {
+      const mid = (lo + hi) / 2;
+      el.style.fontSize = `${mid}px`;
+      if (el.scrollWidth <= maxWidth) {
+        best = mid;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    el.style.fontSize = prevSize;
+    el.style.whiteSpace = prevWhiteSpace;
+    return best;
+  }
+
+  function syncToolbarChipFonts() {
+    const toolbar = document.getElementById("filterToolbar");
+    if (!toolbar || toolbar.hidden) return;
+    toolbar.querySelectorAll(".ft-chip--quick").forEach((btn) => {
+      const label = btn.querySelector(".ft-chip__label");
+      const caret = btn.querySelector(".ft-caret");
+      if (!label) return;
+      const caretW = caret?.offsetWidth || 12;
+      const padX = btn.classList.contains("ft-chip--facility") ? 14 : 16;
+      const avail = btn.clientWidth - caretW - padX - 4;
+      const px = fitElementFontSize(label, avail, TOOLBAR_CHIP_FONT_MIN, TOOLBAR_CHIP_FONT_MAX);
+      btn.style.setProperty("--chip-label-font-size", `${px}px`);
+    });
+  }
+
+  function syncDropPanelFonts() {
+    const panel = document.getElementById("quickDropPanel");
+    if (!panel || panel.hidden) return;
+    const anchorWidth = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--toolbar-drop-anchor-width")
+    );
+    const width = toolbarDropAnchor?.width || anchorWidth || panel.clientWidth;
+    const inner = Math.max(48, width - 36);
+    let maxChars = 0;
+    panel.querySelectorAll(".quick-drop-item").forEach((item) => {
+      const text = (item.textContent || "").replace(/✓/g, "").trim();
+      maxChars = Math.max(maxChars, text.length);
+    });
+    if (!maxChars) return;
+    const charWidth = DROP_ITEM_FONT_MAX * 0.88;
+    const charsPerLine = Math.max(4, Math.floor(inner / charWidth));
+    const estLines = Math.ceil(maxChars / charsPerLine);
+    let fontPx = DROP_ITEM_FONT_MAX;
+    if (estLines > 1) {
+      fontPx = Math.max(DROP_ITEM_FONT_MIN, DROP_ITEM_FONT_MAX - (estLines - 1) * 1.1);
+    }
+    if (maxChars * charWidth > inner * 2) {
+      fontPx = Math.min(fontPx, Math.max(DROP_ITEM_FONT_MIN, (inner * 2) / (maxChars * 0.92)));
+    }
+    panel.style.setProperty("--drop-item-font-size", `${fontPx}px`);
+  }
+
   function syncToolbarDropPosition() {
+    syncToolbarChipFonts();
     if (!toolbarDropKind) return;
     const trigger = resolveToolbarTrigger(toolbarDropKind);
     updateToolbarDropTop(trigger);
     updateToolbarDropAnchor(toolbarDropKind, trigger);
+    syncDropPanelFonts();
   }
 
   function resolveToolbarTrigger(kind) {
@@ -822,6 +897,12 @@
     layer.hidden = false;
     document.body.classList.add("toolbar-drop-open");
     syncToolbarDropUi();
+    syncDropPanelFonts();
+    syncToolbarChipFonts();
+    window.requestAnimationFrame(() => {
+      syncDropPanelFonts();
+      syncToolbarChipFonts();
+    });
     if (kind === "filter") {
       window.setTimeout(() => focusFilterArea(toolbarDropFocus), 40);
     }
@@ -842,7 +923,9 @@
     toolbarDropAnchor = null;
     document.documentElement.style.removeProperty("--toolbar-drop-anchor-left");
     document.documentElement.style.removeProperty("--toolbar-drop-anchor-width");
+    document.getElementById("quickDropPanel")?.style.removeProperty("--drop-item-font-size");
     syncToolbarDropUi();
+    window.requestAnimationFrame(() => syncToolbarChipFonts());
   }
 
   function syncToolbarDropUi() {
