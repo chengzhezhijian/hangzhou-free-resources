@@ -16,15 +16,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/theme-switch.js?v=41"></script>
-  <script src="js/design-variants.js?v=41"></script>
-  <script src="js/copy-variants.js?v=41"></script>
-  <link rel="stylesheet" href="css/style.css?v=41" />
-  <link rel="stylesheet" href="css/design-system.css?v=41" />
-  <link rel="stylesheet" href="css/themes/variants.css?v=41" />
-  <link rel="stylesheet" href="css/copy-variants.css?v=41" />
-  <link rel="stylesheet" href="css/design-layouts.css?v=41" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=41" />
+  <script src="js/theme-switch.js?v=42"></script>
+  <script src="js/design-variants.js?v=42"></script>
+  <script src="js/copy-variants.js?v=42"></script>
+  <link rel="stylesheet" href="css/style.css?v=42" />
+  <link rel="stylesheet" href="css/design-system.css?v=42" />
+  <link rel="stylesheet" href="css/themes/variants.css?v=42" />
+  <link rel="stylesheet" href="css/copy-variants.css?v=42" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=42" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=42" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -97,6 +97,12 @@
               <input type="search" id="searchInput" placeholder="搜自习、纳凉、WiFi、停车…" autocomplete="off" enterkeyhint="search" />
               <button type="button" id="searchClear" class="search-clear" hidden aria-label="清除">×</button>
             </div>
+            <button type="button" class="search-filter-btn" id="searchFilterBtn" aria-haspopup="dialog" aria-label="排序与筛选">
+              <span class="sfb-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </span>
+              <span class="filter-badge" id="searchFilterBadge" hidden>0</span>
+            </button>
           </div>
           <div class="filter-toolbar" id="filterToolbar" role="toolbar" aria-label="筛选"></div>
           <div class="toolbar-drop-layer" id="toolbarDropLayer" hidden>
@@ -104,10 +110,13 @@
             <div class="sort-drop-panel" id="sortDropPanel" hidden role="listbox" aria-label="排序方式"></div>
             <div class="filter-drop-panel" id="filterDropPanel" hidden role="dialog" aria-modal="true" aria-labelledby="filterDropTitle">
               <div class="filter-drop-header">
-                <h3 id="filterDropTitle">筛选</h3>
+                <h3 id="filterDropTitle">排序与筛选</h3>
                 <button type="button" class="sheet-close" id="filterDropClose" aria-label="关闭">×</button>
               </div>
-              <div class="filter-drop-body" id="filterDropMount"></div>
+              <div class="filter-drop-body">
+                <div class="filter-sort-segment" id="filterSortSegment" role="radiogroup" aria-label="排序方式"></div>
+                <div class="filter-drop-mount" id="filterDropMount"></div>
+              </div>
               <div class="filter-drop-footer">
                 <button type="button" class="btn-secondary" id="filterDropResetBtn">重置</button>
                 <button type="button" class="btn-primary" id="filterDropConfirmBtn">确定<span id="filterConfirmCount"></span></button>
@@ -287,22 +296,22 @@
     </div>
   </div>
 
-  <script src="js/site-config.js?v=41"></script>
-  <script src="js/copy-switch.js?v=41"></script>
-  <script src="js/data-china-config.js?v=41"></script>
-  <script src="js/geo.js?v=41"></script>
-  <script src="js/map-nav.js?v=41"></script>
-  <script src="js/analytics.js?v=41"></script>
-  <script src="js/data-study-spaces.js?v=41"></script>
-  <script src="js/data-extra-resources.js?v=41"></script>
-  <script src="js/data-zhejiang-cities.js?v=41"></script>
-  <script src="js/data-zhejiang-expanded.js?v=41"></script>
-  <script src="js/data-china-nationwide.js?v=41"></script>
-  <script src="js/data.js?v=41"></script>
-  <script src="js/resource-coords.js?v=41"></script>
-  <script src="js/layout.js?v=41"></script>
-  <script src="js/design-engine.js?v=41"></script>
-  <script src="js/ui-premium.js?v=41"></script>
-  <script src="js/app.js?v=41"></script>
+  <script src="js/site-config.js?v=42"></script>
+  <script src="js/copy-switch.js?v=42"></script>
+  <script src="js/data-china-config.js?v=42"></script>
+  <script src="js/geo.js?v=42"></script>
+  <script src="js/map-nav.js?v=42"></script>
+  <script src="js/analytics.js?v=42"></script>
+  <script src="js/data-study-spaces.js?v=42"></script>
+  <script src="js/data-extra-resources.js?v=42"></script>
+  <script src="js/data-zhejiang-cities.js?v=42"></script>
+  <script src="js/data-zhejiang-expanded.js?v=42"></script>
+  <script src="js/data-china-nationwide.js?v=42"></script>
+  <script src="js/data.js?v=42"></script>
+  <script src="js/resource-coords.js?v=42"></script>
+  <script src="js/layout.js?v=42"></script>
+  <script src="js/design-engine.js?v=42"></script>
+  <script src="js/ui-premium.js?v=42"></script>
+  <script src="js/app.js?v=42"></script>
 </body>
 </html>

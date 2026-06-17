@@ -145,6 +145,135 @@
   }
 }
 
+/* ─── 搜索框右侧轻量筛选入口（仅默认首页移动端） ─── */
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .loc-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-box--inline {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+.search-filter-btn {
+  display: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--ios-bg-elevated, #fff);
+  box-shadow: var(--ios-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-ui.filter-toolbar-layout:not(.has-design-variant) .search-filter-btn {
+  display: inline-flex;
+}
+
+.search-filter-btn.is-active,
+.search-filter-btn.is-open {
+  background: var(--ios-teal, #0d9488);
+}
+
+.search-filter-btn .sfb-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+}
+
+.search-filter-btn .sfb-icon span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ios-label, #1c1c1e);
+}
+
+.search-filter-btn .sfb-icon span:nth-child(1) {
+  width: 16px;
+}
+.search-filter-btn .sfb-icon span:nth-child(2) {
+  width: 11px;
+}
+.search-filter-btn .sfb-icon span:nth-child(3) {
+  width: 6px;
+}
+
+.search-filter-btn.is-active .sfb-icon span,
+.search-filter-btn.is-open .sfb-icon span {
+  background: #fff;
+}
+
+.search-filter-btn .filter-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+@media (min-width: 960px) {
+  .search-filter-btn {
+    display: none !important;
+  }
+}
+
+/* ─── 筛选面板顶部排序段（综合/距离/评分） ─── */
+.filter-sort-segment {
+  display: flex;
+  gap: 8px;
+  padding: 10px 0 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.08));
+  flex-wrap: wrap;
+}
+
+.fss-opt {
+  flex: 1;
+  min-width: 88px;
+  padding: 9px 10px;
+  border: 1px solid var(--ios-separator, rgba(0, 0, 0, 0.12));
+  border-radius: 9px;
+  background: var(--ios-bg, #f2f2f7);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ios-label, #1c1c1e);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.fss-opt.is-active {
+  border-color: var(--ios-teal, #0d9488);
+  background: var(--accent-light, rgba(13, 148, 136, 0.12));
+  color: var(--ios-teal, #0d9488);
+}
+
+.fss-opt .fss-hint {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--ios-label-tertiary, #8e8e93);
+}
+
 /* ─── 单行筛选栏（美团/淘宝） ─── */
 .filter-toolbar {
   width: 100%;

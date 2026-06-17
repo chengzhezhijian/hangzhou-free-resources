@@ -500,6 +500,20 @@
     });
   }
 
+  function renderFilterSortSegment() {
+    const seg = document.getElementById("filterSortSegment");
+    if (!seg) return;
+    seg.innerHTML = SORT_OPTIONS.map((o) => {
+      const active = state.sortMode === o.id;
+      const needGeo = o.needsGeo && !state.userLocation;
+      const hint = needGeo ? '<span class="fss-hint">点此定位</span>' : "";
+      return `<button type="button" class="fss-opt${active ? " is-active" : ""}" role="radio" aria-checked="${active}" data-sort="${o.id}">${o.label}${hint}</button>`;
+    }).join("");
+    seg.querySelectorAll("[data-sort]").forEach((btn) => {
+      btn.addEventListener("click", () => setSortMode(btn.dataset.sort));
+    });
+  }
+
   function updateToolbarDropTop() {
     const sticky = document.querySelector(".discover-sticky");
     if (!sticky) return;
@@ -524,6 +538,7 @@
       sortPanel.hidden = false;
       filterPanel.hidden = true;
     } else {
+      renderFilterSortSegment();
       updateFilterConfirmCount();
       sortPanel.hidden = true;
       filterPanel.hidden = false;
@@ -553,6 +568,7 @@
     document.querySelectorAll("#filterOpenBtn.ft-chip--filter").forEach((btn) => {
       btn.classList.toggle("is-open", toolbarDropKind === "filter");
     });
+    document.getElementById("searchFilterBtn")?.classList.toggle("is-open", toolbarDropKind === "filter");
   }
 
   function toggleSortDropdown() {
@@ -1092,13 +1108,19 @@
   }
 
   function updateFilterBadge() {
-    const badge = document.getElementById("filterBadge");
-    const filterBtn = document.getElementById("filterOpenBtn");
-    if (!badge) return;
     const n = countActiveFilters();
-    badge.textContent = n;
-    badge.hidden = n === 0;
-    if (filterBtn) filterBtn.classList.toggle("is-active", n > 0);
+    const badge = document.getElementById("filterBadge");
+    if (badge) {
+      badge.textContent = n;
+      badge.hidden = n === 0;
+    }
+    const searchBadge = document.getElementById("searchFilterBadge");
+    if (searchBadge) {
+      searchBadge.textContent = n;
+      searchBadge.hidden = n === 0;
+    }
+    document.getElementById("filterOpenBtn")?.classList.toggle("is-active", n > 0);
+    document.getElementById("searchFilterBtn")?.classList.toggle("is-active", n > 0);
   }
 
   function updateFilterConfirmCount() {
@@ -1128,17 +1150,23 @@
 
   function setSortMode(mode) {
     if (mode === "distance" && !state.userLocation) {
+      // 未定位选「距离最近」：先定位，成功后才切换排序；失败保持原排序，刷新面板避免卡在选中态
+      renderFilterSortSegment();
       runGeoLocate(true).then(() => {
         if (state.userLocation) {
           state.sortMode = "distance";
-          updateSortTabs();
+          state.page = 1;
+          updateContentHeader();
           renderCards();
+        } else {
+          renderFilterSortSegment();
         }
       });
       return;
     }
     state.sortMode = mode;
     updateSortTabs();
+    renderFilterSortSegment();
     updateContentHeader();
     state.page = 1;
     renderCards();
@@ -1222,6 +1250,7 @@
     syncCityQuickLabel();
     updateFilterBadge();
     updateSortTabs();
+    renderFilterSortSegment();
     renderActiveFilters();
     renderCityGrid();
     updateFilterConfirmCount();
@@ -1363,6 +1392,8 @@
       updateFilterConfirmCount();
     });
     document.getElementById("filterConfirmBtn")?.addEventListener("click", closeFilterSheet);
+
+    document.getElementById("searchFilterBtn")?.addEventListener("click", openFilterSheet);
 
     document.getElementById("sortComprehensive")?.addEventListener("click", () => {
       setSortMode("comprehensive");
