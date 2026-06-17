@@ -14,6 +14,7 @@ const designLayouts = fs.readFileSync(path.join(ROOT, "css", "design-layouts.css
 const premiumCss = fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8");
 const designSystem = fs.readFileSync(path.join(ROOT, "css", "design-system.css"), "utf8");
 const quickCategoryBlock = appJs.split('if (kind === "quick-category")')[1]?.split('if (kind === "quick-facility")')[0] || "";
+const quickFacilityBlock = appJs.split('if (kind === "quick-facility")')[1]?.split('panel.innerHTML = `')[1]?.split('return;')[0] || "";
 
 let pass = 0;
 let fail = 0;
@@ -81,6 +82,9 @@ ok("下拉项长文案处理", /\.quick-drop-item[\s\S]*word-break/.test(designL
 ok("下拉项换行非 ellipsis", /\.quick-drop-item\s*\{[^}]*white-space:\s*normal/.test(designLayouts) && !/\.quick-drop-item\s*\{[^}]*text-overflow:\s*ellipsis/.test(designLayouts));
 ok("下拉项字号变量", /--drop-item-font-size/.test(designLayouts) && /syncDropPanelFonts/.test(appJs));
 ok("设施按钮自适应 class", /ft-chip--facility/.test(appJs) && /has-count/.test(appJs) && /\.ft-chip--facility/.test(designLayouts));
+ok("设施下拉标签结构", /quick-drop-item__label/.test(quickFacilityBlock));
+ok("设施下拉无完成按钮", !/quickFacilityDone/.test(appJs));
+ok("重置按钮字号变量", /--drop-action-font-size/.test(designLayouts) && /quickFacilityReset/.test(appJs) && /DROP_ACTION_FONT_MIN/.test(appJs));
 ok("工具栏标签字号变量", /--chip-label-font-size/.test(designLayouts) && /syncToolbarChipFonts/.test(appJs));
 ok(
   "下拉层移出 sticky",

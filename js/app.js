@@ -63,6 +63,8 @@
   const TOOLBAR_CHIP_FONT_MAX = 13;
   const DROP_ITEM_FONT_MIN = 11;
   const DROP_ITEM_FONT_MAX = 13.6;
+  const DROP_ACTION_FONT_MIN = 10;
+  const DROP_ACTION_FONT_MAX = 13;
 
   const SORT_OPTIONS = [
     { id: "comprehensive", label: "综合排序" },
@@ -632,14 +634,13 @@
           ${FACILITY_FILTERS.map((f) => {
             const active = state.facilities.has(f.id);
             return `<button type="button" class="quick-drop-item${active ? " is-active" : ""}" data-facility="${f.id}">
-              ${f.label}
+              <span class="quick-drop-item__label">${f.label}</span>
               ${active ? '<span class="sort-drop-check" aria-hidden="true">✓</span>' : ""}
             </button>`;
           }).join("")}
         </div>
         <div class="quick-drop-actions">
           <button type="button" class="btn-secondary" id="quickFacilityReset">重置</button>
-          <button type="button" class="btn-primary" id="quickFacilityDone">完成</button>
         </div>`;
 
       panel.querySelectorAll("[data-facility]").forEach((btn) => {
@@ -652,6 +653,7 @@
           renderFacilityFilters();
           renderCards();
           renderQuickDropPanel("quick-facility");
+          window.requestAnimationFrame(() => syncDropPanelFonts());
         });
       });
       panel.querySelector("#quickFacilityReset")?.addEventListener("click", () => {
@@ -661,7 +663,6 @@
         renderCards();
         closeToolbarDrop();
       });
-      panel.querySelector("#quickFacilityDone")?.addEventListener("click", closeToolbarDrop);
       return;
     }
 
@@ -762,6 +763,13 @@
       fontPx = Math.min(fontPx, Math.max(DROP_ITEM_FONT_MIN, (inner * 2) / (maxChars * 0.92)));
     }
     panel.style.setProperty("--drop-item-font-size", `${fontPx}px`);
+    const resetBtn = panel.querySelector("#quickFacilityReset");
+    if (resetBtn) {
+      const padX = 20;
+      const avail = Math.max(24, resetBtn.clientWidth - padX);
+      const actionPx = fitElementFontSize(resetBtn, avail, DROP_ACTION_FONT_MIN, DROP_ACTION_FONT_MAX);
+      resetBtn.style.setProperty("--drop-action-font-size", `${actionPx}px`);
+    }
   }
 
   function syncToolbarDropPosition() {

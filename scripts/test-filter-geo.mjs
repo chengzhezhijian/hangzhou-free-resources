@@ -253,13 +253,23 @@ async function run() {
         !/^[^\u4e00-\u9fa5a-zA-Z0-9]/.test(catItem.querySelector(".quick-drop-item__label").textContent.trim())
     );
     ok("类型下拉:字号变量已设", !!quickPanel.style.getPropertyValue("--drop-item-font-size"));
+    const catPanelFontVar = quickPanel.style.getPropertyValue("--drop-item-font-size");
 
     doc.getElementById("quickFacilityBtn").click();
     await tick();
     ok("设施下拉:标题正确", /设施/.test(quickPanel.textContent || ""));
     ok("设施下拉:含设施条目", quickPanel.querySelectorAll(".quick-drop-item").length >= 3);
+    ok("设施下拉:无完成按钮", !doc.getElementById("quickFacilityDone"));
     ok("设施按钮:含 ft-chip--facility", doc.getElementById("quickFacilityBtn")?.classList.contains("ft-chip--facility"));
-    ok("设施下拉:字号变量已设", !!quickPanel.style.getPropertyValue("--drop-item-font-size"));
+    const facilityItem = quickPanel.querySelector("[data-facility]");
+    ok("设施下拉:选项含标签结构", !!facilityItem?.querySelector(".quick-drop-item__label"));
+    const facPanelFontVar = quickPanel.style.getPropertyValue("--drop-item-font-size");
+    ok("设施下拉:字号变量已设", !!facPanelFontVar);
+    ok("设施下拉:项字号变量在范围内", parseFloat(facPanelFontVar) >= 11 && parseFloat(facPanelFontVar) <= 13.6);
+    ok("设施下拉:与类型共用字号变量机制", !!catPanelFontVar && parseFloat(catPanelFontVar) >= 11);
+    const resetBtn = doc.getElementById("quickFacilityReset");
+    const resetFontVar = resetBtn?.style.getPropertyValue("--drop-action-font-size");
+    ok("设施下拉:重置字号变量已设", !!resetFontVar && parseFloat(resetFontVar) >= 10 && parseFloat(resetFontVar) <= 13);
 
     doc.getElementById("quickSortBtn").click();
     await tick();

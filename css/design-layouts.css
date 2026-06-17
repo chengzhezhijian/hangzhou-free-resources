@@ -759,10 +759,13 @@
   padding: 0 10px 10px;
 }
 
-.quick-drop-actions .btn-primary,
 .quick-drop-actions .btn-secondary {
   flex: 1;
+  width: 100%;
   min-height: 34px;
+  font-size: var(--drop-action-font-size, clamp(0.625rem, calc(var(--toolbar-drop-anchor-width, 200px) / 18), 0.8125rem));
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sort-drop-item:last-child {
@@ -897,7 +900,6 @@ body.toolbar-drop-open {
     padding-top: 10px;
   }
 
-  .quick-drop-actions .btn-primary,
   .quick-drop-actions .btn-secondary {
     min-height: 38px;
   }
