@@ -2229,7 +2229,7 @@ body:not(.app-ui) .feedback-fab {
     display: none;
   }
 
-  .feedback-fab {
+  .app-ui .feedback-fab {
     display: none;
   }
 

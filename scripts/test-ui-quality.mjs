@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import { JSDOM } from "jsdom";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CACHE_V = "73";
+const CACHE_V = "74";
 const appJs = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf8");
@@ -154,13 +154,15 @@ const expectedCssChain = [
 ok("site-stats 模块存在", fs.existsSync(path.join(ROOT, "js", "site-stats.js")));
 ok("子页引入 site-stats", new RegExp(`site-stats\\.js\\?v=${CACHE_V}`).test(menuPages));
 ok("子页引入 premium-ui", new RegExp(`premium-ui\\.css\\?v=${CACHE_V}`).test(menuPages));
-ok("子页 v=73", new RegExp(`design-system\\.css\\?v=${CACHE_V}`).test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
+ok("子页 v=74", new RegExp(`design-system\\.css\\?v=${CACHE_V}`).test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
 ok("场景页动态容器", /id="guideGrid"/.test(guideHtml) && /id="guideSceneChips"/.test(guideHtml));
 ok("说明页动态容器", /id="aboutGrid"/.test(aboutHtml) && /id="aboutPageDesc"/.test(aboutHtml));
 ok("工具页动态描述", /id="toolsPageDesc"/.test(toolsHtml) && /tools-section--site/.test(pagesJs));
 ok("反馈渠道区块", /id="feedbackChannels"/.test(feedbackHtml) && /feedback-channel-card/.test(pagesJs));
 ok("说明页无硬编码 2993", !/2993/.test(aboutHtml));
 ok("说明页无硬编码 72城", !/72\s*城/.test(aboutHtml) && !/72城/.test(aboutHtml));
+ok("子页引入 filter-shared", new RegExp(`filter-shared\\.js\\?v=${CACHE_V}`).test(menuPages));
+ok("菜单页无硬编码 72城", !/72\s*城/.test(menuPages) && !/72城/.test(menuPages));
 ok("菜单页无硬编码 2993", !/2993/.test(menuPages));
 ok("动态 tagline 占位", /\{cities\}/.test(siteConfig) && /SiteStats\.compute/.test(fs.readFileSync(path.join(ROOT, "js", "layout.js"), "utf8")));
 ok("pages 渲染 about", /function renderAbout/.test(pagesJs));
@@ -275,6 +277,38 @@ function bootDesktopIndex() {
     ok("桌面 discover 与 header 左缘对齐", false);
   }
 }
+
+// ─── H5 反馈 FAB ───
+function injectMobileStyles(doc) {
+  for (const file of [
+    "css/style.css",
+    "css/design-system.css",
+    "css/themes/variants.css",
+    "css/copy-variants.css",
+    "css/design-layouts.css",
+    "css/premium-ui.css",
+  ]) {
+    const style = doc.createElement("style");
+    style.textContent = fs.readFileSync(path.join(ROOT, file), "utf8");
+    doc.head.appendChild(style);
+  }
+}
+
+{
+  const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const dom = new JSDOM(html, { pretendToBeVisual: true, url: "https://localhost/" });
+  const { window } = dom;
+  Object.defineProperty(window, "innerWidth", { value: 375, configurable: true });
+  Object.defineProperty(window, "innerHeight", { value: 812, configurable: true });
+  injectMobileStyles(window.document);
+  const fab = window.document.getElementById("feedbackFab");
+  const fabStyle = fab && window.getComputedStyle(fab);
+  ok("H5 首页反馈 FAB DOM", !!fab);
+  ok("H5 反馈 FAB 非 hidden", fabStyle && fabStyle.display !== "none" && fabStyle.visibility !== "hidden");
+  ok("H5 反馈 FAB 为 inline-flex", fabStyle && fabStyle.display === "inline-flex");
+}
+
+ok("app-ui feedback-fab 完整样式", /\.app-ui \.feedback-fab[\s\S]*display:\s*inline-flex/.test(designSystem));
 
 const total = pass + fail;
 console.log(`UI/定位: ${pass}/${total} 通过`);

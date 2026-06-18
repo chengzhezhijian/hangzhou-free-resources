@@ -1,30 +1,28 @@
 /**
  * 全站数据统计 — 从 RESOURCES / 配置派生，避免文案硬编码过期
+ * 场景计数与首页 filterResources（默认「全部」城市）对齐
  */
 (function (global) {
-  function textPool(r) {
-    return [r.name, r.address, r.desc, r.note, r.categoryLabel, ...(r.tags || [])]
-      .filter(Boolean)
-      .join(" ");
+  function filterDeps(resources) {
+    return {
+      RESOURCES: resources,
+      RESOURCE_CATEGORIES:
+        typeof RESOURCE_CATEGORIES !== "undefined" ? RESOURCE_CATEGORIES : [],
+    };
   }
 
-  function matchGuide(resources, guide) {
-    let pool = resources;
-    if (guide.category && guide.category !== "all") {
-      pool = pool.filter((r) => r.category === guide.category);
-    }
-    if (guide.search) {
-      pool = pool.filter((r) => textPool(r).includes(guide.search));
-    }
-    return pool.length;
+  function getFilterShared() {
+    if (typeof FilterShared !== "undefined") return FilterShared;
+    if (typeof globalThis !== "undefined" && globalThis.FilterShared) return globalThis.FilterShared;
+    return null;
   }
 
-  function matchQuickScene(resources, scene) {
-    if (scene.search) {
-      return resources.filter((r) => textPool(r).includes(scene.search)).length;
+  function countSceneLikeHomepage(resources, scene) {
+    const shared = getFilterShared();
+    if (shared) {
+      return shared.countSceneFilter(filterDeps(resources), scene, "全部");
     }
-    if (!scene.category || scene.category === "all") return resources.length;
-    return resources.filter((r) => r.category === scene.category).length;
+    return resources.length;
   }
 
   function hasFacility(r, id) {
@@ -80,13 +78,19 @@
       coverageLine: `全国 ${formatCount(total)} 条收录 · ${cityCount} 城可查 · 浙江 ${hangzhou}+ 杭州细录`,
       sceneCounts: quickScenes.map((s) => ({
         label: s.label.replace(/^[^\s]+\s*/, ""),
-        count: matchQuickScene(resources, s),
+        count: countSceneLikeHomepage(resources, s),
         category: s.category,
         search: s.search,
       })),
       guideCounts: guides.map((g) => ({
         need: g.need,
-        count: g.category || g.search ? matchGuide(resources, g) : null,
+        count:
+          g.category || g.search
+            ? countSceneLikeHomepage(resources, {
+                category: g.category || "all",
+                search: g.search || "",
+              })
+            : null,
       })),
       perkStats: perks.map((p) => ({
         id: p.id,
@@ -104,5 +108,5 @@
     };
   }
 
-  global.SiteStats = { compute, matchGuide, matchQuickScene, formatCount };
+  global.SiteStats = { compute, countSceneLikeHomepage, formatCount };
 })(typeof window !== "undefined" ? window : globalThis);

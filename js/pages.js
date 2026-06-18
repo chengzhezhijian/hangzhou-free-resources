@@ -113,7 +113,8 @@
 
     const desc = document.getElementById("toolsPageDesc");
     if (desc && st) {
-      desc.textContent = `地图收录 ${st.formatCount(st.total)} 代表点位；公厕、书房等海量动态数据请跳转下方 ${st.externalToolCount} 个官方平台。`;
+      const gov = st.topCategories.find((c) => c.id === "gov_service");
+      desc.textContent = `地图已收录 ${st.formatCount(st.total)} 条（${st.cityCount} 城），含政务服务 ${SiteStats.formatCount(gov?.count || 0)} 条；公厕、书房等海量动态数据请跳转下方 ${st.externalToolCount} 个官方平台。`;
     }
 
     const scopes = ["全国", "全省"];
@@ -174,7 +175,7 @@
 
     const desc = document.getElementById("aboutPageDesc");
     if (desc) {
-      desc.textContent = `全国 ${st.cityCount} 城政府免费场地：自习、纳凉、WiFi、饮水、充电、政务办事。首页点场景标签或设施筛选即搜。`;
+      desc.textContent = `全国 ${st.cityCount} 城、${st.formatCount(st.total)} 条政府免费场地：自习、纳凉、WiFi、政务办事、法院查询等。首页点场景标签或设施筛选即搜。`;
     }
 
     const grid = document.getElementById("aboutGrid");
@@ -206,7 +207,7 @@
         </div>
         <div class="about-card">
           <h4>📋 数据来源</h4>
-          <p>政府公开信息、各地政务平台与官方地图整理。${categoryLines} 等 ${(typeof RESOURCE_CATEGORIES !== "undefined" ? RESOURCE_CATEGORIES : []).filter((c) => c.id !== "all").length} 类资源持续扩充中。</p>
+          <p>政府公开信息、各地政务平台与官方地图整理。当前含 ${categoryLines} 等 ${(typeof RESOURCE_CATEGORIES !== "undefined" ? RESOURCE_CATEGORIES : []).filter((c) => c.id !== "all").length} 类资源，政务与法院条目随 ${st.cityCount} 城代表点位持续扩充。</p>
         </div>
         <div class="about-card">
           <h4>数据说明</h4>

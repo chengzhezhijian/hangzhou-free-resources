@@ -662,8 +662,21 @@
 }
 
 .app-ui .feedback-fab {
+  display: inline-flex;
+  position: fixed;
+  right: 1rem;
   bottom: calc(var(--tab-bar-h) + 12px);
+  z-index: 210;
+  min-height: var(--touch-min, 44px);
+  padding: 0 1rem;
   background: var(--fab-bg);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
   box-shadow: var(--ios-shadow-lg);
 }
 

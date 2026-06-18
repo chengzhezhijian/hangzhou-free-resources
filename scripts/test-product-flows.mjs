@@ -72,7 +72,7 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /\bapp-ui\b/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=73/],
+  ["Premium 样式", /premium-ui\.css\?v=74/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
   ["设计挂载点", /id="filterToolbar"/],
@@ -156,6 +156,56 @@ assert("文案 AB 报告", fs.existsSync(path.join(ROOT, "docs/ab-copy-results.j
 assert("首页对比墙", fs.existsSync(path.join(ROOT, "labs/ab-homepage.html")));
 assert("整站设计对比墙", fs.existsSync(path.join(ROOT, "labs/ab-design.html")));
 assert("5套UX候选对比墙", fs.existsSync(path.join(ROOT, "labs/ux-candidates.html")));
+
+// ─── 6. 场景计数与 filterResources 对齐 ───
+console.log("\n═══ 场景计数 ═══");
+const statsCtx = vm.createContext({ globalThis: {} });
+const statsDataFiles = [
+  "js/data-china-config.js",
+  "js/data-study-spaces.js",
+  "js/data-extra-resources.js",
+  "js/data-zhejiang-cities.js",
+  "js/data-zhejiang-expanded.js",
+  "js/data-china-nationwide.js",
+  "js/data.js",
+];
+vm.runInContext(
+  statsDataFiles.map((f) => fs.readFileSync(path.join(ROOT, f), "utf8")).join("\n") +
+    "\n" +
+    fs.readFileSync(path.join(ROOT, "js/filter-shared.js"), "utf8") +
+    "\n" +
+    fs.readFileSync(path.join(ROOT, "js/site-stats.js"), "utf8"),
+  statsCtx
+);
+const computed = statsCtx.globalThis.SiteStats.compute();
+for (let i = 0; i < QS.length; i++) {
+  const scene = QS[i];
+  const expected = engine.filterResources({
+    group: "all",
+    subType: "all",
+    facilities: [],
+    city: "全部",
+    district: "全部",
+    featuredOnly: false,
+    freeOnly: false,
+    yearRoundOnly: false,
+    category: scene.category || "all",
+    search: scene.search || "",
+  }).length;
+  const actual = computed.sceneCounts[i]?.count;
+  assert(
+    `场景计数 ${scene.label.trim()}`,
+    actual === expected,
+    `SiteStats=${actual} filter=${expected}`
+  );
+}
+
+const indexHtmlAll = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+const guideHtmlAll = fs.readFileSync(path.join(ROOT, "guide.html"), "utf8");
+assert("首页 H5 反馈 FAB", /id="feedbackFab"/.test(indexHtmlAll));
+assert("场景页 H5 反馈 FAB", /id="feedbackFab"/.test(guideHtmlAll));
+assert("子页无过期 2993", !/2993/.test(guideHtmlAll + fs.readFileSync(path.join(ROOT, "about.html"), "utf8")));
+assert("子页无过期 72城", !/72城/.test(guideHtmlAll + fs.readFileSync(path.join(ROOT, "tools.html"), "utf8")));
 
 // ─── Report ───
 const total = runner.passed + runner.failed;
