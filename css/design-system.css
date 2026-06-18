@@ -14,7 +14,7 @@
   --ios-label-tertiary: rgba(60, 60, 67, 0.28);
   --ios-blue: #007aff;
   --ios-indigo: #5856d6;
-  --ios-teal: #0d9488;
+  --ios-teal: #007aff;
   --ios-radius-xs: 8px;
   --ios-radius-sm: 12px;
   --ios-radius-md: 16px;
@@ -28,9 +28,9 @@
   --ios-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
   --tab-bar-h: calc(52px + env(safe-area-inset-bottom, 0px));
   --nav-bar-h: 52px;
-  --accent: var(--ios-teal);
-  --accent-dark: #0f766e;
-  --accent-light: rgba(13, 148, 136, 0.1);
+  --accent: #007aff;
+  --accent-dark: #0051a8;
+  --accent-light: rgba(0, 122, 255, 0.12);
   --accent-alt: #14b8a6;
   --accent-secondary: var(--ios-indigo);
   --accent-tertiary: #a855f7;
@@ -43,13 +43,15 @@
   --search-bg: rgba(118, 118, 128, 0.1);
   --search-bg-focus: rgba(118, 118, 128, 0.14);
   --tab-bar-bg: rgba(255, 255, 255, 0.82);
-  --chip-active-bg: linear-gradient(135deg, var(--ios-teal), var(--accent-alt));
-  --chip-active-shadow: 0 2px 10px rgba(13, 148, 136, 0.22);
-  --btn-primary-bg: linear-gradient(135deg, var(--ios-teal), var(--accent-alt));
-  --btn-primary-shadow: 0 2px 10px rgba(13, 148, 136, 0.28);
-  --card-stripe: linear-gradient(90deg, var(--ios-teal), var(--ios-indigo), var(--accent-tertiary));
-  --fab-bg: linear-gradient(135deg, var(--ios-indigo), #7c3aed);
-  --nav-brand-gradient: linear-gradient(135deg, var(--ios-teal), var(--ios-indigo));
+  --chip-active-bg: linear-gradient(135deg, #007aff, var(--accent-alt));
+  --chip-active-shadow: 0 4px 16px rgba(0, 122, 255, 0.35);
+  --btn-primary-bg: linear-gradient(135deg, #007aff, var(--accent-alt));
+  --btn-primary-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+  --card-stripe: linear-gradient(90deg, #007aff, var(--ios-indigo), var(--accent-tertiary));
+  --fab-bg: linear-gradient(135deg, var(--ios-indigo), #a855f7);
+  --brand-gradient: linear-gradient(135deg, #007aff, #5856d6);
+  --nav-brand-gradient: var(--brand-gradient);
+  --brand-mark-bg: var(--brand-gradient);
   --title-weight: 700;
   --title-tracking: -0.03em;
   --body-weight: 500;
@@ -98,7 +100,39 @@
   gap: var(--nav-brand-gap);
 }
 
-.app-ui .nav-brand-mini {
+.app-ui .brand-mark,
+.app-ui .brand-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-mark-bg);
+  color: var(--on-accent);
+  font-weight: 700;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.app-ui .glass-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.app-ui .glass-nav__brand .nav-brand-mini {
+  flex: 1;
+}
+
+.app-ui .nav-brand-mini,
+.app-ui .brand h1 {
+  font-family: var(--theme-font);
   font-size: var(--nav-brand-font-size, clamp(0.875rem, 4vw, 1.05rem));
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -111,6 +145,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.app-ui .brand h1 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
 .app-ui .loc-pill {

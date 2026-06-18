@@ -57,7 +57,11 @@
     if (!brand || getComputedStyle(brand).display === "none" || !row?.clientWidth) return;
     const pillW = row.querySelector(".loc-pill")?.offsetWidth || 0;
     const gap = parseFloat(getComputedStyle(row).gap) || 10;
-    const avail = row.clientWidth - pillW - gap - 4;
+    const wrap = brand.closest(".glass-nav__brand");
+    const markW = wrap?.querySelector(".brand-mark")?.offsetWidth || 0;
+    const innerGap = wrap ? parseFloat(getComputedStyle(wrap).gap) || 8 : 0;
+    const rowAvail = row.clientWidth - pillW - gap - 4;
+    const avail = wrap ? rowAvail - markW - innerGap : rowAvail;
     if (avail <= 0) return;
     const px = fitElementFontSize(brand, avail, NAV_BRAND_FONT_MIN, NAV_BRAND_FONT_MAX);
     brand.style.setProperty("--nav-brand-font-size", `${px}px`);

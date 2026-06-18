@@ -514,7 +514,7 @@ async function run() {
     await tick();
     const navBtn = doc.getElementById("cityQuickBtn");
     const headerBtn = doc.getElementById("cityQuickBtnDesktop");
-    const brand = doc.querySelector(".glass-nav__row .nav-brand-mini");
+    const brand = doc.querySelector(".glass-nav__row .glass-nav__brand");
     ok("移动:glass-nav 城市按钮可见", isVisible(navBtn, window));
     const rowKids = [...doc.querySelector(".glass-nav__row").children];
     ok("移动:glass-nav 城市在品牌左侧", rowKids.indexOf(navBtn) < rowKids.indexOf(brand));

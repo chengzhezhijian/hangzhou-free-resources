@@ -123,6 +123,10 @@
     });
   }
 
+  function glassNavBrandHtml(brandName) {
+    return `<a href="index.html" class="glass-nav__brand"><span class="brand-mark" aria-hidden="true">惠</span><span class="nav-brand-mini">${brandName}</span></a>`;
+  }
+
   function initSubpageShell() {
     if (!document.body.classList.contains("subpage")) return;
 
@@ -136,7 +140,7 @@
       glassNav.setAttribute("aria-label", "页面顶栏");
       const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
       const brandName = cfg.siteBrandName || "全国惠民地图";
-      glassNav.innerHTML = `<div class="glass-nav__row"><span class="nav-brand-mini">${brandName}</span></div>`;
+      glassNav.innerHTML = `<div class="glass-nav__row">${glassNavBrandHtml(brandName)}</div>`;
 
       const scrollMain = document.createElement("div");
       scrollMain.className = "scroll-main";
