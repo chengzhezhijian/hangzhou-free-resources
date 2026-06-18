@@ -5,8 +5,10 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { JSDOM } from "jsdom";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const CACHE_V = "73";
 const appJs = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf8");
@@ -141,18 +143,18 @@ const brandShellJs = fs.readFileSync(path.join(ROOT, "js", "brand-shell.js"), "u
 const menuPages = guideHtml + toolsHtml + aboutHtml + feedbackHtml;
 const allPages = [indexHtml, guideHtml, toolsHtml, aboutHtml, feedbackHtml];
 const expectedCssChain = [
-  "css/style.css?v=72",
-  "css/design-system.css?v=72",
-  "css/themes/variants.css?v=72",
-  "css/copy-variants.css?v=72",
-  "css/design-layouts.css?v=72",
-  "css/premium-ui.css?v=72",
+  `css/style.css?v=${CACHE_V}`,
+  `css/design-system.css?v=${CACHE_V}`,
+  `css/themes/variants.css?v=${CACHE_V}`,
+  `css/copy-variants.css?v=${CACHE_V}`,
+  `css/design-layouts.css?v=${CACHE_V}`,
+  `css/premium-ui.css?v=${CACHE_V}`,
 ];
 
 ok("site-stats 模块存在", fs.existsSync(path.join(ROOT, "js", "site-stats.js")));
-ok("子页引入 site-stats", /site-stats\.js\?v=72/.test(menuPages));
-ok("子页引入 premium-ui", /premium-ui\.css\?v=72/.test(menuPages));
-ok("子页 v=72", /design-system\.css\?v=72/.test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
+ok("子页引入 site-stats", new RegExp(`site-stats\\.js\\?v=${CACHE_V}`).test(menuPages));
+ok("子页引入 premium-ui", new RegExp(`premium-ui\\.css\\?v=${CACHE_V}`).test(menuPages));
+ok("子页 v=73", new RegExp(`design-system\\.css\\?v=${CACHE_V}`).test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
 ok("场景页动态容器", /id="guideGrid"/.test(guideHtml) && /id="guideSceneChips"/.test(guideHtml));
 ok("说明页动态容器", /id="aboutGrid"/.test(aboutHtml) && /id="aboutPageDesc"/.test(aboutHtml));
 ok("工具页动态描述", /id="toolsPageDesc"/.test(toolsHtml) && /tools-section--site/.test(pagesJs));
@@ -164,13 +166,13 @@ ok("动态 tagline 占位", /\{cities\}/.test(siteConfig) && /SiteStats\.compute
 ok("pages 渲染 about", /function renderAbout/.test(pagesJs));
 ok("pages 场景计数", /guideCounts|countBadge/.test(pagesJs));
 ok("SiteStats 导出", /global\.SiteStats/.test(siteStatsJs));
-ok("首页引入 site-stats", /site-stats\.js\?v=72/.test(indexHtml));
+ok("首页引入 site-stats", new RegExp(`site-stats\\.js\\?v=${CACHE_V}`).test(indexHtml));
 ok("子页导航含反馈", /feedback\.html/.test(guideHtml + toolsHtml + aboutHtml));
 ok("反馈 Sheet dialog", /<dialog class="feedback-modal sheet-dialog"/.test(feedbackHtml));
 
 // ─── 设计统一（v70） ───
 const layoutJs = fs.readFileSync(path.join(ROOT, "js", "layout.js"), "utf8");
-ok("子页引入 adaptive-fonts", /adaptive-fonts\.js\?v=72/.test(menuPages));
+ok("子页引入 adaptive-fonts", new RegExp(`adaptive-fonts\\.js\\?v=${CACHE_V}`).test(menuPages));
 ok("layout 子页 shell", /initSubpageShell/.test(layoutJs) && /glass-nav/.test(layoutJs));
 ok("brand-shell 模块", /BrandShell/.test(brandShellJs) && /glassNavRowHtml/.test(brandShellJs));
 ok("layout 使用 brand-shell", /BrandShell/.test(layoutJs) && /initBrandShell/.test(layoutJs));
@@ -181,16 +183,16 @@ ok("子页无独立 bottom-nav 配色", !/\.app-ui\.subpage[\s\S]*\.bottom-nav[\
 ok("反馈 Sheet 紫渐变", /\.app-ui\.subpage \.feedback-modal[\s\S]*--detail-header-gradient/.test(premiumCss));
 ok("子页四页样式栈一致", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) =>
   expectedCssChain.every((css) => h.includes(css)) &&
-  /theme-switch\.js\?v=72/.test(h) &&
-  /design-variants\.js\?v=72/.test(h) &&
-  /copy-variants\.js\?v=72/.test(h)
+  new RegExp(`theme-switch\\.js\\?v=${CACHE_V}`).test(h) &&
+  new RegExp(`design-variants\\.js\\?v=${CACHE_V}`).test(h) &&
+  new RegExp(`copy-variants\\.js\\?v=${CACHE_V}`).test(h)
 ));
 ok("五页 CSS 链路一致", allPages.every((h) => expectedCssChain.every((css) => h.includes(css))));
 ok("五页 app-ui class", allPages.every((h) => /\bclass="app-ui/.test(h)));
 ok("子页 home-head 标题", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) => /class="home-head"/.test(h) && /class="display-title"/.test(h)));
 ok("反馈页无 legacy page-head", !/class="page-head"/.test(feedbackHtml));
-ok("子页引入 brand-shell", /brand-shell\.js\?v=72/.test(menuPages));
-ok("首页引入 adaptive-fonts", /adaptive-fonts\.js\?v=72/.test(indexHtml));
+ok("子页引入 brand-shell", new RegExp(`brand-shell\\.js\\?v=${CACHE_V}`).test(menuPages));
+ok("首页引入 adaptive-fonts", new RegExp(`adaptive-fonts\\.js\\?v=${CACHE_V}`).test(indexHtml));
 
 // ─── 品牌统一（v71） ───
 ok("单一品牌渐变 token", /--brand-gradient:\s*linear-gradient\(135deg,\s*#007aff,\s*#5856d6\)/.test(designSystem));
@@ -203,6 +205,76 @@ ok("layout 注入同款 glass-nav", /glassNavRowHtml/.test(brandShellJs) && /gla
 ok("style 子页 legacy 已隔离", !/^\s*\.page-head \{/m.test(styleCss) && !/^\s*\.subpage-main \{/m.test(styleCss));
 ok("子页顶区渐变", /\.app-ui\.subpage \.subpage-scroll::before/.test(fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8")));
 ok("首页惠字统一 class", /brand-mark brand-icon/.test(indexHtml));
+
+// ─── 桌面 header 布局（v73） ───
+ok("app-ui brand 无下划线", /\.app-ui \.brand[\s\S]*text-decoration:\s*none/.test(designSystem));
+ok("app-ui brand-sub 副标题色", /\.app-ui \.brand-sub[\s\S]*--ios-label-secondary/.test(designSystem));
+ok("app-ui header-inner 横向 flex", /\.app-ui \.header-inner[\s\S]*display:\s*flex[\s\S]*justify-content:\s*space-between/.test(designSystem));
+ok("app-ui header-leading 横向 flex", /\.app-ui \.header-leading[\s\S]*display:\s*flex[\s\S]*align-items:\s*center/.test(designSystem));
+ok("桌面 discover-sticky 对齐 scroll-main", /@media \(min-width: 960px\)[\s\S]*\.app-ui \.discover-sticky[\s\S]*margin-left:\s*-24px/.test(designSystem));
+ok("filter-toolbar main 无重复水平 padding", /@media \(min-width: 960px\)[\s\S]*\.app-ui\.filter-toolbar-layout \.main[\s\S]*padding-left:\s*0/.test(designSystem));
+ok("legacy 桌面 discover-inner 已隔离", !/@media \(min-width: 960px\)[\s\S]*^\s*\.discover-inner \{/m.test(styleCss));
+
+function injectDesktopStyles(doc) {
+  for (const file of [
+    "css/style.css",
+    "css/design-system.css",
+    "css/themes/variants.css",
+    "css/copy-variants.css",
+    "css/design-layouts.css",
+    "css/premium-ui.css",
+  ]) {
+    const style = doc.createElement("style");
+    style.textContent = fs.readFileSync(path.join(ROOT, file), "utf8");
+    doc.head.appendChild(style);
+  }
+  const override = doc.createElement("style");
+  override.textContent = [
+    ".app-ui .site-header{display:block!important}",
+    ".app-ui .glass-nav{display:none!important}",
+    ".app-ui.filter-toolbar-layout #cityQuickBtn{display:none!important}",
+    ".app-ui.filter-toolbar-layout .loc-pill--header{display:inline-flex!important}",
+  ].join("");
+  doc.head.appendChild(override);
+}
+
+function bootDesktopIndex() {
+  const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const dom = new JSDOM(html, { pretendToBeVisual: true, url: "https://localhost/" });
+  const { window } = dom;
+  Object.defineProperty(window, "innerWidth", { value: 1280, configurable: true });
+  Object.defineProperty(window, "innerHeight", { value: 800, configurable: true });
+  injectDesktopStyles(window.document);
+  return { window, doc: window.document };
+}
+
+{
+  const { window, doc } = bootDesktopIndex();
+  const brand = doc.getElementById("brandHome");
+  const headerInner = doc.querySelector(".header-inner");
+  const discoverInner = doc.querySelector(".discover-inner");
+  const headerLeading = doc.querySelector(".header-leading");
+  const brandStyle = brand && window.getComputedStyle(brand);
+  const h1Style = brand?.querySelector("h1") && window.getComputedStyle(brand.querySelector("h1"));
+  const subStyle = brand?.querySelector(".brand-sub") && window.getComputedStyle(brand.querySelector(".brand-sub"));
+  const headerStyle = headerInner && window.getComputedStyle(headerInner);
+  const leadingStyle = headerLeading && window.getComputedStyle(headerLeading);
+
+  ok("桌面 brand 无 text-decoration", brandStyle && brandStyle.textDecorationLine === "none");
+  ok("桌面 h1 渐变字 color transparent", h1Style && h1Style.color === "rgba(0, 0, 0, 0)");
+  ok("桌面 brand-sub 无下划线", subStyle && subStyle.textDecorationLine === "none");
+  ok("桌面 header-inner 为 flex", headerStyle && headerStyle.display === "flex");
+  ok("桌面 header-leading 为 flex", leadingStyle && leadingStyle.display === "flex");
+
+  if (headerInner && discoverInner) {
+    const headerRect = headerInner.getBoundingClientRect();
+    const discoverRect = discoverInner.getBoundingClientRect();
+    const delta = Math.abs(discoverRect.left - headerRect.left);
+    ok("桌面 discover 与 header 左缘对齐", delta <= 2);
+  } else {
+    ok("桌面 discover 与 header 左缘对齐", false);
+  }
+}
 
 const total = pass + fail;
 console.log(`UI/定位: ${pass}/${total} 通过`);

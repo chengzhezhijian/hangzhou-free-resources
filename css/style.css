@@ -2154,11 +2154,11 @@ body:not(.app-ui) .feedback-fab {
     font-size: 1.75rem;
   }
 
-  .discover-inner {
+  body:not(.app-ui) .discover-inner {
     padding: 0.75rem 1.5rem;
   }
 
-  .main {
+  body:not(.app-ui) .main {
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 1.5rem;
@@ -2166,14 +2166,14 @@ body:not(.app-ui) .feedback-fab {
     align-items: start;
   }
 
-  .sidebar {
+  body:not(.app-ui) .sidebar {
     display: block;
     position: sticky;
     top: calc(var(--header-h) + 120px);
     padding: 0;
   }
 
-  .loc-search-row {
+  body:not(.app-ui) .loc-search-row {
     max-width: 520px;
   }
 
@@ -2193,7 +2193,7 @@ body:not(.app-ui) .feedback-fab {
     padding-left: 2.25rem;
   }
 
-  .discover-inner .search-box--inline::before {
+  body:not(.app-ui) .discover-inner .search-box--inline::before {
     content: "⌕";
     position: absolute;
     left: 0.85rem;
@@ -2204,20 +2204,20 @@ body:not(.app-ui) .feedback-fab {
     z-index: 1;
   }
 
-  .discover-inner .search-box--inline {
+  body:not(.app-ui) .discover-inner .search-box--inline {
     position: relative;
     max-width: 520px;
   }
 
-  .sidebar-head {
+  body:not(.app-ui) .sidebar-head {
     display: none;
   }
 
-  .sidebar-inner {
+  body:not(.app-ui) .sidebar-inner {
     padding: 1.1rem;
   }
 
-  .filter-block--desktop-city {
+  body:not(.app-ui) .filter-block--desktop-city {
     display: block;
   }
 
