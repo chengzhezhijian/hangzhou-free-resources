@@ -19,6 +19,8 @@ const MapNav = (function () {
     charging: "充电桩",
     wifi_pub: "公共WiFi",
     policy: "政务服务中心",
+    gov_service: "政务服务中心",
+    court: "人民法院",
     legal: "法律援助",
     training: "职业培训",
   };
@@ -37,6 +39,8 @@ const MapNav = (function () {
     legal: "法律援助",
     training: "职业培训",
     policy: "政务服务中心",
+    gov_service: "政务服务中心",
+    court: "人民法院",
   };
 
   const WEBSITE_ONLY_TOOLS = [

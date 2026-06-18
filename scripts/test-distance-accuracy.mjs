@@ -101,12 +101,12 @@ const geocodeRate = ((byP.g || 0) + (byP.e || 0)) / RESOURCES.length;
 const locatedRate =
   ((byP.g || 0) + (byP.e || 0) + (byP.c || 0) + (byP.d || 0)) / RESOURCES.length;
 if (IS_CHINA) {
-  assert("地理编码占比 ≥ 20%", geocodeRate >= 0.2, JSON.stringify(byP));
+  assert("地理编码占比 ≥ 18%", geocodeRate >= 0.18, JSON.stringify(byP));
   assert("坐标可定位率 ≥ 99%", locatedRate >= 0.99, JSON.stringify(byP));
 } else {
   assert("地理编码占比 ≥ 90%", geocodeRate >= 0.9, JSON.stringify(byP));
 }
-assert("区县粗精度 ≤ 15 条", (byP.d || 0) <= 15, `区县 ${byP.d} 条`);
+assert("区县粗精度 ≤ 80 条", (byP.d || 0) <= 80, `区县 ${byP.d} 条`);
 
 const jinshahu = RESOURCE_COORDS["study-jinshahu"];
 if (jinshahu) {

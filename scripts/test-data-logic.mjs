@@ -118,7 +118,7 @@ function filter(state) {
 // ─── 1. 常量与配置 ───
 section("常量与配置");
 
-assertGte("资源总数 ≥ 11000", RESOURCES.length, 11000);
+assertGte("资源总数 ≥ 13000", RESOURCES.length, 13000);
 assertGte("PREFECTURE_CITIES ≥ 100", PREFECTURE_CITIES.length, 100);
 assert("CITY_PICKER 不含「全国」", !CITY_PICKER.includes("全国"));
 assert("CITY_PICKER 含「全部」", CITY_PICKER.includes("全部"));
@@ -254,7 +254,7 @@ for (const city of PREFECTURE_CITIES) {
       engine.resourceCity(r) !== "全国"
   );
   assert(`${city} 筛选池无他市泄漏`, leaked.length === 0);
-  const minPool = city === "杭州" ? 400 : 80;
+      const minPool = city === "杭州" ? 500 : 98;
   assertGte(`${city} 筛选池 ≥ 本地`, pool.length, minPool);
 }
 
@@ -292,6 +292,10 @@ const searchCases = [
   { q: "露营", city: "全部", min: 600, label: "全省搜露营" },
   { q: "法律", city: "全部", min: 600, label: "全省搜法律" },
   { q: "培训", city: "全部", min: 600, label: "全省搜培训" },
+  { q: "政务", city: "全部", min: 1500, label: "全省搜政务" },
+  { q: "市民之家", city: "全部", min: 100, label: "全省搜市民之家" },
+  { q: "法院", city: "全部", min: 700, label: "全省搜法院" },
+  { q: "人社局", city: "全部", min: 100, label: "全省搜人社局" },
 ];
 
 for (const { q, city, min, label } of searchCases) {
@@ -450,10 +454,10 @@ for (const t of EXTERNAL_TOOLS) {
 section("黄金场景计数");
 
 const golden = [
-  { state: { city: "全部" }, min: 11000, max: 11500, label: "默认全量" },
-  { state: { city: "杭州" }, min: 400, max: 480, label: "杭州筛选池" },
-  { state: { city: "北京" }, min: 90, max: 130, label: "北京筛选池" },
-  { state: { city: "上海" }, min: 90, max: 130, label: "上海筛选池" },
+  { state: { city: "全部" }, min: 13000, max: 14000, label: "默认全量" },
+  { state: { city: "杭州" }, min: 500, max: 580, label: "杭州筛选池" },
+  { state: { city: "北京" }, min: 110, max: 150, label: "北京筛选池" },
+  { state: { city: "上海" }, min: 110, max: 150, label: "上海筛选池" },
   { state: { search: "自习", city: "全部" }, min: 1200, max: 2800, label: "全国自习" },
   { state: { category: "reading", city: "杭州" }, min: 220, max: 240, label: "杭州书房分类" },
   { state: { category: "parking", city: "全部" }, min: 700, max: 800, label: "停车分类" },
@@ -462,8 +466,12 @@ const golden = [
   { state: { category: "sports", city: "全部" }, min: 700, max: 800, label: "体育分类" },
   { state: { category: "charging", city: "全部" }, min: 700, max: 800, label: "充电分类" },
   { state: { category: "policy", city: "全部" }, min: 700, max: 850, label: "政策分类" },
+  { state: { category: "gov_service", city: "全部" }, min: 1500, max: 1650, label: "政务服务分类" },
+  { state: { category: "court", city: "全部" }, min: 800, max: 900, label: "法院分类" },
   { state: { category: "legal", city: "全部" }, min: 600, max: 680, label: "法律分类" },
   { state: { category: "training", city: "全部" }, min: 600, max: 680, label: "培训分类" },
+  { state: { category: "gov_service", city: "杭州" }, min: 45, max: 60, label: "杭州政务服务" },
+  { state: { category: "court", city: "杭州" }, min: 28, max: 40, label: "杭州法院" },
 ];
 
 for (const { state, min, max, label } of golden) {

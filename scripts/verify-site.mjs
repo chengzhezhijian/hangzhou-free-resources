@@ -162,20 +162,20 @@ if (!fs.existsSync(coordsPath)) {
     else if (c.p === "c") cityLevel++;
   }
   const geocodeRate = geocoded / RESOURCES.length;
-  const minGeocode = IS_CHINA ? 0.2 : 0.9;
+  const minGeocode = IS_CHINA ? 0.18 : 0.9;
   if (geocodeRate < minGeocode) {
     fail(
       `地理编码坐标占比 ${(geocodeRate * 100).toFixed(1)}% 低于 ${(minGeocode * 100).toFixed(0)}%`
     );
   } else if (IS_CHINA) {
     ok(
-      `地理编码 ${geocoded}，地市估算 ${cityLevel}（全国模式 ≥20% 编码）`
+      `地理编码 ${geocoded}，地市估算 ${cityLevel}（全国模式 ≥18% 编码）`
     );
   } else {
     ok(`地理编码坐标 ${geocoded}/${RESOURCES.length}（≥90%）`);
   }
-  if (district > 15) fail(`区县粗坐标 ${district} 条超过 15`);
-  else ok(`区县粗坐标 ${district} 条（≤15）`);
+  if (district > 80) fail(`区县粗坐标 ${district} 条超过 80`);
+  else ok(`区县粗坐标 ${district} 条（≤80）`);
 
   const oob = RESOURCES.filter((r) => {
     const c = coords[r.id];

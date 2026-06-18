@@ -194,11 +194,12 @@ function ok(name, cond) {
 async function run() {
   const hzParkCount = filteredCount({ city: "杭州", category: "park" });
   const hzAllCount = filteredCount({ city: "杭州" });
+  const hzTotalPages = expectedPages(hzAllCount);
   const allCount = filteredCount({ city: "全部" });
 
   ok("数据:杭州+公园 ≥25", hzParkCount >= 25);
   ok("数据:杭州全量 > 公园", hzAllCount > hzParkCount);
-  ok("数据:默认全量 ≥11000", allCount >= 11000);
+  ok("数据:默认全量 ≥13000", allCount >= 13000);
 
   // ── 杭州+公园：页数应与筛选结果一致 ──
   {
@@ -223,7 +224,7 @@ async function run() {
     await selectCity(doc, "杭州");
     await goNextPage(doc);
     await goNextPage(doc);
-    ok("复现:杭州第3页", pageInfo(doc) === "3 / 10");
+    ok("复现:杭州第3页", pageInfo(doc) === `3 / ${hzTotalPages}`);
 
     await selectCategory(doc, "park");
     ok("复现:筛选后分页 1/1", pageInfo(doc) === "1 / 1");
@@ -247,7 +248,7 @@ async function run() {
     await selectCity(doc, "杭州");
     await goNextPage(doc);
     await goNextPage(doc);
-    ok("切城:杭州第3页", pageInfo(doc) === "3 / 10");
+    ok("切城:杭州第3页", pageInfo(doc) === `3 / ${hzTotalPages}`);
 
     await selectCity(doc, "北京");
     const beijingCount = filteredCount({ city: "北京" });
@@ -281,7 +282,7 @@ async function run() {
     input.dispatchEvent(new window.Event("input", { bubbles: true }));
     await wait(280);
     ok("搜索:回到第1页", pageInfo(doc).startsWith("1 /"));
-    ok("搜索:总页数≤杭州10页", totalPagesFromInfo(pageInfo(doc)) <= expectedPages(hzAllCount));
+    ok("搜索:总页数≤杭州全量页数", totalPagesFromInfo(pageInfo(doc)) <= hzTotalPages);
   }
 
   // ── 场景快捷项后页码重置 ──
@@ -317,7 +318,7 @@ async function run() {
     await wait(100);
     await selectCity(doc, "杭州");
     const total = expectedPages(hzAllCount);
-    ok("末页:总页数=10量级", total === expectedPages(hzAllCount));
+    ok("末页:总页数=杭州全量页数", total === hzTotalPages);
 
     const prev = doc.querySelector('#pagination [data-page="prev"]');
     const next = doc.querySelector('#pagination [data-page="next"]');

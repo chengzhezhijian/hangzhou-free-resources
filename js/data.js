@@ -19,6 +19,8 @@ const RESOURCE_CATEGORIES = [
   { id: "charging", label: "充电", icon: "🔌", group: "amenity" },
   { id: "wifi_pub", label: "公共WiFi", icon: "📶", group: "amenity" },
   { id: "policy", label: "免费政策", icon: "📋", group: "policy" },
+  { id: "gov_service", label: "政务服务", icon: "🏢", group: "policy" },
+  { id: "court", label: "法院", icon: "🏛", group: "policy" },
   { id: "legal", label: "法律咨询", icon: "⚖", group: "policy" },
   { id: "training", label: "职业培训", icon: "🎓", group: "policy" },
 ];
@@ -49,6 +51,8 @@ const CATEGORY_DISPLAY_ORDER = [
   "camping",
   "wifi_pub",
   "policy",
+  "gov_service",
+  "court",
   "legal",
   "training",
 ];
@@ -132,7 +136,7 @@ const SCENE_GUIDES = [
   { need: "急找厕所", pick: "地图公厕工具 + 当地政务", alt: "选城市后可筛具体点位", category: "toilet" },
   { need: "手机或电车要充电", pick: "充电站 / 爱心驿家", alt: "筛「可充电」或点充电标签", category: "charging" },
   { need: "想免费运动", pick: "公共体育馆 / 校园场地", alt: "节假日部分场馆免费，各地公告为准", category: "sports" },
-  { need: "刚到一座城市", pick: "点左上角选城市或开启定位", alt: "72 城代表点位 + 全国官方工具" },
+  { need: "刚到一座城市", pick: "点左上角选城市或开启定位", alt: "全国代表点位 + 当地官方查询工具" },
 ];
 
 const EXTERNAL_TOOLS = [
