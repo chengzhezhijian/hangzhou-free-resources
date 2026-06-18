@@ -612,27 +612,354 @@
   padding-bottom: calc(var(--tab-bar-h) + 16px);
 }
 
+.app-ui {
+  padding-bottom: 0;
+}
+
+/* ─── Subpage shell（与发现页同一 glass-nav / 底栏 / 卡片调性） ─── */
+.app-ui.subpage .scroll-main {
+  flex: 1;
+  padding: 0 16px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-ui.subpage .subpage-main {
+  max-width: none;
+  margin: 0;
+  padding: 8px 0 0;
+}
+
+.app-ui.subpage .subpage-main--center {
+  text-align: center;
+}
+
+.app-ui.subpage .page-head {
+  padding: 8px 0 16px;
+  margin-bottom: 0;
+}
+
+.app-ui.subpage .page-head h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  font-weight: var(--title-weight);
+  line-height: 1.12;
+  letter-spacing: var(--title-tracking);
+}
+
+.app-ui.subpage .section-desc {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ios-label-secondary);
+  line-height: 1.45;
+}
+
+.app-ui.subpage .guide-scene-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.app-ui.subpage .guide-scene-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ios-label-secondary);
+  text-decoration: none;
+  border: none;
+  border-radius: var(--ios-radius-sm);
+  background: var(--ios-bg-elevated);
+  box-shadow: var(--ios-shadow);
+  transition: transform 0.15s var(--ios-spring);
+}
+
+.app-ui.subpage .guide-scene-chip:active {
+  transform: scale(0.96);
+}
+
+.app-ui.subpage .guide-scene-chip em {
+  font-style: normal;
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--ios-teal);
+}
+
+.app-ui.subpage .guide-grid,
+.app-ui.subpage .tools-grid,
+.app-ui.subpage .about-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-ui.subpage .guide-card,
+.app-ui.subpage .tool-card,
+.app-ui.subpage .about-card {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 16px 16px;
+  background: var(--ios-bg-elevated);
+  border: none;
+  border-radius: var(--ios-radius-lg);
+  box-shadow: var(--ios-shadow);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.18s var(--ios-spring);
+}
+
+.app-ui.subpage .guide-card::before,
+.app-ui.subpage .tool-card::before,
+.app-ui.subpage .about-card::before {
+  content: "";
+  display: block;
+  height: 4px;
+  margin: -14px -16px 12px;
+  background: var(--card-stripe);
+}
+
+.app-ui.subpage .guide-card:active,
+.app-ui.subpage .tool-card:active {
+  transform: scale(0.985);
+}
+
+.app-ui.subpage .guide-card h4,
+.app-ui.subpage .tool-card h4,
+.app-ui.subpage .about-card h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--ios-label);
+}
+
+.app-ui.subpage .guide-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.app-ui.subpage .guide-card-count {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--accent-dark);
+  background: var(--accent-light);
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.app-ui.subpage .guide-card .pick {
+  font-weight: 650;
+  color: var(--ios-teal);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.app-ui.subpage .guide-card .alt {
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.app-ui.subpage .guide-card-action {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--ios-teal);
+  text-decoration: none;
+}
+
+.app-ui.subpage .tools-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-ui.subpage .tools-section-title {
+  margin: 12px 0 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui.subpage .tools-section:first-child .tools-section-title {
+  margin-top: 0;
+}
+
+.app-ui.subpage .tools-section-desc {
+  margin: -4px 0 4px;
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui.subpage .tools-section-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-ui.subpage .tool-card--site::before {
+  background: var(--chip-active-bg);
+}
+
+.app-ui.subpage .tool-card p,
+.app-ui.subpage .about-card p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+  line-height: 1.45;
+}
+
+.app-ui.subpage .tool-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  border-radius: 6px;
+}
+
+.app-ui.subpage .about-card--highlight::before {
+  background: var(--chip-active-bg);
+}
+
+.app-ui.subpage .about-footer {
+  margin-top: 16px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ios-label-tertiary);
+  text-align: center;
+}
+
+.app-ui.subpage .feedback-channels {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+  margin: 0 auto 16px;
+  text-align: left;
+}
+
+.app-ui.subpage .feedback-channel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  background: var(--ios-bg-elevated);
+  border: none;
+  border-radius: var(--ios-radius-lg);
+  box-shadow: var(--ios-shadow);
+  cursor: pointer;
+  transition: transform 0.18s var(--ios-spring);
+}
+
+.app-ui.subpage .feedback-channel-card:active {
+  transform: scale(0.985);
+}
+
+.app-ui.subpage .feedback-channel-card strong {
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.app-ui.subpage .feedback-channel-card span {
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui.subpage .feedback-channel-card--alt {
+  border: 1.5px dashed var(--ios-separator);
+  box-shadow: var(--ios-shadow-sm);
+}
+
+.app-ui.subpage .feedback-actions {
+  margin-top: 8px;
+}
+
+.app-ui.subpage .feedback-hint {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui.subpage .feedback-hint a {
+  color: var(--ios-teal);
+}
+
+.app-ui.subpage .feedback-alt {
+  margin-top: 16px;
+  font-size: 0.85rem;
+}
+
+.app-ui.subpage .feedback-alt a {
+  color: var(--ios-teal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-ui.subpage .site-footer {
+  display: block;
+  text-align: center;
+  padding: 16px;
+  padding-bottom: calc(var(--tab-bar-h) + 16px);
+  font-size: 0.72rem;
+  color: var(--ios-label-tertiary);
+}
+
+.app-ui.subpage .form-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ios-label-secondary);
+}
+
+.app-ui.subpage .form-input,
+.app-ui.subpage .form-textarea,
+.app-ui.subpage .select-input {
+  border: none;
+  background: var(--search-bg);
+  border-radius: var(--ios-radius-sm);
+  color: var(--ios-label);
+}
+
+.app-ui.subpage .sheet-dialog {
+  background: var(--ios-bg);
+  border-radius: var(--ios-radius-xl) var(--ios-radius-xl) 0 0;
+  box-shadow: var(--ios-shadow-lg);
+  font-family: var(--theme-font);
+}
+
+.app-ui.subpage .sheet-handle {
+  background: var(--ios-label-tertiary);
+}
+
 @media (max-width: 959px) {
   .app-ui.subpage .site-header {
     display: none;
   }
 
   .app-ui.subpage .subpage-main {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
-  }
-
-  .app-ui.subpage .page-head h2 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-
-  .app-ui.subpage .guide-card,
-  .app-ui.subpage .tool-card,
-  .app-ui.subpage .about-card {
-    border-radius: var(--ios-radius-lg);
-    box-shadow: var(--ios-shadow);
-    border: none;
+    padding-top: 0;
   }
 }
 
@@ -699,5 +1026,22 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 14px;
+  }
+
+  .app-ui.subpage .scroll-main {
+    padding: 24px 24px 0;
+  }
+
+  .app-ui.subpage .guide-grid,
+  .app-ui.subpage .tools-grid,
+  .app-ui.subpage .about-grid,
+  .app-ui.subpage .tools-section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .app-ui.subpage .site-footer {
+    padding-bottom: 32px;
   }
 }

@@ -477,3 +477,47 @@
     animation: none;
   }
 }
+
+/* ─── 子页反馈 Sheet（与详情叠层同一紫渐变头） ─── */
+.app-ui.subpage .feedback-modal.sheet-dialog {
+  position: relative;
+  overflow: hidden;
+  background: var(--ios-bg);
+}
+
+.app-ui.subpage .feedback-modal.sheet-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 96px;
+  background: var(--detail-header-gradient);
+  opacity: 0.94;
+  pointer-events: none;
+}
+
+.app-ui.subpage .feedback-modal .modal-header {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+}
+
+.app-ui.subpage .feedback-modal .modal-header h3 {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-ui.subpage .feedback-modal .modal-close {
+  color: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.app-ui.subpage .feedback-form {
+  position: relative;
+  z-index: 1;
+}

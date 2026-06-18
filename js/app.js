@@ -69,14 +69,6 @@
   const QUICK_FILTER_DROP_CEILING = 260;
   const DROP_ACTION_FONT_MIN = 10;
   const DROP_ACTION_FONT_MAX = 13;
-  const LOC_PILL_FONT_MIN = 10;
-  const LOC_PILL_FONT_MAX = 13;
-  const NAV_BRAND_FONT_MIN = 13.5;
-  const NAV_BRAND_FONT_MAX = 16.8;
-  const DETAIL_TITLE_FONT_MIN = 14;
-  const DETAIL_TITLE_FONT_MAX = 18;
-  const SHEET_ACTION_FONT_MIN = 11;
-  const SHEET_ACTION_FONT_MAX = 16;
   const FILTER_CHIP_FONT_MIN = 10;
   const FILTER_CHIP_FONT_MAX = 13;
   const CITY_PILL_FONT_MIN = 10;
@@ -717,28 +709,7 @@
     document.documentElement.style.setProperty("--toolbar-drop-top", `${top}px`);
   }
 
-  function fitElementFontSize(el, maxWidth, minPx, maxPx) {
-    if (!el || maxWidth <= 0) return maxPx;
-    let lo = minPx;
-    let hi = maxPx;
-    let best = minPx;
-    const prevSize = el.style.fontSize;
-    const prevWhiteSpace = el.style.whiteSpace;
-    el.style.whiteSpace = "nowrap";
-    while (hi - lo > 0.25) {
-      const mid = (lo + hi) / 2;
-      el.style.fontSize = `${mid}px`;
-      if (el.scrollWidth <= maxWidth) {
-        best = mid;
-        lo = mid;
-      } else {
-        hi = mid;
-      }
-    }
-    el.style.fontSize = prevSize;
-    el.style.whiteSpace = prevWhiteSpace;
-    return best;
-  }
+  const fitElementFontSize = (...args) => window.AdaptiveFonts.fitElementFontSize(...args);
 
   function syncToolbarChipFonts() {
     const toolbar = document.getElementById("filterToolbar");
@@ -849,63 +820,6 @@
     });
   }
 
-  function syncLocPillFonts() {
-    document.querySelectorAll(".loc-pill").forEach((pill) => {
-      if (getComputedStyle(pill).display === "none" || pill.clientWidth <= 0) return;
-      const cityEl = pill.querySelector(".loc-pill-city");
-      if (!cityEl) return;
-      const style = getComputedStyle(pill);
-      const iconW = pill.querySelector(".loc-pill-icon")?.offsetWidth || 0;
-      const caretW = pill.querySelector(".loc-pill-caret")?.offsetWidth || 0;
-      const padX =
-        parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + iconW + caretW + 8;
-      const px = fitElementFontSize(cityEl, pill.clientWidth - padX, LOC_PILL_FONT_MIN, LOC_PILL_FONT_MAX);
-      pill.style.setProperty("--loc-pill-font-size", `${px}px`);
-    });
-  }
-
-  function syncNavBrandFont() {
-    const row = document.querySelector(".glass-nav__row");
-    const brand = row?.querySelector(".nav-brand-mini");
-    if (!brand || getComputedStyle(brand).display === "none" || !row?.clientWidth) return;
-    const pillW = row.querySelector(".loc-pill")?.offsetWidth || 0;
-    const gap = parseFloat(getComputedStyle(row).gap) || 10;
-    const avail = row.clientWidth - pillW - gap - 4;
-    if (avail <= 0) return;
-    const px = fitElementFontSize(brand, avail, NAV_BRAND_FONT_MIN, NAV_BRAND_FONT_MAX);
-    brand.style.setProperty("--nav-brand-font-size", `${px}px`);
-  }
-
-  function syncSheetActionFonts(root) {
-    if (!root) return;
-    root.querySelectorAll(".btn-primary, .btn-secondary, .btn-outline, .btn-locate").forEach((btn) => {
-      if (btn.clientWidth <= 0) return;
-      const padX = btn.classList.contains("btn-locate") ? 16 : 24;
-      const px = fitElementFontSize(btn, btn.clientWidth - padX, SHEET_ACTION_FONT_MIN, SHEET_ACTION_FONT_MAX);
-      btn.style.setProperty("--sheet-action-font-size", `${px}px`);
-    });
-  }
-
-  function syncFilterDropFooters() {
-    document.querySelectorAll(".filter-drop-footer, .sheet-footer").forEach((footer) => {
-      if (footer.closest("[hidden]")) return;
-      syncSheetActionFonts(footer);
-    });
-  }
-
-  function syncDetailSheetFonts() {
-    const modal = document.getElementById("detailModal");
-    if (!modal || modal.hidden) return;
-    const title = document.getElementById("modalTitle");
-    const header = modal.querySelector(".modal-header");
-    if (title && header?.clientWidth) {
-      const closeW = modal.querySelector(".modal-close")?.offsetWidth || 40;
-      const px = fitElementFontSize(title, header.clientWidth - closeW - 28, DETAIL_TITLE_FONT_MIN, DETAIL_TITLE_FONT_MAX);
-      title.style.setProperty("--detail-title-font-size", `${px}px`);
-    }
-    syncSheetActionFonts(modal.querySelector(".modal-footer"));
-  }
-
   function syncActiveFilterChipFonts() {
     document.querySelectorAll(".filter-chip").forEach((chip) => {
       if (chip.clientWidth <= 0) return;
@@ -923,7 +837,7 @@
       const px = fitElementFontSize(pill, pill.clientWidth - 18, CITY_PILL_FONT_MIN, CITY_PILL_FONT_MAX);
       pill.style.setProperty("--city-pill-font-size", `${px}px`);
     });
-    syncSheetActionFonts(sheet.querySelector(".city-locate-card"));
+    AdaptiveFonts.syncSheetActionFonts(sheet.querySelector(".city-locate-card"));
   }
 
   function syncFssOptFonts() {
@@ -934,29 +848,18 @@
     });
   }
 
-  function syncEmptyStateFonts() {
-    const empty = document.getElementById("emptyState");
-    if (!empty || empty.hidden) return;
-    syncSheetActionFonts(empty);
-  }
-
-  function syncAdaptiveFonts() {
-    syncToolbarChipFonts();
-    syncDropPanelFonts();
-    syncSortDropPanelFonts();
-    syncLocPillFonts();
-    syncNavBrandFont();
-    syncDetailSheetFonts();
-    syncFilterDropFooters();
-    syncActiveFilterChipFonts();
-    syncCityPanelFonts();
-    syncFssOptFonts();
-    syncEmptyStateFonts();
+  function registerAdaptiveFontSyncers() {
+    if (!window.AdaptiveFonts) return;
+    AdaptiveFonts.register(syncToolbarChipFonts);
+    AdaptiveFonts.register(syncDropPanelFonts);
+    AdaptiveFonts.register(syncSortDropPanelFonts);
+    AdaptiveFonts.register(syncActiveFilterChipFonts);
+    AdaptiveFonts.register(syncCityPanelFonts);
+    AdaptiveFonts.register(syncFssOptFonts);
   }
 
   function scheduleAdaptiveFonts() {
-    syncAdaptiveFonts();
-    window.requestAnimationFrame(() => syncAdaptiveFonts());
+    window.AdaptiveFonts?.schedule();
   }
 
   function syncToolbarDropPosition() {
@@ -965,7 +868,7 @@
       updateToolbarDropTop(trigger);
       updateToolbarDropAnchor(toolbarDropKind, trigger);
     }
-    syncAdaptiveFonts();
+    window.AdaptiveFonts?.sync();
   }
 
   function resolveToolbarTrigger(kind) {
@@ -2427,6 +2330,7 @@
   }
 
   function init() {
+    registerAdaptiveFontSyncers();
     if (!document.getElementById("cardGrid")) return;
 
     const designInit = getDesign();

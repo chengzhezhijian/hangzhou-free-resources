@@ -31,6 +31,8 @@ const SCRIPTS = [
   "data-china-nationwide.js",
   "data.js",
   "resource-coords.js",
+  "site-stats.js",
+  "adaptive-fonts.js",
   "layout.js",
   "design-engine.js",
   "ui-premium.js",

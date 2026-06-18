@@ -14,6 +14,7 @@ const designLayouts = fs.readFileSync(path.join(ROOT, "css", "design-layouts.css
 const styleCss = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
 const premiumCss = fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8");
 const designSystem = fs.readFileSync(path.join(ROOT, "css", "design-system.css"), "utf8");
+const adaptiveFontsJs = fs.readFileSync(path.join(ROOT, "js", "adaptive-fonts.js"), "utf8");
 const quickCategoryBlock = appJs.split('if (kind === "quick-category")')[1]?.split('if (kind === "quick-facility")')[0] || "";
 const quickFacilityBlock = appJs.split('if (kind === "quick-facility")')[1]?.split('panel.innerHTML = `')[1]?.split('return;')[0] || "";
 
@@ -91,10 +92,10 @@ ok("重置按钮字号变量", /--drop-action-font-size/.test(designLayouts) && 
 ok("工具栏标签字号变量", /--chip-label-font-size/.test(designLayouts) && /syncToolbarChipFonts/.test(appJs));
 ok("工具栏四段 chip 统一字号", /unifiedPx/.test(appJs) && /Math\.min\(unifiedPx/.test(appJs));
 ok("设施 chip 无单独标签字号 CSS", !/\.ft-chip--facility[\s\S]*?\.ft-chip__label[\s\S]*?font-size/.test(designLayouts));
-ok("全站自适应入口", /function syncAdaptiveFonts/.test(appJs) && /scheduleAdaptiveFonts/.test(appJs));
-ok("城市 pill 字号变量", /--loc-pill-font-size/.test(designSystem + designLayouts) && /syncLocPillFonts/.test(appJs));
-ok("详情标题字号变量", /--detail-title-font-size/.test(premiumCss) && /syncDetailSheetFonts/.test(appJs));
-ok("Sheet 按钮字号变量", /--sheet-action-font-size/.test(designLayouts + styleCss) && /syncSheetActionFonts/.test(appJs));
+ok("全站自适应入口", /function syncAdaptiveFonts/.test(adaptiveFontsJs) && /scheduleAdaptiveFonts/.test(adaptiveFontsJs));
+ok("城市 pill 字号变量", /--loc-pill-font-size/.test(designSystem + designLayouts) && /syncLocPillFonts/.test(adaptiveFontsJs));
+ok("详情标题字号变量", /--detail-title-font-size/.test(premiumCss) && /syncDetailSheetFonts/.test(adaptiveFontsJs));
+ok("Sheet 按钮字号变量", /--sheet-action-font-size/.test(designLayouts + styleCss) && /syncSheetActionFonts/.test(adaptiveFontsJs));
 ok("城市面板 pill 字号", /--city-pill-font-size/.test(designLayouts) && /syncCityPanelFonts/.test(appJs));
 ok("筛选 chip 字号变量", /--filter-chip-font-size/.test(designLayouts) && /syncActiveFilterChipFonts/.test(appJs));
 ok("排序下拉字号变量", /--sort-drop-item-font-size/.test(designLayouts) && /syncSortDropPanelFonts/.test(appJs));
@@ -139,9 +140,9 @@ const siteStatsJs = fs.readFileSync(path.join(ROOT, "js", "site-stats.js"), "utf
 const menuPages = guideHtml + toolsHtml + aboutHtml + feedbackHtml;
 
 ok("site-stats 模块存在", fs.existsSync(path.join(ROOT, "js", "site-stats.js")));
-ok("子页引入 site-stats", /site-stats\.js\?v=69/.test(menuPages));
-ok("子页引入 premium-ui", /premium-ui\.css\?v=69/.test(menuPages));
-ok("子页 v=69", /design-system\.css\?v=69/.test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
+ok("子页引入 site-stats", /site-stats\.js\?v=70/.test(menuPages));
+ok("子页引入 premium-ui", /premium-ui\.css\?v=70/.test(menuPages));
+ok("子页 v=70", /design-system\.css\?v=70/.test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
 ok("场景页动态容器", /id="guideGrid"/.test(guideHtml) && /id="guideSceneChips"/.test(guideHtml));
 ok("说明页动态容器", /id="aboutGrid"/.test(aboutHtml) && /id="aboutPageDesc"/.test(aboutHtml));
 ok("工具页动态描述", /id="toolsPageDesc"/.test(toolsHtml) && /tools-section--site/.test(pagesJs));
@@ -153,9 +154,23 @@ ok("动态 tagline 占位", /\{cities\}/.test(siteConfig) && /SiteStats\.compute
 ok("pages 渲染 about", /function renderAbout/.test(pagesJs));
 ok("pages 场景计数", /guideCounts|countBadge/.test(pagesJs));
 ok("SiteStats 导出", /global\.SiteStats/.test(siteStatsJs));
-ok("首页引入 site-stats", /site-stats\.js\?v=69/.test(indexHtml));
+ok("首页引入 site-stats", /site-stats\.js\?v=70/.test(indexHtml));
 ok("子页导航含反馈", /feedback\.html/.test(guideHtml + toolsHtml + aboutHtml));
 ok("反馈 Sheet dialog", /<dialog class="feedback-modal sheet-dialog"/.test(feedbackHtml));
+
+// ─── 设计统一（v70） ───
+const layoutJs = fs.readFileSync(path.join(ROOT, "js", "layout.js"), "utf8");
+ok("子页引入 adaptive-fonts", /adaptive-fonts\.js\?v=70/.test(menuPages));
+ok("layout 子页 shell", /initSubpageShell/.test(layoutJs) && /glass-nav/.test(layoutJs));
+ok("子页 design-system token", /\.app-ui\.subpage[\s\S]*--ios-bg-elevated/.test(designSystem));
+ok("子页卡片条纹", /\.app-ui\.subpage[\s\S]*--card-stripe/.test(designSystem));
+ok("子页 chip 对齐发现页", /\.app-ui\.subpage \.guide-scene-chip[\s\S]*--ios-shadow/.test(designSystem));
+ok("子页无独立 bottom-nav 配色", !/\.app-ui\.subpage[\s\S]*\.bottom-nav[\s\S]*--border/.test(styleCss));
+ok("反馈 Sheet 紫渐变", /\.app-ui\.subpage \.feedback-modal[\s\S]*--detail-header-gradient/.test(premiumCss));
+ok("子页四页样式栈一致", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) =>
+  /design-system\.css\?v=70/.test(h) && /premium-ui\.css\?v=70/.test(h) && /design-layouts\.css\?v=70/.test(h)
+));
+ok("首页引入 adaptive-fonts", /adaptive-fonts\.js\?v=70/.test(indexHtml));
 
 const total = pass + fail;
 console.log(`UI/定位: ${pass}/${total} 通过`);

@@ -123,11 +123,51 @@
     });
   }
 
+  function initSubpageShell() {
+    if (!document.body.classList.contains("subpage")) return;
+
+    const main = document.querySelector(".subpage-main");
+    if (main && !main.closest(".app-viewport")) {
+      const viewport = document.createElement("div");
+      viewport.className = "app-viewport";
+
+      const glassNav = document.createElement("header");
+      glassNav.className = "glass-nav";
+      glassNav.setAttribute("aria-label", "页面顶栏");
+      const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+      const brandName = cfg.siteBrandName || "全国惠民地图";
+      glassNav.innerHTML = `<div class="glass-nav__row"><span class="nav-brand-mini">${brandName}</span></div>`;
+
+      const scrollMain = document.createElement("div");
+      scrollMain.className = "scroll-main";
+
+      const parent = main.parentNode;
+      parent.insertBefore(viewport, main);
+      viewport.appendChild(glassNav);
+      viewport.appendChild(scrollMain);
+      scrollMain.appendChild(main);
+
+      const footer = document.querySelector(".site-footer");
+      if (footer && footer.parentNode === parent) {
+        parent.insertBefore(footer, viewport.nextSibling);
+      }
+    }
+
+    window.AdaptiveFonts?.schedule();
+  }
+
+  function initAdaptiveFonts() {
+    if (!window.AdaptiveFonts) return;
+    AdaptiveFonts.schedule();
+  }
+
   function init() {
     initNav();
     initBrand();
     initBrandSub();
     initFeedback();
+    initSubpageShell();
+    initAdaptiveFonts();
   }
 
   if (document.readyState === "loading") {

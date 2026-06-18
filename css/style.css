@@ -1199,6 +1199,7 @@ img {
   font-size: 0.85rem;
 }
 
+/* Subpages — legacy fallbacks; 子页样式见 design-system.css */
 .guide-section {
   background: var(--bg-card);
 }
@@ -1491,8 +1492,8 @@ img {
   color: var(--ink-faint);
 }
 
-/* Bottom nav */
-.bottom-nav {
+/* Bottom nav — legacy；.app-ui 使用 design-system.css */
+body:not(.app-ui) .bottom-nav {
   position: fixed;
   left: 0;
   right: 0;
@@ -1530,7 +1531,7 @@ img {
   line-height: 1;
 }
 
-.feedback-fab {
+body:not(.app-ui) .feedback-fab {
   display: inline-flex;
   position: fixed;
   right: 1rem;
