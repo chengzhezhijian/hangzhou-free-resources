@@ -1,8 +1,9 @@
 /**
- * 全站公共布局：导航高亮、品牌链接、反馈入口
+ * 全站公共布局：导航高亮、品牌链接、反馈入口、子页 shell
  */
 (function () {
   const PAGE = document.body.dataset.page || "map";
+  const Shell = window.BrandShell;
 
   function track(name, props) {
     if (typeof window.trackEvent === "function") window.trackEvent(name, props);
@@ -121,14 +122,25 @@
     document.querySelectorAll(".brand-sub").forEach((el) => {
       el.textContent = tagline;
     });
+    const brandName = cfg.siteBrandName || Shell?.BRAND_NAME || "全国惠民地图";
+    document.querySelectorAll(".nav-brand-mini").forEach((el) => {
+      el.textContent = brandName;
+    });
   }
 
-  function glassNavBrandHtml(brandName) {
-    return `<a href="index.html" class="glass-nav__brand"><span class="brand-mark" aria-hidden="true">惠</span><span class="nav-brand-mini">${brandName}</span></a>`;
+  /** 子页：强制同步 site-header 与 BrandShell 模板一致 */
+  function initBrandShell() {
+    if (!Shell || !document.body.classList.contains("subpage")) return;
+    const siteHeader = document.querySelector(".site-header");
+    if (!siteHeader) return;
+    siteHeader.innerHTML = Shell.siteHeaderInnerHtml({ subpage: true });
   }
 
   function initSubpageShell() {
-    if (!document.body.classList.contains("subpage")) return;
+    if (!document.body.classList.contains("subpage") || !Shell) return;
+
+    const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
+    const brandName = cfg.siteBrandName || Shell.BRAND_NAME;
 
     const main = document.querySelector(".subpage-main");
     if (main && !main.closest(".app-viewport")) {
@@ -137,13 +149,10 @@
 
       const glassNav = document.createElement("header");
       glassNav.className = "glass-nav";
-      glassNav.setAttribute("aria-label", "页面顶栏");
-      const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-      const brandName = cfg.siteBrandName || "全国惠民地图";
-      glassNav.innerHTML = `<div class="glass-nav__row">${glassNavBrandHtml(brandName)}</div>`;
+      glassNav.innerHTML = Shell.glassNavRowHtml(brandName, { cityHidden: true });
 
       const scrollMain = document.createElement("div");
-      scrollMain.className = "scroll-main";
+      scrollMain.className = "scroll-main subpage-scroll";
 
       const parent = main.parentNode;
       parent.insertBefore(viewport, main);
@@ -154,6 +163,11 @@
       const footer = document.querySelector(".site-footer");
       if (footer && footer.parentNode === parent) {
         parent.insertBefore(footer, viewport.nextSibling);
+      }
+    } else {
+      const existingRow = document.querySelector(".glass-nav__row");
+      if (existingRow && !document.getElementById("cityQuickBtn")) {
+        existingRow.insertAdjacentHTML("afterbegin", Shell.cityPillHtml("cityQuickBtn", "cityQuickValue", "", ' tabindex="-1" aria-hidden="true"'));
       }
     }
 
@@ -166,6 +180,7 @@
   }
 
   function init() {
+    initBrandShell();
     initNav();
     initBrand();
     initBrandSub();

@@ -137,12 +137,22 @@ const aboutHtml = fs.readFileSync(path.join(ROOT, "about.html"), "utf8");
 const feedbackHtml = fs.readFileSync(path.join(ROOT, "feedback.html"), "utf8");
 const pagesJs = fs.readFileSync(path.join(ROOT, "js", "pages.js"), "utf8");
 const siteStatsJs = fs.readFileSync(path.join(ROOT, "js", "site-stats.js"), "utf8");
+const brandShellJs = fs.readFileSync(path.join(ROOT, "js", "brand-shell.js"), "utf8");
 const menuPages = guideHtml + toolsHtml + aboutHtml + feedbackHtml;
+const allPages = [indexHtml, guideHtml, toolsHtml, aboutHtml, feedbackHtml];
+const expectedCssChain = [
+  "css/style.css?v=72",
+  "css/design-system.css?v=72",
+  "css/themes/variants.css?v=72",
+  "css/copy-variants.css?v=72",
+  "css/design-layouts.css?v=72",
+  "css/premium-ui.css?v=72",
+];
 
 ok("site-stats 模块存在", fs.existsSync(path.join(ROOT, "js", "site-stats.js")));
-ok("子页引入 site-stats", /site-stats\.js\?v=71/.test(menuPages));
-ok("子页引入 premium-ui", /premium-ui\.css\?v=71/.test(menuPages));
-ok("子页 v=71", /design-system\.css\?v=71/.test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
+ok("子页引入 site-stats", /site-stats\.js\?v=72/.test(menuPages));
+ok("子页引入 premium-ui", /premium-ui\.css\?v=72/.test(menuPages));
+ok("子页 v=72", /design-system\.css\?v=72/.test(menuPages) && !/design-system\.css\?v=33/.test(menuPages));
 ok("场景页动态容器", /id="guideGrid"/.test(guideHtml) && /id="guideSceneChips"/.test(guideHtml));
 ok("说明页动态容器", /id="aboutGrid"/.test(aboutHtml) && /id="aboutPageDesc"/.test(aboutHtml));
 ok("工具页动态描述", /id="toolsPageDesc"/.test(toolsHtml) && /tools-section--site/.test(pagesJs));
@@ -154,23 +164,33 @@ ok("动态 tagline 占位", /\{cities\}/.test(siteConfig) && /SiteStats\.compute
 ok("pages 渲染 about", /function renderAbout/.test(pagesJs));
 ok("pages 场景计数", /guideCounts|countBadge/.test(pagesJs));
 ok("SiteStats 导出", /global\.SiteStats/.test(siteStatsJs));
-ok("首页引入 site-stats", /site-stats\.js\?v=71/.test(indexHtml));
+ok("首页引入 site-stats", /site-stats\.js\?v=72/.test(indexHtml));
 ok("子页导航含反馈", /feedback\.html/.test(guideHtml + toolsHtml + aboutHtml));
 ok("反馈 Sheet dialog", /<dialog class="feedback-modal sheet-dialog"/.test(feedbackHtml));
 
 // ─── 设计统一（v70） ───
 const layoutJs = fs.readFileSync(path.join(ROOT, "js", "layout.js"), "utf8");
-ok("子页引入 adaptive-fonts", /adaptive-fonts\.js\?v=71/.test(menuPages));
+ok("子页引入 adaptive-fonts", /adaptive-fonts\.js\?v=72/.test(menuPages));
 ok("layout 子页 shell", /initSubpageShell/.test(layoutJs) && /glass-nav/.test(layoutJs));
+ok("brand-shell 模块", /BrandShell/.test(brandShellJs) && /glassNavRowHtml/.test(brandShellJs));
+ok("layout 使用 brand-shell", /BrandShell/.test(layoutJs) && /initBrandShell/.test(layoutJs));
 ok("子页 design-system token", /\.app-ui\.subpage[\s\S]*--ios-bg-elevated/.test(designSystem));
 ok("子页卡片条纹", /\.app-ui\.subpage[\s\S]*--card-stripe/.test(designSystem));
 ok("子页 chip 对齐发现页", /\.app-ui\.subpage \.guide-scene-chip[\s\S]*--ios-shadow/.test(designSystem));
 ok("子页无独立 bottom-nav 配色", !/\.app-ui\.subpage[\s\S]*\.bottom-nav[\s\S]*--border/.test(styleCss));
 ok("反馈 Sheet 紫渐变", /\.app-ui\.subpage \.feedback-modal[\s\S]*--detail-header-gradient/.test(premiumCss));
 ok("子页四页样式栈一致", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) =>
-  /design-system\.css\?v=71/.test(h) && /premium-ui\.css\?v=71/.test(h) && /design-layouts\.css\?v=71/.test(h) && /variants\.css\?v=71/.test(h) && /theme-switch\.js\?v=71/.test(h)
+  expectedCssChain.every((css) => h.includes(css)) &&
+  /theme-switch\.js\?v=72/.test(h) &&
+  /design-variants\.js\?v=72/.test(h) &&
+  /copy-variants\.js\?v=72/.test(h)
 ));
-ok("首页引入 adaptive-fonts", /adaptive-fonts\.js\?v=71/.test(indexHtml));
+ok("五页 CSS 链路一致", allPages.every((h) => expectedCssChain.every((css) => h.includes(css))));
+ok("五页 app-ui class", allPages.every((h) => /\bclass="app-ui/.test(h)));
+ok("子页 home-head 标题", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) => /class="home-head"/.test(h) && /class="display-title"/.test(h)));
+ok("反馈页无 legacy page-head", !/class="page-head"/.test(feedbackHtml));
+ok("子页引入 brand-shell", /brand-shell\.js\?v=72/.test(menuPages));
+ok("首页引入 adaptive-fonts", /adaptive-fonts\.js\?v=72/.test(indexHtml));
 
 // ─── 品牌统一（v71） ───
 ok("单一品牌渐变 token", /--brand-gradient:\s*linear-gradient\(135deg,\s*#007aff,\s*#5856d6\)/.test(designSystem));
@@ -179,8 +199,9 @@ ok("默认无 teal 品牌渐变", !/--nav-brand-gradient:\s*[^;]*#0d9488/.test(d
 ok("brand-mark 统一样式", /\.app-ui \.brand-mark[\s\S]*--brand-mark-bg/.test(designSystem));
 ok("桌面 h1 渐变字", /\.app-ui \.brand h1[\s\S]*--nav-brand-gradient/.test(designSystem));
 ok("首页 glass-nav 含 brand-mark", /glass-nav__brand[\s\S]*brand-mark[\s\S]*nav-brand-mini/.test(indexHtml));
-ok("layout 注入同款 glass-nav", /glassNavBrandHtml/.test(layoutJs) && /glass-nav__brand[\s\S]*brand-mark[\s\S]*nav-brand-mini/.test(layoutJs));
-ok("子页惠字统一 class", [guideHtml, toolsHtml, aboutHtml, feedbackHtml].every((h) => /brand-mark brand-icon/.test(h)));
+ok("layout 注入同款 glass-nav", /glassNavRowHtml/.test(brandShellJs) && /glass-nav__brand[\s\S]*brand-mark[\s\S]*nav-brand-mini/.test(brandShellJs));
+ok("style 子页 legacy 已隔离", !/^\s*\.page-head \{/m.test(styleCss) && !/^\s*\.subpage-main \{/m.test(styleCss));
+ok("子页顶区渐变", /\.app-ui\.subpage \.subpage-scroll::before/.test(fs.readFileSync(path.join(ROOT, "css", "premium-ui.css"), "utf8")));
 ok("首页惠字统一 class", /brand-mark brand-icon/.test(indexHtml));
 
 const total = pass + fail;

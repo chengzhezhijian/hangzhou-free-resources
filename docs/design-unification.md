@@ -105,3 +105,66 @@ v69 完成了场景 / 工具 / 说明 / 反馈的**内容**动态适配，但子
 ## 版本
 
 静态资源缓存参数：**v=71**（v70 品牌统一 +1）
+
+---
+
+## v72 彻底对齐（结构 + CSS 加载 + 顶栏）
+
+### 根因（v71 仍不一致）
+
+| 分叉点 | 发现页 | 子页（v71） |
+|--------|--------|------------|
+| 品牌 HTML 来源 | `index.html` 静态 | 四页各自手写 `site-header`，`feedback.html` **缺 header-leading / 城市 pill** |
+| glass-nav | 静态 + `brand-mark` | `layout.js` 注入，但与 `site-header` 无单一模板 |
+| CSS 加载 | 7 文件 + 3 head 脚本 | `feedback.html` **缺** `copy-variants.css` / `design-variants.js` / `copy-variants.js` |
+| 页面标题区 | `.home-head` + `.display-title` | 反馈页仍用 legacy `.page-head h2`（1.15rem 小标题） |
+| legacy CSS | — | `style.css` 全局 `--accent: #0d6e6e`、`.brand-icon`、`.header-nav a.is-active` 泄漏到 `.app-ui` |
+| 顶区视觉 | `discover-sticky` + `--discover-sticky-bg` 渐变 | 子页 `scroll-main` 无同款渐变底 |
+
+### v72 统一方案
+
+1. **`js/brand-shell.js`** — 单一模板：`siteHeaderInnerHtml()` / `glassNavRowHtml()`，与 `index.html` 字节级一致
+2. **`js/layout.js`** — `initBrandShell()` 子页强制同步 `site-header`；`initSubpageShell()` 注入 `app-viewport` + `glass-nav` + `scroll-main.subpage-scroll`
+3. **五页 CSS 链路完全一致**（顺序与版本）：
+   - `style.css` → `design-system.css` → `variants.css` → `copy-variants.css` → `design-layouts.css` → `premium-ui.css`
+   - head 脚本：`theme-switch.js` / `design-variants.js` / `copy-variants.js`
+4. **反馈页对齐**：`home-head` + `display-title` + `display-sub`；补齐 copy/design 栈
+5. **`style.css` legacy 隔离**：`.site-header` / `.brand*` / `.page-head` / `.subpage-main` / `.bottom-nav-item` 等加 `body:not(.app-ui)` 前缀
+6. **`design-system.css`** — 桌面 `.app-ui .header-nav` 使用 `--accent` 蓝，不再继承 teal legacy
+7. **`premium-ui.css`** — `.app-ui.subpage .subpage-scroll::before` 复用 `--discover-sticky-bg` 顶区渐变
+
+### 改动摘要
+
+| 文件 | 改动 |
+|------|------|
+| `js/brand-shell.js` | **新增** 全站品牌壳层 HTML 模板 |
+| `js/layout.js` | 接入 BrandShell；`initBrandShell` |
+| `feedback.html` | 补齐 CSS/JS 栈；`home-head`；空 `site-header` 由 JS 注入 |
+| `css/style.css` | legacy 规则 scoped 到 `body:not(.app-ui)` |
+| `css/design-system.css` | 桌面 header-nav 蓝紫 accent |
+| `css/premium-ui.css` | 子页顶区渐变 strip |
+| 五页 HTML | `brand-shell.js?v=72`；统一 `v=72` |
+| `manifest.webmanifest` | `theme_color` → `#007aff` |
+| `scripts/test-ui-quality.mjs` | 五页 CSS 链路 / brand-shell / home-head / 无 page-head 断言 |
+
+## v72 并排验收清单
+
+切换五个 Tab（发现 ↔ 场景 ↔ 工具 ↔ 说明 ↔ 反馈），逐项肉眼对比：
+
+| 对比项 | 发现 | 场景 | 工具 | 说明 | 反馈 |
+|--------|------|------|------|------|------|
+| 「惠」图标 | 28×28 蓝紫渐变底 | 同左 | 同左 | 同左 | 同左 |
+| 「全国惠民地图」标题色 | 蓝紫 gradient clip | 同左 | 同左 | 同左 | 同左 |
+| 移动顶栏背景 | 毛玻璃 `--glass-nav-bg` | 同左 | 同左 | 同左 | 同左 |
+| 页面大标题 | `display-title` 量级 | 同左 | 同左 | 同左 | 同左 |
+| 正文背景 | `#f2f2f7` | 同左 | 同左 | 同左 | 同左 |
+| 顶区渐变底 | discover-sticky | subpage-scroll 同款 | 同左 | 同左 | 同左 |
+| 桌面导航选中色 | `#007aff` | 同左 | 同左 | 同左 | 同左 |
+
+- [ ] 五 Tab 切换时顶栏品牌区无法区分是不同套 UI
+- [ ] 无绿色 `#0d6e6e` / `#0d9488` 品牌残留
+- [ ] `npm run test:all` 全绿
+
+## 版本
+
+静态资源缓存参数：**v=72**（v71 结构对齐 +1）

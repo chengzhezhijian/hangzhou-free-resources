@@ -153,6 +153,30 @@
   line-height: 1.2;
 }
 
+@media (min-width: 960px) {
+  .app-ui .header-nav {
+    display: flex;
+    gap: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .app-ui .header-nav a {
+    color: var(--ios-label-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .app-ui .header-nav a:hover {
+    color: var(--accent);
+  }
+
+  .app-ui .header-nav a.is-active {
+    color: var(--accent);
+    font-weight: 600;
+  }
+}
+
 .app-ui .loc-pill {
   flex-shrink: 0;
   max-width: 46%;
@@ -675,25 +699,21 @@
   text-align: center;
 }
 
-.app-ui.subpage .page-head {
+.app-ui.subpage .subpage-main--center {
+  text-align: center;
+  padding-top: 8px;
+}
+
+/* 子页标题区与发现页 home-head 同款 class（display-title / display-sub） */
+.app-ui.subpage .home-head {
   padding: 8px 0 16px;
-  margin-bottom: 0;
 }
 
-.app-ui.subpage .page-head h2 {
-  margin: 0;
-  font-size: clamp(1.75rem, 7vw, 2.25rem);
-  font-weight: var(--title-weight);
-  line-height: 1.12;
-  letter-spacing: var(--title-tracking);
-}
-
-.app-ui.subpage .section-desc {
-  margin: 8px 0 0;
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--ios-label-secondary);
-  line-height: 1.45;
+/* 子页保留城市 pill DOM 与发现页一致，视觉隐藏 */
+.app-ui.subpage .loc-pill,
+.app-ui.subpage .loc-pill--header {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .app-ui.subpage .guide-scene-chips {

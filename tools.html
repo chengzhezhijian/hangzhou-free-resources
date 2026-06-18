@@ -9,12 +9,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/theme-switch.js?v=71"></script>
-  <link rel="stylesheet" href="css/style.css?v=71" />
-  <link rel="stylesheet" href="css/design-system.css?v=71" />
-  <link rel="stylesheet" href="css/themes/variants.css?v=71" />
-  <link rel="stylesheet" href="css/design-layouts.css?v=71" />
-  <link rel="stylesheet" href="css/premium-ui.css?v=71" />
+  <script src="js/theme-switch.js?v=72"></script>
+  <script src="js/design-variants.js?v=72"></script>
+  <script src="js/copy-variants.js?v=72"></script>
+  <link rel="stylesheet" href="css/style.css?v=72" />
+  <link rel="stylesheet" href="css/design-system.css?v=72" />
+  <link rel="stylesheet" href="css/themes/variants.css?v=72" />
+  <link rel="stylesheet" href="css/copy-variants.css?v=72" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=72" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=72" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -28,13 +31,20 @@
 <body data-page="tools" class="app-ui subpage">
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="brand" id="brandHome">
-        <span class="brand-mark brand-icon" aria-hidden="true">惠</span>
-        <div class="brand-text">
-          <h1>全国惠民地图</h1>
-          <p class="brand-sub">政府免费便民 · 搜完即走</p>
-        </div>
-      </a>
+      <div class="header-leading">
+        <button type="button" class="loc-pill loc-pill--header" id="cityQuickBtnDesktop" aria-haspopup="dialog" aria-label="选择城市" tabindex="-1" aria-hidden="true">
+          <span class="loc-pill-icon" aria-hidden="true">📍</span>
+          <span class="loc-pill-city" id="cityQuickValueDesktop">选择城市</span>
+          <span class="loc-pill-caret" aria-hidden="true">▾</span>
+        </button>
+        <a href="index.html" class="brand" id="brandHome">
+          <span class="brand-mark brand-icon" aria-hidden="true">惠</span>
+          <div class="brand-text">
+            <h1>全国惠民地图</h1>
+            <p class="brand-sub">政府免费便民 · 搜完即走</p>
+          </div>
+        </a>
+      </div>
       <nav class="header-nav" aria-label="桌面导航">
         <a href="index.html" data-nav-page="map">发现</a>
         <a href="guide.html" data-nav-page="guide">场景</a>
@@ -46,10 +56,10 @@
   </header>
 
   <main class="subpage-main">
-    <div class="page-head">
-      <h2>官方实时查询</h2>
-      <p class="section-desc" id="toolsPageDesc">地图收录代表点位；海量动态数据请跳转下方官方平台。</p>
-    </div>
+    <section class="home-head">
+      <h2 class="display-title">官方实时查询</h2>
+      <p class="display-sub" id="toolsPageDesc">地图收录代表点位；海量动态数据请跳转下方官方平台。</p>
+    </section>
     <div class="tools-grid" id="toolsGrid"></div>
   </main>
 
@@ -62,13 +72,14 @@
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <script src="js/site-config.js?v=71"></script>
-  <script src="js/analytics.js?v=71"></script>
-  <script src="js/data-china-config.js?v=71"></script>
-  <script src="js/data.js?v=71"></script>
-  <script src="js/site-stats.js?v=71"></script>
-  <script src="js/adaptive-fonts.js?v=71"></script>
-  <script src="js/layout.js?v=71"></script>
-  <script src="js/pages.js?v=71"></script>
+  <script src="js/site-config.js?v=72"></script>
+  <script src="js/analytics.js?v=72"></script>
+  <script src="js/data-china-config.js?v=72"></script>
+  <script src="js/data.js?v=72"></script>
+  <script src="js/site-stats.js?v=72"></script>
+  <script src="js/adaptive-fonts.js?v=72"></script>
+  <script src="js/brand-shell.js?v=72"></script>
+  <script src="js/layout.js?v=72"></script>
+  <script src="js/pages.js?v=72"></script>
 </body>
 </html>
