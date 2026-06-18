@@ -33,6 +33,9 @@
       state.city = city;
     }
     if (params.get("free") === "1") state.freeOnly = true;
+    if (category || q || group || city || params.get("free") === "1") {
+      state.page = 1;
+    }
     if (params.toString()) {
       track("landing_params", Object.fromEntries(params.entries()));
     }
@@ -1444,10 +1447,15 @@
     if (typeof window.markCardsEnter === "function") window.markCardsEnter();
   }
 
-  function renderPagination(total, totalPages) {
+  function renderPagination(totalPages) {
     const el = document.getElementById("pagination");
+    if (!el) return;
     if (totalPages <= 1) {
       el.hidden = true;
+      el.innerHTML =
+        totalPages === 1
+          ? `<span class="page-info">${state.page} / 1</span>`
+          : "";
       return;
     }
     el.hidden = false;
@@ -1474,8 +1482,14 @@
     const pageSize = getPageSize();
     const design = getDesign();
 
-    const totalPages = Math.ceil(filtered.length / pageSize) || 1;
-    if (state.page > totalPages) state.page = totalPages;
+    const totalPages = filtered.length === 0 ? 0 : Math.ceil(filtered.length / pageSize);
+    if (totalPages === 0) {
+      state.page = 1;
+    } else if (state.page > totalPages) {
+      state.page = totalPages;
+    } else if (state.page < 1) {
+      state.page = 1;
+    }
 
     const start = (state.page - 1) * pageSize;
     const pageItems = filtered.slice(start, start + pageSize);
@@ -1483,7 +1497,7 @@
     countEl.textContent = resultCountLabel(filtered.length);
     if (typeof window.animateResultCount === "function") window.animateResultCount();
     if (typeof window.syncPremiumUrl === "function") window.syncPremiumUrl(state);
-    renderPagination(filtered.length, totalPages);
+    renderPagination(totalPages);
     updateMobileChrome();
     updateContentHeader();
     updateDistanceHint();

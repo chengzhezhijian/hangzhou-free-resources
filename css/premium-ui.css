@@ -314,6 +314,10 @@
   padding: 16px 0;
 }
 
+.app-ui .pagination-wrap[hidden] {
+  display: none !important;
+}
+
 .app-ui .page-btn {
   min-width: 88px;
   padding: 10px 16px;
