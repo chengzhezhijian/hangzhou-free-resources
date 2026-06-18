@@ -5,8 +5,8 @@ const SITE_CONFIG = {
   /** 对外品牌名（页面展示用，不含部署域名） */
   siteBrandName: "全国惠民地图",
 
-  /** 品牌副标题（全站 header 展示） */
-  siteTagline: "政府免费便民 · 72城搜完即走",
+  /** 品牌副标题（全站 header 展示；含 {cities} 时由 layout.js 注入实际城数） */
+  siteTagline: "政府免费便民 · {cities}城搜完即走",
 
   /** 数据范围：china = 全国版 */
   siteScope: "china",

@@ -9,8 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=33" />
-  <link rel="stylesheet" href="css/design-system.css?v=33" />
+  <link rel="stylesheet" href="css/style.css?v=69" />
+  <link rel="stylesheet" href="css/design-system.css?v=69" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=69" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=69" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -28,7 +30,7 @@
         <span class="brand-icon">惠</span>
         <div class="brand-text">
           <h1>全国惠民地图</h1>
-          <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
+          <p class="brand-sub">政府免费便民 · 搜完即走</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
@@ -36,6 +38,7 @@
         <a href="guide.html" data-nav-page="guide">场景</a>
         <a href="tools.html" data-nav-page="tools">工具</a>
         <a href="about.html" data-nav-page="about">说明</a>
+        <a href="feedback.html" data-nav-page="feedback">反馈</a>
       </nav>
     </div>
   </header>
@@ -43,8 +46,9 @@
   <main class="subpage-main">
     <div class="page-head">
       <h2>我这种情况，去哪找？</h2>
-      <p class="section-desc">先选城市，点「去查点位」直达首页筛选。72 城均可查，杭州数据最全。</p>
+      <p class="section-desc" id="guidePageDesc">先选城市，点「去查点位」直达首页筛选。</p>
     </div>
+    <div class="guide-scene-chips" id="guideSceneChips" aria-label="首页场景标签"></div>
     <div class="guide-grid" id="guideGrid"></div>
   </main>
 
@@ -57,11 +61,12 @@
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <script src="js/site-config.js?v=33"></script>
-  <script src="js/analytics.js?v=33"></script>
-  <script src="js/data-china-config.js?v=33"></script>
-  <script src="js/data.js?v=33"></script>
-  <script src="js/layout.js?v=33"></script>
-  <script src="js/pages.js?v=33"></script>
+  <script src="js/site-config.js?v=69"></script>
+  <script src="js/analytics.js?v=69"></script>
+  <script src="js/data-china-config.js?v=69"></script>
+  <script src="js/data.js?v=69"></script>
+  <script src="js/site-stats.js?v=69"></script>
+  <script src="js/layout.js?v=69"></script>
+  <script src="js/pages.js?v=69"></script>
 </body>
 </html>

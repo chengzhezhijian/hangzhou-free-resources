@@ -9,8 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=33" />
-  <link rel="stylesheet" href="css/design-system.css?v=33" />
+  <link rel="stylesheet" href="css/style.css?v=69" />
+  <link rel="stylesheet" href="css/design-system.css?v=69" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=69" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=69" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -28,7 +30,7 @@
         <span class="brand-icon">惠</span>
         <div class="brand-text">
           <h1>全国惠民地图</h1>
-          <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
+          <p class="brand-sub">政府免费便民 · 搜完即走</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
@@ -44,8 +46,9 @@
   <main class="subpage-main subpage-main--center">
     <div class="page-head">
       <h2>信息不准？缺了点位？</h2>
-      <p class="section-desc">你的一条反馈，能帮到下一个找免费资源的人</p>
+      <p class="section-desc" id="feedbackPageDesc">你的一条反馈，能帮到下一个找免费资源的人</p>
     </div>
+    <div class="feedback-channels" id="feedbackChannels"></div>
     <div class="feedback-actions">
       <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="btn-primary btn-primary--lg" id="feedbackOpen">30 秒提交纠错</a>
     </div>
@@ -59,24 +62,24 @@
 
   <nav class="bottom-nav" aria-label="主导航">
     <a href="index.html" class="bottom-nav-item" data-nav-page="map">
-      <span class="bottom-nav-icon">🗺</span>
+      <span class="bottom-nav-icon">✦</span>
       <span>发现</span>
     </a>
     <a href="guide.html" class="bottom-nav-item" data-nav-page="guide">
-      <span class="bottom-nav-icon">💡</span>
+      <span class="bottom-nav-icon">◈</span>
       <span>场景</span>
     </a>
     <a href="tools.html" class="bottom-nav-item" data-nav-page="tools">
-      <span class="bottom-nav-icon">🔧</span>
+      <span class="bottom-nav-icon">⬡</span>
       <span>工具</span>
     </a>
     <a href="about.html" class="bottom-nav-item" data-nav-page="about">
-      <span class="bottom-nav-icon">ℹ️</span>
+      <span class="bottom-nav-icon">○</span>
       <span>说明</span>
     </a>
   </nav>
 
-  <div class="feedback-modal sheet-dialog" id="feedbackModal" hidden role="dialog" aria-modal="true">
+  <dialog class="feedback-modal sheet-dialog" id="feedbackModal">
     <div class="sheet-handle" aria-hidden="true"></div>
     <div class="modal-header">
       <h3>提交反馈</h3>
@@ -105,10 +108,14 @@
         <button type="button" class="btn-secondary" id="feedbackCancel">取消</button>
       </div>
     </form>
-  </div>
+  </dialog>
 
-  <script src="js/site-config.js?v=33"></script>
-  <script src="js/analytics.js?v=33"></script>
-  <script src="js/layout.js?v=33"></script>
+  <script src="js/site-config.js?v=69"></script>
+  <script src="js/analytics.js?v=69"></script>
+  <script src="js/data-china-config.js?v=69"></script>
+  <script src="js/data.js?v=69"></script>
+  <script src="js/site-stats.js?v=69"></script>
+  <script src="js/layout.js?v=69"></script>
+  <script src="js/pages.js?v=69"></script>
 </body>
 </html>

@@ -1245,10 +1245,103 @@ img {
 }
 
 .guide-card h4 {
-  margin: 0 0 0.35rem;
-  font-size: 0.8rem;
-  color: var(--ink-faint);
+  margin: 0;
+  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+  font-weight: 700;
+}
+
+.guide-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.guide-card-count {
+  flex-shrink: 0;
+  font-size: clamp(0.65rem, 2vw, 0.72rem);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft, rgba(13, 148, 136, 0.1));
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--ios-radius-sm, 8px);
+  white-space: nowrap;
+}
+
+.guide-scene-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.guide-scene-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: clamp(0.72rem, 2.2vw, 0.8rem);
   font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--ios-radius-sm, 8px);
+}
+
+.guide-scene-chip em {
+  font-style: normal;
+  font-size: 0.85em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tools-section-desc {
+  margin: -0.35rem 0 0.65rem;
+  font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+  color: var(--ink-muted);
+}
+
+.tool-card--site {
+  border-color: var(--accent-soft, rgba(13, 148, 136, 0.25));
+}
+
+.feedback-channels {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 360px;
+  margin: 0 auto 1rem;
+  text-align: left;
+}
+
+.feedback-channel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--ios-radius-md, 12px);
+  cursor: pointer;
+}
+
+.feedback-channel-card strong {
+  font-size: clamp(0.88rem, 2.6vw, 0.95rem);
+}
+
+.feedback-channel-card span {
+  font-size: clamp(0.72rem, 2.2vw, 0.78rem);
+  color: var(--ink-muted);
+}
+
+.feedback-channel-card--alt {
+  border-style: dashed;
 }
 
 .guide-card .pick {

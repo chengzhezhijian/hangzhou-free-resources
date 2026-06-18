@@ -1,6 +1,6 @@
 # 10 套主题 AB 对比说明
 
-> 生成时间：2026-06-18 02:08:57 · 对比墙：[`labs/ab-compare.html`](../labs/ab-compare.html)
+> 生成时间：2026-06-18 02:10:06 · 对比墙：[`labs/ab-compare.html`](../labs/ab-compare.html)
 
 ## 如何选择
 

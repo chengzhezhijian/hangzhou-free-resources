@@ -74,6 +74,14 @@
 
     document.getElementById("feedbackOpen")?.addEventListener("click", open);
     document.getElementById("feedbackFab")?.addEventListener("click", open);
+    document.getElementById("feedbackFormOpen")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (modal) {
+        modal.showModal();
+        document.body.classList.add("sheet-open");
+      }
+      track("feedback_open", { source: "channel" });
+    });
     document.getElementById("feedbackClose")?.addEventListener("click", () => modal?.close());
     document.getElementById("feedbackCancel")?.addEventListener("click", () => modal?.close());
     modal?.addEventListener("click", (e) => {
@@ -105,7 +113,11 @@
 
   function initBrandSub() {
     const cfg = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : {};
-    const tagline = cfg.siteTagline || "浙江免费便民 · 搜完即走";
+    let tagline = cfg.siteTagline || "浙江免费便民 · 搜完即走";
+    if (typeof SiteStats !== "undefined" && tagline.includes("{cities}")) {
+      const { cityCount } = SiteStats.compute();
+      tagline = tagline.replace(/\{cities\}/g, String(cityCount));
+    }
     document.querySelectorAll(".brand-sub").forEach((el) => {
       el.textContent = tagline;
     });

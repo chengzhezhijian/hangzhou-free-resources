@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0d9488" />
-  <meta name="description" content="全国惠民地图：72城免费自习、纳凉、WiFi、充电，政府免费场地一站查。" />
+  <meta name="description" content="全国惠民地图：免费自习、纳凉、WiFi、充电，政府免费场地一站查。" />
   <title>使用说明 · 全国惠民地图</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=33" />
-  <link rel="stylesheet" href="css/design-system.css?v=33" />
+  <link rel="stylesheet" href="css/style.css?v=69" />
+  <link rel="stylesheet" href="css/design-system.css?v=69" />
+  <link rel="stylesheet" href="css/design-layouts.css?v=69" />
+  <link rel="stylesheet" href="css/premium-ui.css?v=69" />
   <script>
     var _hmt = _hmt || [];
     (function () {
@@ -28,7 +30,7 @@
         <span class="brand-icon">惠</span>
         <div class="brand-text">
           <h1>全国惠民地图</h1>
-          <p class="brand-sub">政府免费便民 · 72城搜完即走</p>
+          <p class="brand-sub">政府免费便民 · 搜完即走</p>
         </div>
       </a>
       <nav class="header-nav" aria-label="桌面导航">
@@ -36,6 +38,7 @@
         <a href="guide.html" data-nav-page="guide">场景</a>
         <a href="tools.html" data-nav-page="tools">工具</a>
         <a href="about.html" data-nav-page="about">说明</a>
+        <a href="feedback.html" data-nav-page="feedback">反馈</a>
       </nav>
     </div>
   </header>
@@ -43,31 +46,10 @@
   <main class="subpage-main">
     <div class="page-head">
       <h2>这个 App 能帮你找什么？</h2>
-      <p class="section-desc">全国 72 城政府免费场地：自习、纳凉、WiFi、饮水、充电。首页点标签即筛，还能遛娃、找停车。</p>
+      <p class="section-desc" id="aboutPageDesc">全国政府免费场地：自习、纳凉、WiFi、饮水、充电。首页点标签即筛。</p>
     </div>
-    <div class="about-grid">
-      <div class="about-card about-card--highlight">
-        <h4>📶 免费 WiFi</h4>
-        <p>图书馆、城市书房普遍有免费无线网络。首页点「免费WiFi」或搜「自习」，杭州收录最全。</p>
-      </div>
-      <div class="about-card about-card--highlight">
-        <h4>❄️ 有空调纳凉</h4>
-        <p>纳凉点、图书馆、爱心驿家。点「纳凉」或筛「有空调」，夏季开放为主。</p>
-      </div>
-      <div class="about-card about-card--highlight">
-        <h4>💧 可饮水 · 🔌 可充电</h4>
-        <p>爱心驿家、党群中心、充电站。筛「可饮水」「可充电」，或看「工具」页全国地图入口。</p>
-      </div>
-      <div class="about-card">
-        <h4>数据说明</h4>
-        <p>共 2993 条：杭州 400+ 细录，其他 71 城为代表点位 + 官方查询工具。海量动态数据请用当地政务平台。</p>
-      </div>
-      <div class="about-card">
-        <h4>免责声明</h4>
-        <p>信息来源于政府公开资料，设施以场馆当日公告为准，出行前请核实。</p>
-      </div>
-    </div>
-    <p class="about-footer">数据整理：2026-06-15 · 全国版 v1</p>
+    <div class="about-grid" id="aboutGrid"></div>
+    <p class="about-footer" id="aboutFooter"></p>
   </main>
 
   <nav class="bottom-nav" aria-label="主导航">
@@ -79,8 +61,12 @@
 
   <a href="https://wj.qq.com/s2/27038162/ce58/" target="_blank" rel="noopener" class="feedback-fab" id="feedbackFab" aria-label="反馈">反馈</a>
 
-  <script src="js/site-config.js?v=33"></script>
-  <script src="js/analytics.js?v=33"></script>
-  <script src="js/layout.js?v=33"></script>
+  <script src="js/site-config.js?v=69"></script>
+  <script src="js/analytics.js?v=69"></script>
+  <script src="js/data-china-config.js?v=69"></script>
+  <script src="js/data.js?v=69"></script>
+  <script src="js/site-stats.js?v=69"></script>
+  <script src="js/layout.js?v=69"></script>
+  <script src="js/pages.js?v=69"></script>
 </body>
 </html>
