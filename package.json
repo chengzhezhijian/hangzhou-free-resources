@@ -16,8 +16,10 @@
     "test:pagination": "node scripts/test-pagination.mjs",
     "test:all": "node scripts/verify-site.mjs && node scripts/test-data-logic.mjs && node scripts/test-distance-accuracy.mjs && node scripts/test-ui-quality.mjs && node scripts/test-product-flows.mjs && node scripts/test-filter-geo.mjs && node scripts/test-pagination.mjs && node scripts/ab-theme-test.mjs && node scripts/ab-copy-test.mjs && node scripts/ab-design-test.mjs",
     "build:china": "node scripts/build-china-nationwide.mjs",
-    "build:coords": "AMAP_WEB_KEY= node scripts/build-resource-coords.mjs",
-    "build:all": "node scripts/build-china-nationwide.mjs && AMAP_WEB_KEY= node scripts/build-resource-coords.mjs",
+    "fetch:amap": "node scripts/fetch-amap-poi.mjs",
+    "build:coords": "node scripts/build-resource-coords.mjs",
+    "build:amap": "node scripts/fetch-amap-poi.mjs && node scripts/build-resource-coords.mjs",
+    "build:all": "node scripts/build-china-nationwide.mjs && node scripts/fetch-amap-poi.mjs && node scripts/build-resource-coords.mjs",
     "build:miniprogram": "node scripts/build-miniprogram-data.mjs"
   },
   "devDependencies": {

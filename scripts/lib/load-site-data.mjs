@@ -15,13 +15,16 @@ const DATA_FILES = [
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
   "data-china-nationwide.js",
+  "data-amap-hangzhou.js",
   "data.js",
 ];
 
 export function loadSiteData() {
-  const combined = DATA_FILES.map((f) =>
-    fs.readFileSync(path.join(JS_DIR, f), "utf8")
-  ).join("\n");
+  const combined = DATA_FILES.filter((f) =>
+    fs.existsSync(path.join(JS_DIR, f))
+  )
+    .map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8"))
+    .join("\n");
 
   const ctx = vm.createContext({ console });
   vm.runInContext(

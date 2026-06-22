@@ -917,6 +917,9 @@ if (typeof ZHEJIANG_EXPANDED_RESOURCES !== "undefined") {
 if (typeof CHINA_NATIONWIDE_RESOURCES !== "undefined") {
   RESOURCES.push(...CHINA_NATIONWIDE_RESOURCES);
 }
+if (typeof AMAP_HANGZHOU_RESOURCES !== "undefined") {
+  RESOURCES.push(...AMAP_HANGZHOU_RESOURCES);
+}
 
 if (typeof NATIONWIDE_CITIES !== "undefined" && typeof SITE_SCOPE !== "undefined" && SITE_SCOPE === "china") {
   CITIES = NATIONWIDE_CITIES.slice();

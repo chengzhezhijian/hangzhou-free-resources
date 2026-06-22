@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import { fileURLToPath } from "url";
+import { amapWebKey } from "./lib/load-env.mjs";
 import { COORD_ANCHORS } from "./lib/coord-anchors.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -74,9 +75,13 @@ const files = [
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
   "data-china-nationwide.js",
+  "data-amap-hangzhou.js",
   "data.js",
 ];
-  const combined = files.map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8")).join("\n");
+  const combined = files
+    .filter((f) => fs.existsSync(path.join(JS_DIR, f)))
+    .map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8"))
+    .join("\n");
   const ctx = vm.createContext({ console });
   vm.runInContext(`${combined};globalThis.__R__ = RESOURCES;`, ctx);
   return ctx.__R__;
@@ -185,6 +190,13 @@ async function amapGeocode(query, key, city) {
   return { lat, lng, precision: "geocode" };
 }
 
+function isTemplateResource(resource) {
+  if (resource.verified || resource.source === "amap") return false;
+  if (resource.id?.startsWith("cn-")) return true;
+  const note = resource.note || "";
+  return note.includes("以当地公告为准") || note.includes("模板");
+}
+
 async function resolveCoord(resource, cache, key, cityCenters) {
   if (resource.lat != null && resource.lng != null) {
     return { lat: resource.lat, lng: resource.lng, precision: "exact" };
@@ -195,6 +207,9 @@ async function resolveCoord(resource, cache, key, cityCenters) {
   const query = geocodeQuery(resource);
   const cached = cacheLookup(cache, query, resource);
   if (cached) return cached;
+  if (isTemplateResource(resource)) {
+    return fallbackCoord(resource, cityCenters);
+  }
   if (query && key) {
     try {
       await new Promise((r) => setTimeout(r, 120));
@@ -215,7 +230,7 @@ async function main() {
   const resources = loadResources();
   const cityCenters = loadCityCenters(ctx);
   const cache = loadCache();
-  const key = process.env.AMAP_WEB_KEY || "";
+  const key = amapWebKey();
   const coords = {};
   let geocoded = 0;
   let district = 0;

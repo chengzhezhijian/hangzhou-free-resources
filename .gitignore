@@ -3,4 +3,5 @@ node_modules/
 miniprogram/packageData/data/
 miniprogram/data/
 scripts/.geocode-cache.json
+scripts/.amap-poi-cache.json
 .env

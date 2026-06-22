@@ -244,6 +244,16 @@
   padding: 6px 0 0;
 }
 
+.app-ui .badge-verified {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  background: linear-gradient(135deg, #007aff, #5856d6);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
 .app-ui .card-premium.card-enter {
   animation: card-enter 0.45s var(--premium-ease-out) backwards;
 }

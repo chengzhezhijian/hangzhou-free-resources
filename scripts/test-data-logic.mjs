@@ -118,7 +118,7 @@ function filter(state) {
 // ─── 1. 常量与配置 ───
 section("常量与配置");
 
-assertGte("资源总数 ≥ 13000", RESOURCES.length, 13000);
+assertGte("资源总数 ≥ 15000", RESOURCES.length, 15000);
 assertGte("PREFECTURE_CITIES ≥ 100", PREFECTURE_CITIES.length, 100);
 assert("CITY_PICKER 不含「全国」", !CITY_PICKER.includes("全国"));
 assert("CITY_PICKER 含「全部」", CITY_PICKER.includes("全部"));
@@ -159,6 +159,14 @@ assert(
   "category 均在合法枚举内",
   badCategory.length === 0,
   badCategory.length ? badCategory[0].id : ""
+);
+
+const amapVerified = RESOURCES.filter((r) => r.source === "amap" && r.verified);
+assertGte("高德 verified POI ≥ 1400", amapVerified.length, 1400);
+assert(
+  "高德 POI 均含 lat/lng",
+  amapVerified.every((r) => r.lat != null && r.lng != null),
+  String(amapVerified.filter((r) => r.lat == null).length)
 );
 
 const badCity = RESOURCES.filter(
@@ -454,24 +462,24 @@ for (const t of EXTERNAL_TOOLS) {
 section("黄金场景计数");
 
 const golden = [
-  { state: { city: "全部" }, min: 13000, max: 14000, label: "默认全量" },
-  { state: { city: "杭州" }, min: 500, max: 580, label: "杭州筛选池" },
+  { state: { city: "全部" }, min: 15000, max: 16000, label: "默认全量" },
+  { state: { city: "杭州" }, min: 1900, max: 2100, label: "杭州筛选池" },
   { state: { city: "北京" }, min: 110, max: 150, label: "北京筛选池" },
   { state: { city: "上海" }, min: 110, max: 150, label: "上海筛选池" },
   { state: { search: "自习", city: "全部" }, min: 1200, max: 2800, label: "全国自习" },
-  { state: { category: "reading", city: "杭州" }, min: 220, max: 240, label: "杭州书房分类" },
+  { state: { category: "reading", city: "杭州" }, min: 220, max: 260, label: "杭州书房分类" },
   { state: { category: "parking", city: "全部" }, min: 700, max: 800, label: "停车分类" },
-  { state: { category: "toilet", city: "全部" }, min: 700, max: 800, label: "公厕分类" },
+  { state: { category: "toilet", city: "全部" }, min: 700, max: 1000, label: "公厕分类" },
   { state: { category: "camping", city: "全部" }, min: 600, max: 680, label: "露营分类" },
-  { state: { category: "sports", city: "全部" }, min: 700, max: 800, label: "体育分类" },
-  { state: { category: "charging", city: "全部" }, min: 700, max: 800, label: "充电分类" },
+  { state: { category: "sports", city: "全部" }, min: 700, max: 950, label: "体育分类" },
+  { state: { category: "charging", city: "全部" }, min: 700, max: 980, label: "充电分类" },
   { state: { category: "policy", city: "全部" }, min: 700, max: 850, label: "政策分类" },
-  { state: { category: "gov_service", city: "全部" }, min: 1500, max: 1650, label: "政务服务分类" },
-  { state: { category: "court", city: "全部" }, min: 800, max: 900, label: "法院分类" },
+  { state: { category: "gov_service", city: "全部" }, min: 1500, max: 2000, label: "政务服务分类" },
+  { state: { category: "court", city: "全部" }, min: 800, max: 1150, label: "法院分类" },
   { state: { category: "legal", city: "全部" }, min: 600, max: 680, label: "法律分类" },
   { state: { category: "training", city: "全部" }, min: 600, max: 680, label: "培训分类" },
-  { state: { category: "gov_service", city: "杭州" }, min: 45, max: 60, label: "杭州政务服务" },
-  { state: { category: "court", city: "杭州" }, min: 28, max: 40, label: "杭州法院" },
+  { state: { category: "gov_service", city: "杭州" }, min: 350, max: 420, label: "杭州政务服务" },
+  { state: { category: "court", city: "杭州" }, min: 300, max: 340, label: "杭州法院" },
 ];
 
 for (const { state, min, max, label } of golden) {

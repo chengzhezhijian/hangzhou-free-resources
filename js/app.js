@@ -278,6 +278,7 @@
 
   function sortComprehensive(list) {
     return [...list].sort((a, b) => {
+      if (!!a.verified !== !!b.verified) return (b.verified ? 1 : 0) - (a.verified ? 1 : 0);
       if (!!a.featured !== !!b.featured) return b.featured - a.featured;
       return (a.name || "").localeCompare(b.name || "", "zh-CN");
     });
@@ -285,6 +286,8 @@
 
   function resourceScore(r) {
     let score = 0;
+    if (r.verified) score += 200;
+    if (r.source === "amap") score += 30;
     if (r.featured) score += 100;
     score += (r.facilities?.length || 0) * 5;
     if (r.hours) score += 2;
@@ -311,6 +314,7 @@
       if (da == null) return 1;
       if (db == null) return -1;
       if (Math.abs(da - db) > 0.001) return da - db;
+      if (!!a.verified !== !!b.verified) return (b.verified ? 1 : 0) - (a.verified ? 1 : 0);
       if (!!a.featured !== !!b.featured) return b.featured - a.featured;
       return (a.name || "").localeCompare(b.name || "", "zh-CN");
     });
@@ -1248,6 +1252,7 @@
             <div class="card-badges">
               ${distLabel ? `<span class="badge-distance" title="直线距离">${distLabel}</span>` : ""}
               ${costBadge(resource)}
+              ${resource.verified ? '<span class="badge-verified" title="高德POI已核实">✓</span>' : ""}
               ${resource.featured ? '<span class="badge-star" title="推荐">★</span>' : ""}
               ${resource.seasonal ? '<span class="badge-seasonal">夏季</span>' : ""}
             </div>
