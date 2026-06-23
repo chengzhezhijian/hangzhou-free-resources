@@ -67,17 +67,22 @@ const CITY_CENTROIDS = {
 };
 
 function loadResources() {
-const files = [
-  "map-nav.js",
-  "data-china-config.js",
-  "data-study-spaces.js",
-  "data-extra-resources.js",
-  "data-zhejiang-cities.js",
-  "data-zhejiang-expanded.js",
-  "data-china-nationwide.js",
-  "data-amap-hangzhou.js",
-  "data.js",
-];
+  const amapFile = fs.existsSync(path.join(JS_DIR, "data-amap-poi.js"))
+    ? "data-amap-poi.js"
+    : fs.existsSync(path.join(JS_DIR, "data-amap-hangzhou.js"))
+      ? "data-amap-hangzhou.js"
+      : null;
+  const files = [
+    "map-nav.js",
+    "data-china-config.js",
+    "data-study-spaces.js",
+    "data-extra-resources.js",
+    "data-zhejiang-cities.js",
+    "data-zhejiang-expanded.js",
+    "data-china-nationwide.js",
+    ...(amapFile ? [amapFile] : []),
+    "data.js",
+  ];
   const combined = files
     .filter((f) => fs.existsSync(path.join(JS_DIR, f)))
     .map((f) => fs.readFileSync(path.join(JS_DIR, f), "utf8"))

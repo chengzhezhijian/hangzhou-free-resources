@@ -1,74 +1,42 @@
 #!/usr/bin/env node
 /**
- * 从高德 POI 搜索 API 拉取杭州真实点位，生成 js/data-amap-hangzhou.js
- * 用法: node scripts/fetch-amap-poi.mjs
- * 需 .env 中 AMAP_WEB_KEY（Web 服务）
+ * 高德 POI 增量拉取 → js/data-amap-poi.js
+ *
+ * 用法:
+ *   node scripts/fetch-amap-poi.mjs              # 每日增量（默认）
+ *   AMAP_FULL_SYNC=1 node scripts/fetch-amap-poi.mjs  # 全量同步
+ *
+ * 环境变量:
+ *   AMAP_WEB_KEY      必填（.env 或 CI secret）
+ *   AMAP_FULL_SYNC=1  全量页数；否则每任务仅前 2 页增量
+ *   AMAP_CITIES=zhejiang|all|杭州,宁波  覆盖城市列表
  */
 import fs from "fs";
 import path from "path";
+import vm from "vm";
 import { fileURLToPath } from "url";
 import { amapWebKey } from "./lib/load-env.mjs";
+import {
+  ZHEJIANG_CITIES,
+  ROTATION_CITIES,
+  FETCH_TASKS,
+  citiesForRun,
+  pageLimit,
+  CATEGORY_FACILITIES,
+} from "./lib/amap-poi-config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
-const OUT = path.join(ROOT, "js", "data-amap-hangzhou.js");
+const JS_DIR = path.join(ROOT, "js");
+const OUT = path.join(JS_DIR, "data-amap-poi.js");
+const LEGACY_OUT = path.join(JS_DIR, "data-amap-hangzhou.js");
 const CACHE = path.join(__dirname, ".amap-poi-cache.json");
+const LOG = path.join(ROOT, "docs", "amap-sync-log.md");
 
-/** 杭州 POI 检索任务：keywords + 站点类别 + 最大页数（每页 25 条） */
-const FETCH_TASKS = [
-  { keywords: "市民之家", category: "gov_service", maxPages: 8 },
-  { keywords: "政务服务中心", category: "gov_service", maxPages: 8 },
-  { keywords: "人力资源和社会保障局", category: "gov_service", maxPages: 5 },
-  { keywords: "人民法院", category: "court", maxPages: 8 },
-  { keywords: "劳动人事争议仲裁", category: "court", maxPages: 4 },
-  { keywords: "公共厕所", category: "toilet", maxPages: 12 },
-  { keywords: "充电站", category: "charging", maxPages: 10 },
-  { keywords: "公共图书馆", category: "library", maxPages: 5 },
-  { keywords: "城市书房", category: "reading", maxPages: 8 },
-  { keywords: "人民公园", category: "park", maxPages: 8 },
-  { keywords: "体育场馆", category: "sports", maxPages: 6 },
-  { keywords: "党群服务中心", category: "community", maxPages: 6 },
-];
-
-const DISTRICT_SHORT = {
-  上城区: "上城",
-  拱墅区: "拱墅",
-  西湖区: "西湖",
-  滨江区: "滨江",
-  萧山区: "萧山",
-  余杭区: "余杭",
-  临平区: "临平",
-  钱塘区: "钱塘",
-  富阳区: "富阳",
-  临安区: "临安",
-  桐庐县: "桐庐",
-  淳安县: "淳安",
-  建德市: "建德",
-};
-
-const CATEGORY_FACILITIES = {
-  gov_service: { wifi: "partial", water: "partial", ac: true },
-  court: { wifi: "partial", water: "partial", ac: true },
-  toilet: { water: "partial" },
-  charging: { charge: true },
-  library: { wifi: true, water: "partial", ac: true, study: true, charge: true },
-  reading: { wifi: "partial", ac: true, study: true, charge: "partial" },
-  park: { water: "partial" },
-  sports: { water: "partial", ac: "partial" },
-  community: { wifi: "partial", water: true, ac: "partial", charge: "partial" },
-};
+const FULL_SYNC = process.env.AMAP_FULL_SYNC === "1";
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-function districtFromAdname(adname) {
-  if (!adname) return "";
-  return DISTRICT_SHORT[adname] || adname.replace(/(区|县|市)$/, "");
-}
-
-function normalizeKey(name, address) {
-  return `${(name || "").replace(/\s/g, "")}|${(address || "").slice(0, 24)}`;
 }
 
 function asText(v) {
@@ -77,20 +45,29 @@ function asText(v) {
   return String(v).trim();
 }
 
-function poiToResource(poi, category) {
+function districtFromAdname(adname) {
+  if (!adname) return "";
+  return adname.replace(/(区|县|市)$/, "");
+}
+
+function normalizeKey(name, address, city) {
+  return `${city}|${(name || "").replace(/\s/g, "")}|${(address || "").slice(0, 24)}`;
+}
+
+function poiToResource(poi, category, city, slug) {
   const [lng, lat] = (poi.location || "").split(",").map(Number);
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   const address = asText(poi.address) || asText(poi.name);
   if (!address) return null;
 
-  const id = `amap-hz-${category}-${poi.id}`;
+  const id = `amap-${slug}-${category}-${poi.id}`;
   const tel = asText(poi.tel).split(";")[0].trim();
 
   return {
     id,
     name: asText(poi.name),
     category,
-    city: "杭州",
+    city,
     district: districtFromAdname(poi.adname),
     address,
     phone: tel && tel !== "[]" ? tel : "",
@@ -106,7 +83,50 @@ function poiToResource(poi, category) {
     note: "数据来源：高德地图 POI，开放时间与是否免费请以现场及官方公告为准",
     seasonal: false,
     costType: "free",
+    syncedAt: new Date().toISOString().slice(0, 10),
   };
+}
+
+function loadExistingResources() {
+  const byId = new Map();
+  const files = [
+    { path: OUT, vars: ["AMAP_POI_RESOURCES"] },
+    { path: LEGACY_OUT, vars: ["AMAP_HANGZHOU_RESOURCES", "AMAP_POI_RESOURCES"] },
+  ];
+
+  for (const { path: fp, vars } of files) {
+    if (!fs.existsSync(fp)) continue;
+    const ctx = vm.createContext({});
+    try {
+      vm.runInContext(fs.readFileSync(fp, "utf8"), ctx);
+      for (const v of vars) {
+        const arr = ctx[v];
+        if (!Array.isArray(arr)) continue;
+        for (const r of arr) {
+          if (r?.id) byId.set(r.id, r);
+        }
+      }
+    } catch (e) {
+      console.warn("跳过解析", fp, e.message);
+    }
+  }
+  return byId;
+}
+
+function resolveCityList() {
+  const raw = (process.env.AMAP_CITIES || "").trim();
+  if (raw === "all") {
+    return [...ZHEJIANG_CITIES, ...ROTATION_CITIES];
+  }
+  if (raw === "zhejiang") {
+    return [...ZHEJIANG_CITIES];
+  }
+  if (raw) {
+    const names = raw.split(/[,，]/).map((s) => s.trim()).filter(Boolean);
+    const all = [...ZHEJIANG_CITIES, ...ROTATION_CITIES];
+    return all.filter((c) => names.includes(c.name));
+  }
+  return citiesForRun({ fullSync: FULL_SYNC, includeRotation: !FULL_SYNC });
 }
 
 async function fetchPlacePage(keywords, city, page, key) {
@@ -120,96 +140,154 @@ async function fetchPlacePage(keywords, city, page, key) {
   url.searchParams.set("extensions", "base");
 
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status} ${keywords} p${page}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${city} ${keywords} p${page}`);
   const data = await res.json();
   if (data.status !== "1") {
-    throw new Error(`Amap ${data.info || data.infocode} ${keywords} p${page}`);
+    throw new Error(`Amap ${data.info || data.infocode} ${city} ${keywords} p${page}`);
   }
   return data;
 }
 
-async function fetchTask(task, key, seenIds, seenKeys, out) {
-  const { keywords, category, maxPages } = task;
+async function fetchCityTask(city, slug, task, key, byId, seenKeys, stats) {
+  const { keywords, category } = task;
+  const maxP = pageLimit(city.name, task, FULL_SYNC);
   let added = 0;
+  let updated = 0;
 
-  for (let page = 1; page <= maxPages; page++) {
-    await sleep(180);
-    const data = await fetchPlacePage(keywords, "杭州", page, key);
+  for (let page = 1; page <= maxP; page++) {
+    await sleep(FULL_SYNC ? 180 : 120);
+    const data = await fetchPlacePage(keywords, city.name, page, key);
     const pois = data.pois || [];
     if (!pois.length) break;
 
     for (const poi of pois) {
-      if (!poi.id || seenIds.has(poi.id)) continue;
-      const resource = poiToResource(poi, category);
+      if (!poi.id) continue;
+      const resource = poiToResource(poi, category, city.name, slug);
       if (!resource) continue;
-      const dk = normalizeKey(resource.name, resource.address);
-      if (seenKeys.has(dk)) continue;
-      seenIds.add(poi.id);
-      seenKeys.add(dk);
-      out.push(resource);
-      added++;
+      const dk = normalizeKey(resource.name, resource.address, city.name);
+      if (seenKeys.has(dk) && !byId.has(resource.id)) continue;
+
+      if (byId.has(resource.id)) {
+        const prev = byId.get(resource.id);
+        byId.set(resource.id, { ...prev, ...resource, syncedAt: resource.syncedAt });
+        updated++;
+      } else {
+        byId.set(resource.id, resource);
+        seenKeys.add(dk);
+        added++;
+      }
     }
 
     const total = parseInt(data.count, 10) || 0;
     if (page * 25 >= total) break;
   }
 
-  console.log(`  ✓ ${keywords} (${category}) +${added}`);
-  return added;
+  stats.requests += maxP;
+  console.log(`  ✓ ${city.name} · ${keywords} +${added} ~${updated}`);
+  return { added, updated };
 }
 
-function writeOutput(resources) {
-  const header = `/** 杭州市高德 POI 资源（fetch-amap-poi.mjs 生成，勿手改） */
-/** 数据来源：高德地图 POI 搜索 API · 生成于 ${new Date().toISOString()} */
-const AMAP_HANGZHOU_RESOURCES = `;
+function writeOutput(byId) {
+  const resources = [...byId.values()].sort((a, b) =>
+    (a.city || "").localeCompare(b.city || "", "zh-CN") ||
+    (a.category || "").localeCompare(b.category || "") ||
+    (a.name || "").localeCompare(b.name || "", "zh-CN")
+  );
+
+  const header = `/** 高德 POI 资源（fetch-amap-poi.mjs 生成，勿手改） */
+/** 数据来源：高德地图 POI · 更新于 ${new Date().toISOString()} */
+const AMAP_POI_RESOURCES = `;
   fs.writeFileSync(OUT, `${header}${JSON.stringify(resources, null, 2)};\n`);
+  return resources;
+}
+
+function appendLog(summary) {
+  const line = `- **${summary.date}** ${summary.mode}：${summary.total} 条（+${summary.added}）· ${summary.cities.join("、")}\n`;
+  let body = "";
+  if (fs.existsSync(LOG)) {
+    body = fs.readFileSync(LOG, "utf8");
+  } else {
+    body = "# 高德 POI 同步日志\n\n";
+  }
+  if (!body.includes(line.slice(0, 20))) {
+    fs.writeFileSync(LOG, body + line);
+  }
 }
 
 async function main() {
   const key = amapWebKey();
   if (!key) {
-    console.error("缺少 AMAP_WEB_KEY，请在 .env 中配置");
+    console.error("缺少 AMAP_WEB_KEY（.env 或 GitHub Secrets）");
     process.exit(1);
   }
 
-  let cache = {};
-  try {
-    cache = JSON.parse(fs.readFileSync(CACHE, "utf8"));
-  } catch {
-    /* empty */
+  const cities = resolveCityList();
+  const byId = loadExistingResources();
+  const before = byId.size;
+  const seenKeys = new Set(
+    [...byId.values()].map((r) => normalizeKey(r.name, r.address, r.city))
+  );
+
+  console.log(
+    FULL_SYNC ? "全量同步高德 POI…" : "每日增量同步高德 POI…",
+    `已有 ${before} 条 · ${cities.length} 城`
+  );
+
+  const stats = { added: 0, updated: 0, requests: 0 };
+
+  for (const city of cities) {
+    console.log(`\n▸ ${city.name}`);
+    for (const task of FETCH_TASKS) {
+      const { added, updated } = await fetchCityTask(
+        city,
+        city.slug,
+        task,
+        key,
+        byId,
+        seenKeys,
+        stats
+      );
+      stats.added += added;
+      stats.updated += updated;
+    }
   }
 
-  const seenIds = new Set(Object.keys(cache.seenIds || {}));
-  const seenKeys = new Set(cache.seenKeys || []);
-  const resources = [];
-
-  console.log("拉取杭州高德 POI…");
-  for (const task of FETCH_TASKS) {
-    await fetchTask(task, key, seenIds, seenKeys, resources);
-  }
+  const resources = writeOutput(byId);
 
   fs.writeFileSync(
     CACHE,
     JSON.stringify(
       {
         updatedAt: new Date().toISOString(),
-        seenIds: Object.fromEntries([...seenIds].map((id) => [id, true])),
-        seenKeys: [...seenKeys],
-        count: resources.length,
+        mode: FULL_SYNC ? "full" : "daily",
+        total: resources.length,
+        added: stats.added,
+        updated: stats.updated,
+        cities: cities.map((c) => c.name),
       },
       null,
       2
     )
   );
 
-  writeOutput(resources);
-  console.log(`\n✓ 写入 ${OUT}`);
-  console.log(`  共 ${resources.length} 条 verified 杭州 POI`);
+  appendLog({
+    date: new Date().toISOString().slice(0, 10),
+    mode: FULL_SYNC ? "全量" : "增量",
+    total: resources.length,
+    added: stats.added,
+    cities: cities.map((c) => c.name),
+  });
 
+  const byCity = {};
   const byCat = {};
   resources.forEach((r) => {
+    byCity[r.city] = (byCity[r.city] || 0) + 1;
     byCat[r.category] = (byCat[r.category] || 0) + 1;
   });
+
+  console.log(`\n✓ 写入 ${OUT}`);
+  console.log(`  合计 ${resources.length} 条（+${stats.added} 新增，~${stats.updated} 更新）`);
+  console.log("  城市:", JSON.stringify(byCity));
   console.log("  分类:", JSON.stringify(byCat));
 }
 

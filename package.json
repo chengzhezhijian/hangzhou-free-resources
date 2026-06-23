@@ -17,8 +17,11 @@
     "test:all": "node scripts/verify-site.mjs && node scripts/test-data-logic.mjs && node scripts/test-distance-accuracy.mjs && node scripts/test-ui-quality.mjs && node scripts/test-product-flows.mjs && node scripts/test-filter-geo.mjs && node scripts/test-pagination.mjs && node scripts/ab-theme-test.mjs && node scripts/ab-copy-test.mjs && node scripts/ab-design-test.mjs",
     "build:china": "node scripts/build-china-nationwide.mjs",
     "fetch:amap": "node scripts/fetch-amap-poi.mjs",
+    "fetch:amap:full": "AMAP_FULL_SYNC=1 node scripts/fetch-amap-poi.mjs",
     "build:coords": "node scripts/build-resource-coords.mjs",
     "build:amap": "node scripts/fetch-amap-poi.mjs && node scripts/build-resource-coords.mjs",
+    "sync:amap": "node scripts/sync-amap-daily.mjs",
+    "sync:amap:full": "node scripts/sync-amap-daily.mjs --full",
     "build:all": "node scripts/build-china-nationwide.mjs && node scripts/fetch-amap-poi.mjs && node scripts/build-resource-coords.mjs",
     "build:miniprogram": "node scripts/build-miniprogram-data.mjs"
   },

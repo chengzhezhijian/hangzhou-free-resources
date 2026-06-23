@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import { JSDOM } from "jsdom";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CACHE_V = "75";
+const CACHE_V = "76";
 const appJs = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
 const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 const siteConfig = fs.readFileSync(path.join(ROOT, "js", "site-config.js"), "utf8");
@@ -310,11 +310,13 @@ function injectMobileStyles(doc) {
 
 ok("app-ui feedback-fab 完整样式", /\.app-ui \.feedback-fab[\s\S]*display:\s*inline-flex/.test(designSystem));
 
-ok("高德杭州数据文件存在", fs.existsSync(path.join(ROOT, "js/data-amap-hangzhou.js")));
+ok("高德 POI 数据文件存在", fs.existsSync(path.join(ROOT, "js/data-amap-poi.js")));
 ok(
-  "index 引用 data-amap-hangzhou",
-  /data-amap-hangzhou\.js/.test(fs.readFileSync(path.join(ROOT, "index.html"), "utf8"))
+  "index 引用 data-amap-poi",
+  /data-amap-poi\.js/.test(fs.readFileSync(path.join(ROOT, "index.html"), "utf8"))
 );
+ok("fetch-amap 增量合并", /loadExistingResources/.test(fs.readFileSync(path.join(ROOT, "scripts/fetch-amap-poi.mjs"), "utf8")));
+ok("daily workflow 存在", fs.existsSync(path.join(ROOT, ".github/workflows/daily-amap-sync.yml")));
 ok("app.js verified 排序优先", /a\.verified/.test(fs.readFileSync(path.join(ROOT, "js/app.js"), "utf8")));
 ok("badge-verified 样式", /\.badge-verified/.test(fs.readFileSync(path.join(ROOT, "css/premium-ui.css"), "utf8")));
 

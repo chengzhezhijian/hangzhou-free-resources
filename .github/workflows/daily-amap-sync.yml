@@ -1,0 +1,60 @@
+name: Daily Amap POI Sync
+
+on:
+  schedule:
+    # 每天 UTC 18:00 = 北京时间次日 02:00
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      full_sync:
+        description: "全量同步（AMAP_FULL_SYNC=1）"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-poi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci 2>/dev/null || npm install
+
+      - name: Sync Amap POI (incremental)
+        env:
+          AMAP_WEB_KEY: ${{ secrets.AMAP_WEB_KEY }}
+          AMAP_FULL_SYNC: ${{ github.event.inputs.full_sync == 'true' && '1' || '0' }}
+          AMAP_BUMP_VERSION: "1"
+        run: node scripts/sync-amap-daily.mjs --bump
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/data-amap-poi.js js/resource-coords.js docs/amap-sync-log.md
+          git add index.html guide.html tools.html about.html feedback.html js/theme-switch.js labs/ab-compare.html scripts/test-product-flows.mjs scripts/test-ui-quality.mjs 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "无数据变更，跳过 commit"
+            exit 0
+          fi
+          git commit -m "$(cat <<'EOF'
+chore(data): 每日高德 POI 增量同步
+
+自动拉取浙江 11 市 + 当日轮转代表城市 POI，重建坐标并 bump 缓存版本。
+EOF
+)"
+          git push

@@ -28,7 +28,7 @@ const SCRIPTS = [
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
   "data-china-nationwide.js",
-  "data-amap-hangzhou.js",
+  "data-amap-poi.js",
   "data.js",
   "resource-coords.js",
   "site-stats.js",

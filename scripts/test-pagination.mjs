@@ -29,7 +29,7 @@ const SCRIPTS = [
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
   "data-china-nationwide.js",
-  "data-amap-hangzhou.js",
+  "data-amap-poi.js",
   "data.js",
   "resource-coords.js",
   "filter-shared.js",
@@ -203,7 +203,7 @@ async function run() {
 
   ok("数据:杭州+公园 ≥25", hzParkCount >= 25);
   ok("数据:杭州全量 > 公园", hzAllCount > hzParkCount);
-  ok("数据:默认全量 ≥15000", allCount >= 15000);
+  ok("数据:默认全量 ≥33000", allCount >= 33000);
 
   // ── 杭州+公园：页数应与筛选结果一致 ──
   {

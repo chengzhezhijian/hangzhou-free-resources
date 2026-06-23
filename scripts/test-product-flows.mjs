@@ -56,7 +56,7 @@ const QS = dataCtx.QS;
 // ─── 1. 产品定位 ───
 console.log("\n═══ 产品需求 ═══");
 assert("全国版 SITE_SCOPE", SITE_SCOPE === "china");
-assert("资源规模 ≥ 15000", RESOURCES.length >= 15000);
+assert("资源规模 ≥ 33000", RESOURCES.length >= 33000);
 assert("设施卖点 4 项", VP?.length === 4);
 assert("设施顺序：WiFi 优先", VP?.[0]?.id === "wifi");
 assert("场景标签 6 项", QS?.length === 6);
@@ -72,7 +72,7 @@ const UI_REQUIREMENTS = [
   ["app-ui 壳层", /\bapp-ui\b/],
   ["毛玻璃顶栏", /glass-nav/],
   ["粘性筛选区", /discover-sticky/],
-  ["Premium 样式", /premium-ui\.css\?v=75/],
+  ["Premium 样式", /premium-ui\.css\?v=76/],
   ["整站 UX 设计", /design-variants\.js/],
   ["设计布局 CSS", /design-layouts\.css/],
   ["设计挂载点", /id="filterToolbar"/],
@@ -167,9 +167,9 @@ const statsDataFiles = [
   "js/data-zhejiang-cities.js",
   "js/data-zhejiang-expanded.js",
   "js/data-china-nationwide.js",
-  "js/data-amap-hangzhou.js",
+  "js/data-amap-poi.js",
   "js/data.js",
-];
+].filter((f) => fs.existsSync(path.join(ROOT, f)));
 vm.runInContext(
   statsDataFiles.map((f) => fs.readFileSync(path.join(ROOT, f), "utf8")).join("\n") +
     "\n" +

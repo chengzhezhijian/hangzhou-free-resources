@@ -15,7 +15,11 @@ const DATA_FILES = [
   "data-zhejiang-cities.js",
   "data-zhejiang-expanded.js",
   "data-china-nationwide.js",
-  "data-amap-hangzhou.js",
+  ...(fs.existsSync(path.join(JS_DIR, "data-amap-poi.js"))
+    ? ["data-amap-poi.js"]
+    : fs.existsSync(path.join(JS_DIR, "data-amap-hangzhou.js"))
+      ? ["data-amap-hangzhou.js"]
+      : []),
   "data.js",
 ];
 

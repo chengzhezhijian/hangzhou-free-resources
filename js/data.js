@@ -917,7 +917,9 @@ if (typeof ZHEJIANG_EXPANDED_RESOURCES !== "undefined") {
 if (typeof CHINA_NATIONWIDE_RESOURCES !== "undefined") {
   RESOURCES.push(...CHINA_NATIONWIDE_RESOURCES);
 }
-if (typeof AMAP_HANGZHOU_RESOURCES !== "undefined") {
+if (typeof AMAP_POI_RESOURCES !== "undefined") {
+  RESOURCES.push(...AMAP_POI_RESOURCES);
+} else if (typeof AMAP_HANGZHOU_RESOURCES !== "undefined") {
   RESOURCES.push(...AMAP_HANGZHOU_RESOURCES);
 }
 
